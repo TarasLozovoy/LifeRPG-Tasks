@@ -12,11 +12,23 @@ import android.widget.TextView;
 import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.R;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
 
 public class TasksActivity extends AppCompatActivity {
     private final static String LIFE_CONTROLLER_TAG = "life_controller_tag";
+    private final String SKILLS_FILE_NAME = "skills_file_name.txt";
+    private final String CHARACTERISTICS_FILE_NAME = "characteristics_file_name.txt";
+    private final String TASKS_FILE_NAME = "tasks_file_name.txt";
+
+    private String skillsFromFile;
+    private String characteristicsFromFile;
+    private String tasksFromFile;
 
     private Button openSkillsButton, openCharacteristicsButton;
     private TextView tasksTextView;
@@ -88,5 +100,33 @@ public class TasksActivity extends AppCompatActivity {
             sb.append("\n");
         }
         tasksTextView.setText(sb);
+    }
+
+    private void readContentFromFiles(){
+        characteristicsFromFile = getStringFromFile(CHARACTERISTICS_FILE_NAME);
+        skillsFromFile = getStringFromFile(SKILLS_FILE_NAME);
+        tasksFromFile = getStringFromFile(TASKS_FILE_NAME);
+    }
+
+    private String getStringFromFile(String fileName){
+        try{
+            FileInputStream fis = openFileInput(fileName);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader reader = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            return sb.toString();
+        } catch (FileNotFoundException e){
+            //TODO add creating files
+            e.printStackTrace();
+            return "";
+        } catch (IOException e){
+            //TODO add creating files
+            e.printStackTrace();
+            return "";
+        }
     }
 }
