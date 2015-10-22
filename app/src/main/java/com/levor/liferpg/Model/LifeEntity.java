@@ -27,13 +27,13 @@ public class LifeEntity {
     }
 
     private LifeEntity() {
-//        skills.put("Android", new Skill("Android", intelligence));
-//        skills.put("Java", new Skill("Java", intelligence));
-//        skills.put("Erudition", new Skill("Erudition", wisdom));
-//        skills.put("English", new Skill("English", intelligence));
-//        skills.put("Powerlifting", new Skill("Powerlifting", strength));
-//        skills.put("Roller skating", new Skill("Roller skating", stamina));
-//        skills.put("Running", new Skill("Running", stamina));
+        skills.put("Android", new Skill("Android", intelligence));
+        skills.put("Java", new Skill("Java", intelligence));
+        skills.put("Erudition", new Skill("Erudition", wisdom));
+        skills.put("English", new Skill("English", intelligence));
+        skills.put("Powerlifting", new Skill("Powerlifting", strength));
+        skills.put("Roller skating", new Skill("Roller skating", stamina));
+        skills.put("Running", new Skill("Running", stamina));
 
 //        addTask("Learn Android", skills.get("Android"));
 //        addTask("Learn Java", skills.get("Java"));

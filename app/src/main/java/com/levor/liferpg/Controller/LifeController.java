@@ -44,6 +44,10 @@ public class LifeController {
         return map;
     }
 
+    public String[] getTasksTitlesAsArray(){
+        return tasks.keySet().toArray(new String[tasks.size()]);
+    }
+
     public Map<String, Integer[]> getSkillsTitlesAndLevels(){
         return lifeEntity.getSkillsTitlesAndLevels();
     }

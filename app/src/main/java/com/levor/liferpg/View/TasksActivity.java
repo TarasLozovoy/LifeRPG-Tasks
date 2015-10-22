@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.levor.liferpg.Controller.LifeController;
@@ -23,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 public class TasksActivity extends AppCompatActivity {
-    private final static String LIFE_CONTROLLER_TAG = "life_controller_tag";
     private final String SKILLS_FILE_NAME = "skills_file_name.txt";
     private final String CHARACTERISTICS_FILE_NAME = "characteristics_file_name.txt";
     private final String TASKS_FILE_NAME = "tasks_file_name.txt";
@@ -33,8 +34,10 @@ public class TasksActivity extends AppCompatActivity {
     private String characteristicsFromFile;
     private String tasksFromFile;
 
-    private Button openSkillsButton, openCharacteristicsButton, readButton, writeButton;
+    private Button openSkillsButton;
+    private Button openCharacteristicsButton;
     private TextView tasksTextView;
+    private ListView listViewTasks;
     private final LifeController lifeController = LifeController.getInstance();
 
     @Override
@@ -44,10 +47,14 @@ public class TasksActivity extends AppCompatActivity {
         openSkillsButton = (Button) findViewById(R.id.openSkillsButton);
         openCharacteristicsButton = (Button) findViewById(R.id.openCharacteristicsButton);
         tasksTextView = (TextView) findViewById(R.id.tasks);
-        showTasks();
+        listViewTasks = (ListView) findViewById(R.id.listViewTasks);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this
+                , android.R.layout.simple_list_item_1, lifeController.getTasksTitlesAsArray());
+        listViewTasks.setAdapter(adapter);
+//        showTasks();
         registerButtonsListeners();
 
-        readButton = (Button) findViewById(R.id.button);
+        Button readButton = (Button) findViewById(R.id.buttonRead);
         readButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,7 +62,7 @@ public class TasksActivity extends AppCompatActivity {
             }
         });
 
-        writeButton = (Button) findViewById(R.id.buttonWrite);
+        Button writeButton = (Button) findViewById(R.id.buttonWrite);
         writeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +134,7 @@ public class TasksActivity extends AppCompatActivity {
         tasksFromFile = getStringFromFile(TASKS_FILE_NAME);
         Log.e(TAG, "chars: " + characteristicsFromFile + "\nskiils: " + skillsFromFile + "\nTasks: " + tasksFromFile);
         lifeController.updateCurrentContentWithStrings(characteristicsFromFile, skillsFromFile, tasksFromFile);
-        showTasks();
+        recreateAdapter();
     }
 
     private String getStringFromFile(String fileName){
@@ -167,5 +174,10 @@ public class TasksActivity extends AppCompatActivity {
         } catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    private void recreateAdapter(){
+        listViewTasks.setAdapter(new ArrayAdapter<>(this
+                , android.R.layout.simple_list_item_1, lifeController.getTasksTitlesAsArray()));
     }
 }
