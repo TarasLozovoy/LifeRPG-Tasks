@@ -1,6 +1,7 @@
 package com.levor.liferpg.Model;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +14,8 @@ public class LifeEntity {
     private final Characteristic stamina = new Characteristic("Stamina", 1);
     private final Characteristic dexterity = new Characteristic("Dexterity", 1);
 
-    private Map<String, Skill> skills = new TreeMap<>();
-    private Map<String, Task> tasks = new TreeMap<>();
+    private Map<String, Skill> skills = new TreeMap<>();  //title, skill
+    private Map<String, Task> tasks = new TreeMap<>();    //title, task
 
     private static LifeEntity lifeEntity;
 
@@ -26,44 +27,44 @@ public class LifeEntity {
     }
 
     private LifeEntity() {
-        skills.put("Android", new Skill("Android", intelligence));
-        skills.put("Java", new Skill("Java", intelligence));
-        skills.put("Erudition", new Skill("Erudition", wisdom));
-        skills.put("English", new Skill("English", intelligence));
-        skills.put("Powerlifting", new Skill("Powerlifting", strength));
-        skills.put("Roller skating", new Skill("Roller skating", stamina));
-        skills.put("Running", new Skill("Running", stamina));
+//        skills.put("Android", new Skill("Android", intelligence));
+//        skills.put("Java", new Skill("Java", intelligence));
+//        skills.put("Erudition", new Skill("Erudition", wisdom));
+//        skills.put("English", new Skill("English", intelligence));
+//        skills.put("Powerlifting", new Skill("Powerlifting", strength));
+//        skills.put("Roller skating", new Skill("Roller skating", stamina));
+//        skills.put("Running", new Skill("Running", stamina));
 
-        addTask("Learn Android", skills.get("Android"));
-        addTask("Learn Java", skills.get("Java"));
-        addTask("Fix easy bug on Android", skills.get("Android"));
-        addTask("Fix medium bug on Android", skills.get("Android"));
-        addTask("Fix difficult bug on Android", skills.get("Android"));
-        addTask("Fix easy bug on Java", skills.get("Java"));
-        addTask("Fix medium bug on Java", skills.get("Java"));
-        addTask("Fix difficult bug on Java", skills.get("Java"));
-
-        addTask("Read fiction book", skills.get("Erudition"));
-        addTask("Read self-development book", skills.get("Erudition"));
-        addTask("Read Android book", skills.get("Erudition"), skills.get("Android"));
-        addTask("Read Java book", skills.get("Erudition"), skills.get("Java"));
-
-        addTask("Read fiction book on English", skills.get("Erudition"), skills.get("English"));
-        addTask("Read self-development book on English", skills.get("Erudition"), skills.get("English"));
-        addTask("Read Android book on English", skills.get("Erudition"), skills.get("Android"), skills.get("English"));
-        addTask("Read Java book on English", skills.get("Erudition"), skills.get("Java"), skills.get("English"));
-        addTask("Learn English", skills.get("English"));
-
-        addTask("Run 5 km", skills.get("Running"));
-        addTask("Run 10 km", skills.get("Running"));
-        addTask("Run 15 km", skills.get("Running"));
-
-        addTask("Ride for 10 km", skills.get("Roller skating"));
-        addTask("Ride for 20 km", skills.get("Roller skating"));
-        addTask("Ride for 30 km", skills.get("Roller skating"));
-        addTask("Ride for 40 km", skills.get("Roller skating"));
-
-        addTask("Train in gym", skills.get("Powerlifting"));
+//        addTask("Learn Android", skills.get("Android"));
+//        addTask("Learn Java", skills.get("Java"));
+//        addTask("Fix easy bug on Android", skills.get("Android"));
+//        addTask("Fix medium bug on Android", skills.get("Android"));
+//        addTask("Fix difficult bug on Android", skills.get("Android"));
+//        addTask("Fix easy bug on Java", skills.get("Java"));
+//        addTask("Fix medium bug on Java", skills.get("Java"));
+//        addTask("Fix difficult bug on Java", skills.get("Java"));
+//
+//        addTask("Read fiction book", skills.get("Erudition"));
+//        addTask("Read self-development book", skills.get("Erudition"));
+//        addTask("Read Android book", skills.get("Erudition"), skills.get("Android"));
+//        addTask("Read Java book", skills.get("Erudition"), skills.get("Java"));
+//
+//        addTask("Read fiction book on English", skills.get("Erudition"), skills.get("English"));
+//        addTask("Read self-development book on English", skills.get("Erudition"), skills.get("English"));
+//        addTask("Read Android book on English", skills.get("Erudition"), skills.get("Android"), skills.get("English"));
+//        addTask("Read Java book on English", skills.get("Erudition"), skills.get("Java"), skills.get("English"));
+//        addTask("Learn English", skills.get("English"));
+//
+//        addTask("Run 5 km", skills.get("Running"));
+//        addTask("Run 10 km", skills.get("Running"));
+//        addTask("Run 15 km", skills.get("Running"));
+//
+//        addTask("Ride for 10 km", skills.get("Roller skating"));
+//        addTask("Ride for 20 km", skills.get("Roller skating"));
+//        addTask("Ride for 30 km", skills.get("Roller skating"));
+//        addTask("Ride for 40 km", skills.get("Roller skating"));
+//
+//        addTask("Train in gym", skills.get("Powerlifting"));
     }
 
     public Map<String, Integer[]> getSkillsTitlesAndLevels() {
@@ -80,6 +81,10 @@ public class LifeEntity {
 
     public void addTask(String title, Skill ... relatedSkills){
         tasks.put(title, new Task(title, relatedSkills));
+    }
+
+    public void addSkill(String title, int level, int sublevel, Characteristic keyCharacteristic){
+        skills.put(title, new Skill(title, level, sublevel, keyCharacteristic));
     }
 
     private List<Characteristic> getAllCharacteristics(){
@@ -153,5 +158,60 @@ public class LifeEntity {
             }
         }
         return sb.toString();
+    }
+
+    public void updateCharacteristic(String title, int level) throws IOException {
+        getCharacteristicByTitle(title).setLevel(level);
+    }
+
+    public void updateSkill(String title, int level, int sublevel, String keyCharacteristicTitle) throws IOException {
+        if (skills.containsKey(title)){
+            Skill updSkill = skills.get(title);
+            updSkill.setLevel(level);
+            updSkill.setSublevel(sublevel);
+            updSkill.setKeyCharacteristic(getCharacteristicByTitle(keyCharacteristicTitle));
+        } else {
+            addSkill(title, level, sublevel, getCharacteristicByTitle(keyCharacteristicTitle));
+        }
+    }
+
+    public void updateTask(String title, String ... relatedSkillsTitles) throws IOException {
+        if (tasks.containsKey(title)){
+            Task updTask = tasks.get(title);
+            Skill[] skills = new Skill[relatedSkillsTitles.length];
+            for (int i = 0; i < relatedSkillsTitles.length; i++){
+                skills[i] = getSkillByTitle(relatedSkillsTitles[i]);
+            }
+            updTask.addRelatedSkills(skills);
+
+        } else {
+            Skill[] relatedSkills = new Skill[relatedSkillsTitles.length];
+            for (int i = 0; i < relatedSkillsTitles.length; i++){
+                relatedSkills[i] = getSkillByTitle(relatedSkillsTitles[i]);
+            }
+            addTask(title, relatedSkills);
+        }
+    }
+
+
+
+
+
+    private Characteristic getCharacteristicByTitle(String title) throws IOException {
+        for (Characteristic ch : getAllCharacteristics()){
+            if (ch.getTitle().equals(title)){
+                return ch;
+            }
+        }
+        throw new IOException("Skill with current title not found");
+    }
+
+    private Skill getSkillByTitle(String title) throws IOException {
+        for (Skill sk : skills.values()){
+            if (sk.getTitle().equals(title)){
+                return sk;
+            }
+        }
+        throw new IOException("Skill with current title not found");
     }
 }

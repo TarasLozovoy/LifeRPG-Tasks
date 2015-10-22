@@ -34,6 +34,15 @@
         android:layout_height="wrap_content"
         android:text="Read from file"
         android:id="@+id/button"
+        android:layout_below="@+id/buttonWrite"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Write to file"
+        android:id="@+id/buttonWrite"
         android:layout_below="@+id/openCharacteristicsButton"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

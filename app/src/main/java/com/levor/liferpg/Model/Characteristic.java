@@ -28,4 +28,14 @@ public class Characteristic {
     public void increaseLevelByN(int N){
         level += N;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        Characteristic ch;
+        if (o instanceof Characteristic){
+            ch = (Characteristic) o;
+            return this.title.equals(ch.title);
+        }
+        return false;
+    }
 }

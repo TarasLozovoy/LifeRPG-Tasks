@@ -41,6 +41,10 @@ public class Skill {
         return keyCharacteristic;
     }
 
+    public void setKeyCharacteristic(Characteristic keyCharacteristic) {
+        this.keyCharacteristic = keyCharacteristic;
+    }
+
     public void increaseSublevel(){
         sublevel++;
         if (sublevel == level){

@@ -21,6 +21,10 @@ public class Task {
         return relatedSkills;
     }
 
+    public void addRelatedSkills(Skill ... skills) {
+        this.relatedSkills = Arrays.asList(skills);
+    }
+
     public void perform(){
         for (Skill s: relatedSkills) {
             s.increaseSublevel();

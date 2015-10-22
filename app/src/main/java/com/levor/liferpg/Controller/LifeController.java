@@ -4,6 +4,7 @@ import com.levor.liferpg.Model.LifeEntity;
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -78,5 +79,56 @@ public class LifeController {
 
     public String getCurrentTasksString(){
         return  lifeEntity.getCurrentTasksString();
+    }
+
+
+    //======================================
+    //Setters
+    //======================================
+
+    public void updateCurrentContentWithStrings(String characteristicsFromFile, String skillsFromFile, String tasksFromFile) {
+        //characteristics
+        String[] characteristics = characteristicsFromFile.split(":;");
+        for (String characteristic : characteristics){
+            if (!characteristic.equals("")) {
+                String[] subelements = characteristic.split("::");
+                try {
+                    lifeEntity.updateCharacteristic(subelements[0], Integer.parseInt(subelements[1]));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        //skills
+        String[] skills = skillsFromFile.split(":;");
+        for (String skill : skills){
+            if (!skill.equals("")) {
+                String[] subelements = skill.split("::");
+                try {
+                    lifeEntity.updateSkill(subelements[0], Integer.parseInt(subelements[1]),
+                            Integer.parseInt(subelements[2]), subelements[3]);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        //tasks
+        String[] tasks = tasksFromFile.split(":;");
+        for (String task : tasks){
+            if (!task.equals("")) {
+                String[] subelements = task.split("::");
+                String[] relatedSkillsTitles = new String[subelements.length - 1];
+                for (int i = 0; i < relatedSkillsTitles.length; i++){
+                    relatedSkillsTitles[i] = subelements[i + 1];
+                }
+                try {
+                    lifeEntity.updateTask(subelements[0], relatedSkillsTitles);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

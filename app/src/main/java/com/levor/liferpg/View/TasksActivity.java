@@ -33,7 +33,7 @@ public class TasksActivity extends AppCompatActivity {
     private String characteristicsFromFile;
     private String tasksFromFile;
 
-    private Button openSkillsButton, openCharacteristicsButton, one;
+    private Button openSkillsButton, openCharacteristicsButton, readButton, writeButton;
     private TextView tasksTextView;
     private final LifeController lifeController = LifeController.getInstance();
 
@@ -47,19 +47,21 @@ public class TasksActivity extends AppCompatActivity {
         showTasks();
         registerButtonsListeners();
 
-        one = (Button) findViewById(R.id.button);
-        one.setOnClickListener(new View.OnClickListener() {
+        readButton = (Button) findViewById(R.id.button);
+        readButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 readContentStringsFromFiles();
             }
         });
-    }
 
-    @Override
-    protected void onPause() {
-        writeContentToFile();
-        super.onPause();
+        writeButton = (Button) findViewById(R.id.buttonWrite);
+        writeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                writeContentStringsToFile();
+            }
+        });
     }
 
     @Override
@@ -124,6 +126,8 @@ public class TasksActivity extends AppCompatActivity {
         skillsFromFile = getStringFromFile(SKILLS_FILE_NAME);
         tasksFromFile = getStringFromFile(TASKS_FILE_NAME);
         Log.e(TAG, "chars: " + characteristicsFromFile + "\nskiils: " + skillsFromFile + "\nTasks: " + tasksFromFile);
+        lifeController.updateCurrentContentWithStrings(characteristicsFromFile, skillsFromFile, tasksFromFile);
+        showTasks();
     }
 
     private String getStringFromFile(String fileName){
@@ -148,7 +152,7 @@ public class TasksActivity extends AppCompatActivity {
         }
     }
 
-    private void writeContentToFile(){
+    private void writeContentStringsToFile(){
         writeStringToFile(lifeController.getCurrentCharacteristicsString(), CHARACTERISTICS_FILE_NAME);
         writeStringToFile(lifeController.getCurrentSkillsString(), SKILLS_FILE_NAME);
         writeStringToFile(lifeController.getCurrentTasksString(), TASKS_FILE_NAME);
