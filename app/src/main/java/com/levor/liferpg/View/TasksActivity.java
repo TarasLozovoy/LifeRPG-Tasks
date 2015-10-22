@@ -3,6 +3,7 @@ package com.levor.liferpg.View;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.levor.liferpg.R;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -25,12 +27,13 @@ public class TasksActivity extends AppCompatActivity {
     private final String SKILLS_FILE_NAME = "skills_file_name.txt";
     private final String CHARACTERISTICS_FILE_NAME = "characteristics_file_name.txt";
     private final String TASKS_FILE_NAME = "tasks_file_name.txt";
+    private final String TAG = "com.levor.liferpg";
 
     private String skillsFromFile;
     private String characteristicsFromFile;
     private String tasksFromFile;
 
-    private Button openSkillsButton, openCharacteristicsButton;
+    private Button openSkillsButton, openCharacteristicsButton, one;
     private TextView tasksTextView;
     private final LifeController lifeController = LifeController.getInstance();
 
@@ -43,6 +46,20 @@ public class TasksActivity extends AppCompatActivity {
         tasksTextView = (TextView) findViewById(R.id.tasks);
         showTasks();
         registerButtonsListeners();
+
+        one = (Button) findViewById(R.id.button);
+        one.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                readContentStringsFromFiles();
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        writeContentToFile();
+        super.onPause();
     }
 
     @Override
@@ -102,31 +119,49 @@ public class TasksActivity extends AppCompatActivity {
         tasksTextView.setText(sb);
     }
 
-    private void readContentFromFiles(){
+    private void readContentStringsFromFiles(){
         characteristicsFromFile = getStringFromFile(CHARACTERISTICS_FILE_NAME);
         skillsFromFile = getStringFromFile(SKILLS_FILE_NAME);
         tasksFromFile = getStringFromFile(TASKS_FILE_NAME);
+        Log.e(TAG, "chars: " + characteristicsFromFile + "\nskiils: " + skillsFromFile + "\nTasks: " + tasksFromFile);
     }
 
     private String getStringFromFile(String fileName){
         try{
             FileInputStream fis = openFileInput(fileName);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader reader = new BufferedReader(isr);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
             StringBuilder sb = new StringBuilder();
             String line = "";
             while ((line = reader.readLine()) != null) {
                 sb.append(line);
             }
+            reader.close();
+            fis.close();
             return sb.toString();
         } catch (FileNotFoundException e){
             //TODO add creating files
             e.printStackTrace();
             return "";
         } catch (IOException e){
-            //TODO add creating files
             e.printStackTrace();
             return "";
+        }
+    }
+
+    private void writeContentToFile(){
+        writeStringToFile(lifeController.getCurrentCharacteristicsString(), CHARACTERISTICS_FILE_NAME);
+        writeStringToFile(lifeController.getCurrentSkillsString(), SKILLS_FILE_NAME);
+        writeStringToFile(lifeController.getCurrentTasksString(), TASKS_FILE_NAME);
+        Log.d(TAG, "content saved to filesystem");
+    }
+
+    private void writeStringToFile(String str, String fileName){
+        try{
+            FileOutputStream fos = openFileOutput(fileName, MODE_PRIVATE);
+            fos.write(str.getBytes());
+            fos.close();
+        } catch (IOException e){
+            e.printStackTrace();
         }
     }
 }

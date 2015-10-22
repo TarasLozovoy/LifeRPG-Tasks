@@ -56,7 +56,7 @@ public class SkillsActivity extends AppCompatActivity {
                     .append(" (")
                     .append(set.getValue()[1])
                     .append(").\nIncreases ")
-                    .append(lifeController.getCharacteristicrelatedToSkill(set.getKey()))
+                    .append(lifeController.getCharacteristicRelatedToSkill(set.getKey()))
                     .append(".\n\n");
         }
         skillsTextView.setText(sb);

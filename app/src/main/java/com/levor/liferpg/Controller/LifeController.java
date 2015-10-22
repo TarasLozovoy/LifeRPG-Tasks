@@ -26,6 +26,10 @@ public class LifeController {
         tasks = lifeEntity.getTasks();
     }
 
+    //======================================
+    //Getters
+    //======================================
+
     public Map<String, List<String>> getTasksWithRelatedSkills(){
         Map<String, List<String>> map = new TreeMap<>(); //Task title, related skills titles
         for (Task t : tasks.values()){
@@ -43,7 +47,7 @@ public class LifeController {
         return lifeEntity.getSkillsTitlesAndLevels();
     }
 
-    public String getCharacteristicrelatedToSkill(String skillTitle){
+    public String getCharacteristicRelatedToSkill(String skillTitle){
         return lifeEntity.getCharacteristicTitleBySkill(skillTitle);
     }
 
@@ -62,5 +66,17 @@ public class LifeController {
     }
     public int getDexterityLevel(){
         return lifeEntity.getDexterityLevel();
+    }
+
+    public String getCurrentCharacteristicsString(){
+        return lifeEntity.getCurrentCharacteristicsString();
+    }
+
+    public String getCurrentSkillsString(){
+        return lifeEntity.getCurrentSkillsString();
+    }
+
+    public String getCurrentTasksString(){
+        return  lifeEntity.getCurrentTasksString();
     }
 }

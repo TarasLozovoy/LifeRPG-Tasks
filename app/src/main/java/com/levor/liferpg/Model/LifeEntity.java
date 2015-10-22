@@ -1,6 +1,8 @@
 package com.levor.liferpg.Model;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -15,6 +17,7 @@ public class LifeEntity {
     private Map<String, Task> tasks = new TreeMap<>();
 
     private static LifeEntity lifeEntity;
+
     public static LifeEntity getInstance(){
         if (lifeEntity == null){
             lifeEntity = new LifeEntity();
@@ -79,6 +82,16 @@ public class LifeEntity {
         tasks.put(title, new Task(title, relatedSkills));
     }
 
+    private List<Characteristic> getAllCharacteristics(){
+        ArrayList<Characteristic> list = new ArrayList<>();
+        list.add(intelligence);
+        list.add(wisdom);
+        list.add(strength);
+        list.add(stamina);
+        list.add(dexterity);
+        return list;
+    }
+
     public int getIntelligenceLevel(){
         return intelligence.getLevel();
     }
@@ -101,5 +114,44 @@ public class LifeEntity {
 
     public String getCharacteristicTitleBySkill(String skillTitle){
         return skills.get(skillTitle).getKeyCharacteristic().getTitle();
+    }
+
+    public String getCurrentCharacteristicsString() {
+        StringBuilder sb = new StringBuilder();
+        for (Characteristic ch : getAllCharacteristics()){
+            sb.append(ch.getTitle())
+                    .append("::")
+                    .append(ch.getLevel())
+                    .append(":;");
+        }
+        return sb.toString();
+    }
+
+    public String getCurrentSkillsString() {
+        StringBuilder sb = new StringBuilder();
+        for (Skill sk : skills.values()){
+            sb.append(sk.getTitle())
+                    .append("::")
+                    .append(sk.getLevel())
+                    .append("::")
+                    .append(sk.getSublevel())
+                    .append("::")
+                    .append(sk.getKeyCharacteristic().getTitle())
+                    .append(":;");
+        }
+        return sb.toString();
+    }
+
+    public String getCurrentTasksString() {
+        StringBuilder sb = new StringBuilder();
+        for(Task t : tasks.values()){
+            sb.append(t.getTitle())
+                    .append("::");
+            for (int i = 0; i < t.getRelatedSkills().size(); i++){
+                sb.append(t.getRelatedSkills().get(i).getTitle())
+                        .append(i == t.getRelatedSkills().size() - 1 ? ":;" : "::");
+            }
+        }
+        return sb.toString();
     }
 }
