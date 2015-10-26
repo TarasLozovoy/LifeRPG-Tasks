@@ -194,7 +194,9 @@ public class LifeEntity {
     }
 
 
-
+    public Task getTaskByTitle(String title){
+        return tasks.get(title);
+    }
 
 
     private Characteristic getCharacteristicByTitle(String title) throws IOException {

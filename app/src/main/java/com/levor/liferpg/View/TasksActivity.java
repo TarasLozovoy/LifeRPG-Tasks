@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.levor.liferpg.Adapters.TasksAdapter;
 import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.R;
 
@@ -48,27 +49,18 @@ public class TasksActivity extends AppCompatActivity {
         openCharacteristicsButton = (Button) findViewById(R.id.openCharacteristicsButton);
         tasksTextView = (TextView) findViewById(R.id.tasks);
         listViewTasks = (ListView) findViewById(R.id.listViewTasks);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this
-                , android.R.layout.simple_list_item_1, lifeController.getTasksTitlesAsArray());
+
+        readContentStringsFromFiles();
+
+        TasksAdapter adapter = new TasksAdapter(this, lifeController.getTasksTitlesAsList());
         listViewTasks.setAdapter(adapter);
-//        showTasks();
         registerButtonsListeners();
+    }
 
-        Button readButton = (Button) findViewById(R.id.buttonRead);
-        readButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                readContentStringsFromFiles();
-            }
-        });
-
-        Button writeButton = (Button) findViewById(R.id.buttonWrite);
-        writeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                writeContentStringsToFile();
-            }
-        });
+    @Override
+    protected void onPause() {
+        writeContentStringsToFile();
+        super.onPause();
     }
 
     @Override
@@ -150,7 +142,6 @@ public class TasksActivity extends AppCompatActivity {
             fis.close();
             return sb.toString();
         } catch (FileNotFoundException e){
-            //TODO add creating files
             e.printStackTrace();
             return "";
         } catch (IOException e){
@@ -177,7 +168,6 @@ public class TasksActivity extends AppCompatActivity {
     }
 
     private void recreateAdapter(){
-        listViewTasks.setAdapter(new ArrayAdapter<>(this
-                , android.R.layout.simple_list_item_1, lifeController.getTasksTitlesAsArray()));
+        listViewTasks.setAdapter(new TasksAdapter(this, lifeController.getTasksTitlesAsList()));
     }
 }

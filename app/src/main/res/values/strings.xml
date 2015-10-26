@@ -13,4 +13,6 @@
     <string name="stamina">Stamina -</string>
     <string name="dexterity">Dexterity -</string>
     <string name="title_activity_skills">SkillsActivity</string>
+
+    <string name="tasks_list_view_positive_button">Done</string>
 </resources>

@@ -6,14 +6,13 @@ import com.levor.liferpg.Model.Task;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class LifeController {
     private LifeEntity lifeEntity = LifeEntity.getInstance();
-    Map<String, Task> tasks;
+    private Map<String, Task> tasks;
 
     private static LifeController LifeController;
     public static LifeController getInstance(){
@@ -44,8 +43,8 @@ public class LifeController {
         return map;
     }
 
-    public String[] getTasksTitlesAsArray(){
-        return tasks.keySet().toArray(new String[tasks.size()]);
+    public List<String> getTasksTitlesAsList(){
+        return new ArrayList<>(tasks.keySet());
     }
 
     public Map<String, Integer[]> getSkillsTitlesAndLevels(){
@@ -134,5 +133,9 @@ public class LifeController {
                 }
             }
         }
+    }
+
+    public Task getTaskByTitle(String s) {
+        return lifeEntity.getTaskByTitle(s);
     }
 }
