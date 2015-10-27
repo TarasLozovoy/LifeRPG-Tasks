@@ -63,7 +63,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Task task = lifeController.getTaskByTitle(items.get(position));
+                final Task task = lifeController.getTaskByTitle(items.get(position));
                 StringBuilder sb = new StringBuilder();
                 sb.append("Task successfully performed!\n")
                         .append("Skill(s) improved:\n");
@@ -90,6 +90,18 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("Undo", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                StringBuilder sb = new StringBuilder();
+                                sb.append("Task undone.");
+                                for(Skill sk: task.getRelatedSkills()){
+                                    sk.decreaseSublevel();
+                                    sb.append("\n").append(sk.getTitle()).append(" skill returned to previous state");
+                                }
+                                Toast.makeText(mContext, sb.toString(),Toast.LENGTH_LONG).show();
                             }
                         });
                 AlertDialog alert = builder.create();

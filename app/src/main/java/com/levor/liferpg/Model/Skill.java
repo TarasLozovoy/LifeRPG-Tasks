@@ -53,4 +53,13 @@ public class Skill {
             sublevel = 0;
         }
     }
+
+    public void decreaseSublevel(){
+        sublevel--;
+        if (sublevel < 0) {
+            keyCharacteristic.increaseLevelByN(-(1 + level/10));
+            level --;
+            sublevel = level - 1;
+        }
+    }
 }
