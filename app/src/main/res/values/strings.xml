@@ -15,4 +15,5 @@
     <string name="title_activity_skills">SkillsActivity</string>
 
     <string name="tasks_list_view_positive_button">Done</string>
+    <string name="title_activity_detailed_task">DetailedTaskActivity</string>
 </resources>

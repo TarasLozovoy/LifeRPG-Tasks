@@ -7,13 +7,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.levor.liferpg.Adapters.TasksAdapter;
 import com.levor.liferpg.Controller.LifeController;
+import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
 
 import java.io.BufferedReader;
@@ -30,6 +31,7 @@ public class TasksActivity extends AppCompatActivity {
     private final String CHARACTERISTICS_FILE_NAME = "characteristics_file_name.txt";
     private final String TASKS_FILE_NAME = "tasks_file_name.txt";
     private final String TAG = "com.levor.liferpg";
+    public final static String SELECTED_TASK_TITLE_TAG = "selected_task_title_tag";
 
     private String skillsFromFile;
     private String characteristicsFromFile;
@@ -38,7 +40,7 @@ public class TasksActivity extends AppCompatActivity {
     private Button openSkillsButton;
     private Button openCharacteristicsButton;
     private TextView tasksTextView;
-    private ListView listViewTasks;
+    private ListView listView;
     private final LifeController lifeController = LifeController.getInstance();
 
     @Override
@@ -48,12 +50,10 @@ public class TasksActivity extends AppCompatActivity {
         openSkillsButton = (Button) findViewById(R.id.openSkillsButton);
         openCharacteristicsButton = (Button) findViewById(R.id.openCharacteristicsButton);
         tasksTextView = (TextView) findViewById(R.id.tasks);
-        listViewTasks = (ListView) findViewById(R.id.listViewTasks);
+        listView = (ListView) findViewById(R.id.listViewTasks);
 
         readContentStringsFromFiles();
-
-        TasksAdapter adapter = new TasksAdapter(this, lifeController.getTasksTitlesAsList());
-        listViewTasks.setAdapter(adapter);
+        setupListView();
         registerButtonsListeners();
     }
 
@@ -98,6 +98,20 @@ public class TasksActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(TasksActivity.this, SkillsActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setupListView(){
+        TasksAdapter adapter = new TasksAdapter(this, lifeController.getTasksTitlesAsList());
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedTaskTitle = lifeController.getTasksTitlesAsList().get(position);
+                Intent intent = new Intent(TasksActivity.this, DetailedTaskActivity.class);
+                intent.putExtra(SELECTED_TASK_TITLE_TAG, selectedTaskTitle);
                 startActivity(intent);
             }
         });
@@ -168,6 +182,6 @@ public class TasksActivity extends AppCompatActivity {
     }
 
     private void recreateAdapter(){
-        listViewTasks.setAdapter(new TasksAdapter(this, lifeController.getTasksTitlesAsList()));
+        listView.setAdapter(new TasksAdapter(this, lifeController.getTasksTitlesAsList()));
     }
 }
