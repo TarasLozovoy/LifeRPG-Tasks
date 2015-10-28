@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.levor.liferpg.Adapters.TasksAdapter;
 import com.levor.liferpg.Controller.LifeController;
@@ -32,6 +33,7 @@ public class TasksActivity extends AppCompatActivity {
     private final String TASKS_FILE_NAME = "tasks_file_name.txt";
     private final String TAG = "com.levor.liferpg";
     public final static String SELECTED_TASK_TITLE_TAG = "selected_task_title_tag";
+    public final static int ADD_TASK_ACTIVITY_REQUEST_CODE = 0;
 
     private String skillsFromFile;
     private String characteristicsFromFile;
@@ -39,7 +41,7 @@ public class TasksActivity extends AppCompatActivity {
 
     private Button openSkillsButton;
     private Button openCharacteristicsButton;
-    private TextView tasksTextView;
+    private Button addNewTaskButton;
     private ListView listView;
     private final LifeController lifeController = LifeController.getInstance();
 
@@ -49,7 +51,7 @@ public class TasksActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tasks);
         openSkillsButton = (Button) findViewById(R.id.openSkillsButton);
         openCharacteristicsButton = (Button) findViewById(R.id.openCharacteristicsButton);
-        tasksTextView = (TextView) findViewById(R.id.tasks);
+        addNewTaskButton = (Button) findViewById(R.id.addTaskButton);
         listView = (ListView) findViewById(R.id.listViewTasks);
 
         readContentStringsFromFiles();
@@ -101,6 +103,26 @@ public class TasksActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        addNewTaskButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(TasksActivity.this, AddTaskActivity.class), ADD_TASK_ACTIVITY_REQUEST_CODE);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case ADD_TASK_ACTIVITY_REQUEST_CODE:
+                if(resultCode == RESULT_OK){
+                    Toast.makeText(this, "Task added", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                //do nothing
+        }
     }
 
     private void setupListView(){
@@ -115,23 +137,6 @@ public class TasksActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    private void showTasks(){
-        Map<String, List<String>> tasks = lifeController.getTasksWithRelatedSkills();
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, List<String>> set : tasks.entrySet()){
-            sb.append(set.getKey())
-                    .append(".\nRelated skills: \n");
-            for(String s : set.getValue()){
-                sb.append('-')
-                        .append(s)
-                        .append('-')
-                        .append(" ");
-            }
-            sb.append("\n");
-        }
-        tasksTextView.setText(sb);
     }
 
     private void readContentStringsFromFiles(){

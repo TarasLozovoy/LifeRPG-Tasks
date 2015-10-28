@@ -28,6 +28,8 @@
             android:name=".View.DetailedTaskActivity"
             android:label="@string/title_activity_detailed_task" >
         </activity>
+        <activity android:name=".View.AddTaskActivity" >
+        </activity>
     </application>
 
 </manifest>
