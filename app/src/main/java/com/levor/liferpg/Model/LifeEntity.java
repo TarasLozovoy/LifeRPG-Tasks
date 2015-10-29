@@ -208,7 +208,7 @@ public class LifeEntity {
         throw new IOException("Skill with current title not found");
     }
 
-    private Skill getSkillByTitle(String title) throws IOException {
+    public Skill getSkillByTitle(String title) throws IOException {
         for (Skill sk : skills.values()){
             if (sk.getTitle().equals(title)){
                 return sk;

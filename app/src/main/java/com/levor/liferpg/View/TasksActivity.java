@@ -118,6 +118,7 @@ public class TasksActivity extends AppCompatActivity {
             case ADD_TASK_ACTIVITY_REQUEST_CODE:
                 if(resultCode == RESULT_OK){
                     Toast.makeText(this, "Task added", Toast.LENGTH_SHORT).show();
+                    recreateAdapter();
                 }
                 break;
             default:

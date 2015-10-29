@@ -1,12 +1,16 @@
 package com.levor.liferpg.View;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +24,7 @@ public class AddTaskActivity extends AppCompatActivity {
     private EditText newTaskTitleEditText;
     private TextView relatedSkillToAdd;
     private Button addSkillButton;
+    private Button finishActivity;
 
     private ArrayList<String> relatedskills = new ArrayList<>();
 
@@ -31,24 +36,33 @@ public class AddTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_task);
         newTaskTitleEditText = (EditText) findViewById(R.id.new_task_title_edit_text);
         relatedSkillToAdd = (TextView) findViewById(R.id.related_skills_to_add);
+        finishActivity = (Button) findViewById(R.id.finish_activity);
+        finishActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+                lifeController.createNewTask(newTaskTitleEditText.getText().toString(), relatedskills);
+                AddTaskActivity.this.finish();
+            }
+        });
         addSkillButton = (Button) findViewById(R.id.add_related_skill);
         addSkillButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(AddTaskActivity.this, addSkillButton);
-                popupMenu.getMenuInflater().inflate(R.menu.add_related_skill_popup_menu, popupMenu.getMenu());
-                for (String sk : lifeController.getSkillsTitlesAndLevels().keySet()){
-                    popupMenu.getMenu().add(sk);
-                }
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                final ArrayAdapter<String> adapter = new ArrayAdapter<>(AddTaskActivity.this, android.R.layout.select_dialog_singlechoice
+                        , lifeController.getSkillsTitlesAndLevels().keySet().toArray(new String[lifeController.getSkillsTitlesAndLevels().size()]));
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(AddTaskActivity.this);
+                dialog.setTitle("Choose skill to add");
+                dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
                     @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        relatedskills.add(item.getTitle().toString());
-                        relatedSkillToAdd.setText(relatedSkillToAdd.getText() + item.getTitle().toString() + " ");
-                        return true;
+                    public void onClick(DialogInterface dialog, int which) {
+                        relatedskills.add(adapter.getItem(which));
+                        relatedSkillToAdd.setText(relatedSkillToAdd.getText() + adapter.getItem(which) + " ");
+                        dialog.dismiss();
                     }
                 });
-                popupMenu.show();
+                dialog.show();
             }
         });
     }

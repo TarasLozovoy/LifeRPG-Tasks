@@ -138,4 +138,16 @@ public class LifeController {
     public Task getTaskByTitle(String s) {
         return lifeEntity.getTaskByTitle(s);
     }
+
+    public void createNewTask(String title, ArrayList<String> relatedSkills) {
+        Skill[] skills = new Skill[relatedSkills.size()];
+        for (int i = 0; i < relatedSkills.size(); i++){
+            try {
+                skills[i] = lifeEntity.getSkillByTitle(relatedSkills.get(i));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        lifeEntity.addTask(title, skills);
+    }
 }
