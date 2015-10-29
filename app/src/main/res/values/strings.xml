@@ -3,8 +3,8 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name="open_skills">Open Skills</string>
-    <string name="open_characteristics">Open Characteristics</string>
+    <string name="open_skills">Skills</string>
+    <string name="open_characteristics">Characteristics</string>
     <string name="title_activity_characteristic">CharacteristicActivity</string>
 
     <string name="intelligence">Intelligence -</string>
@@ -20,6 +20,6 @@
     <string name="new_task_title_edit_text">Type task title</string>
     <string name="add_skills_to_task">Related skills: </string>
     <string name="add_skill_to_task">Add related skill</string>
-    <string name="add_new_task">Add new task</string>
+    <string name="add_new_task">New task</string>
     <string name="create_task">Create task</string>
 </resources>

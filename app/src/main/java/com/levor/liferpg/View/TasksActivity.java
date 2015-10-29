@@ -41,7 +41,6 @@ public class TasksActivity extends AppCompatActivity {
 
     private Button openSkillsButton;
     private Button openCharacteristicsButton;
-    private Button addNewTaskButton;
     private ListView listView;
     private final LifeController lifeController = LifeController.getInstance();
 
@@ -51,7 +50,6 @@ public class TasksActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tasks);
         openSkillsButton = (Button) findViewById(R.id.openSkillsButton);
         openCharacteristicsButton = (Button) findViewById(R.id.openCharacteristicsButton);
-        addNewTaskButton = (Button) findViewById(R.id.addTaskButton);
         listView = (ListView) findViewById(R.id.listViewTasks);
 
         readContentStringsFromFiles();
@@ -67,20 +65,14 @@ public class TasksActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_tasks, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (item.getItemId() == R.id.add_new_task) {
+            startActivityForResult(new Intent(TasksActivity.this, AddTaskActivity.class), ADD_TASK_ACTIVITY_REQUEST_CODE);
             return true;
         }
 
@@ -103,13 +95,6 @@ public class TasksActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        addNewTaskButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(new Intent(TasksActivity.this, AddTaskActivity.class), ADD_TASK_ACTIVITY_REQUEST_CODE);
-            }
-        });
     }
 
     @Override
@@ -117,7 +102,6 @@ public class TasksActivity extends AppCompatActivity {
         switch (requestCode){
             case ADD_TASK_ACTIVITY_REQUEST_CODE:
                 if(resultCode == RESULT_OK){
-                    Toast.makeText(this, "Task added", Toast.LENGTH_SHORT).show();
                     recreateAdapter();
                 }
                 break;

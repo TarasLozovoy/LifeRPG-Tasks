@@ -4,13 +4,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,7 +24,6 @@ public class AddTaskActivity extends AppCompatActivity {
     private EditText newTaskTitleEditText;
     private ListView relatedSkillListView;
     private Button addSkillButton;
-    private Button finishActivity;
 
     private ArrayList<String> relatedSkills = new ArrayList<>();
 
@@ -46,21 +45,11 @@ public class AddTaskActivity extends AppCompatActivity {
         });
         updateListView();
 
-        finishActivity = (Button) findViewById(R.id.finish_activity);
-        finishActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_OK);
-                lifeController.createNewTask(newTaskTitleEditText.getText().toString(), relatedSkills);
-                AddTaskActivity.this.finish();
-            }
-        });
-
         addSkillButton = (Button) findViewById(R.id.add_related_skill);
         addSkillButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ArrayAdapter<String> adapter = new ArrayAdapter<>(AddTaskActivity.this, android.R.layout.select_dialog_singlechoice
+                final ArrayAdapter<String> adapter = new ArrayAdapter<>(AddTaskActivity.this, android.R.layout.select_dialog_item
                         , lifeController.getSkillsTitlesAndLevels().keySet().toArray(new String[lifeController.getSkillsTitlesAndLevels().size()]));
 
                 AlertDialog.Builder dialog = new AlertDialog.Builder(AddTaskActivity.this);
@@ -80,6 +69,34 @@ public class AddTaskActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add_task, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.create_task) {
+            String title = newTaskTitleEditText.getText().toString();
+            if (title.isEmpty()){
+                Toast.makeText(this, "Task title can't be empty", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            if (relatedSkills.isEmpty()){
+                Toast.makeText(this, "Add at least one related skill", Toast.LENGTH_LONG).show();
+                return true;
+            }
+            if (lifeController.getTaskByTitle(title) != null){
+                createIdenticalTaskRequestDialog(title);
+            } else {
+                createNewTask(title);
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void updateListView(){
         relatedSkillListView.setAdapter(new TaskAddingAdapter(this, relatedSkills));
     }
@@ -88,5 +105,34 @@ public class AddTaskActivity extends AppCompatActivity {
     public void onBackPressed() {
         Toast.makeText(this, "Task is not added", Toast.LENGTH_SHORT).show();
         super.onBackPressed();
+    }
+
+    private void createIdenticalTaskRequestDialog(final String title){
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setTitle("Task with such title is already created!")
+                .setMessage("Are you sure you want to rewrite old task with new one?")
+                .setCancelable(true)
+                .setNegativeButton("No, change new task title", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        createNewTask(title);
+                    }
+                })
+                .show();
+
+    }
+
+    private void createNewTask(String title){
+        setResult(RESULT_OK);
+        lifeController.createNewTask(title, relatedSkills);
+        Toast.makeText(this, "Task added", Toast.LENGTH_LONG).show();
+        AddTaskActivity.this.finish();
     }
 }

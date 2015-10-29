@@ -2,8 +2,8 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".TasksActivity">
-    <item android:id="@+id/action_settings"
-          android:title="@string/action_settings"
+    <item android:id="@+id/add_new_task"
+          android:title="@string/add_new_task"
           android:orderInCategory="100"
-          app:showAsAction="never"/>
+          app:showAsAction="always"/>
 </menu>

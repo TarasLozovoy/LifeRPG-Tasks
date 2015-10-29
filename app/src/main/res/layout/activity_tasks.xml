@@ -21,18 +21,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/addTaskButton"
-        android:text="@string/add_new_task"
-        android:layout_below="@id/openSkillsButton"/>
-
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listViewTasks"
-        android:layout_below="@+id/addTaskButton"
+        android:layout_below="@+id/openSkillsButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
