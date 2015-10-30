@@ -51,6 +51,24 @@ public class LifeController {
         return lifeEntity.getSkillsTitlesAndLevels();
     }
 
+    public ArrayList<Skill> getAllSkills(){
+        return lifeEntity.getAllSkills();
+
+//        Map<String, Integer[]> skills = lifeEntity.getAllSkills();
+//        ArrayList<String> skillList = new ArrayList<>();
+//        for (Map.Entry<String, Integer[]> pair : skills.entrySet()){
+//            StringBuilder sb = new StringBuilder();
+//            sb.append(pair.getKey())
+//                    .append(" - ")
+//                    .append(pair.getValue()[0])
+//                    .append("(")
+//                    .append(pair.getValue()[1])
+//                    .append(")");
+//            skillList.add(sb.toString());
+//        }
+//        return skillList.toArray(new String[skillList.size()]);
+    }
+
     public String getCharacteristicRelatedToSkill(String skillTitle){
         return lifeEntity.getCharacteristicTitleBySkill(skillTitle);
     }
@@ -84,6 +102,9 @@ public class LifeController {
         return  lifeEntity.getCurrentTasksString();
     }
 
+    public Task getTaskByTitle(String s) {
+        return lifeEntity.getTaskByTitle(s);
+    }
 
     //======================================
     //Setters
@@ -135,10 +156,6 @@ public class LifeController {
         }
     }
 
-    public Task getTaskByTitle(String s) {
-        return lifeEntity.getTaskByTitle(s);
-    }
-
     public void createNewTask(String title, ArrayList<String> relatedSkills) {
         Skill[] skills = new Skill[relatedSkills.size()];
         for (int i = 0; i < relatedSkills.size(); i++){
@@ -149,5 +166,18 @@ public class LifeController {
             }
         }
         lifeEntity.addTask(title, skills);
+    }
+
+    public Skill getSkillByTitle(String title) {
+        try {
+            return lifeEntity.getSkillByTitle(title);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ArrayList<Task> getTasksBySkill(Skill sk){
+        return lifeEntity.getTasksBySkill(sk);
     }
 }

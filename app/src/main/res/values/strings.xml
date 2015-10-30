@@ -22,4 +22,13 @@
     <string name="add_skill_to_task">Add related skill</string>
     <string name="add_new_task">New task</string>
     <string name="create_task">Create task</string>
+    <string name="title_activity_detailed_skill">DetailedSkillActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="increases">Increases: </string>
+    <string name="tasks_enhancing_skill">Skill sublevel may be increased by performing next tasks:
+    </string>
+    <string name="level">Level:</string>
+    <string name="sublevel">Sublevel:</string>
+    <string name="to_next_lvl">Points left to next level:</string>
 </resources>

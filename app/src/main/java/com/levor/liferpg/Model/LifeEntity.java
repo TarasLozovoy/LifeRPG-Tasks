@@ -3,6 +3,7 @@ package com.levor.liferpg.Model;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -215,5 +216,19 @@ public class LifeEntity {
             }
         }
         throw new IOException("Skill with current title not found");
+    }
+
+    public ArrayList<Skill> getAllSkills(){
+        return new ArrayList<>(skills.values());
+    }
+
+    public ArrayList<Task> getTasksBySkill(Skill sk){
+        ArrayList<Task> tasksBySkill = new ArrayList<>();
+        for (Task t : tasks.values()){
+            if (t.getRelatedSkills().contains(sk)){
+                tasksBySkill.add(t);
+            }
+        }
+        return tasksBySkill;
     }
 }

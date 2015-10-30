@@ -1,27 +1,47 @@
 package com.levor.liferpg.View;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.levor.liferpg.Controller.LifeController;
+import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.R;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SkillsActivity extends AppCompatActivity {
+    public final static String SELECTED_SKILL_TITLE_TAG = "selected_skill_title_tag";
     private final LifeController lifeController = LifeController.getInstance();
-
-    private TextView skillsTextView;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_skills);
-        skillsTextView = (TextView) findViewById(R.id.skillsTextView);
-        showSkills();
+        listView = (ListView) findViewById(R.id.skills_list_view);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(SkillsActivity.this, DetailedSkillActivity.class);
+                intent.putExtra(SELECTED_SKILL_TITLE_TAG, lifeController.getAllSkills().get(position).getTitle());
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        updateAdapter();
+        super.onResume();
     }
 
     @Override
@@ -46,19 +66,19 @@ public class SkillsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showSkills() {
-        StringBuilder sb = new StringBuilder();
-        Map<String, Integer[]> map = lifeController.getSkillsTitlesAndLevels();
-        for (Map.Entry<String, Integer[]> set : map.entrySet()){
-            sb.append(set.getKey())
+    private void updateAdapter() {
+        List<Skill> skills = lifeController.getAllSkills();
+        List<String> rows = new ArrayList<>(skills.size());
+        for (Skill sk : skills){
+            StringBuilder sb = new StringBuilder();
+            sb.append(sk.getTitle())
                     .append(" - ")
-                    .append(set.getValue()[0])
-                    .append(" (")
-                    .append(set.getValue()[1])
-                    .append(").\nIncreases ")
-                    .append(lifeController.getCharacteristicRelatedToSkill(set.getKey()))
-                    .append(".\n\n");
+                    .append(sk.getLevel())
+                    .append("(")
+                    .append(sk.getSublevel())
+                    .append(")");
+            rows.add(sb.toString());
         }
-        skillsTextView.setText(sb);
+        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, rows.toArray()));
     }
 }

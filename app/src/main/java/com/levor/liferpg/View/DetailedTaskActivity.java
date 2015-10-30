@@ -14,6 +14,7 @@ import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
 
 public class DetailedTaskActivity extends AppCompatActivity {
+    public final static String SELECTED_TASK_TITLE_TAG = "selected_task_title_tag";
     private TextView taskTitle;
     private TextView relatedSkills;
     private Task currenttask;
@@ -28,11 +29,11 @@ public class DetailedTaskActivity extends AppCompatActivity {
         taskTitle = (TextView) findViewById(R.id.task_title);
         relatedSkills = (TextView) findViewById(R.id.related_skills);
 
-        String title = getIntent().getStringExtra(TasksActivity.SELECTED_TASK_TITLE_TAG);
+        String title = getIntent().getStringExtra(SELECTED_TASK_TITLE_TAG);
         taskTitle.setText(title);
 
         currenttask = lifeController.getTaskByTitle(title);
-        StringBuilder sb = new StringBuilder("Related skill(s):\n");
+        StringBuilder sb = new StringBuilder("Increases:\n");
         for (Skill sk : currenttask.getRelatedSkills()){
             sb.append(sk.getTitle())
                     .append(" - ")

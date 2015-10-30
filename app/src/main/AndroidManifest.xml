@@ -30,6 +30,10 @@
         </activity>
         <activity android:name=".View.AddTaskActivity" >
         </activity>
+        <activity
+            android:name=".View.DetailedSkillActivity"
+            android:label="@string/title_activity_detailed_skill" >
+        </activity>
     </application>
 
 </manifest>

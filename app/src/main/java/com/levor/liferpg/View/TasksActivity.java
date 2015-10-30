@@ -32,7 +32,6 @@ public class TasksActivity extends AppCompatActivity {
     private final String CHARACTERISTICS_FILE_NAME = "characteristics_file_name.txt";
     private final String TASKS_FILE_NAME = "tasks_file_name.txt";
     private final String TAG = "com.levor.liferpg";
-    public final static String SELECTED_TASK_TITLE_TAG = "selected_task_title_tag";
     public final static int ADD_TASK_ACTIVITY_REQUEST_CODE = 0;
 
     private String skillsFromFile;
@@ -118,7 +117,7 @@ public class TasksActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedTaskTitle = lifeController.getTasksTitlesAsList().get(position);
                 Intent intent = new Intent(TasksActivity.this, DetailedTaskActivity.class);
-                intent.putExtra(SELECTED_TASK_TITLE_TAG, selectedTaskTitle);
+                intent.putExtra(DetailedTaskActivity.SELECTED_TASK_TITLE_TAG, selectedTaskTitle);
                 startActivity(intent);
             }
         });
