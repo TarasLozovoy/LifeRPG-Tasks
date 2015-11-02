@@ -90,6 +90,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
+                                notifyDataSetChanged();
                             }
                         })
                         .setNegativeButton("Undo", new DialogInterface.OnClickListener() {
@@ -106,7 +107,6 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                         });
                 AlertDialog alert = builder.create();
                 alert.show();
-                notifyDataSetChanged();
             }
         });
         return view;

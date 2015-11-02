@@ -180,4 +180,8 @@ public class LifeController {
     public ArrayList<Task> getTasksBySkill(Skill sk){
         return lifeEntity.getTasksBySkill(sk);
     }
+
+    public void removeTask(Task task) {
+        lifeEntity.removeTask(task);
+    }
 }

@@ -28,7 +28,8 @@
             android:name=".View.DetailedTaskActivity"
             android:label="@string/title_activity_detailed_task" >
         </activity>
-        <activity android:name=".View.AddTaskActivity" >
+        <activity android:name=".View.AddTaskActivity"
+                  android:label="@string/title_activity_add_task">
         </activity>
         <activity
             android:name=".View.DetailedSkillActivity"

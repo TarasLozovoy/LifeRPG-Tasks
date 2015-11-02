@@ -1,6 +1,7 @@
 package com.levor.liferpg.View;
 
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -29,6 +30,7 @@ public class DetailedSkillActivity extends AppCompatActivity {
     private final LifeController lifeController = LifeController.getInstance();
     private Skill currentSkill;
     private ArrayList<String> currentTasks;
+    private TasksAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class DetailedSkillActivity extends AppCompatActivity {
         toNextLevel = (TextView) findViewById(R.id.to_next_level_value);
         listView = (ListView) findViewById(R.id.related_tasks);
         currentSkill = lifeController.getSkillByTitle(getIntent().getStringExtra(SkillsActivity.SELECTED_SKILL_TITLE_TAG));
+        setTitle(currentSkill.getTitle() + " skill details");
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -49,17 +52,18 @@ public class DetailedSkillActivity extends AppCompatActivity {
                 String selectedTaskTitle = currentTasks.get(position);
                 Intent intent = new Intent(DetailedSkillActivity.this, DetailedTaskActivity.class);
                 intent.putExtra(DetailedTaskActivity.SELECTED_TASK_TITLE_TAG, selectedTaskTitle);
-                startActivity(intent);
+                startActivityForResult(intent, DetailedTaskActivity.DETAILED_TASK_ACTIVITY_REQUEST_CODE);
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        currentSkill = lifeController.getSkillByTitle(currentSkill.getTitle());
-        recreateAdapter();
+        createAdapter();
+        adapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                currentSkill = lifeController.getSkillByTitle(currentSkill.getTitle());
+                updateSkillDetails();
+            }
+        });
         updateSkillDetails();
-        super.onResume();
     }
 
     @Override
@@ -84,21 +88,31 @@ public class DetailedSkillActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void recreateAdapter(){
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case DetailedTaskActivity.DETAILED_TASK_ACTIVITY_REQUEST_CODE :
+                adapter.notifyDataSetChanged();
+                break;
+        }
+    }
+
+    private void createAdapter(){
         ArrayList<Task> tasks = lifeController.getTasksBySkill(currentSkill);
         ArrayList<String> titles = new ArrayList<>();
         for (Task t: tasks){
             titles.add(t.getTitle());
         }
         currentTasks = titles;
-        listView.setAdapter(new TasksAdapter(this, titles));
+        adapter = new TasksAdapter(this, titles);
+        listView.setAdapter(adapter);
     }
 
     private void updateSkillDetails(){
         skillTitleTV.setText(currentSkill.getTitle());
         keyCharTV.setText(currentSkill.getKeyCharacteristic().getTitle());
-        levelValue.setText(""+currentSkill.getLevel());
-        sublevelValue.setText(""+currentSkill.getSublevel());
-        toNextLevel.setText(""+(currentSkill.getLevel() - currentSkill.getSublevel()));
+        levelValue.setText(" "+currentSkill.getLevel());
+        sublevelValue.setText(" "+currentSkill.getSublevel());
+        toNextLevel.setText(" "+(currentSkill.getLevel() - currentSkill.getSublevel()));
     }
 }

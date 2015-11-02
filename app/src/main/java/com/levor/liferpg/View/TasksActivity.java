@@ -1,6 +1,7 @@
 package com.levor.liferpg.View;
 
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +11,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.levor.liferpg.Adapters.TasksAdapter;
 import com.levor.liferpg.Controller.LifeController;
-import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
 
 import java.io.BufferedReader;
@@ -24,8 +22,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.List;
-import java.util.Map;
 
 public class TasksActivity extends AppCompatActivity {
     private final String SKILLS_FILE_NAME = "skills_file_name.txt";
@@ -41,7 +37,9 @@ public class TasksActivity extends AppCompatActivity {
     private Button openSkillsButton;
     private Button openCharacteristicsButton;
     private ListView listView;
+
     private final LifeController lifeController = LifeController.getInstance();
+    private TasksAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +50,7 @@ public class TasksActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listViewTasks);
 
         readContentStringsFromFiles();
+        createAdapter();
         setupListView();
         registerButtonsListeners();
     }
@@ -101,9 +100,13 @@ public class TasksActivity extends AppCompatActivity {
         switch (requestCode){
             case ADD_TASK_ACTIVITY_REQUEST_CODE:
                 if(resultCode == RESULT_OK){
-                    recreateAdapter();
+                    createAdapter();
                 }
                 break;
+            case DetailedTaskActivity.DETAILED_TASK_ACTIVITY_REQUEST_CODE:
+                if(resultCode == RESULT_OK){
+                    createAdapter();
+                }
             default:
                 //do nothing
         }
@@ -118,7 +121,7 @@ public class TasksActivity extends AppCompatActivity {
                 String selectedTaskTitle = lifeController.getTasksTitlesAsList().get(position);
                 Intent intent = new Intent(TasksActivity.this, DetailedTaskActivity.class);
                 intent.putExtra(DetailedTaskActivity.SELECTED_TASK_TITLE_TAG, selectedTaskTitle);
-                startActivity(intent);
+                startActivityForResult(intent, DetailedTaskActivity.DETAILED_TASK_ACTIVITY_REQUEST_CODE);
             }
         });
     }
@@ -129,7 +132,7 @@ public class TasksActivity extends AppCompatActivity {
         tasksFromFile = getStringFromFile(TASKS_FILE_NAME);
         Log.e(TAG, "chars: " + characteristicsFromFile + "\nskiils: " + skillsFromFile + "\nTasks: " + tasksFromFile);
         lifeController.updateCurrentContentWithStrings(characteristicsFromFile, skillsFromFile, tasksFromFile);
-        recreateAdapter();
+        createAdapter();
     }
 
     private String getStringFromFile(String fileName){
@@ -170,7 +173,8 @@ public class TasksActivity extends AppCompatActivity {
         }
     }
 
-    private void recreateAdapter(){
-        listView.setAdapter(new TasksAdapter(this, lifeController.getTasksTitlesAsList()));
+    private void createAdapter(){
+        adapter = new TasksAdapter(this, lifeController.getTasksTitlesAsList());
+        listView.setAdapter(adapter);
     }
 }

@@ -5,14 +5,14 @@
 
     <string name="open_skills">Skills</string>
     <string name="open_characteristics">Characteristics</string>
-    <string name="title_activity_characteristic">CharacteristicActivity</string>
+    <string name="title_activity_characteristic">Characteristics</string>
 
     <string name="intelligence">Intelligence -</string>
     <string name="wisdom">Wisdom -</string>
     <string name="strength">Strength -</string>
     <string name="stamina">Stamina -</string>
     <string name="dexterity">Dexterity -</string>
-    <string name="title_activity_skills">SkillsActivity</string>
+    <string name="title_activity_skills">Skills</string>
 
     <string name="tasks_list_view_positive_button">Done</string>
     <string name="title_activity_detailed_task">DetailedTaskActivity</string>
@@ -31,4 +31,9 @@
     <string name="level">Level:</string>
     <string name="sublevel">Sublevel:</string>
     <string name="to_next_lvl">Points left to next level:</string>
+    <string name="related_skills">Related skills:</string>
+    <string name="perform_task">Perform</string>
+    <string name="remove_task">Remove task</string>
+    <string name="tasks_activity_title">Tasks</string>
+    <string name="title_activity_add_task">Add new task</string>
 </resources>

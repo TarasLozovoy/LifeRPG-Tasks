@@ -231,4 +231,9 @@ public class LifeEntity {
         }
         return tasksBySkill;
     }
+
+
+    public void removeTask(Task task) {
+        tasks.remove(task.getTitle());
+    }
 }
