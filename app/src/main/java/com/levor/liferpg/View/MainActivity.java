@@ -1,7 +1,8 @@
 package com.levor.liferpg.View;
 
-import android.content.Intent;
-import android.database.DataSetObserver;
+import android.app.Fragment;
+
+import android.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,13 +12,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.levor.liferpg.Adapters.TasksAdapter;
 import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.R;
+import com.levor.liferpg.View.Fragments.CharacteristicsFragment;
+import com.levor.liferpg.View.Fragments.SkillsFragment;
+import com.levor.liferpg.View.Fragments.TasksFragment;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -26,51 +27,43 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class TasksActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     private final String SKILLS_FILE_NAME = "skills_file_name.txt";
     private final String CHARACTERISTICS_FILE_NAME = "characteristics_file_name.txt";
     private final String TASKS_FILE_NAME = "tasks_file_name.txt";
     private final String TAG = "com.levor.liferpg";
-    public final static int ADD_TASK_ACTIVITY_REQUEST_CODE = 0;
 
     private String skillsFromFile;
     private String characteristicsFromFile;
     private String tasksFromFile;
 
-    private Button openSkillsButton;
-    private Button openCharacteristicsButton;
-    private ListView listView;
+    private final LifeController lifeController = LifeController.getInstance();
+
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private String[] activities;
 
-    private final LifeController lifeController = LifeController.getInstance();
-    private TasksAdapter adapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tasks);
-        openSkillsButton = (Button) findViewById(R.id.openSkillsButton);
-        openCharacteristicsButton = (Button) findViewById(R.id.openCharacteristicsButton);
-        listView = (ListView) findViewById(R.id.listViewTasks);
+        setContentView(R.layout.activity_main_fragment);
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         activities = getResources().getStringArray(R.array.activities_array);
 
         mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, activities));
-        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(TasksActivity.this, activities[position], Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         readContentStringsFromFiles();
-        createAdapter();
-        setupListView();
-        registerButtonsListeners();
+
+        Fragment fragment = new TasksFragment();
+
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction()
+                .add(R.id.content_frame, fragment)
+                .commit();
+
     }
 
     @Override
@@ -81,67 +74,24 @@ public class TasksActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_tasks, menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.add_new_task) {
-            startActivityForResult(new Intent(TasksActivity.this, AddTaskActivity.class), ADD_TASK_ACTIVITY_REQUEST_CODE);
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void registerButtonsListeners(){
-        openCharacteristicsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TasksActivity.this, CharacteristicActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        openSkillsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(TasksActivity.this, SkillsActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
-            case ADD_TASK_ACTIVITY_REQUEST_CODE:
-                if(resultCode == RESULT_OK){
-                    createAdapter();
-                }
-                break;
-            case DetailedTaskActivity.DETAILED_TASK_ACTIVITY_REQUEST_CODE:
-                if(resultCode == RESULT_OK){
-                    createAdapter();
-                }
-            default:
-                //do nothing
-        }
-    }
-
-    private void setupListView(){
-        TasksAdapter adapter = new TasksAdapter(this, lifeController.getTasksTitlesAsList());
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedTaskTitle = lifeController.getTasksTitlesAsList().get(position);
-                Intent intent = new Intent(TasksActivity.this, DetailedTaskActivity.class);
-                intent.putExtra(DetailedTaskActivity.SELECTED_TASK_TITLE_TAG, selectedTaskTitle);
-                startActivityForResult(intent, DetailedTaskActivity.DETAILED_TASK_ACTIVITY_REQUEST_CODE);
-            }
-        });
     }
 
     private void readContentStringsFromFiles(){
@@ -150,7 +100,6 @@ public class TasksActivity extends AppCompatActivity {
         tasksFromFile = getStringFromFile(TASKS_FILE_NAME);
         Log.e(TAG, "chars: " + characteristicsFromFile + "\nskiils: " + skillsFromFile + "\nTasks: " + tasksFromFile);
         lifeController.updateCurrentContentWithStrings(characteristicsFromFile, skillsFromFile, tasksFromFile);
-        createAdapter();
     }
 
     private String getStringFromFile(String fileName){
@@ -158,7 +107,7 @@ public class TasksActivity extends AppCompatActivity {
             FileInputStream fis = openFileInput(fileName);
             BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
             StringBuilder sb = new StringBuilder();
-            String line = "";
+            String line;
             while ((line = reader.readLine()) != null) {
                 sb.append(line);
             }
@@ -172,6 +121,10 @@ public class TasksActivity extends AppCompatActivity {
             e.printStackTrace();
             return "";
         }
+    }
+
+    public LifeController getController(){
+        return lifeController;
     }
 
     private void writeContentStringsToFile(){
@@ -191,8 +144,48 @@ public class TasksActivity extends AppCompatActivity {
         }
     }
 
-    private void createAdapter(){
-        adapter = new TasksAdapter(this, lifeController.getTasksTitlesAsList());
-        listView.setAdapter(adapter);
+    public void saveAppDataToFile(){
+        writeContentStringsToFile();
+    }
+
+    private void switchRootFragment(int fragmentNumber) {
+        Fragment fragment = null;
+        switch (fragmentNumber) {
+            case 0 :
+                fragment = new TasksFragment();
+                break;
+            case 1:
+                fragment = new SkillsFragment();
+                break;
+            case 2:
+                fragment = new CharacteristicsFragment();
+                break;
+            default:
+                throw new RuntimeException("No such menu item!");
+        }
+        showParentFragment(fragment);
+        mDrawerList.setItemChecked(fragmentNumber, true);
+        mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            switchRootFragment(position);
+        }
+    }
+
+    public void showChildFragment(Fragment fragment){
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.enter_right, R.anim.exit_left)
+                .replace(R.id.content_frame, fragment)
+                .commit();
+    }
+
+    public void showParentFragment(Fragment fragment){
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)
+                .replace(R.id.content_frame, fragment)
+                .commit();
     }
 }

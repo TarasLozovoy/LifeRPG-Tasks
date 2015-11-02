@@ -36,8 +36,8 @@ public class LifeEntity {
         addSkill("Roller skating", stamina);
         addSkill("Running", stamina);
 
-//        addTask("Learn Android", skills.get("Android"));
-//        addTask("Learn Java", skills.get("Java"));
+        addTask("Learn Android", skills.get("Android"));
+        addTask("Learn Java", skills.get("Java"));
 //        addTask("Fix easy bug on Android", skills.get("Android"));
 //        addTask("Fix medium bug on Android", skills.get("Android"));
 //        addTask("Fix difficult bug on Android", skills.get("Android"));

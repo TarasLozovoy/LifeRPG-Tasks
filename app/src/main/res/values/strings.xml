@@ -39,4 +39,17 @@
     <string name="title_activity_detailed_characteristic">DetailedCharacteristicActivity</string>
     <string name="characteristic_level">Level:</string>
     <string name="characteristic_related_skills">Can be improved by enhancing next skills:</string>
+
+    <string-array
+        name="activities_array">
+        <item>Tasks</item>
+        <item>Skills</item>
+        <item>Characteristics</item>
+    </string-array>
+
+    <string name="title_activity_main_fragment">MainActivity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
