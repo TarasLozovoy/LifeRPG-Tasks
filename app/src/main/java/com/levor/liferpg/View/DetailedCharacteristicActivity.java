@@ -12,23 +12,38 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.levor.liferpg.Controller.LifeController;
+import com.levor.liferpg.Model.Characteristic;
+import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.R;
 
-public class CharacteristicActivity extends AppCompatActivity {
-    private final LifeController lifeController = LifeController.getInstance();
+import java.util.ArrayList;
+
+public class DetailedCharacteristicActivity extends AppCompatActivity {
+    public final static String CHARACTERISTIC_TITLE = "characteristic_title";
+
+    private TextView levelValue;
     private ListView listView;
+
+    private final LifeController lifeController = LifeController.getInstance();
+    private Characteristic currentCharacteristic;
+    private ArrayList<Skill> currentSkills = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_characteristic);
+        setContentView(R.layout.activity_detailed_characteristic);
+        currentCharacteristic = lifeController.getCharacteristicByTitle(getIntent().getStringExtra(CHARACTERISTIC_TITLE));
+        setTitle(currentCharacteristic.getTitle());
+
+        levelValue = (TextView) findViewById(R.id.level_value);
         listView = (ListView) findViewById(R.id.list_view);
+        createAdapter();
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(CharacteristicActivity.this, DetailedCharacteristicActivity.class);
-                intent.putExtra(DetailedCharacteristicActivity.CHARACTERISTIC_TITLE
-                        , lifeController.getCharacteristicTitleAndLevelAsArray()[position].split(" ")[0]);
+                Intent intent = new Intent(DetailedCharacteristicActivity.this, DetailedSkillActivity.class);
+                intent.putExtra(DetailedSkillActivity.SELECTED_SKILL_TITLE_TAG, currentSkills.get(position).getTitle());
                 startActivity(intent);
             }
         });
@@ -36,6 +51,7 @@ public class CharacteristicActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        levelValue.setText("" + currentCharacteristic.getLevel());
         createAdapter();
         super.onResume();
     }
@@ -43,7 +59,7 @@ public class CharacteristicActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_characteristic, menu);
+        getMenuInflater().inflate(R.menu.menu_detailed_characteristic, menu);
         return true;
     }
 
@@ -63,7 +79,11 @@ public class CharacteristicActivity extends AppCompatActivity {
     }
 
     private void createAdapter(){
-        String[] chars = lifeController.getCharacteristicTitleAndLevelAsArray();
-        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, chars));
+        ArrayList<String> skills = new ArrayList<>();
+        currentSkills = lifeController.getSkillsByCharacteristic(currentCharacteristic);
+        for (Skill sk : currentSkills){
+            skills.add(sk.getTitle() + " - " + sk.getLevel() + "(" + sk.getSublevel() + ")");
+        }
+        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, skills));
     }
 }

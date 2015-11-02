@@ -1,5 +1,6 @@
 package com.levor.liferpg.Controller;
 
+import com.levor.liferpg.Model.Characteristic;
 import com.levor.liferpg.Model.LifeEntity;
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
@@ -183,5 +184,27 @@ public class LifeController {
 
     public void removeTask(Task task) {
         lifeEntity.removeTask(task);
+    }
+
+    public String[] getCharacteristicTitleAndLevelAsArray(){
+        List<Characteristic> characteristics = lifeEntity.getAllCharacteristics();
+        ArrayList<String> strings = new ArrayList<>();
+        for (Characteristic ch : characteristics){
+            strings.add(ch.getTitle() + " - " + ch.getLevel());
+        }
+        return strings.toArray(new String[strings.size()]);
+    }
+
+    public Characteristic getCharacteristicByTitle(String title) {
+        try {
+            return lifeEntity.getCharacteristicByTitle(title);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public ArrayList<Skill> getSkillsByCharacteristic(Characteristic ch) {
+        return lifeEntity.getSkillsByCharacteristic(ch);
     }
 }

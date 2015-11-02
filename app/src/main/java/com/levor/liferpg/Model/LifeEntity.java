@@ -28,13 +28,13 @@ public class LifeEntity {
     }
 
     private LifeEntity() {
-        skills.put("Android", new Skill("Android", intelligence));
-        skills.put("Java", new Skill("Java", intelligence));
-        skills.put("Erudition", new Skill("Erudition", wisdom));
-        skills.put("English", new Skill("English", intelligence));
-        skills.put("Powerlifting", new Skill("Powerlifting", strength));
-        skills.put("Roller skating", new Skill("Roller skating", stamina));
-        skills.put("Running", new Skill("Running", stamina));
+        addSkill("Android", intelligence);
+        addSkill("Java", intelligence);
+        addSkill("Erudition", wisdom);
+        addSkill("English", intelligence);
+        addSkill("Powerlifting", strength);
+        addSkill("Roller skating", stamina);
+        addSkill("Running", stamina);
 
 //        addTask("Learn Android", skills.get("Android"));
 //        addTask("Learn Java", skills.get("Java"));
@@ -84,11 +84,16 @@ public class LifeEntity {
         tasks.put(title, new Task(title, relatedSkills));
     }
 
-    public void addSkill(String title, int level, int sublevel, Characteristic keyCharacteristic){
-        skills.put(title, new Skill(title, level, sublevel, keyCharacteristic));
+    public void addSkill(String title, Characteristic keyCharacteristic){
+        addSkill(title, 1, 0, keyCharacteristic);
     }
 
-    private List<Characteristic> getAllCharacteristics(){
+    public void addSkill(String title, int level, int sublevel, Characteristic keyCharacteristic){
+        Skill sk = new Skill(title, level, sublevel, keyCharacteristic);
+        skills.put(title, sk);
+    }
+
+    public List<Characteristic> getAllCharacteristics(){
         ArrayList<Characteristic> list = new ArrayList<>();
         list.add(intelligence);
         list.add(wisdom);
@@ -200,7 +205,7 @@ public class LifeEntity {
     }
 
 
-    private Characteristic getCharacteristicByTitle(String title) throws IOException {
+    public Characteristic getCharacteristicByTitle(String title) throws IOException {
         for (Characteristic ch : getAllCharacteristics()){
             if (ch.getTitle().equals(title)){
                 return ch;
@@ -230,6 +235,16 @@ public class LifeEntity {
             }
         }
         return tasksBySkill;
+    }
+
+    public ArrayList<Skill> getSkillsByCharacteristic(Characteristic ch){
+        ArrayList<Skill> sk = new ArrayList<>();
+        for (Skill skill : skills.values()){
+            if (skill.getKeyCharacteristic().equals(ch)){
+                sk.add(skill);
+            }
+        }
+        return sk;
     }
 
 

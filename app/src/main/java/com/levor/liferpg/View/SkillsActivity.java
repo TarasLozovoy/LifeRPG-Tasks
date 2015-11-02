@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SkillsActivity extends AppCompatActivity {
-    public final static String SELECTED_SKILL_TITLE_TAG = "selected_skill_title_tag";
+
     private final LifeController lifeController = LifeController.getInstance();
     private ListView listView;
 
@@ -32,7 +32,7 @@ public class SkillsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(SkillsActivity.this, DetailedSkillActivity.class);
-                intent.putExtra(SELECTED_SKILL_TITLE_TAG, lifeController.getAllSkills().get(position).getTitle());
+                intent.putExtra(DetailedSkillActivity.SELECTED_SKILL_TITLE_TAG, lifeController.getAllSkills().get(position).getTitle());
                 startActivity(intent);
             }
         });

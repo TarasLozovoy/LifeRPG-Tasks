@@ -20,6 +20,7 @@ import com.levor.liferpg.R;
 import java.util.ArrayList;
 
 public class DetailedSkillActivity extends AppCompatActivity {
+    public final static String SELECTED_SKILL_TITLE_TAG = "selected_skill_title_tag";
     private TextView skillTitleTV;
     private TextView keyCharTV;
     private TextView levelValue;
@@ -43,7 +44,7 @@ public class DetailedSkillActivity extends AppCompatActivity {
         sublevelValue = (TextView) findViewById(R.id.sublevel_value);
         toNextLevel = (TextView) findViewById(R.id.to_next_level_value);
         listView = (ListView) findViewById(R.id.related_tasks);
-        currentSkill = lifeController.getSkillByTitle(getIntent().getStringExtra(SkillsActivity.SELECTED_SKILL_TITLE_TAG));
+        currentSkill = lifeController.getSkillByTitle(getIntent().getStringExtra(SELECTED_SKILL_TITLE_TAG));
         setTitle(currentSkill.getTitle() + " skill details");
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

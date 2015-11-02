@@ -36,4 +36,7 @@
     <string name="remove_task">Remove task</string>
     <string name="tasks_activity_title">Tasks</string>
     <string name="title_activity_add_task">Add new task</string>
+    <string name="title_activity_detailed_characteristic">DetailedCharacteristicActivity</string>
+    <string name="characteristic_level">Level:</string>
+    <string name="characteristic_related_skills">Can be improved by enhancing next skills:</string>
 </resources>
