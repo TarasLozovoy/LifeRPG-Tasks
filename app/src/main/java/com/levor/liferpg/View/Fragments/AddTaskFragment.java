@@ -1,11 +1,8 @@
 package com.levor.liferpg.View.Fragments;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +83,7 @@ public class AddTaskFragment extends DefaultFragment {
                 dialog.show();
             }
         });
-
+        getActivity().setTitle("Create new task");
 
         return view;
     }
@@ -120,6 +117,6 @@ public class AddTaskFragment extends DefaultFragment {
     private void createNewTask(String title){
         getController().createNewTask(title, relatedSkills);
         Toast.makeText(getActivity(), "Task added", Toast.LENGTH_LONG).show();
-        getCurrentActivity().showParentFragment(new TasksFragment());
+        getCurrentActivity().showPreviousFragment();
     }
 }

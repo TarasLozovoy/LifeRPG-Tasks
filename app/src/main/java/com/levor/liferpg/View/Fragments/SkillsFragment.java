@@ -1,8 +1,5 @@
 package com.levor.liferpg.View.Fragments;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,7 +11,6 @@ import android.widget.ListView;
 
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.R;
-import com.levor.liferpg.View.DetailedSkillActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +26,14 @@ public class SkillsFragment extends DefaultFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), DetailedSkillActivity.class);
-                intent.putExtra(DetailedSkillActivity.SELECTED_SKILL_TITLE_TAG, getController().getAllSkills().get(position).getTitle());
-//                startActivity(intent);
-                //TODO
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(DetailedSkillFragment.SELECTED_SKILL_TITLE_TAG
+                        , getController().getAllSkills().get(position).getTitle());
+                Fragment fragment = new DetailedSkillFragment();
+                getCurrentActivity().showChildFragment(fragment, bundle);
             }
         });
+        getActivity().setTitle("Skills");
         return view;
     }
 

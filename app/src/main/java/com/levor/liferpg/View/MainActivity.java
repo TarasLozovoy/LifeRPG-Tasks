@@ -26,6 +26,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.EmptyStackException;
+import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
     private final String SKILLS_FILE_NAME = "skills_file_name.txt";
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private String[] activities;
+    private Stack<Fragment> fragmentsStack = new Stack<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         readContentStringsFromFiles();
 
         Fragment fragment = new TasksFragment();
+        fragmentsStack.push(fragment);
 
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction()
@@ -163,9 +167,54 @@ public class MainActivity extends AppCompatActivity {
             default:
                 throw new RuntimeException("No such menu item!");
         }
-        showParentFragment(fragment);
+        showRootFragment(fragment, null);
         mDrawerList.setItemChecked(fragmentNumber, true);
         mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+    public boolean showPreviousFragment() {
+        fragmentsStack.pop();
+        Fragment fragment;
+        try {
+            fragment = fragmentsStack.peek();
+        } catch (EmptyStackException e){
+            return false;
+        }
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)
+                .replace(R.id.content_frame, fragment)
+                .commit();
+        return true;
+    }
+
+    public void showChildFragment(Fragment fragment, Bundle bundle){
+        fragment.setArguments(bundle);
+        fragmentsStack.push(fragment);
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.enter_right, R.anim.exit_left)
+                .replace(R.id.content_frame, fragment)
+                .commit();
+    }
+
+    public void showRootFragment(Fragment fragment, Bundle bundle){
+        fragment.setArguments(bundle);
+        fragmentsStack.clear();
+        fragmentsStack.push(fragment);
+        getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)
+                .replace(R.id.content_frame, fragment)
+                .commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(mDrawerList)){
+            mDrawerLayout.closeDrawer(mDrawerList);
+            return;
+        }
+        if (!showPreviousFragment()){
+            super.onBackPressed();
+        }
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -173,19 +222,5 @@ public class MainActivity extends AppCompatActivity {
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             switchRootFragment(position);
         }
-    }
-
-    public void showChildFragment(Fragment fragment){
-        getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.enter_right, R.anim.exit_left)
-                .replace(R.id.content_frame, fragment)
-                .commit();
-    }
-
-    public void showParentFragment(Fragment fragment){
-        getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)
-                .replace(R.id.content_frame, fragment)
-                .commit();
     }
 }

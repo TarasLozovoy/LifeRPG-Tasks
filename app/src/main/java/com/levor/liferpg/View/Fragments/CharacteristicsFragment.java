@@ -28,13 +28,14 @@ public class CharacteristicsFragment extends DefaultFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), DetailedCharacteristicActivity.class);
-                intent.putExtra(DetailedCharacteristicActivity.CHARACTERISTIC_TITLE
+                Bundle b = new Bundle();
+                b.putSerializable(DetailedCharacteristicFragment.CHARACTERISTIC_TITLE
                         , getController().getCharacteristicTitleAndLevelAsArray()[position].split(" ")[0]);
-//                startActivity(intent);
-                //TODO
+                Fragment f = new DetailedCharacteristicFragment();
+                getCurrentActivity().showChildFragment(f, b);
             }
         });
+        getActivity().setTitle("Characteristics");
         return view;
     }
 

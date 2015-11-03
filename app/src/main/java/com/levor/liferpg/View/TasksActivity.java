@@ -1,7 +1,6 @@
 package com.levor.liferpg.View;
 
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -87,7 +86,7 @@ public class TasksActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.add_new_task) {
+        if (item.getItemId() == R.id.perform_task) {
             startActivityForResult(new Intent(TasksActivity.this, AddTaskActivity.class), ADD_TASK_ACTIVITY_REQUEST_CODE);
             return true;
         }

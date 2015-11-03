@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.levor.liferpg.View.Fragments.DetailedTaskFragment">
+
+    <TextView
+        android:id="@+id/task_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"/>
+
+    <TextView
+        android:id="@+id/increases"
+        android:text="@string/related_skills"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/task_title"
+        android:textSize="19sp"/>
+
+    <ListView android:id="@+id/list_view" android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_below="@id/increases"
+              android:listSelector="@android:color/transparent"
+              android:cacheColorHint="@android:color/transparent"
+        >
+    </ListView>
+
+    <Button
+        android:id="@+id/perform_task"
+        android:text="@string/perform_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_view"/>
+
+    <Button
+        android:id="@+id/remove_task"
+        android:text="@string/remove_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_view"
+        android:layout_toRightOf="@id/perform_task"/>
+
+</RelativeLayout>

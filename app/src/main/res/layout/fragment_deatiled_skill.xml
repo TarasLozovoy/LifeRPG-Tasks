@@ -1,0 +1,88 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.levor.liferpg.View.Fragments.DetailedSkillFragment">
+
+    <TextView
+        android:id="@+id/skill_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"/>
+
+    <LinearLayout android:id="@+id/level_ll"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/skill_title"
+                  android:orientation="horizontal">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/level"/>
+        <TextView android:id="@+id/level_value"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/sublevel_ll"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/level_ll"
+                  android:orientation="horizontal">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/sublevel"/>
+        <TextView android:id="@+id/sublevel_value"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/to_next_lvl_ll"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_below="@id/sublevel_ll"
+                  android:orientation="horizontal">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/to_next_lvl"/>
+        <TextView android:id="@+id/to_next_level_value"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <TextView android:id="@+id/characteristic"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_below="@id/to_next_lvl_ll"
+              android:paddingRight="3dp"
+              android:text="@string/increases"
+              android:textSize="15sp"/>
+
+    <TextView android:id="@+id/key_char"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_below="@id/to_next_lvl_ll"
+              android:layout_toRightOf="@id/characteristic"
+              android:textSize="15sp"/>
+
+    <TextView android:id="@+id/related_tasks_text"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_below="@id/characteristic"
+              android:paddingTop="5dp"
+              android:text="@string/tasks_enhancing_skill"
+              android:textSize="15sp"/>
+
+    <ListView android:id="@+id/related_tasks"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_below="@id/related_tasks_text">
+
+    </ListView>
+
+</RelativeLayout>
