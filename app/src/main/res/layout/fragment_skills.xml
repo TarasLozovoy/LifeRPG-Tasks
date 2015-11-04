@@ -1,11 +1,18 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="com.levor.liferpg.View.Fragments.SkillsFragment">
+             tools:context="com.levor.liferpg.View.Fragments.Skills.SkillsFragment">
+
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:id="@+id/add_new_skill"
+        android:text="@string/add_new_skill"/>
 
     <ListView android:layout_width="match_parent" android:layout_height="wrap_content"
-              android:id="@+id/skills_list_view">
+              android:id="@+id/skills_list_view"
+        android:layout_below="@id/add_new_skill">
     </ListView>
 
-</FrameLayout>
+
+
+</RelativeLayout>

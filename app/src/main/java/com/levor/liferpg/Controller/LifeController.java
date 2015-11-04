@@ -165,22 +165,17 @@ public class LifeController {
     public void createNewTask(String title, List<String> relatedSkills) {
         Skill[] skills = new Skill[relatedSkills.size()];
         for (int i = 0; i < relatedSkills.size(); i++){
-            try {
-                skills[i] = lifeEntity.getSkillByTitle(relatedSkills.get(i));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            skills[i] = lifeEntity.getSkillByTitle(relatedSkills.get(i));
         }
         lifeEntity.addTask(title, skills);
     }
 
+    public void createNewSkill(String title, Characteristic keyChar){
+        lifeEntity.addSkill(title, keyChar);
+    }
+
     public Skill getSkillByTitle(String title) {
-        try {
-            return lifeEntity.getSkillByTitle(title);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return lifeEntity.getSkillByTitle(title);
     }
 
     public ArrayList<Task> getTasksBySkill(Skill sk){
@@ -191,11 +186,20 @@ public class LifeController {
         lifeEntity.removeTask(task);
     }
 
-    public String[] getCharacteristicTitleAndLevelAsArray(){
+    public String[] getCharacteristicsTitleAndLevelAsArray(){
         List<Characteristic> characteristics = lifeEntity.getAllCharacteristics();
         ArrayList<String> strings = new ArrayList<>();
         for (Characteristic ch : characteristics){
             strings.add(ch.getTitle() + " - " + ch.getLevel());
+        }
+        return strings.toArray(new String[strings.size()]);
+    }
+
+    public String[] getCharacteristicsTitlesArray(){
+        List<Characteristic> characteristics = lifeEntity.getAllCharacteristics();
+        ArrayList<String> strings = new ArrayList<>();
+        for (Characteristic ch : characteristics){
+            strings.add(ch.getTitle());
         }
         return strings.toArray(new String[strings.size()]);
     }

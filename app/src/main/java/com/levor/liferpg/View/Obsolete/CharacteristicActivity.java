@@ -27,7 +27,7 @@ public class CharacteristicActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(CharacteristicActivity.this, DetailedCharacteristicActivity.class);
                 intent.putExtra(DetailedCharacteristicActivity.CHARACTERISTIC_TITLE
-                        , lifeController.getCharacteristicTitleAndLevelAsArray()[position].split(" ")[0]);
+                        , lifeController.getCharacteristicsTitleAndLevelAsArray()[position].split(" ")[0]);
                 startActivity(intent);
             }
         });
@@ -62,7 +62,7 @@ public class CharacteristicActivity extends AppCompatActivity {
     }
 
     private void createAdapter(){
-        String[] chars = lifeController.getCharacteristicTitleAndLevelAsArray();
+        String[] chars = lifeController.getCharacteristicsTitleAndLevelAsArray();
         listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, chars));
     }
 }

@@ -1,4 +1,4 @@
-package com.levor.liferpg.View.Fragments;
+package com.levor.liferpg.View.Fragments.Tasks;
 
 
 import android.app.AlertDialog;
@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
+import com.levor.liferpg.View.Fragments.DefaultFragment;
+import com.levor.liferpg.View.Fragments.Skills.DetailedSkillFragment;
 
 import java.util.ArrayList;
 import java.util.UUID;

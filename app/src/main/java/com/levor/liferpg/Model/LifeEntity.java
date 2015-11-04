@@ -37,11 +37,11 @@ public class LifeEntity {
         addSkill("Roller skating", stamina);
         addSkill("Running", stamina);
 
-        try {
-            addTask("Learn Android", getSkillByTitle("Android"));
-            addTask("Learn Java", getSkillByTitle("Java"));
-            addTask("Fix bug on Android", getSkillByTitle("Android"));
-            addTask("Fix bug on Java", getSkillByTitle("Java"));
+
+        addTask("Learn Android", getSkillByTitle("Android"));
+        addTask("Learn Java", getSkillByTitle("Java"));
+        addTask("Fix bug on Android", getSkillByTitle("Android"));
+        addTask("Fix bug on Java", getSkillByTitle("Java"));
 //
 //        addTask("Read fiction book", skills.get("Erudition"));
 //        addTask("Read self-development book", skills.get("Erudition"));
@@ -64,7 +64,6 @@ public class LifeEntity {
 //        addTask("Ride for 40 km", skills.get("Roller skating"));
 //
 //        addTask("Train in gym", skills.get("Powerlifting"));
-        } catch (IOException e){}
     }
 
     public Map<String, Integer[]> getSkillsTitlesAndLevels() {
@@ -80,6 +79,10 @@ public class LifeEntity {
     }
 
     public void addTask(String title, Skill ... relatedSkills){
+        Task updTask = getTaskByTitle(title);
+        if (updTask != null){
+            tasks.remove(updTask.getId());
+        }
         UUID id = UUID.randomUUID();
         tasks.put(id, new Task(title, id, relatedSkills));
     }
@@ -90,6 +93,10 @@ public class LifeEntity {
     }
 
     public void addSkill(String title, int level, int sublevel, UUID id, Characteristic keyCharacteristic){
+        Skill updSkill = getSkillByTitle(title);
+        if (updSkill != null){
+            skills.remove(updSkill.getId());
+        }
         Skill sk = new Skill(title, level, sublevel, id, keyCharacteristic);
         skills.put(id, sk);
     }
@@ -213,13 +220,13 @@ public class LifeEntity {
         throw new IOException("Skill with current title not found");
     }
 
-    public Skill getSkillByTitle(String title) throws IOException {
+    public Skill getSkillByTitle(String title) {
         for (Skill sk : skills.values()){
             if (sk.getTitle().equals(title)){
                 return sk;
             }
         }
-        throw new IOException("Skill with current title not found");
+        return null;
     }
 
     public Skill getSkillByID(UUID id){

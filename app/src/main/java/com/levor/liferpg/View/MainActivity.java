@@ -16,9 +16,9 @@ import android.widget.ListView;
 
 import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.R;
-import com.levor.liferpg.View.Fragments.CharacteristicsFragment;
-import com.levor.liferpg.View.Fragments.SkillsFragment;
-import com.levor.liferpg.View.Fragments.TasksFragment;
+import com.levor.liferpg.View.Fragments.Characteristics.CharacteristicsFragment;
+import com.levor.liferpg.View.Fragments.Skills.SkillsFragment;
+import com.levor.liferpg.View.Fragments.Tasks.TasksFragment;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

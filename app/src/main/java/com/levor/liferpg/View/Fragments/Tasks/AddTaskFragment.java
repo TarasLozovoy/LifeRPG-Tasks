@@ -1,4 +1,4 @@
-package com.levor.liferpg.View.Fragments;
+package com.levor.liferpg.View.Fragments.Tasks;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.levor.liferpg.Adapters.TaskAddingAdapter;
 import com.levor.liferpg.R;
+import com.levor.liferpg.View.Fragments.DefaultFragment;
 
 import java.util.ArrayList;
 import java.util.List;

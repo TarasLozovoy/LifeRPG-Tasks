@@ -1,4 +1,4 @@
-package com.levor.liferpg.View.Fragments;
+package com.levor.liferpg.View.Fragments.Characteristics;
 
 
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.levor.liferpg.R;
+import com.levor.liferpg.View.Fragments.DefaultFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +29,7 @@ public class CharacteristicsFragment extends DefaultFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle b = new Bundle();
                 b.putSerializable(DetailedCharacteristicFragment.CHARACTERISTIC_TITLE
-                        , getController().getCharacteristicTitleAndLevelAsArray()[position].split(" ")[0]);
+                        , getController().getCharacteristicsTitleAndLevelAsArray()[position].split(" ")[0]);
                 Fragment f = new DetailedCharacteristicFragment();
                 getCurrentActivity().showChildFragment(f, b);
             }
@@ -44,7 +45,7 @@ public class CharacteristicsFragment extends DefaultFragment {
     }
 
     private void createAdapter(){
-        String[] chars = getController().getCharacteristicTitleAndLevelAsArray();
+        String[] chars = getController().getCharacteristicsTitleAndLevelAsArray();
         listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, chars));
     }
 }

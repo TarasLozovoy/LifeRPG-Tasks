@@ -1,4 +1,4 @@
-package com.levor.liferpg.View.Fragments;
+package com.levor.liferpg.View.Fragments.Characteristics;
 
 
 import android.os.Bundle;
@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.levor.liferpg.Model.Characteristic;
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.R;
+import com.levor.liferpg.View.Fragments.DefaultFragment;
+import com.levor.liferpg.View.Fragments.Skills.DetailedSkillFragment;
 
 import java.util.ArrayList;
 

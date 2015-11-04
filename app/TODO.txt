@@ -1,3 +1,2 @@
-- add id task, skills, chars navigation
-- add new skills;
 - edit skills;
+- action bar;

@@ -1,4 +1,4 @@
-package com.levor.liferpg.View.Fragments;
+package com.levor.liferpg.View.Fragments.Tasks;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,9 @@ import android.widget.ListView;
 
 import com.levor.liferpg.Adapters.TasksAdapter;
 import com.levor.liferpg.R;
+import com.levor.liferpg.View.Fragments.DefaultFragment;
+import com.levor.liferpg.View.Fragments.Tasks.AddTaskFragment;
+import com.levor.liferpg.View.Fragments.Tasks.DetailedTaskFragment;
 
 import java.util.UUID;
 

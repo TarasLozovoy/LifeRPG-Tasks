@@ -2,7 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="com.levor.liferpg.View.Fragments.Tasks.AddTaskFragment">
+             tools:context="com.levor.liferpg.View.Fragments.Skills.AddSkillFragment">
 
     <LinearLayout
         android:id="@+id/add_title_layout"
@@ -13,18 +13,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/new_task_title"
+            android:text="@string/new_skill_title"
             android:textSize="22sp"/>
 
         <EditText
-            android:id="@+id/new_task_title_edit_text"
+            android:id="@+id/new_skill_title_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/new_task_title_edit_text" />
+            android:hint="@string/new_skill_title_edit_text" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/add_skill_ll"
+        android:id="@+id/add_characteristic_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/add_title_layout"
@@ -33,28 +33,25 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_skills_to_task"
+            android:text="@string/key_characteristic"
             android:textSize="22sp"/>
 
-        <ListView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/related_skills_to_add"
+            android:id="@+id/key_characteristic_value"
             />
+
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="@string/set_key_characteristic"
+            android:id="@+id/set_key_characteristic_button"/>
     </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/add_related_skill"
-        android:text="@string/add_skill_to_task"
-        android:layout_below="@id/add_skill_ll"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/finish"
-        android:text="@string/create_task"
-        android:layout_below="@id/add_related_skill"/>
+        android:text="@string/create_new_skill"
+        android:layout_below="@id/add_characteristic_ll"/>
 
 </RelativeLayout>

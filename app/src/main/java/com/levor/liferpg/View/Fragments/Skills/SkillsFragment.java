@@ -1,4 +1,4 @@
-package com.levor.liferpg.View.Fragments;
+package com.levor.liferpg.View.Fragments.Skills;
 
 import android.os.Bundle;
 import android.app.Fragment;
@@ -7,10 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.R;
+import com.levor.liferpg.View.Fragments.DefaultFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +20,20 @@ import java.util.UUID;
 
 public class SkillsFragment extends DefaultFragment {
     private ListView listView;
+    private Button addNewSkillButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_skills, container, false);
+        addNewSkillButton = (Button) view.findViewById(R.id.add_new_skill);
+        addNewSkillButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment f = new AddSkillFragment();
+                getCurrentActivity().showChildFragment(f, null);
+            }
+        });
         listView = (ListView) view.findViewById(R.id.skills_list_view);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

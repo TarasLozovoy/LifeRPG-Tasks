@@ -1,4 +1,4 @@
-package com.levor.liferpg.View.Fragments;
+package com.levor.liferpg.View.Fragments.Skills;
 
 
 import android.database.DataSetObserver;
@@ -15,6 +15,8 @@ import com.levor.liferpg.Adapters.TasksAdapter;
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
+import com.levor.liferpg.View.Fragments.DefaultFragment;
+import com.levor.liferpg.View.Fragments.Tasks.DetailedTaskFragment;
 
 import java.util.ArrayList;
 import java.util.UUID;
