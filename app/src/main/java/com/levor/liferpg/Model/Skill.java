@@ -1,20 +1,24 @@
 package com.levor.liferpg.Model;
 
+import java.util.UUID;
+
 public class Skill {
     private String title;
     private int level;
     private int sublevel;
     private Characteristic keyCharacteristic;
+    private UUID id;
 
-    public Skill(String title, Characteristic keyCharacteristic) {
-        this(title, 1, 0, keyCharacteristic);
+    public Skill(String title, UUID id, Characteristic keyCharacteristic) {
+        this(title, 1, 0, id, keyCharacteristic);
     }
 
-    public Skill(String title, int level, int sublevel, Characteristic keyCharacteristic) {
+    public Skill(String title, int level, int sublevel, UUID id, Characteristic keyCharacteristic) {
         this.title = title;
         this.level = level;
         this.sublevel = sublevel;
         this.keyCharacteristic = keyCharacteristic;
+        this.id = id;
     }
 
     public String getTitle() {
@@ -61,5 +65,9 @@ public class Skill {
             level --;
             sublevel = level - 1;
         }
+    }
+
+    public UUID getId() {
+        return id;
     }
 }

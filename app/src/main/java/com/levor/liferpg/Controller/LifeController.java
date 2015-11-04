@@ -10,10 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 
 public class LifeController {
     private LifeEntity lifeEntity = LifeEntity.getInstance();
-    private Map<String, Task> tasks;
+    private Map<UUID, Task> tasks;
 
     private static LifeController LifeController;
     public static LifeController getInstance(){
@@ -45,7 +46,11 @@ public class LifeController {
     }
 
     public List<String> getTasksTitlesAsList(){
-        return new ArrayList<>(tasks.keySet());
+        List<String> titles = new ArrayList<>();
+        for (Task t : tasks.values()){
+            titles.add(t.getTitle());
+        }
+        return titles;
     }
 
     public Map<String, Integer[]> getSkillsTitlesAndLevels(){
@@ -70,8 +75,8 @@ public class LifeController {
 //        return skillList.toArray(new String[skillList.size()]);
     }
 
-    public String getCharacteristicRelatedToSkill(String skillTitle){
-        return lifeEntity.getCharacteristicTitleBySkill(skillTitle);
+    public String getCharacteristicRelatedToSkill(UUID id){
+        return lifeEntity.getCharacteristicTitleBySkill(id);
     }
 
     public int getIntelligenceLevel(){
@@ -132,7 +137,7 @@ public class LifeController {
                 String[] subelements = skill.split("::");
                 try {
                     lifeEntity.updateSkill(subelements[0], Integer.parseInt(subelements[1]),
-                            Integer.parseInt(subelements[2]), subelements[3]);
+                            Integer.parseInt(subelements[2]),UUID.fromString(subelements[3]), subelements[4]);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -149,7 +154,7 @@ public class LifeController {
                     relatedSkillsTitles[i] = subelements[i + 1];
                 }
                 try {
-                    lifeEntity.updateTask(subelements[0], relatedSkillsTitles);
+                    lifeEntity.updateTask(subelements[0], UUID.fromString(subelements[1]), relatedSkillsTitles);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -157,7 +162,7 @@ public class LifeController {
         }
     }
 
-    public void createNewTask(String title, ArrayList<String> relatedSkills) {
+    public void createNewTask(String title, List<String> relatedSkills) {
         Skill[] skills = new Skill[relatedSkills.size()];
         for (int i = 0; i < relatedSkills.size(); i++){
             try {
@@ -206,5 +211,13 @@ public class LifeController {
 
     public ArrayList<Skill> getSkillsByCharacteristic(Characteristic ch) {
         return lifeEntity.getSkillsByCharacteristic(ch);
+    }
+
+    public Task getTaskByID(UUID id) {
+        return lifeEntity.getTaskByID(id);
+    }
+
+    public Skill getSkillByID(UUID id) {
+        return lifeEntity.getSkillByID(id);
     }
 }

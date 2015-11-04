@@ -53,7 +53,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/create_task"
+        android:id="@+id/finish"
         android:text="@string/create_task"
         android:layout_below="@id/add_related_skill"/>
 

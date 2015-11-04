@@ -16,7 +16,6 @@ import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
-import com.levor.liferpg.View.TasksActivity;
 
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package com.levor.liferpg.View.Fragments;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.levor.liferpg.R;
-import com.levor.liferpg.View.DetailedCharacteristicActivity;
 
 /**
  * A simple {@link Fragment} subclass.

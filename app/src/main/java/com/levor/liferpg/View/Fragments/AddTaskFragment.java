@@ -17,14 +17,15 @@ import com.levor.liferpg.Adapters.TaskAddingAdapter;
 import com.levor.liferpg.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AddTaskFragment extends DefaultFragment {
-    private EditText newTaskTitleEditText;
+    protected EditText newTaskTitleEditText;
     private ListView relatedSkillListView;
     private Button addSkillButton;
-    private Button createTask;
+    protected Button finishButton;
 
-    private ArrayList<String> relatedSkills = new ArrayList<>();
+    protected List<String> relatedSkills = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,34 +34,9 @@ public class AddTaskFragment extends DefaultFragment {
         newTaskTitleEditText = (EditText) view.findViewById(R.id.new_task_title_edit_text);
 
         relatedSkillListView = (ListView) view.findViewById(R.id.related_skills_to_add);
-        relatedSkillListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                relatedSkills.remove(position);
-                updateListView();
-            }
-        });
-        updateListView();
-        createTask = (Button) view.findViewById(R.id.create_task);
-        createTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String title = newTaskTitleEditText.getText().toString();
-                if (title.isEmpty()){
-                    Toast.makeText(getActivity(), "Task title can't be empty", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (relatedSkills.isEmpty()){
-                    Toast.makeText(getActivity(), "Add at least one related skill", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if (getController().getTaskByTitle(title) != null){
-                    createIdenticalTaskRequestDialog(title);
-                } else {
-                    createNewTask(title);
-                }
-            }
-        });
+        setupListView();
+        finishButton = (Button) view.findViewById(R.id.finish);
+        setFinishButtonOnClickListener();
         addSkillButton = (Button) view.findViewById(R.id.add_related_skill);
         addSkillButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +68,7 @@ public class AddTaskFragment extends DefaultFragment {
         relatedSkillListView.setAdapter(new TaskAddingAdapter(getActivity(), relatedSkills));
     }
 
-    private void createIdenticalTaskRequestDialog(final String title){
+    protected void createIdenticalTaskRequestDialog(final String title){
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
         b.setTitle("Task with such title is already created!")
                 .setMessage("Are you sure you want to rewrite old task with new one?")
@@ -107,16 +83,49 @@ public class AddTaskFragment extends DefaultFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        createNewTask(title);
+                        finishTask(title, "Task added");
                     }
                 })
                 .show();
 
     }
 
-    private void createNewTask(String title){
+    protected void finishTask(String title, String message){
         getController().createNewTask(title, relatedSkills);
-        Toast.makeText(getActivity(), "Task added", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
+    }
+
+    private void setupListView(){
+        relatedSkillListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                relatedSkills.remove(position);
+                updateListView();
+            }
+        });
+        updateListView();
+    }
+
+    protected void setFinishButtonOnClickListener(){
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String title = newTaskTitleEditText.getText().toString();
+                if (title.isEmpty()) {
+                    Toast.makeText(getActivity(), "Task title can't be empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (relatedSkills.isEmpty()) {
+                    Toast.makeText(getActivity(), "Add at least one related skill", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (getController().getTaskByTitle(title) != null) {
+                    createIdenticalTaskRequestDialog(title);
+                } else {
+                    finishTask(title, "Task added");
+                }
+            }
+        });
     }
 }

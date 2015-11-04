@@ -51,5 +51,7 @@
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="finish_editing">Finish edit</string>
+    <string name="edit_task">Edit</string>
 
 </resources>

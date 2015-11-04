@@ -1,4 +1,4 @@
-package com.levor.liferpg.View;
+package com.levor.liferpg.View.Obsolete;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

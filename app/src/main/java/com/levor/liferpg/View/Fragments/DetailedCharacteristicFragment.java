@@ -1,7 +1,6 @@
 package com.levor.liferpg.View.Fragments;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import com.levor.liferpg.Model.Characteristic;
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.R;
-import com.levor.liferpg.View.DetailedSkillActivity;
 
 import java.util.ArrayList;
 
@@ -48,7 +46,7 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle b = new Bundle();
-                b.putSerializable(DetailedSkillFragment.SELECTED_SKILL_TITLE_TAG, currentSkills.get(position).getTitle());
+                b.putSerializable(DetailedSkillFragment.SELECTED_SKILL_UUID_TAG, currentSkills.get(position).getId());
                 Fragment f = new DetailedSkillFragment();
                 getCurrentActivity().showChildFragment(f, b);
             }

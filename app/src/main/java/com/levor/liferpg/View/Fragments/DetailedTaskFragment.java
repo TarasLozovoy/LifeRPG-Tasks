@@ -20,17 +20,19 @@ import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DetailedTaskFragment extends DefaultFragment {
-    public final static String SELECTED_TASK_TITLE_TAG = "selected_task_title_tag";
+    public final static String SELECTED_TASK_UUID_TAG = "selected_task_uuid_tag";
 
     private TextView taskTitle;
     private ListView listView;
     private Button removeTask;
     private Button performTask;
+    private Button editTask;
     private Task currentTask;
 
 
@@ -43,19 +45,30 @@ public class DetailedTaskFragment extends DefaultFragment {
         listView = (ListView) v.findViewById(R.id.list_view);
         removeTask = (Button) v.findViewById(R.id.remove_task);
         performTask = (Button) v.findViewById(R.id.perform_task);
+        editTask = (Button) v.findViewById(R.id.edit_task);
 
-        String title = getArguments().getString(SELECTED_TASK_TITLE_TAG);
-        taskTitle.setText(title);
-        getCurrentActivity().setTitle(title + " task details");
+        UUID id = (UUID)getArguments().get(SELECTED_TASK_UUID_TAG);
+        currentTask = getController().getTaskByID(id);
+        taskTitle.setText(currentTask.getTitle());
+        getCurrentActivity().setTitle(currentTask.getTitle() + " task details");
 
-        currentTask = getController().getTaskByTitle(title);
+
         createAdapter();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle b = new Bundle();
-                b.putSerializable(DetailedSkillFragment.SELECTED_SKILL_TITLE_TAG, currentTask.getRelatedSkills().get(position).getTitle());
+                b.putSerializable(DetailedSkillFragment.SELECTED_SKILL_UUID_TAG, currentTask.getRelatedSkills().get(position).getId());
                 Fragment f = new DetailedSkillFragment();
+                getCurrentActivity().showChildFragment(f, b);
+            }
+        });
+        editTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putSerializable(EditTaskFragment.CURRENT_TASK_TAG, currentTask.getTitle());
+                Fragment f = new EditTaskFragment();
                 getCurrentActivity().showChildFragment(f, b);
             }
         });

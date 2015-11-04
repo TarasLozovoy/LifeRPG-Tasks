@@ -1,7 +1,6 @@
 package com.levor.liferpg.View.Fragments;
 
 
-import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -16,16 +15,16 @@ import com.levor.liferpg.Adapters.TasksAdapter;
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
-import com.levor.liferpg.View.DetailedTaskActivity;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DetailedSkillFragment extends DefaultFragment {
 
-    public final static String SELECTED_SKILL_TITLE_TAG = "selected_skill_title_tag";
+    public final static String SELECTED_SKILL_UUID_TAG = "selected_skill_UUID_tag";
     private TextView skillTitleTV;
     private TextView keyCharTV;
     private TextView levelValue;
@@ -47,15 +46,17 @@ public class DetailedSkillFragment extends DefaultFragment {
         sublevelValue = (TextView) v.findViewById(R.id.sublevel_value);
         toNextLevel = (TextView) v.findViewById(R.id.to_next_level_value);
         listView = (ListView) v.findViewById(R.id.related_tasks);
-        currentSkill = getController().getSkillByTitle(getArguments().getString(SELECTED_SKILL_TITLE_TAG));
+        UUID id = (UUID)getArguments().get(SELECTED_SKILL_UUID_TAG);
+        currentSkill = getController().getSkillByID(id);
         getActivity().setTitle(currentSkill.getTitle() + " skill details");
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedTaskTitle = currentTasks.get(position);
+                UUID taskID = getController().getTaskByTitle(selectedTaskTitle).getId();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_TITLE_TAG, selectedTaskTitle);
+                bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, taskID);
                 Fragment fragment = new DetailedTaskFragment();
                 getCurrentActivity().showChildFragment(fragment, bundle);
             }

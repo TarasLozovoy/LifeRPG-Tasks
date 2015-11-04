@@ -14,6 +14,7 @@ import com.levor.liferpg.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class SkillsFragment extends DefaultFragment {
     private ListView listView;
@@ -26,9 +27,10 @@ public class SkillsFragment extends DefaultFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                UUID currentId = getController().getAllSkills().get(position).getId();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(DetailedSkillFragment.SELECTED_SKILL_TITLE_TAG
-                        , getController().getAllSkills().get(position).getTitle());
+                bundle.putSerializable(DetailedSkillFragment.SELECTED_SKILL_UUID_TAG
+                        , currentId);
                 Fragment fragment = new DetailedSkillFragment();
                 getCurrentActivity().showChildFragment(fragment, bundle);
             }
@@ -61,6 +63,6 @@ public class SkillsFragment extends DefaultFragment {
                     .append(")");
             rows.add(sb.toString());
         }
-        listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, rows.toArray(new String[rows.size()])));
+        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, rows.toArray(new String[rows.size()])));
     }
 }

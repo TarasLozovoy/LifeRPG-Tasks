@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.UUID;
 
 public class LifeEntity {
     private final Characteristic intelligence = new Characteristic("Intelligence", 1);
@@ -15,8 +16,8 @@ public class LifeEntity {
     private final Characteristic stamina = new Characteristic("Stamina", 1);
     private final Characteristic dexterity = new Characteristic("Dexterity", 1);
 
-    private Map<String, Skill> skills = new TreeMap<>();  //title, skill
-    private Map<String, Task> tasks = new TreeMap<>();    //title, task
+    private Map<UUID, Skill> skills = new TreeMap<>();  //title, skill
+    private Map<UUID, Task> tasks = new TreeMap<>();    //title, task
 
     private static LifeEntity lifeEntity;
 
@@ -36,14 +37,11 @@ public class LifeEntity {
         addSkill("Roller skating", stamina);
         addSkill("Running", stamina);
 
-        addTask("Learn Android", skills.get("Android"));
-        addTask("Learn Java", skills.get("Java"));
-//        addTask("Fix easy bug on Android", skills.get("Android"));
-//        addTask("Fix medium bug on Android", skills.get("Android"));
-//        addTask("Fix difficult bug on Android", skills.get("Android"));
-//        addTask("Fix easy bug on Java", skills.get("Java"));
-//        addTask("Fix medium bug on Java", skills.get("Java"));
-//        addTask("Fix difficult bug on Java", skills.get("Java"));
+        try {
+            addTask("Learn Android", getSkillByTitle("Android"));
+            addTask("Learn Java", getSkillByTitle("Java"));
+            addTask("Fix bug on Android", getSkillByTitle("Android"));
+            addTask("Fix bug on Java", getSkillByTitle("Java"));
 //
 //        addTask("Read fiction book", skills.get("Erudition"));
 //        addTask("Read self-development book", skills.get("Erudition"));
@@ -66,6 +64,7 @@ public class LifeEntity {
 //        addTask("Ride for 40 km", skills.get("Roller skating"));
 //
 //        addTask("Train in gym", skills.get("Powerlifting"));
+        } catch (IOException e){}
     }
 
     public Map<String, Integer[]> getSkillsTitlesAndLevels() {
@@ -76,21 +75,23 @@ public class LifeEntity {
         return map;
     }
 
-    public Map<String, Task> getTasks() {
+    public Map<UUID, Task> getTasks() {
         return tasks;
     }
 
     public void addTask(String title, Skill ... relatedSkills){
-        tasks.put(title, new Task(title, relatedSkills));
+        UUID id = UUID.randomUUID();
+        tasks.put(id, new Task(title, id, relatedSkills));
     }
 
     public void addSkill(String title, Characteristic keyCharacteristic){
-        addSkill(title, 1, 0, keyCharacteristic);
+        UUID id = UUID.randomUUID();
+        addSkill(title, 1, 0, id, keyCharacteristic);
     }
 
-    public void addSkill(String title, int level, int sublevel, Characteristic keyCharacteristic){
-        Skill sk = new Skill(title, level, sublevel, keyCharacteristic);
-        skills.put(title, sk);
+    public void addSkill(String title, int level, int sublevel, UUID id, Characteristic keyCharacteristic){
+        Skill sk = new Skill(title, level, sublevel, id, keyCharacteristic);
+        skills.put(id, sk);
     }
 
     public List<Characteristic> getAllCharacteristics(){
@@ -123,8 +124,8 @@ public class LifeEntity {
         return dexterity.getLevel();
     }
 
-    public String getCharacteristicTitleBySkill(String skillTitle){
-        return skills.get(skillTitle).getKeyCharacteristic().getTitle();
+    public String getCharacteristicTitleBySkill(UUID id){
+        return skills.get(id).getKeyCharacteristic().getTitle();
     }
 
     public String getCurrentCharacteristicsString() {
@@ -147,6 +148,8 @@ public class LifeEntity {
                     .append("::")
                     .append(sk.getSublevel())
                     .append("::")
+                    .append(sk.getId())
+                    .append("::")
                     .append(sk.getKeyCharacteristic().getTitle())
                     .append(":;");
         }
@@ -157,6 +160,8 @@ public class LifeEntity {
         StringBuilder sb = new StringBuilder();
         for(Task t : tasks.values()){
             sb.append(t.getTitle())
+                    .append("::")
+                    .append(t.getId())
                     .append("::");
             for (int i = 0; i < t.getRelatedSkills().size(); i++){
                 sb.append(t.getRelatedSkills().get(i).getTitle())
@@ -170,20 +175,20 @@ public class LifeEntity {
         getCharacteristicByTitle(title).setLevel(level);
     }
 
-    public void updateSkill(String title, int level, int sublevel, String keyCharacteristicTitle) throws IOException {
-        if (skills.containsKey(title)){
-            Skill updSkill = skills.get(title);
+    public void updateSkill(String title, int level, int sublevel,UUID id, String keyCharacteristicTitle) throws IOException {
+        if (skills.containsKey(id)){
+            Skill updSkill = skills.get(id);
             updSkill.setLevel(level);
             updSkill.setSublevel(sublevel);
             updSkill.setKeyCharacteristic(getCharacteristicByTitle(keyCharacteristicTitle));
         } else {
-            addSkill(title, level, sublevel, getCharacteristicByTitle(keyCharacteristicTitle));
+            addSkill(title, level, sublevel, id, getCharacteristicByTitle(keyCharacteristicTitle));
         }
     }
 
-    public void updateTask(String title, String ... relatedSkillsTitles) throws IOException {
-        if (tasks.containsKey(title)){
-            Task updTask = tasks.get(title);
+    public void updateTask(String title,UUID id, String ... relatedSkillsTitles) throws IOException {
+        if (tasks.containsKey(id)){
+            Task updTask = tasks.get(id);
             Skill[] skills = new Skill[relatedSkillsTitles.length];
             for (int i = 0; i < relatedSkillsTitles.length; i++){
                 skills[i] = getSkillByTitle(relatedSkillsTitles[i]);
@@ -198,12 +203,6 @@ public class LifeEntity {
             addTask(title, relatedSkills);
         }
     }
-
-
-    public Task getTaskByTitle(String title){
-        return tasks.get(title);
-    }
-
 
     public Characteristic getCharacteristicByTitle(String title) throws IOException {
         for (Characteristic ch : getAllCharacteristics()){
@@ -221,6 +220,10 @@ public class LifeEntity {
             }
         }
         throw new IOException("Skill with current title not found");
+    }
+
+    public Skill getSkillByID(UUID id){
+        return skills.get(id);
     }
 
     public ArrayList<Skill> getAllSkills(){
@@ -249,6 +252,19 @@ public class LifeEntity {
 
 
     public void removeTask(Task task) {
-        tasks.remove(task.getTitle());
+        tasks.remove(task.getId());
+    }
+
+    public Task getTaskByID(UUID id) {
+        return tasks.get(id);
+    }
+
+    public Task getTaskByTitle(String s) {
+        for (Task t: tasks.values()){
+            if (t.getTitle().equals(s)){
+                return t;
+            }
+        }
+        return null;
     }
 }

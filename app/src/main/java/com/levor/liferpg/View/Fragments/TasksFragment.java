@@ -11,6 +11,8 @@ import android.widget.ListView;
 import com.levor.liferpg.Adapters.TasksAdapter;
 import com.levor.liferpg.R;
 
+import java.util.UUID;
+
 public class TasksFragment extends DefaultFragment {
     private ListView listView;
     private Button addTask;
@@ -49,8 +51,9 @@ public class TasksFragment extends DefaultFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedTaskTitle = getController().getTasksTitlesAsList().get(position);
+                UUID taskID = getController().getTaskByTitle(selectedTaskTitle).getId();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_TITLE_TAG, selectedTaskTitle);
+                bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, taskID);
                 getCurrentActivity().showChildFragment(new DetailedTaskFragment(), bundle);
             }
         });

@@ -34,11 +34,19 @@
         android:layout_below="@id/list_view"/>
 
     <Button
+        android:id="@+id/edit_task"
+        android:text="@string/edit_task"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_view"
+        android:layout_toRightOf="@id/perform_task"/>
+
+    <Button
         android:id="@+id/remove_task"
         android:text="@string/remove_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/list_view"
-        android:layout_toRightOf="@id/perform_task"/>
+        android:layout_toRightOf="@id/edit_task"/>
 
 </RelativeLayout>
