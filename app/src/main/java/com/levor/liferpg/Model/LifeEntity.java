@@ -88,11 +88,11 @@ public class LifeEntity {
     }
 
     public void addSkill(String title, Characteristic keyCharacteristic){
-        UUID id = UUID.randomUUID();
-        addSkill(title, 1, 0, id, keyCharacteristic);
+        addSkill(title, 1, 0, keyCharacteristic);
     }
 
-    public void addSkill(String title, int level, int sublevel, UUID id, Characteristic keyCharacteristic){
+    public void addSkill(String title, int level, int sublevel, Characteristic keyCharacteristic){
+        UUID id = UUID.randomUUID();
         Skill updSkill = getSkillByTitle(title);
         if (updSkill != null){
             skills.remove(updSkill.getId());
@@ -189,7 +189,7 @@ public class LifeEntity {
             updSkill.setSublevel(sublevel);
             updSkill.setKeyCharacteristic(getCharacteristicByTitle(keyCharacteristicTitle));
         } else {
-            addSkill(title, level, sublevel, id, getCharacteristicByTitle(keyCharacteristicTitle));
+            addSkill(title, level, sublevel, getCharacteristicByTitle(keyCharacteristicTitle));
         }
     }
 

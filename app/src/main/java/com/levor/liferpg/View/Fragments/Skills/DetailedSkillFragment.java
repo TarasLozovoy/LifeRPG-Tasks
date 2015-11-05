@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,6 +34,7 @@ public class DetailedSkillFragment extends DefaultFragment {
     private TextView sublevelValue;
     private TextView toNextLevel;
     private ListView listView;
+    private Button editSkillButton;
 
     private Skill currentSkill;
     private ArrayList<String> currentTasks;
@@ -48,6 +50,8 @@ public class DetailedSkillFragment extends DefaultFragment {
         sublevelValue = (TextView) v.findViewById(R.id.sublevel_value);
         toNextLevel = (TextView) v.findViewById(R.id.to_next_level_value);
         listView = (ListView) v.findViewById(R.id.related_tasks);
+        editSkillButton = (Button) v.findViewById(R.id.edit_skill_button);
+        editSkillButton.setOnClickListener(new EditSkillButtonOnClickListener());
         UUID id = (UUID)getArguments().get(SELECTED_SKILL_UUID_TAG);
         currentSkill = getController().getSkillByID(id);
         getActivity().setTitle(currentSkill.getTitle() + " skill details");
@@ -92,5 +96,15 @@ public class DetailedSkillFragment extends DefaultFragment {
         levelValue.setText(" " + currentSkill.getLevel());
         sublevelValue.setText(" " + currentSkill.getSublevel());
         toNextLevel.setText(" " + (currentSkill.getLevel() - currentSkill.getSublevel()));
+    }
+
+    private class EditSkillButtonOnClickListener implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            Bundle b = new Bundle();
+            b.putSerializable(EditSkillFragment.EDIT_SKILL_UUID_TAG, currentSkill.getId());
+            Fragment f = new EditSkillFragment();
+            getCurrentActivity().showChildFragment(f, b);
+        }
     }
 }

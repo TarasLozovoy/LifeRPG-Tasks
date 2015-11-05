@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.levor.liferpg.View.Fragments.Skills.DetailedSkillFragment">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.levor.liferpg.View.Fragments.Skills.DetailedSkillFragment">
 
     <TextView
         android:id="@+id/skill_title"
@@ -84,5 +84,13 @@
               android:layout_below="@id/related_tasks_text">
 
     </ListView>
+    <Button
+        android:id="@+id/edit_skill_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/edit_skill_button"/>
 
 </RelativeLayout>

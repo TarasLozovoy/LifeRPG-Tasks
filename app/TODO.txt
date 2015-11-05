@@ -1,2 +1,2 @@
-- edit skills;
 - action bar;
+- landscape mode;

@@ -70,4 +70,8 @@ public class Skill {
     public UUID getId() {
         return id;
     }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

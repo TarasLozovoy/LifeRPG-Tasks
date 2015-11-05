@@ -23,12 +23,12 @@ import com.levor.liferpg.View.Fragments.DefaultFragment;
  * A simple {@link Fragment} subclass.
  */
 public class AddSkillFragment extends DefaultFragment {
-    private EditText titleEditText;
-    private TextView keyCharacteristicTV;
-    private Button setKeyCharacteristicButton;
-    private Button finishButton;
+    protected EditText titleEditText;
+    protected TextView keyCharacteristicTV;
+    protected Button setKeyCharacteristicButton;
+    protected Button finishButton;
 
-    private Characteristic keyCharacteristic;
+    protected Characteristic keyCharacteristic;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +55,7 @@ public class AddSkillFragment extends DefaultFragment {
                 public void onClick(DialogInterface dialog, int which) {
                     keyCharacteristic = getController().getCharacteristicByTitle(adapter.getItem(which));
                     keyCharacteristicTV.setText(keyCharacteristic.getTitle());
+                    setKeyCharacteristicButton.setText(R.string.change_characteristic);
                     dialog.dismiss();
                 }
             });
@@ -89,11 +90,10 @@ public class AddSkillFragment extends DefaultFragment {
             } else {
                 finishAddingSkill(titleEditText.getText().toString(), "Skill added");
             }
-
         }
     }
 
-    private void finishAddingSkill(String title, String message) {
+    protected void finishAddingSkill(String title, String message) {
         getController().createNewSkill(title, keyCharacteristic);
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();

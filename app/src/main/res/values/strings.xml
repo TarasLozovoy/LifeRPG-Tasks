@@ -57,4 +57,9 @@
     <string name="create_new_skill">Add new skill</string>
     <string name="add_new_skill">Add new skill</string>
 
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit_skill_button">Edit</string>
+    <string name="change_characteristic">Change characteristic</string>
+
 </resources>

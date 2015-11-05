@@ -26,6 +26,7 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
     public final static String CHARACTERISTIC_TITLE = "characteristic_title";
 
     private TextView levelValue;
+    private TextView characteristicTitle;
     private ListView listView;
 
     private Characteristic currentCharacteristic;
@@ -40,7 +41,9 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
         getActivity().setTitle(currentCharacteristic.getTitle() + " details");
 
         levelValue = (TextView) v.findViewById(R.id.level_value);
+        characteristicTitle = (TextView) v.findViewById(R.id.characteristic_title);
         listView = (ListView) v.findViewById(R.id.list_view);
+        characteristicTitle.setText(currentCharacteristic.getTitle());
         levelValue.setText("" + currentCharacteristic.getLevel());
         createAdapter();
 

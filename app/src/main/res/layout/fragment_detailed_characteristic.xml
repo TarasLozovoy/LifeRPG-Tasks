@@ -5,19 +5,25 @@
              tools:context="com.levor.liferpg.View.Fragments.Characteristics.DetailedCharacteristicFragment">
 
     <TextView
+        android:id="@+id/characteristic_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"/>
+
+    <TextView
         android:id="@+id/level"
         android:text="@string/characteristic_level"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"/>
-
+        android:textSize="20sp"
+        android:layout_below="@id/characteristic_title"/>
     <TextView
         android:id="@+id/level_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/level"
-        android:textSize="20sp"/>
-
+        android:textSize="20sp"
+        android:layout_below="@id/characteristic_title"/>
     <TextView
         android:id="@+id/related_skill"
         android:text="@string/characteristic_related_skills"
@@ -25,9 +31,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/level"
         android:textSize="20sp"/>
-
     <ListView android:layout_width="match_parent" android:layout_height="wrap_content"
               android:id="@+id/list_view"
-              android:layout_below="@id/related_skill"> </ListView>
+    android:layout_below="@id/related_skill"> </ListView>
 
 </RelativeLayout>

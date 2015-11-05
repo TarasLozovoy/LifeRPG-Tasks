@@ -149,9 +149,9 @@ public class LifeController {
         for (String task : tasks){
             if (!task.equals("")) {
                 String[] subelements = task.split("::");
-                String[] relatedSkillsTitles = new String[subelements.length - 1];
+                String[] relatedSkillsTitles = new String[subelements.length - 2];
                 for (int i = 0; i < relatedSkillsTitles.length; i++){
-                    relatedSkillsTitles[i] = subelements[i + 1];
+                    relatedSkillsTitles[i] = subelements[i + 2];
                 }
                 try {
                     lifeEntity.updateTask(subelements[0], UUID.fromString(subelements[1]), relatedSkillsTitles);
