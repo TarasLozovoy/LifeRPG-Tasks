@@ -2,8 +2,9 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".TasksActivity">
-    <item android:id="@+id/perform_task"
+    <item android:id="@+id/new_task"
           android:title="@string/add_new_task"
+          android:icon="@drawable/ic_add_black_24dp"
           android:orderInCategory="100"
-          app:showAsAction="always"/>
+          app:showAsAction="ifRoom"/>
 </menu>

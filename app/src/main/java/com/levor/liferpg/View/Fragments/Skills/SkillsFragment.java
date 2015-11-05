@@ -3,6 +3,9 @@ package com.levor.liferpg.View.Fragments.Skills;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,20 +23,11 @@ import java.util.UUID;
 
 public class SkillsFragment extends DefaultFragment {
     private ListView listView;
-    private Button addNewSkillButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_skills, container, false);
-        addNewSkillButton = (Button) view.findViewById(R.id.add_new_skill);
-        addNewSkillButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment f = new AddSkillFragment();
-                getCurrentActivity().showChildFragment(f, null);
-            }
-        });
         listView = (ListView) view.findViewById(R.id.skills_list_view);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -46,7 +40,9 @@ public class SkillsFragment extends DefaultFragment {
                 getCurrentActivity().showChildFragment(fragment, bundle);
             }
         });
-        getActivity().setTitle("Skills");
+
+        setHasOptionsMenu(true);
+        getCurrentActivity().setActionBarTitle("Skills");
         return view;
     }
 
@@ -59,6 +55,23 @@ public class SkillsFragment extends DefaultFragment {
     public void onResume() {
         updateAdapter();
         super.onResume();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_skills, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.add_new_skill:
+                Fragment f = new AddSkillFragment();
+                getCurrentActivity().showChildFragment(f, null);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void updateAdapter() {

@@ -5,6 +5,9 @@ import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,6 +20,7 @@ import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
+import com.levor.liferpg.View.Fragments.Tasks.AddTaskFragment;
 import com.levor.liferpg.View.Fragments.Tasks.DetailedTaskFragment;
 
 import java.util.ArrayList;
@@ -34,7 +38,6 @@ public class DetailedSkillFragment extends DefaultFragment {
     private TextView sublevelValue;
     private TextView toNextLevel;
     private ListView listView;
-    private Button editSkillButton;
 
     private Skill currentSkill;
     private ArrayList<String> currentTasks;
@@ -50,11 +53,10 @@ public class DetailedSkillFragment extends DefaultFragment {
         sublevelValue = (TextView) v.findViewById(R.id.sublevel_value);
         toNextLevel = (TextView) v.findViewById(R.id.to_next_level_value);
         listView = (ListView) v.findViewById(R.id.related_tasks);
-        editSkillButton = (Button) v.findViewById(R.id.edit_skill_button);
-        editSkillButton.setOnClickListener(new EditSkillButtonOnClickListener());
         UUID id = (UUID)getArguments().get(SELECTED_SKILL_UUID_TAG);
         currentSkill = getController().getSkillByID(id);
-        getActivity().setTitle(currentSkill.getTitle() + " skill details");
+        setHasOptionsMenu(true);
+        getCurrentActivity().setActionBarTitle("Skill");
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -79,6 +81,25 @@ public class DetailedSkillFragment extends DefaultFragment {
         return v;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_detailed_skill, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.edit_skill:
+                Bundle b = new Bundle();
+                b.putSerializable(EditSkillFragment.EDIT_SKILL_UUID_TAG, currentSkill.getId());
+                Fragment f = new EditSkillFragment();
+                getCurrentActivity().showChildFragment(f, b);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void createAdapter(){
         ArrayList<Task> tasks = getController().getTasksBySkill(currentSkill);
         ArrayList<String> titles = new ArrayList<>();
@@ -96,15 +117,5 @@ public class DetailedSkillFragment extends DefaultFragment {
         levelValue.setText(" " + currentSkill.getLevel());
         sublevelValue.setText(" " + currentSkill.getSublevel());
         toNextLevel.setText(" " + (currentSkill.getLevel() - currentSkill.getSublevel()));
-    }
-
-    private class EditSkillButtonOnClickListener implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-            Bundle b = new Bundle();
-            b.putSerializable(EditSkillFragment.EDIT_SKILL_UUID_TAG, currentSkill.getId());
-            Fragment f = new EditSkillFragment();
-            getCurrentActivity().showChildFragment(f, b);
-        }
     }
 }

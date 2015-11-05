@@ -7,17 +7,11 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools">
-    <Button
-        android:id="@+id/perform_task"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_new_task"/>
 
     <ListView
         android:id="@+id/listViewTasks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/perform_task"/>
+        android:layout_alignParentStart="true"/>
 </RelativeLayout>

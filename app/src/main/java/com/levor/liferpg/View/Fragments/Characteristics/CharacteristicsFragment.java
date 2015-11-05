@@ -34,7 +34,7 @@ public class CharacteristicsFragment extends DefaultFragment {
                 getCurrentActivity().showChildFragment(f, b);
             }
         });
-        getActivity().setTitle("Characteristics");
+        getCurrentActivity().setActionBarTitle("Characteristics");
         return view;
     }
 

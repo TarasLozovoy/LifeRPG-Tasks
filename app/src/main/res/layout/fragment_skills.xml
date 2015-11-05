@@ -4,13 +4,8 @@
              android:layout_height="match_parent"
              tools:context="com.levor.liferpg.View.Fragments.Skills.SkillsFragment">
 
-    <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:id="@+id/add_new_skill"
-        android:text="@string/add_new_skill"/>
-
     <ListView android:layout_width="match_parent" android:layout_height="wrap_content"
-              android:id="@+id/skills_list_view"
-        android:layout_below="@id/add_new_skill">
+              android:id="@+id/skills_list_view">
     </ListView>
 
 

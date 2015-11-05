@@ -6,6 +6,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -27,51 +30,61 @@ public class EditSkillFragment extends AddSkillFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
         currentSkill = getController().getSkillByID((UUID) getArguments().get(EDIT_SKILL_UUID_TAG));
-        finishButton.setText(R.string.finish_editing);
-        finishButton.setOnClickListener(new FinishButtonOnClickListener());
         titleEditText.setText(currentSkill.getTitle());
         keyCharacteristic = currentSkill.getKeyCharacteristic();
         keyCharacteristicTV.setText(keyCharacteristic.getTitle());
         setKeyCharacteristicButton.setText(R.string.change_characteristic);
+        setHasOptionsMenu(true);
+        getCurrentActivity().setActionBarTitle("Edit skill");
         return v;
     }
 
     @Override
-    protected void finishAddingSkill(String title, String message) {
-        currentSkill.setTitle(title);
-        currentSkill.setKeyCharacteristic(keyCharacteristic);
-        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-        getCurrentActivity().showPreviousFragment();
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_edit_skill, menu);
     }
 
-    private class FinishButtonOnClickListener implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-            if (titleEditText.getText().toString().equals("")){
-                Toast.makeText(getActivity(), "Skill title can't be empty", Toast.LENGTH_SHORT).show();
-            } else if (keyCharacteristic == null){
-                Toast.makeText(getActivity(), "Key characteristic should be set", Toast.LENGTH_SHORT).show();
-            } else if (getController().getSkillByTitle(titleEditText.getText().toString()) != null
-                    && !getController().getSkillByTitle(titleEditText.getText().toString()).equals(currentSkill)){
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Oops!")
-                        .setMessage("Another skill with same title is already exists. Overwrite?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finishAddingSkill(titleEditText.getText().toString(), "Skill updated");
-                            }
-                        })
-                        .setNegativeButton("No, change new skill title", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .show();
-            } else {
-                finishAddingSkill(titleEditText.getText().toString(), "Skill updated");
-            }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.save:
+                if (titleEditText.getText().toString().equals("")){
+                    Toast.makeText(getActivity(), "Skill title can't be empty", Toast.LENGTH_SHORT).show();
+                } else if (keyCharacteristic == null){
+                    Toast.makeText(getActivity(), "Key characteristic should be set", Toast.LENGTH_SHORT).show();
+                } else if (getController().getSkillByTitle(titleEditText.getText().toString()) != null
+                        && !getController().getSkillByTitle(titleEditText.getText().toString()).equals(currentSkill)){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Oops!")
+                            .setMessage("Another skill with same title is already exists. Overwrite?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish(titleEditText.getText().toString(), "Skill updated");
+                                }
+                            })
+                            .setNegativeButton("No, change new skill title", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
+                } else {
+                    finish(titleEditText.getText().toString(), "Skill updated");
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void finish(String title, String message) {
+        currentSkill.setTitle(title);
+        currentSkill.setKeyCharacteristic(keyCharacteristic);
+        getCurrentActivity().saveAppData();
+        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+        getCurrentActivity().showPreviousFragment();
     }
 }

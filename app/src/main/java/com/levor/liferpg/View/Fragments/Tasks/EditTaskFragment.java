@@ -6,6 +6,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -28,36 +31,43 @@ public class EditTaskFragment extends AddTaskFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
-        finishButton.setText(R.string.finish_editing);
         currentTask = getController().getTaskByTitle(getArguments().getString(CURRENT_TASK_TAG));
         newTaskTitleEditText.setText(currentTask.getTitle());
         for (Skill sk: currentTask.getRelatedSkills()){
             relatedSkills.add(sk.getTitle());
         }
+        setHasOptionsMenu(true);
+        getCurrentActivity().setActionBarTitle("Edit task");
         return v;
     }
 
     @Override
-    protected void setFinishButtonOnClickListener() {
-        finishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_edit_task, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.save_task:
                 String title = newTaskTitleEditText.getText().toString();
                 if (title.isEmpty()) {
                     Toast.makeText(getActivity(), "Task title can't be empty", Toast.LENGTH_SHORT).show();
-                    return;
+                    return true;
                 }
                 if (relatedSkills.isEmpty()) {
                     Toast.makeText(getActivity(), "Add at least one related skill", Toast.LENGTH_LONG).show();
-                    return;
+                    return true;
                 }
                 if (getController().getTaskByTitle(title) != null && !title.equals(currentTask.getTitle())){
                     createIdenticalTaskRequestDialog(title);
-                    return;
+                    return true;
                 }
                 finishTask(title, "Task edit finished");
-            }
-        });
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -90,6 +100,7 @@ public class EditTaskFragment extends AddTaskFragment {
             skills.add(getController().getSkillByTitle(s));
         }
         currentTask.setRelatedSkills(skills);
+        getCurrentActivity().saveAppData();
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
     }

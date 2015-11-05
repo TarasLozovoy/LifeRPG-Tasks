@@ -2,8 +2,9 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.levor.liferpg.View.Obsolete.SkillsActivity">
-    <item android:id="@+id/action_settings"
-          android:title="@string/action_settings"
+    <item android:id="@+id/add_new_skill"
+          android:title="@string/add_new_skill"
+          android:icon="@drawable/ic_add_black_24dp"
           android:orderInCategory="100"
-          app:showAsAction="never"/>
+          app:showAsAction="ifRoom"/>
 </menu>

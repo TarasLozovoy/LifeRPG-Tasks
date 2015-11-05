@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -24,7 +27,6 @@ public class AddTaskFragment extends DefaultFragment {
     protected EditText newTaskTitleEditText;
     private ListView relatedSkillListView;
     private Button addSkillButton;
-    protected Button finishButton;
 
     protected List<String> relatedSkills = new ArrayList<>();
 
@@ -36,8 +38,6 @@ public class AddTaskFragment extends DefaultFragment {
 
         relatedSkillListView = (ListView) view.findViewById(R.id.related_skills_to_add);
         setupListView();
-        finishButton = (Button) view.findViewById(R.id.finish);
-        setFinishButtonOnClickListener();
         addSkillButton = (Button) view.findViewById(R.id.add_related_skill);
         addSkillButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,9 +60,40 @@ public class AddTaskFragment extends DefaultFragment {
                 dialog.show();
             }
         });
-        getActivity().setTitle("Create new task");
+        setHasOptionsMenu(true);
+        getCurrentActivity().setActionBarTitle("Create new task");
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_add_task, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.create_task:
+                String title = newTaskTitleEditText.getText().toString();
+                if (title.isEmpty()) {
+                    Toast.makeText(getActivity(), "Task title can't be empty", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                if (relatedSkills.isEmpty()) {
+                    Toast.makeText(getActivity(), "Add at least one related skill", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                if (getController().getTaskByTitle(title) != null) {
+                    createIdenticalTaskRequestDialog(title);
+                    return true;
+                } else {
+                    finishTask(title, "Task added");
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void updateListView(){
@@ -93,6 +124,7 @@ public class AddTaskFragment extends DefaultFragment {
 
     protected void finishTask(String title, String message){
         getController().createNewTask(title, relatedSkills);
+        getCurrentActivity().saveAppData();
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
     }
@@ -106,27 +138,5 @@ public class AddTaskFragment extends DefaultFragment {
             }
         });
         updateListView();
-    }
-
-    protected void setFinishButtonOnClickListener(){
-        finishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String title = newTaskTitleEditText.getText().toString();
-                if (title.isEmpty()) {
-                    Toast.makeText(getActivity(), "Task title can't be empty", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (relatedSkills.isEmpty()) {
-                    Toast.makeText(getActivity(), "Add at least one related skill", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if (getController().getTaskByTitle(title) != null) {
-                    createIdenticalTaskRequestDialog(title);
-                } else {
-                    finishTask(title, "Task added");
-                }
-            }
-        });
     }
 }

@@ -38,7 +38,7 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_detailed_characteristic, container, false);
         currentCharacteristic = getController().getCharacteristicByTitle(getArguments().getString(CHARACTERISTIC_TITLE));
-        getActivity().setTitle(currentCharacteristic.getTitle() + " details");
+        getCurrentActivity().setActionBarTitle(currentCharacteristic.getTitle() + " details");
 
         levelValue = (TextView) v.findViewById(R.id.level_value);
         characteristicTitle = (TextView) v.findViewById(R.id.characteristic_title);

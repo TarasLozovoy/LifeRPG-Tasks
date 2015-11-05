@@ -84,13 +84,5 @@
               android:layout_below="@id/related_tasks_text">
 
     </ListView>
-    <Button
-        android:id="@+id/edit_skill_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/edit_skill_button"/>
 
 </RelativeLayout>

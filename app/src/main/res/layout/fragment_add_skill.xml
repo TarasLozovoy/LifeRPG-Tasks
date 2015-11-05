@@ -48,11 +48,4 @@
             android:id="@+id/set_key_characteristic_button"/>
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/finish"
-        android:text="@string/create_new_skill"
-        android:layout_below="@id/add_characteristic_ll"/>
-
 </RelativeLayout>

@@ -50,11 +50,4 @@
         android:text="@string/add_skill_to_task"
         android:layout_below="@id/add_skill_ll"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/finish"
-        android:text="@string/create_task"
-        android:layout_below="@id/add_related_skill"/>
-
 </RelativeLayout>

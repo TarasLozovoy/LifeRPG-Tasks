@@ -1,7 +1,11 @@
 package com.levor.liferpg.View.Fragments.Tasks;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -11,6 +15,7 @@ import android.widget.ListView;
 import com.levor.liferpg.Adapters.TasksAdapter;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
+import com.levor.liferpg.View.Fragments.Skills.AddSkillFragment;
 import com.levor.liferpg.View.Fragments.Tasks.AddTaskFragment;
 import com.levor.liferpg.View.Fragments.Tasks.DetailedTaskFragment;
 
@@ -18,7 +23,6 @@ import java.util.UUID;
 
 public class TasksFragment extends DefaultFragment {
     private ListView listView;
-    private Button addTask;
 
     private TasksAdapter adapter;
 
@@ -28,18 +32,28 @@ public class TasksFragment extends DefaultFragment {
         View view = inflater.inflate(R.layout.fragment_tasks, container, false);
 
         listView = (ListView) view.findViewById(R.id.listViewTasks);
-        addTask = (Button) view.findViewById(R.id.perform_task);
-        addTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getCurrentActivity().showChildFragment(new AddTaskFragment(), null);
-            }
-        });
 
         createAdapter();
         setupListView();
-        getActivity().setTitle("Tasks");
+        setHasOptionsMenu(true);
+        getCurrentActivity().setActionBarTitle("Tasks");
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_tasks, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.new_task:
+                getCurrentActivity().showChildFragment(new AddTaskFragment(), null);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void createAdapter(){
