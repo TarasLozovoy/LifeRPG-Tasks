@@ -33,7 +33,6 @@
     <string name="to_next_lvl">Points left to next level:</string>
     <string name="related_skills">Related skills:</string>
     <string name="perform_task">Perform</string>
-    <string name="remove_task">Remove</string>
     <string name="tasks_activity_title">Tasks</string>
     <string name="title_activity_add_task">Add new task</string>
     <string name="title_activity_detailed_characteristic">DetailedCharacteristicActivity</string>
@@ -68,5 +67,6 @@
     <string name="edit_skill">Edit</string>
     <string name="add_skill">Add</string>
     <string name="save">Save</string>
+    <string name="remove">Delete</string>
 
 </resources>

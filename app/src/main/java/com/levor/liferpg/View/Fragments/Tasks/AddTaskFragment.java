@@ -80,10 +80,6 @@ public class AddTaskFragment extends DefaultFragment {
                     Toast.makeText(getActivity(), "Task title can't be empty", Toast.LENGTH_SHORT).show();
                     return true;
                 }
-                if (relatedSkills.isEmpty()) {
-                    Toast.makeText(getActivity(), "Add at least one related skill", Toast.LENGTH_LONG).show();
-                    return true;
-                }
                 if (getController().getTaskByTitle(title) != null) {
                     createIdenticalTaskRequestDialog(title);
                     return true;

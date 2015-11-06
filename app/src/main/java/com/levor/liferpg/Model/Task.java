@@ -24,8 +24,12 @@ public class Task {
         return relatedSkills;
     }
 
-    public void addRelatedSkills(Skill ... skills) {
+    public void setRelatedSkills(Skill... skills) {
         this.relatedSkills = Arrays.asList(skills);
+    }
+
+    public void addRelatedSkill(Skill sk){
+        this.relatedSkills.add(sk);
     }
 
     public void perform(){

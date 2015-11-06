@@ -14,7 +14,6 @@ import java.util.UUID;
 
 public class LifeController {
     private LifeEntity lifeEntity = LifeEntity.getInstance();
-    private Map<UUID, Task> tasks;
 
     private static LifeController LifeController;
     public static LifeController getInstance(){
@@ -24,9 +23,7 @@ public class LifeController {
         return LifeController;
     }
 
-    private LifeController() {
-        tasks = lifeEntity.getTasks();
-    }
+    private LifeController() {}
 
     //======================================
     //Getters
@@ -34,7 +31,7 @@ public class LifeController {
 
     public Map<String, List<String>> getTasksWithRelatedSkills(){
         Map<String, List<String>> map = new TreeMap<>(); //Task title, related skills titles
-        for (Task t : tasks.values()){
+        for (Task t : lifeEntity.getTasks().values()){
             List<String> skillsTitles = new ArrayList<>();
             for(Skill s : t.getRelatedSkills()){
                 skillsTitles.add(s.getTitle());
@@ -47,7 +44,7 @@ public class LifeController {
 
     public List<String> getTasksTitlesAsList(){
         List<String> titles = new ArrayList<>();
-        for (Task t : tasks.values()){
+        for (Task t : lifeEntity.getTasks().values()){
             titles.add(t.getTitle());
         }
         return titles;
@@ -223,5 +220,19 @@ public class LifeController {
 
     public Skill getSkillByID(UUID id) {
         return lifeEntity.getSkillByID(id);
+    }
+
+    public void removeSkill(Skill skill) {
+        List<Task> tasks = getTasksBySkill(skill);
+        for (Task t : tasks){
+            List<Skill> newSkills = new ArrayList<>();
+            for (Skill sk : t.getRelatedSkills()){
+                if (!sk.equals(skill)){
+                    newSkills.add(sk);
+                }
+            }
+            t.setRelatedSkills(newSkills);
+        }
+        lifeEntity.removeSkill(skill);
     }
 }

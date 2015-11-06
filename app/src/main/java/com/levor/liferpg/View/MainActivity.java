@@ -35,6 +35,10 @@ import java.util.EmptyStackException;
 import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
+    public final static int TASKS_FRAGMENT_ID = 0;
+    public final static int SKILLS_FRAGMENT_ID = 1;
+    public final static int CHARACTERISTICS_FRAGMENT_ID = 2;
+
     private final String SKILLS_FILE_NAME = "skills_file_name.txt";
     private final String CHARACTERISTICS_FILE_NAME = "characteristics_file_name.txt";
     private final String TASKS_FILE_NAME = "tasks_file_name.txt";
@@ -70,11 +74,13 @@ public class MainActivity extends AppCompatActivity {
                 R.mipmap.ic_drawer, R.string.drawer_open, R.string.drawer_close){
             public void onDrawerOpened(View view) {
                 getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.light_blue)));
+                getSupportActionBar().setHomeAsUpIndicator(0);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
+                getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
             }
         };
 
@@ -83,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_drawer);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
 
         readContentStringsFromFiles();
 
@@ -191,15 +197,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void switchRootFragment(int fragmentNumber) {
-        Fragment fragment = null;
+        Fragment fragment;
         switch (fragmentNumber) {
-            case 0 :
+            case TASKS_FRAGMENT_ID :
                 fragment = new TasksFragment();
                 break;
-            case 1:
+            case SKILLS_FRAGMENT_ID:
                 fragment = new SkillsFragment();
                 break;
-            case 2:
+            case CHARACTERISTICS_FRAGMENT_ID:
                 fragment = new CharacteristicsFragment();
                 break;
             default:
@@ -223,6 +229,14 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.content_frame, fragment)
                 .commit();
         return true;
+    }
+
+    public boolean showNthPreviousFragment(int n) {
+        if (n <= 1 || fragmentsStack.size() == 1) {
+            return showPreviousFragment();
+        }
+        fragmentsStack.pop();
+        return showNthPreviousFragment(n - 1);
     }
 
     public void showChildFragment(Fragment fragment, Bundle bundle){

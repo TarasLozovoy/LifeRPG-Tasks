@@ -3,7 +3,6 @@ package com.levor.liferpg.Model;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -200,7 +199,7 @@ public class LifeEntity {
             for (int i = 0; i < relatedSkillsTitles.length; i++){
                 skills[i] = getSkillByTitle(relatedSkillsTitles[i]);
             }
-            updTask.addRelatedSkills(skills);
+            updTask.setRelatedSkills(skills);
 
         } else {
             Skill[] relatedSkills = new Skill[relatedSkillsTitles.length];
@@ -273,5 +272,9 @@ public class LifeEntity {
             }
         }
         return null;
+    }
+
+    public void removeSkill(Skill skill) {
+        skills.remove(skill.getId());
     }
 }

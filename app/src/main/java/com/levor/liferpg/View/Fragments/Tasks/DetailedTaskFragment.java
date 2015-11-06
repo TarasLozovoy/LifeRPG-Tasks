@@ -83,9 +83,6 @@ public class DetailedTaskFragment extends DefaultFragment {
             case R.id.perform_task:
                 performTask();
                 return true;
-            case R.id.remove_task:
-                removeTask();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -149,25 +146,5 @@ public class DetailedTaskFragment extends DefaultFragment {
                 });
         AlertDialog alert = builder.create();
         alert.show();
-    }
-
-    private void removeTask(){
-        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-        alert.setTitle("Removing " + currentTask.getTitle())
-                .setMessage("Are you really want to remove this task?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        getController().removeTask(currentTask);
-                        getCurrentActivity().showPreviousFragment();
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
     }
 }

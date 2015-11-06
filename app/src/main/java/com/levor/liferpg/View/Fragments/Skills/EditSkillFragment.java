@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.R;
+import com.levor.liferpg.View.MainActivity;
 
 import java.util.UUID;
 
@@ -74,9 +75,33 @@ public class EditSkillFragment extends AddSkillFragment {
                     finish(titleEditText.getText().toString(), "Skill updated");
                 }
                 return true;
+            case R.id.remove:
+                removeSkill();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void removeSkill(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        alert.setTitle("Removing " + currentSkill.getTitle())
+                .setMessage("Are you really want to remove this skill?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getController().removeSkill(currentSkill);
+                        getCurrentActivity().saveAppData();
+                        getCurrentActivity().showNthPreviousFragment(2);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 
     @Override

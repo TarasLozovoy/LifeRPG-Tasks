@@ -55,15 +55,15 @@ public class EditTaskFragment extends AddTaskFragment {
                     Toast.makeText(getActivity(), "Task title can't be empty", Toast.LENGTH_SHORT).show();
                     return true;
                 }
-                if (relatedSkills.isEmpty()) {
-                    Toast.makeText(getActivity(), "Add at least one related skill", Toast.LENGTH_LONG).show();
-                    return true;
-                }
                 if (getController().getTaskByTitle(title) != null && !title.equals(currentTask.getTitle())){
                     createIdenticalTaskRequestDialog(title);
                     return true;
                 }
                 finishTask(title, "Task edit finished");
+                return true;
+
+            case R.id.remove_task:
+                removeTask();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -87,6 +87,26 @@ public class EditTaskFragment extends AddTaskFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         finishTask(title, "Task edit finished");
+                    }
+                })
+                .show();
+    }
+
+    private void removeTask(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+        alert.setTitle("Removing " + currentTask.getTitle())
+                .setMessage("Are you really want to remove this task?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getController().removeTask(currentTask);
+                        getCurrentActivity().showPreviousFragment();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
                     }
                 })
                 .show();
