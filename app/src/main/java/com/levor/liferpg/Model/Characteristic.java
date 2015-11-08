@@ -1,6 +1,6 @@
 package com.levor.liferpg.Model;
 
-public class Characteristic {
+public class Characteristic implements Comparable<Characteristic>{
     private String title;
     private int level;
 
@@ -37,5 +37,15 @@ public class Characteristic {
             return this.title.equals(ch.title);
         }
         return false;
+    }
+
+    @Override
+    public int compareTo(Characteristic another) {
+        if (this.level < another.level){
+            return +1;
+        } else if ( this.level > another.level){
+            return -1;
+        }
+        return this.title.compareTo(another.title);
     }
 }

@@ -3,6 +3,8 @@ package com.levor.liferpg.Model;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -14,6 +16,9 @@ public class LifeEntity {
     private final Characteristic strength = new Characteristic("Strength", 1);
     private final Characteristic stamina = new Characteristic("Stamina", 1);
     private final Characteristic dexterity = new Characteristic("Dexterity", 1);
+    private final Characteristic perception = new Characteristic("Perception", 1);
+    private final Characteristic memory = new Characteristic("Memory", 1);
+    private final Characteristic charisma = new Characteristic("Charisma", 1);
 
     private Map<UUID, Skill> skills = new TreeMap<>();  //title, skill
     private Map<UUID, Task> tasks = new TreeMap<>();    //title, task
@@ -107,6 +112,10 @@ public class LifeEntity {
         list.add(strength);
         list.add(stamina);
         list.add(dexterity);
+        list.add(perception);
+        list.add(memory);
+        list.add(charisma);
+        Collections.sort(list);
         return list;
     }
 
@@ -128,6 +137,18 @@ public class LifeEntity {
 
     public int getDexterityLevel(){
         return dexterity.getLevel();
+    }
+
+    public int getPerceptionLevel(){
+        return perception.getLevel();
+    }
+
+    public int getMemoryLevel(){
+        return memory.getLevel();
+    }
+
+    public int getCharismaLevel(){
+        return charisma.getLevel();
     }
 
     public String getCharacteristicTitleBySkill(UUID id){

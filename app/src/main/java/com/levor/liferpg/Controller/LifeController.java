@@ -79,7 +79,6 @@ public class LifeController {
     public int getIntelligenceLevel(){
         return lifeEntity.getIntelligenceLevel();
     }
-
     public int getWisdomLevel(){
         return lifeEntity.getWisdomLevel();
     }
@@ -91,6 +90,15 @@ public class LifeController {
     }
     public int getDexterityLevel(){
         return lifeEntity.getDexterityLevel();
+    }
+    public int getPerceptionLevel(){
+        return lifeEntity.getPerceptionLevel();
+    }
+    public int getMemoryLevel(){
+        return lifeEntity.getMemoryLevel();
+    }
+    public int getCharismaLevel(){
+        return lifeEntity.getCharismaLevel();
     }
 
     public String getCurrentCharacteristicsString(){
