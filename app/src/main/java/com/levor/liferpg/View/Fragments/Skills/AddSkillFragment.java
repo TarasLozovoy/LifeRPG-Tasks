@@ -25,6 +25,8 @@ import com.levor.liferpg.View.Fragments.DefaultFragment;
  * A simple {@link Fragment} subclass.
  */
 public class AddSkillFragment extends DefaultFragment {
+    public static final String RECEIVED_CHARACTERISTIC_TITLE_TAG = "received_characteristic_title_tag";
+
     protected EditText titleEditText;
     protected TextView keyCharacteristicTV;
     protected Button setKeyCharacteristicButton;
@@ -39,6 +41,11 @@ public class AddSkillFragment extends DefaultFragment {
         keyCharacteristicTV = (TextView) v.findViewById(R.id.key_characteristic_value);
         setKeyCharacteristicButton = (Button) v.findViewById(R.id.set_key_characteristic_button);
         setKeyCharacteristicButton.setOnClickListener(new ChangeCharacteristicOnClickListener());
+        String title;
+        if (getArguments()!= null && (title = getArguments().getString(RECEIVED_CHARACTERISTIC_TITLE_TAG)) != null){
+            keyCharacteristic = getController().getCharacteristicByTitle(title);
+            keyCharacteristicTV.setText(title);
+        }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(R.string.new_skill);
         return v;

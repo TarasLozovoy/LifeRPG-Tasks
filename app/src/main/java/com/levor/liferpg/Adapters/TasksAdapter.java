@@ -63,6 +63,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
             @Override
             public void onClick(View v) {
                 final Task task = lifeController.getTaskByTitle(items.get(position));
+                boolean heroLevelIncreased = false;
                 StringBuilder sb = new StringBuilder();
                 sb.append("Task successfully performed!\n")
                         .append("Skill(s) improved:\n");
@@ -73,7 +74,9 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                             .append("(")
                             .append(sk.getSublevel())
                             .append(")");
-                    sk.increaseSublevel();
+                    if (lifeController.changeSkillSubLevel(sk, true) && !heroLevelIncreased){
+                        heroLevelIncreased = true;
+                    }
                     sb.append(" -> ")
                             .append(sk.getLevel())
                             .append("(")
@@ -82,6 +85,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                             .append("\n");
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                final boolean finalHeroLevelIncreased = heroLevelIncreased;
                 builder.setTitle(items.get(position))
                         .setCancelable(false)
                         .setMessage(sb.toString())
@@ -90,6 +94,10 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
                                 notifyDataSetChanged();
+                                if (finalHeroLevelIncreased){
+                                    Toast.makeText(mContext, "Congratulations!\n" + lifeController.getHeroName()
+                                            + "'s level increased!",Toast.LENGTH_LONG).show();
+                                }
                             }
                         })
                         .setNegativeButton("Undo", new DialogInterface.OnClickListener() {
@@ -98,7 +106,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                                 StringBuilder sb = new StringBuilder();
                                 sb.append("Task undone.");
                                 for(Skill sk: task.getRelatedSkills()){
-                                    sk.decreaseSublevel();
+                                    lifeController.changeSkillSubLevel(sk, false);
                                     sb.append("\n").append(sk.getTitle()).append(" skill returned to previous state");
                                 }
                                 Toast.makeText(mContext, sb.toString(),Toast.LENGTH_LONG).show();

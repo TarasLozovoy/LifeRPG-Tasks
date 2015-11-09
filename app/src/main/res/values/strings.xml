@@ -41,9 +41,8 @@
 
     <string-array
         name="activities_array">
+        <item>Hero</item>
         <item>Tasks</item>
-        <item>Skills</item>
-        <item>Characteristics</item>
     </string-array>
 
     <string name="title_activity_main_fragment">MainActivity</string>
@@ -55,6 +54,8 @@
     <string name="set_key_characteristic">Set characteristic</string>
     <string name="create_new_skill">Add new skill</string>
     <string name="add_new_skill">New skill</string>
+    <string name="do_task">DO</string>
+
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -68,5 +69,8 @@
     <string name="add_skill">Add</string>
     <string name="save">Save</string>
     <string name="remove">Delete</string>
+    <string name="open_characteristics_with_arrow"><![CDATA[Characteristics >>]]></string>
+    <string name="open_skills_with_arrow"><![CDATA[Skills >>]]></string>
+    <string name="edit_hero">Edit</string>
 
 </resources>

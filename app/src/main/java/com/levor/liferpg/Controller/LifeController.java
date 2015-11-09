@@ -117,11 +117,30 @@ public class LifeController {
         return lifeEntity.getTaskByTitle(s);
     }
 
+
+
+    public String getCurrentHeroString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(lifeEntity.getHero().getName())
+                .append("::")
+                .append(lifeEntity.getHero().getLevel())
+                .append("::")
+                .append(lifeEntity.getHero().getXp());
+        return sb.toString();
+    }
+
     //======================================
     //Setters
     //======================================
 
-    public void updateCurrentContentWithStrings(String characteristicsFromFile, String skillsFromFile, String tasksFromFile) {
+    /**
+     * receives saved to file app data, encodes them and update app with it
+     * @param characteristicsFromFile title::level:;title::level:; ...
+     * @param skillsFromFile title::level::sublevel::UUID::keyCharTitle:; ...
+     * @param tasksFromFile title::relatedSkill1:: ... :: relatedSkillN:; ...
+     * @param heroFromFile name::level::xp
+     */
+    public void updateCurrentContentWithStrings(String characteristicsFromFile, String skillsFromFile, String tasksFromFile, String heroFromFile) {
         //characteristics
         String[] characteristics = characteristicsFromFile.split(":;");
         for (String characteristic : characteristics){
@@ -164,6 +183,12 @@ public class LifeController {
                     e.printStackTrace();
                 }
             }
+        }
+
+        //hero
+        if(!heroFromFile.equals("")) {
+            String[] heroData = heroFromFile.split("::");
+            lifeEntity.updateHero(heroData[0], Integer.parseInt(heroData[1]), Integer.parseInt(heroData[2]));
         }
     }
 
@@ -242,5 +267,37 @@ public class LifeController {
             t.setRelatedSkills(newSkills);
         }
         lifeEntity.removeSkill(skill);
+    }
+
+    /**
+     * Increases or decreases skill sublevel and hero xp.
+     * @param sk skill to update
+     * @param increase increases values if true, decreases if false.
+     * @return true if hero level changed, false otherwise.
+     */
+    public boolean changeSkillSubLevel(Skill sk, boolean increase){
+        if (increase){
+            sk.increaseSublevel();
+            return lifeEntity.getHero().increaseXP();
+        } else {
+            sk.decreaseSublevel();
+            return lifeEntity.getHero().decreaseXP();
+        }
+    }
+
+    public String getHeroName(){
+        return lifeEntity.getHero().getName();
+    }
+
+    public int getHeroLevel(){
+        return lifeEntity.getHero().getLevel();
+    }
+
+    public int getHeroXp(){
+        return lifeEntity.getHero().getXp();
+    }
+
+    public int getHeroXpToNextLevel(){
+        return lifeEntity.getHero().getXpToNextLevel();
     }
 }

@@ -3,10 +3,11 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/perform_task"
-          android:title="@string/perform_task"
-          android:icon="@drawable/ic_done_black_24dp"
+          android:title="@string/do_task"
           android:orderInCategory="2"
-          app:showAsAction="ifRoom"/>
+          app:showAsAction="ifRoom"
+        />
+
 
     <item android:id="@+id/edit_task"
           android:title="@string/edit_task"

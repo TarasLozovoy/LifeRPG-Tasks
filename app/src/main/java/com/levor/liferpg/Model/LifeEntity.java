@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import java.util.UUID;
 
 public class LifeEntity {
+    private final Hero hero = new Hero();
     private final Characteristic intelligence = new Characteristic("Intelligence", 1);
     private final Characteristic wisdom = new Characteristic("Wisdom", 1);
     private final Characteristic strength = new Characteristic("Strength", 1);
@@ -68,6 +69,10 @@ public class LifeEntity {
 //        addTask("Ride for 40 km", skills.get("Roller skating"));
 //
 //        addTask("Train in gym", skills.get("Powerlifting"));
+    }
+
+    public Hero getHero() {
+        return hero;
     }
 
     public Map<String, Integer[]> getSkillsTitlesAndLevels() {
@@ -196,6 +201,12 @@ public class LifeEntity {
             }
         }
         return sb.toString();
+    }
+
+    public void updateHero(String name, int level, int xp){
+        hero.setName(name);
+        hero.setLevel(level);
+        hero.setXp(xp);
     }
 
     public void updateCharacteristic(String title, int level) throws IOException {

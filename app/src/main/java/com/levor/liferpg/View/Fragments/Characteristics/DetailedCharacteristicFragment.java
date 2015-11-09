@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,7 +16,9 @@ import com.levor.liferpg.Model.Characteristic;
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
+import com.levor.liferpg.View.Fragments.Skills.AddSkillFragment;
 import com.levor.liferpg.View.Fragments.Skills.DetailedSkillFragment;
+import com.levor.liferpg.View.Fragments.Tasks.AddTaskFragment;
 
 import java.util.ArrayList;
 
@@ -45,6 +48,7 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
         listView = (ListView) v.findViewById(R.id.list_view);
         characteristicTitle.setText(currentCharacteristic.getTitle());
         levelValue.setText("" + currentCharacteristic.getLevel());
+        createFooterView();
         createAdapter();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -57,6 +61,21 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
             }
         });
         return v;
+    }
+
+    private void createFooterView() {
+        Button footerButton = new Button(getActivity());
+        footerButton.setText(R.string.create_new_skill);
+        footerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment f = new AddSkillFragment();
+                Bundle b = new Bundle();
+                b.putSerializable(AddSkillFragment.RECEIVED_CHARACTERISTIC_TITLE_TAG, currentCharacteristic.getTitle());
+                getCurrentActivity().showChildFragment(f, b);
+            }
+        });
+        listView.addFooterView(footerButton);
     }
 
     private void createAdapter(){

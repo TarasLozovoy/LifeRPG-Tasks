@@ -22,6 +22,7 @@ import android.widget.ListView;
 import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.Characteristics.CharacteristicsFragment;
+import com.levor.liferpg.View.Fragments.HeroMainFragment;
 import com.levor.liferpg.View.Fragments.Skills.SkillsFragment;
 import com.levor.liferpg.View.Fragments.Tasks.TasksFragment;
 
@@ -35,18 +36,19 @@ import java.util.EmptyStackException;
 import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
-    public final static int TASKS_FRAGMENT_ID = 0;
-    public final static int SKILLS_FRAGMENT_ID = 1;
-    public final static int CHARACTERISTICS_FRAGMENT_ID = 2;
+    public final static int HERO_FRAGMENT_ID = 0;
+    public final static int TASKS_FRAGMENT_ID = 1;
 
     private final String SKILLS_FILE_NAME = "skills_file_name.txt";
     private final String CHARACTERISTICS_FILE_NAME = "characteristics_file_name.txt";
     private final String TASKS_FILE_NAME = "tasks_file_name.txt";
+    private final String HERO_FILE_NAME = "hero_file_name.txt";
     private final String TAG = "com.levor.liferpg";
 
     private String skillsFromFile;
     private String characteristicsFromFile;
     private String tasksFromFile;
+    private String heroFromFile;
 
     private final LifeController lifeController = LifeController.getInstance();
 
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         readContentStringsFromFiles();
 
-        Fragment fragment = new TasksFragment();
+        Fragment fragment = new HeroMainFragment();
         fragmentsStack.push(fragment);
 
         FragmentManager fm = getFragmentManager();
@@ -146,8 +148,9 @@ public class MainActivity extends AppCompatActivity {
         characteristicsFromFile = getStringFromFile(CHARACTERISTICS_FILE_NAME);
         skillsFromFile = getStringFromFile(SKILLS_FILE_NAME);
         tasksFromFile = getStringFromFile(TASKS_FILE_NAME);
+        heroFromFile = getStringFromFile(HERO_FILE_NAME);
         Log.e(TAG, "chars: " + characteristicsFromFile + "\nskiils: " + skillsFromFile + "\nTasks: " + tasksFromFile);
-        lifeController.updateCurrentContentWithStrings(characteristicsFromFile, skillsFromFile, tasksFromFile);
+        lifeController.updateCurrentContentWithStrings(characteristicsFromFile, skillsFromFile, tasksFromFile, heroFromFile);
     }
 
     private String getStringFromFile(String fileName){
@@ -179,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
         writeStringToFile(lifeController.getCurrentCharacteristicsString(), CHARACTERISTICS_FILE_NAME);
         writeStringToFile(lifeController.getCurrentSkillsString(), SKILLS_FILE_NAME);
         writeStringToFile(lifeController.getCurrentTasksString(), TASKS_FILE_NAME);
+        writeStringToFile(lifeController.getCurrentHeroString(), HERO_FILE_NAME);
         Log.d(TAG, "content saved to filesystem");
     }
 
@@ -199,14 +203,11 @@ public class MainActivity extends AppCompatActivity {
     private void switchRootFragment(int fragmentNumber) {
         Fragment fragment;
         switch (fragmentNumber) {
+            case HERO_FRAGMENT_ID :
+                fragment = new HeroMainFragment();
+                break;
             case TASKS_FRAGMENT_ID :
                 fragment = new TasksFragment();
-                break;
-            case SKILLS_FRAGMENT_ID:
-                fragment = new SkillsFragment();
-                break;
-            case CHARACTERISTICS_FRAGMENT_ID:
-                fragment = new CharacteristicsFragment();
                 break;
             default:
                 throw new RuntimeException("No such menu item!");

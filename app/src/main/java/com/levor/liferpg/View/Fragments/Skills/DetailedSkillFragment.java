@@ -70,6 +70,7 @@ public class DetailedSkillFragment extends DefaultFragment {
             }
         });
         createAdapter();
+        createFooterView();
         adapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
@@ -117,5 +118,20 @@ public class DetailedSkillFragment extends DefaultFragment {
         levelValue.setText(" " + currentSkill.getLevel());
         sublevelValue.setText(" " + currentSkill.getSublevel());
         toNextLevel.setText(" " + (currentSkill.getLevel() - currentSkill.getSublevel()));
+    }
+
+    private void createFooterView() {
+        Button footerButton = new Button(getActivity());
+        footerButton.setText(R.string.add_new_task);
+        footerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment f = new AddTaskFragment();
+                Bundle b = new Bundle();
+                b.putSerializable(AddTaskFragment.RECEIVED_SKILL_TITLE_TAG, currentSkill.getTitle());
+                getCurrentActivity().showChildFragment(f, b);
+            }
+        });
+        listView.addFooterView(footerButton);
     }
 }

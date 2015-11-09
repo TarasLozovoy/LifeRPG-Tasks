@@ -32,18 +32,6 @@ public class Task {
         this.relatedSkills.add(sk);
     }
 
-    public void perform(){
-        for (Skill s: relatedSkills) {
-            s.increaseSublevel();
-        }
-    }
-
-    public void performNTimes(int N){
-        for (int i = 0; i < N; i++) {
-            perform();
-        }
-    }
-
     public void setRelatedSkills(List<Skill> relatedSkills) {
         this.relatedSkills = relatedSkills;
     }

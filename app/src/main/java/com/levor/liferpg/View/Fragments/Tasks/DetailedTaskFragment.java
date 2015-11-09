@@ -113,7 +113,7 @@ public class DetailedTaskFragment extends DefaultFragment {
                     .append("(")
                     .append(sk.getSublevel())
                     .append(")");
-            sk.increaseSublevel();
+            getCurrentActivity().getController().changeSkillSubLevel(sk, true);
             sb.append(" -> ")
                     .append(sk.getLevel())
                     .append("(")
@@ -138,7 +138,7 @@ public class DetailedTaskFragment extends DefaultFragment {
                         StringBuilder sb = new StringBuilder();
                         sb.append("Task undone.");
                         for(Skill sk: currentTask.getRelatedSkills()){
-                            sk.decreaseSublevel();
+                            getCurrentActivity().getController().changeSkillSubLevel(sk, false);
                             sb.append("\n").append(sk.getTitle()).append(" skill returned to previous state");
                         }
                         Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG).show();

@@ -17,13 +17,17 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.levor.liferpg.Adapters.TaskAddingAdapter;
+import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class AddTaskFragment extends DefaultFragment {
+    public static final String RECEIVED_SKILL_TITLE_TAG = "received_skill_tag";
+
     protected EditText newTaskTitleEditText;
     private ListView relatedSkillListView;
     private Button addSkillButton;
@@ -60,6 +64,12 @@ public class AddTaskFragment extends DefaultFragment {
                 dialog.show();
             }
         });
+
+        String skillTitle;
+        if (getArguments() != null && (skillTitle = getArguments().getString(RECEIVED_SKILL_TITLE_TAG)) != null) {
+            relatedSkills.add(skillTitle);
+            updateListView();
+        }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Create new task");
 
