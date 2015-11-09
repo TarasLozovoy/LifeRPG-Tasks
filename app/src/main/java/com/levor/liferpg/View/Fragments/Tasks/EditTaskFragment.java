@@ -100,7 +100,7 @@ public class EditTaskFragment extends AddTaskFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         getController().removeTask(currentTask);
-                        getCurrentActivity().showPreviousFragment();
+                        getCurrentActivity().showNthPreviousFragment(2);
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {

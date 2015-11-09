@@ -51,6 +51,14 @@ public class HeroMainFragment extends DefaultFragment {
     }
 
     @Override
+    public void onResume() {
+        xpProgress.setMax(getController().getHeroXpToNextLevel());
+        xpProgress.setProgress(getController().getHeroXp());
+        xpProgressTV.setText("XP : " + xpProgress.getProgress() + "/" + xpProgress.getMax());
+        super.onResume();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_hero_main_fragment, menu);
     }
