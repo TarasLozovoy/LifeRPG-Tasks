@@ -78,6 +78,7 @@ public class AddTaskFragment extends DefaultFragment {
         }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Create new task");
+        getCurrentActivity().showActionBarHomeButtonAsBack(true);
 
         return view;
     }
@@ -103,6 +104,9 @@ public class AddTaskFragment extends DefaultFragment {
                 } else {
                     finishTask(title, "Task added");
                 }
+                return true;
+            case android.R.id.home:
+                getCurrentActivity().showPreviousFragment();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

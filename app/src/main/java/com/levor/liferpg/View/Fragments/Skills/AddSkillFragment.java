@@ -58,6 +58,7 @@ public class AddSkillFragment extends DefaultFragment {
         }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(R.string.new_skill);
+        getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return v;
     }
 
@@ -95,6 +96,9 @@ public class AddSkillFragment extends DefaultFragment {
                 } else {
                     finish(titleEditText.getText().toString(), "Skill added");
                 }
+                return true;
+            case android.R.id.home:
+                getCurrentActivity().showPreviousFragment();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

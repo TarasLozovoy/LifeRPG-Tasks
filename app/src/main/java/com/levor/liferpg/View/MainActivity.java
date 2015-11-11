@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView mDrawerList;
     private String[] activities;
     private static Stack<Fragment> fragmentsStack = new Stack<>();
+    private boolean showBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDrawerClosed(View drawerView) {
                 getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
-                getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+                getSupportActionBar().setHomeAsUpIndicator(showBack ? 0 : R.drawable.ic_menu_black_24dp);
             }
         };
 
@@ -119,13 +120,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
+        if (fragmentsStack.peek().onOptionsItemSelected(item)) return true;
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        // Handle your other action bar items...
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -142,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
+
 
     private void readContentStringsFromFiles(){
         characteristicsFromFile = getStringFromFile(CHARACTERISTICS_FILE_NAME);
@@ -211,9 +210,10 @@ public class MainActivity extends AppCompatActivity {
             default:
                 throw new RuntimeException("No such menu item!");
         }
-        showRootFragment(fragment, null);
         mDrawerList.setItemChecked(fragmentNumber, true);
         mDrawerLayout.closeDrawer(mDrawerList);
+        if (fragmentsStack.peek().getClass() == fragment.getClass()) return;
+        showRootFragment(fragment, null);
     }
 
     public boolean showPreviousFragment() {
@@ -228,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
                 .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)
                 .replace(R.id.content_frame, fragment)
                 .commit();
+        mDrawerLayout.closeDrawer(mDrawerList);
         return true;
     }
 
@@ -279,6 +280,16 @@ public class MainActivity extends AppCompatActivity {
     public void setActionBarTitle(int id) {
         String title = getResources().getString(id);
         setActionBarTitle(title);
+    }
+
+    public void showActionBarHomeButtonAsBack(boolean isBack) {
+        if (isBack) {
+            getSupportActionBar().setHomeAsUpIndicator(0);
+            showBack = true;
+        } else {
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
+            showBack = false;
+        }
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

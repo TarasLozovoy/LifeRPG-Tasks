@@ -47,6 +47,7 @@ public class HeroMainFragment extends DefaultFragment {
         heroLevelTV.setText("Level " + getController().getHeroLevel());
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(R.id.hero);
+        getCurrentActivity().showActionBarHomeButtonAsBack(false);
         return v;
     }
 

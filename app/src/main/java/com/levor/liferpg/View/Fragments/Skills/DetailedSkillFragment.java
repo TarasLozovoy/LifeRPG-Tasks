@@ -57,6 +57,7 @@ public class DetailedSkillFragment extends DefaultFragment {
         currentSkill = getController().getSkillByID(id);
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Skill");
+        getCurrentActivity().showActionBarHomeButtonAsBack(true);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -96,6 +97,9 @@ public class DetailedSkillFragment extends DefaultFragment {
                 b.putSerializable(EditSkillFragment.EDIT_SKILL_UUID_TAG, currentSkill.getId());
                 Fragment f = new EditSkillFragment();
                 getCurrentActivity().showChildFragment(f, b);
+                return true;
+            case android.R.id.home:
+                getCurrentActivity().showPreviousFragment();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

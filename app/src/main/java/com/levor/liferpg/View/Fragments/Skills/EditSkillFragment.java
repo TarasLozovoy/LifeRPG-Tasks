@@ -36,6 +36,7 @@ public class EditSkillFragment extends AddSkillFragment {
         setKeyCharacteristicButton.setText(R.string.change_characteristic);
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Edit skill");
+        getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return v;
     }
 
@@ -77,6 +78,9 @@ public class EditSkillFragment extends AddSkillFragment {
                 return true;
             case R.id.remove:
                 removeSkill();
+                return true;
+            case android.R.id.home:
+                getCurrentActivity().showPreviousFragment();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -52,6 +52,7 @@ public class DetailedTaskFragment extends DefaultFragment {
         taskTitle.setText(currentTask.getTitle());
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Task");
+        getCurrentActivity().showActionBarHomeButtonAsBack(true);
 
         createAdapter();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -83,6 +84,9 @@ public class DetailedTaskFragment extends DefaultFragment {
                 return true;
             case R.id.perform_task:
                 performTask();
+                return true;
+            case android.R.id.home:
+                getCurrentActivity().showPreviousFragment();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -4,6 +4,7 @@ package com.levor.liferpg.View.Fragments.Characteristics;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -35,6 +36,7 @@ public class CharacteristicsFragment extends DefaultFragment {
             }
         });
         getCurrentActivity().setActionBarTitle("Characteristics");
+        getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return view;
     }
 
@@ -42,6 +44,16 @@ public class CharacteristicsFragment extends DefaultFragment {
     public void onResume() {
         createAdapter();
         super.onResume();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getCurrentActivity().showPreviousFragment();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void createAdapter(){

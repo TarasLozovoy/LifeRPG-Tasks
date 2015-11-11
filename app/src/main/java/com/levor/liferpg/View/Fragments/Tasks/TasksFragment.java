@@ -37,6 +37,7 @@ public class TasksFragment extends DefaultFragment {
         setupListView();
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Tasks");
+        getCurrentActivity().showActionBarHomeButtonAsBack(false);
         return view;
     }
 

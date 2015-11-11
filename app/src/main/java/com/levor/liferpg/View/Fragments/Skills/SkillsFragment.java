@@ -43,6 +43,7 @@ public class SkillsFragment extends DefaultFragment {
 
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Skills");
+        getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return view;
     }
 
@@ -69,6 +70,9 @@ public class SkillsFragment extends DefaultFragment {
             case R.id.add_new_skill:
                 Fragment f = new AddSkillFragment();
                 getCurrentActivity().showChildFragment(f, null);
+                return true;
+            case android.R.id.home:
+                getCurrentActivity().showPreviousFragment();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
