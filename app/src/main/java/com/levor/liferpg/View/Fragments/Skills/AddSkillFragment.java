@@ -27,6 +27,9 @@ import com.levor.liferpg.View.Fragments.DefaultFragment;
 public class AddSkillFragment extends DefaultFragment {
     public static final String RECEIVED_CHARACTERISTIC_TITLE_TAG = "received_characteristic_title_tag";
 
+    protected final String SKILL_TITLE_TAG = "skill_title_tag";
+    protected final String KEY_CHARACTERISTIC_TITLE = "key_characteristic_title";
+
     protected EditText titleEditText;
     protected TextView keyCharacteristicTV;
     protected Button setKeyCharacteristicButton;
@@ -43,8 +46,15 @@ public class AddSkillFragment extends DefaultFragment {
         setKeyCharacteristicButton.setOnClickListener(new ChangeCharacteristicOnClickListener());
         String title;
         if (getArguments()!= null && (title = getArguments().getString(RECEIVED_CHARACTERISTIC_TITLE_TAG)) != null){
-            keyCharacteristic = getController().getCharacteristicByTitle(title);
-            keyCharacteristicTV.setText(title);
+            setKeyCharacteristicByTitle(title);
+        }
+        if (savedInstanceState != null) {
+            titleEditText.setText(savedInstanceState.getString(SKILL_TITLE_TAG));
+            String charTitle = savedInstanceState.getString(KEY_CHARACTERISTIC_TITLE);
+            if (charTitle != null) {
+                setKeyCharacteristicByTitle(charTitle);
+
+            }
         }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(R.string.new_skill);
@@ -53,6 +63,7 @@ public class AddSkillFragment extends DefaultFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.menu_add_skill, menu);
     }
 
@@ -90,6 +101,15 @@ public class AddSkillFragment extends DefaultFragment {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(SKILL_TITLE_TAG, titleEditText.getText().toString());
+        if (keyCharacteristic != null) {
+            outState.putSerializable(KEY_CHARACTERISTIC_TITLE, keyCharacteristic.getTitle());
+        }
+        super.onSaveInstanceState(outState);
+    }
+
     private class ChangeCharacteristicOnClickListener implements View.OnClickListener{
         @Override
         public void onClick(View v) {
@@ -100,8 +120,7 @@ public class AddSkillFragment extends DefaultFragment {
             dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    keyCharacteristic = getController().getCharacteristicByTitle(adapter.getItem(which));
-                    keyCharacteristicTV.setText(keyCharacteristic.getTitle());
+                    setKeyCharacteristicByTitle(adapter.getItem(which));
                     setKeyCharacteristicButton.setText(R.string.change_characteristic);
                     dialog.dismiss();
                 }
@@ -115,5 +134,10 @@ public class AddSkillFragment extends DefaultFragment {
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
         getCurrentActivity().saveAppData();
         getCurrentActivity().showPreviousFragment();
+    }
+
+    protected void setKeyCharacteristicByTitle(String title) {
+        keyCharacteristic = getController().getCharacteristicByTitle(title);
+        keyCharacteristicTV.setText(title);
     }
 }

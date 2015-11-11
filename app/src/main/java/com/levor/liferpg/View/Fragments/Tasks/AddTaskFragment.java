@@ -28,11 +28,14 @@ import java.util.UUID;
 public class AddTaskFragment extends DefaultFragment {
     public static final String RECEIVED_SKILL_TITLE_TAG = "received_skill_tag";
 
+    private final String TASK_TITLE_TAG = "task_title_tag";
+    private final String RELATED_SKILLS_TAG = "related_skills_tag";
+
     protected EditText newTaskTitleEditText;
     private ListView relatedSkillListView;
     private Button addSkillButton;
 
-    protected List<String> relatedSkills = new ArrayList<>();
+    protected ArrayList<String> relatedSkills = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,7 +44,6 @@ public class AddTaskFragment extends DefaultFragment {
         newTaskTitleEditText = (EditText) view.findViewById(R.id.new_task_title_edit_text);
 
         relatedSkillListView = (ListView) view.findViewById(R.id.related_skills_to_add);
-        setupListView();
         addSkillButton = (Button) view.findViewById(R.id.add_related_skill);
         addSkillButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +66,11 @@ public class AddTaskFragment extends DefaultFragment {
                 dialog.show();
             }
         });
-
+        if (savedInstanceState != null) {
+            newTaskTitleEditText.setText(savedInstanceState.getString(TASK_TITLE_TAG));
+            relatedSkills = savedInstanceState.getStringArrayList(RELATED_SKILLS_TAG);
+        }
+        setupListView();
         String skillTitle;
         if (getArguments() != null && (skillTitle = getArguments().getString(RECEIVED_SKILL_TITLE_TAG)) != null) {
             relatedSkills.add(skillTitle);
@@ -78,6 +84,7 @@ public class AddTaskFragment extends DefaultFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.menu_add_task, menu);
     }
 
@@ -100,6 +107,13 @@ public class AddTaskFragment extends DefaultFragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable(TASK_TITLE_TAG, newTaskTitleEditText.getText().toString());
+        outState.putSerializable(RELATED_SKILLS_TAG, relatedSkills);
+        super.onSaveInstanceState(outState);
     }
 
     private void updateListView(){

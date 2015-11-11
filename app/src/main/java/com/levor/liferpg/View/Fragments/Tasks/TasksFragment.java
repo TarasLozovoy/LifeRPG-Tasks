@@ -42,6 +42,7 @@ public class TasksFragment extends DefaultFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.menu_tasks, menu);
     }
 

@@ -32,8 +32,7 @@ public class EditSkillFragment extends AddSkillFragment {
         View v = super.onCreateView(inflater, container, savedInstanceState);
         currentSkill = getController().getSkillByID((UUID) getArguments().get(EDIT_SKILL_UUID_TAG));
         titleEditText.setText(currentSkill.getTitle());
-        keyCharacteristic = currentSkill.getKeyCharacteristic();
-        keyCharacteristicTV.setText(keyCharacteristic.getTitle());
+        setKeyCharacteristicByTitle(currentSkill.getKeyCharacteristic().getTitle());
         setKeyCharacteristicButton.setText(R.string.change_characteristic);
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Edit skill");
@@ -42,6 +41,7 @@ public class EditSkillFragment extends AddSkillFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.menu_edit_skill, menu);
     }
 

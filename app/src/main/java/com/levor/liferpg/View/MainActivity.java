@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerList;
     private String[] activities;
-    private Stack<Fragment> fragmentsStack = new Stack<>();
+    private static Stack<Fragment> fragmentsStack = new Stack<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,15 +94,14 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
 
         readContentStringsFromFiles();
-
-        Fragment fragment = new HeroMainFragment();
-        fragmentsStack.push(fragment);
-
-        FragmentManager fm = getFragmentManager();
-        fm.beginTransaction()
-                .add(R.id.content_frame, fragment)
-                .commit();
-
+        if (savedInstanceState == null) {
+            Fragment fragment = new HeroMainFragment();
+            fragmentsStack.push(fragment);
+            FragmentManager fm = getFragmentManager();
+            fm.beginTransaction()
+                    .add(R.id.content_frame, fragment)
+                    .commit();
+        }
     }
 
     @Override

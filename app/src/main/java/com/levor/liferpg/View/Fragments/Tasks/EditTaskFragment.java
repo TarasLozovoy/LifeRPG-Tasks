@@ -32,9 +32,11 @@ public class EditTaskFragment extends AddTaskFragment {
                              Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
         currentTask = getController().getTaskByTitle(getArguments().getString(CURRENT_TASK_TAG));
-        newTaskTitleEditText.setText(currentTask.getTitle());
-        for (Skill sk: currentTask.getRelatedSkills()){
-            relatedSkills.add(sk.getTitle());
+        if (savedInstanceState == null) {
+            newTaskTitleEditText.setText(currentTask.getTitle());
+            for (Skill sk : currentTask.getRelatedSkills()) {
+                relatedSkills.add(sk.getTitle());
+            }
         }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Edit task");
@@ -43,6 +45,7 @@ public class EditTaskFragment extends AddTaskFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
         inflater.inflate(R.menu.menu_edit_task, menu);
     }
 
