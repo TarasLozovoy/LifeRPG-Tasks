@@ -43,6 +43,7 @@
         name="activities_array">
         <item>Hero</item>
         <item>Tasks</item>
+        <item>Settings</item>
     </string-array>
 
     <string name="title_activity_main_fragment">MainActivity</string>
@@ -72,5 +73,11 @@
     <string name="open_characteristics_with_arrow"><![CDATA[Characteristics >>]]></string>
     <string name="open_skills_with_arrow"><![CDATA[Skills >>]]></string>
     <string name="edit_hero">Edit</string>
+    <string name="dropbox_activation_status">Dropbox synchronization:</string>
+    <string name="enable_dropbox_button_text">Enable dropbox</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+    <string name="disable">Disable</string>
+    <string name="enable">Enable</string>
 
 </resources>

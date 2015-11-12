@@ -2,46 +2,34 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.levor.liferpg" >
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-            android:name=".View.Obsolete.TasksActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
-            android:name=".View.Obsolete.CharacteristicActivity"
-            android:label="@string/title_activity_characteristic" >
-        </activity>
-        <activity
-            android:name=".View.Obsolete.SkillsActivity"
-            android:label="@string/title_activity_skills" >
-        </activity>
-        <activity
-            android:name=".View.Obsolete.DetailedTaskActivity"
-            android:label="@string/title_activity_detailed_task" >
-        </activity>
-        <activity
-            android:name=".View.Obsolete.AddTaskActivity"
-            android:label="@string/title_activity_add_task" >
-        </activity>
-        <activity
-            android:name=".View.Obsolete.DetailedSkillActivity"
-            android:label="@string/title_activity_detailed_skill" >
-        </activity>
-        <activity
-            android:name=".View.Obsolete.DetailedCharacteristicActivity"
-            android:label="@string/title_activity_detailed_characteristic" >
-        </activity>
-        <activity
-            android:name=".View.MainActivity"
+            android:name=".View.Activities.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.dropbox.client2.android.AuthActivity"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|keyboard">
+            <intent-filter>
+                <!-- Change this to be db- followed by your app key -->
+                <data android:scheme="db-wszp50bxwdv3yeh"/>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
     </application>

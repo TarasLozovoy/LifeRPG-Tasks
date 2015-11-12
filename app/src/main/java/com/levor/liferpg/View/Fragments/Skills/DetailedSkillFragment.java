@@ -113,7 +113,7 @@ public class DetailedSkillFragment extends DefaultFragment {
             titles.add(t.getTitle());
         }
         currentTasks = titles;
-        adapter = new TasksAdapter(getActivity(), titles);
+        adapter = new TasksAdapter(getActivity(), titles, getCurrentActivity());
         listView.setAdapter(adapter);
     }
 

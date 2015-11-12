@@ -14,6 +14,7 @@ import java.util.UUID;
 
 public class LifeController {
     private LifeEntity lifeEntity = LifeEntity.getInstance();
+    private OnHeroChangedListener heroListener;
 
     private static LifeController LifeController;
     public static LifeController getInstance(){
@@ -142,53 +143,62 @@ public class LifeController {
      */
     public void updateCurrentContentWithStrings(String characteristicsFromFile, String skillsFromFile, String tasksFromFile, String heroFromFile) {
         //characteristics
-        String[] characteristics = characteristicsFromFile.split(":;");
-        for (String characteristic : characteristics){
-            if (!characteristic.equals("")) {
-                String[] subelements = characteristic.split("::");
-                try {
-                    lifeEntity.updateCharacteristic(subelements[0], Integer.parseInt(subelements[1]));
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if (characteristicsFromFile != null) {
+            String[] characteristics = characteristicsFromFile.split(":;");
+            for (String characteristic : characteristics) {
+                if (!characteristic.equals("")) {
+                    String[] subelements = characteristic.split("::");
+                    try {
+                        lifeEntity.updateCharacteristic(subelements[0], Integer.parseInt(subelements[1]));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
 
         //skills
-        String[] skills = skillsFromFile.split(":;");
-        for (String skill : skills){
-            if (!skill.equals("")) {
-                String[] subelements = skill.split("::");
-                try {
-                    lifeEntity.updateSkill(subelements[0], Integer.parseInt(subelements[1]),
-                            Integer.parseInt(subelements[2]),UUID.fromString(subelements[3]), subelements[4]);
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if (skillsFromFile != null) {
+            String[] skills = skillsFromFile.split(":;");
+            for (String skill : skills) {
+                if (!skill.equals("")) {
+                    String[] subelements = skill.split("::");
+                    try {
+                        lifeEntity.updateSkill(subelements[0], Integer.parseInt(subelements[1]),
+                                Integer.parseInt(subelements[2]), UUID.fromString(subelements[3]), subelements[4]);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
 
         //tasks
-        String[] tasks = tasksFromFile.split(":;");
-        for (String task : tasks){
-            if (!task.equals("")) {
-                String[] subelements = task.split("::");
-                String[] relatedSkillsTitles = new String[subelements.length - 2];
-                for (int i = 0; i < relatedSkillsTitles.length; i++){
-                    relatedSkillsTitles[i] = subelements[i + 2];
-                }
-                try {
-                    lifeEntity.updateTask(subelements[0], UUID.fromString(subelements[1]), relatedSkillsTitles);
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if (tasksFromFile != null) {
+            String[] tasks = tasksFromFile.split(":;");
+            for (String task : tasks) {
+                if (!task.equals("")) {
+                    String[] subelements = task.split("::");
+                    String[] relatedSkillsTitles = new String[subelements.length - 2];
+                    for (int i = 0; i < relatedSkillsTitles.length; i++) {
+                        relatedSkillsTitles[i] = subelements[i + 2];
+                    }
+                    try {
+                        lifeEntity.updateTask(subelements[0], UUID.fromString(subelements[1]), relatedSkillsTitles);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
 
         //hero
-        if(!heroFromFile.equals("")) {
+        if (heroFromFile != null && !heroFromFile.equals("")) {
             String[] heroData = heroFromFile.split("::");
             lifeEntity.updateHero(heroData[0], Integer.parseInt(heroData[1]), Integer.parseInt(heroData[2]));
+            if (heroListener != null) {
+                heroListener.onChanged();
+            }
         }
     }
 
@@ -299,5 +309,17 @@ public class LifeController {
 
     public int getHeroXpToNextLevel(){
         return lifeEntity.getHero().getXpToNextLevel();
+    }
+
+    public void registerOnHeroChangedListener(OnHeroChangedListener listener) {
+        heroListener = listener;
+    }
+
+    public void unregisterOnHeroChangedListener() {
+        heroListener = null;
+    }
+
+    public interface OnHeroChangedListener {
+        void onChanged();
     }
 }

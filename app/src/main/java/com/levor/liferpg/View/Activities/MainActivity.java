@@ -1,4 +1,4 @@
-package com.levor.liferpg.View;
+package com.levor.liferpg.View.Activities;
 
 import android.app.Fragment;
 
@@ -23,6 +23,7 @@ import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.Characteristics.CharacteristicsFragment;
 import com.levor.liferpg.View.Fragments.HeroMainFragment;
+import com.levor.liferpg.View.Fragments.SettingsFragment;
 import com.levor.liferpg.View.Fragments.Skills.SkillsFragment;
 import com.levor.liferpg.View.Fragments.Tasks.TasksFragment;
 
@@ -35,22 +36,10 @@ import java.io.InputStreamReader;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends SaverActivity {
     public final static int HERO_FRAGMENT_ID = 0;
     public final static int TASKS_FRAGMENT_ID = 1;
-
-    private final String SKILLS_FILE_NAME = "skills_file_name.txt";
-    private final String CHARACTERISTICS_FILE_NAME = "characteristics_file_name.txt";
-    private final String TASKS_FILE_NAME = "tasks_file_name.txt";
-    private final String HERO_FILE_NAME = "hero_file_name.txt";
-    private final String TAG = "com.levor.liferpg";
-
-    private String skillsFromFile;
-    private String characteristicsFromFile;
-    private String tasksFromFile;
-    private String heroFromFile;
-
-    private final LifeController lifeController = LifeController.getInstance();
+    public final static int SETTINGS_FRAGMENT_ID = 2;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -94,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
 
-        readContentStringsFromFiles();
+
         if (savedInstanceState == null) {
             Fragment fragment = new HeroMainFragment();
             fragmentsStack.push(fragment);
@@ -141,61 +130,8 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
-    private void readContentStringsFromFiles(){
-        characteristicsFromFile = getStringFromFile(CHARACTERISTICS_FILE_NAME);
-        skillsFromFile = getStringFromFile(SKILLS_FILE_NAME);
-        tasksFromFile = getStringFromFile(TASKS_FILE_NAME);
-        heroFromFile = getStringFromFile(HERO_FILE_NAME);
-        Log.e(TAG, "chars: " + characteristicsFromFile + "\nskiils: " + skillsFromFile + "\nTasks: " + tasksFromFile);
-        lifeController.updateCurrentContentWithStrings(characteristicsFromFile, skillsFromFile, tasksFromFile, heroFromFile);
-    }
-
-    private String getStringFromFile(String fileName){
-        try{
-            FileInputStream fis = openFileInput(fileName);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-            }
-            reader.close();
-            fis.close();
-            return sb.toString();
-        } catch (FileNotFoundException e){
-            e.printStackTrace();
-            return "";
-        } catch (IOException e){
-            e.printStackTrace();
-            return "";
-        }
-    }
-
     public LifeController getController(){
         return lifeController;
-    }
-
-    private void writeContentStringsToFile(){
-        writeStringToFile(lifeController.getCurrentCharacteristicsString(), CHARACTERISTICS_FILE_NAME);
-        writeStringToFile(lifeController.getCurrentSkillsString(), SKILLS_FILE_NAME);
-        writeStringToFile(lifeController.getCurrentTasksString(), TASKS_FILE_NAME);
-        writeStringToFile(lifeController.getCurrentHeroString(), HERO_FILE_NAME);
-        Log.d(TAG, "content saved to filesystem");
-    }
-
-    private void writeStringToFile(String str, String fileName){
-        try{
-            FileOutputStream fos = openFileOutput(fileName, MODE_PRIVATE);
-            fos.write(str.getBytes());
-            fos.close();
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
-    public void saveAppData(){
-        writeContentStringsToFile();
     }
 
     private void switchRootFragment(int fragmentNumber) {
@@ -206,6 +142,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case TASKS_FRAGMENT_ID :
                 fragment = new TasksFragment();
+                break;
+            case SETTINGS_FRAGMENT_ID:
+                fragment = new SettingsFragment();
                 break;
             default:
                 throw new RuntimeException("No such menu item!");

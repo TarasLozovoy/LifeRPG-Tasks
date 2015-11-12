@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.R;
-import com.levor.liferpg.View.MainActivity;
 
 import java.util.UUID;
 

@@ -12,7 +12,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.Characteristics.CharacteristicsFragment;
 import com.levor.liferpg.View.Fragments.Skills.SkillsFragment;
@@ -38,13 +40,8 @@ public class HeroMainFragment extends DefaultFragment {
         xpProgressTV = (TextView) v.findViewById(R.id.xp_progress_TV);
         heroLevelTV = (TextView) v.findViewById(R.id.hero_level);
 
-        xpProgress.setMax(getController().getHeroXpToNextLevel());
-        xpProgress.setProgress(getController().getHeroXp());
-        xpProgressTV.setText("XP : " + xpProgress.getProgress() + "/" + xpProgress.getMax());
         setButtonsOnClickListener();
         heroImageIV.setImageResource(R.drawable.default_hero);
-        heroNameTV.setText(getController().getHeroName());
-        heroLevelTV.setText("Level " + getController().getHeroLevel());
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(R.id.hero);
         getCurrentActivity().showActionBarHomeButtonAsBack(false);
@@ -52,17 +49,35 @@ public class HeroMainFragment extends DefaultFragment {
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
     public void onResume() {
-        xpProgress.setMax(getController().getHeroXpToNextLevel());
-        xpProgress.setProgress(getController().getHeroXp());
-        xpProgressTV.setText("XP : " + xpProgress.getProgress() + "/" + xpProgress.getMax());
+        getController().registerOnHeroChangedListener(new HeroChangeListener());
+        updateUI();
         super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        getController().unregisterOnHeroChangedListener();
+        super.onPause();
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_hero_main_fragment, menu);
+    }
+
+    private void updateUI() {
+        xpProgress.setMax(getController().getHeroXpToNextLevel());
+        xpProgress.setProgress(getController().getHeroXp());
+        xpProgressTV.setText("XP : " + xpProgress.getProgress() + "/" + xpProgress.getMax());
+        heroNameTV.setText(getController().getHeroName());
+        heroLevelTV.setText("Level " + getController().getHeroLevel());
     }
 
     private void setButtonsOnClickListener() {
@@ -81,5 +96,11 @@ public class HeroMainFragment extends DefaultFragment {
         });
     }
 
+    private class HeroChangeListener implements LifeController.OnHeroChangedListener {
 
+        @Override
+        public void onChanged() {
+            updateUI();
+        }
+    }
 }

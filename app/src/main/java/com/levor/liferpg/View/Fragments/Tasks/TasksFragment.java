@@ -59,12 +59,12 @@ public class TasksFragment extends DefaultFragment {
     }
 
     private void createAdapter(){
-        adapter = new TasksAdapter(getActivity(), getController().getTasksTitlesAsList());
+        adapter = new TasksAdapter(getActivity(), getController().getTasksTitlesAsList(), getCurrentActivity());
         listView.setAdapter(adapter);
     }
 
     private void setupListView(){
-        TasksAdapter adapter = new TasksAdapter(getActivity(), getController().getTasksTitlesAsList());
+        TasksAdapter adapter = new TasksAdapter(getActivity(), getController().getTasksTitlesAsList(), getCurrentActivity());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

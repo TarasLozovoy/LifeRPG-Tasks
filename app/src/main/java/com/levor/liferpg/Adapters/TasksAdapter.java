@@ -16,6 +16,7 @@ import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
+import com.levor.liferpg.View.Activities.MainActivity;
 
 import java.util.List;
 
@@ -25,11 +26,13 @@ import java.util.List;
 public class TasksAdapter extends BaseAdapter implements ListAdapter{
     private Context mContext;
     private List<String> items;
+    private MainActivity activity;
     private LifeController lifeController = LifeController.getInstance();
 
-    public TasksAdapter(Context context, List<String> array){
+    public TasksAdapter(Context context, List<String> array, MainActivity activity) {
         this.mContext = context;
         this.items = array;
+        this.activity = activity;
     }
 
     @Override
@@ -98,6 +101,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                                     Toast.makeText(mContext, "Congratulations!\n" + lifeController.getHeroName()
                                             + "'s level increased!",Toast.LENGTH_LONG).show();
                                 }
+                                activity.saveAppData();
                             }
                         })
                         .setNegativeButton("Undo", new DialogInterface.OnClickListener() {
