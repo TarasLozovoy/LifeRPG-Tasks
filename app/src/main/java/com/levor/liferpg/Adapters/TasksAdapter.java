@@ -3,6 +3,7 @@ package com.levor.liferpg.Adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +11,13 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Activities.MainActivity;
+import com.levor.liferpg.View.Fragments.HeroMainFragment;
 
 import java.util.List;
 
@@ -62,6 +63,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
         listItemText.setText(items.get(position));
 
         Button doneBtn = (Button) view.findViewById(R.id.check_button);
+        final View finalView = view;
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,8 +100,15 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                                 dialog.dismiss();
                                 notifyDataSetChanged();
                                 if (finalHeroLevelIncreased){
-                                    Toast.makeText(mContext, "Congratulations!\n" + lifeController.getHeroName()
-                                            + "'s level increased!",Toast.LENGTH_LONG).show();
+                                    Snackbar.make(finalView, "Congratulations!\n" + lifeController.getHeroName()
+                                            + "'s level increased!", Snackbar.LENGTH_LONG)
+                                            .setAction("Go to Hero page", new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    activity.showRootFragment(new HeroMainFragment(), null);
+                                                }
+                                            })
+                                            .show();
                                 }
                                 activity.saveAppData();
                             }
@@ -113,7 +122,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                                     lifeController.changeSkillSubLevel(sk, false);
                                     sb.append("\n").append(sk.getTitle()).append(" skill returned to previous state");
                                 }
-                                Toast.makeText(mContext, sb.toString(),Toast.LENGTH_LONG).show();
+                                Snackbar.make(finalView, sb.toString(), Snackbar.LENGTH_LONG).show();
                             }
                         });
                 AlertDialog alert = builder.create();

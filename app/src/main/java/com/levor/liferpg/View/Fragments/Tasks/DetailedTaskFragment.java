@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,17 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
 import com.levor.liferpg.View.Fragments.Skills.DetailedSkillFragment;
-import com.levor.liferpg.View.Fragments.Skills.EditSkillFragment;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -146,7 +144,7 @@ public class DetailedTaskFragment extends DefaultFragment {
                             getCurrentActivity().getController().changeSkillSubLevel(sk, false);
                             sb.append("\n").append(sk.getTitle()).append(" skill returned to previous state");
                         }
-                        Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG).show();
+                        Snackbar.make(getView(), sb.toString(), Snackbar.LENGTH_LONG).show();
                     }
                 });
         AlertDialog alert = builder.create();

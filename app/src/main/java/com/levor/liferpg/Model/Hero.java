@@ -72,6 +72,7 @@ public class Hero {
     }
 
     private int xpToLevel(int level){
+        if (level < 0) return 0;
         return (int) (10 + 10*Math.pow(level, 2));
     }
 

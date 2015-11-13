@@ -1,20 +1,13 @@
 package com.levor.liferpg.Adapters;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.levor.liferpg.Controller.LifeController;
-import com.levor.liferpg.Model.Skill;
-import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
 
 import java.util.List;

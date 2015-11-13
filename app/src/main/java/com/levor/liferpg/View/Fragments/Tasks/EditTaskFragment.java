@@ -5,13 +5,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
@@ -56,7 +56,7 @@ public class EditTaskFragment extends AddTaskFragment {
             case R.id.save_task:
                 String title = newTaskTitleEditText.getText().toString();
                 if (title.isEmpty()) {
-                    Toast.makeText(getActivity(), "Task title can't be empty", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), "Task title can't be empty", Snackbar.LENGTH_LONG).show();
                     return true;
                 }
                 if (getController().getTaskByTitle(title) != null && !title.equals(currentTask.getTitle())){
@@ -128,7 +128,7 @@ public class EditTaskFragment extends AddTaskFragment {
         }
         currentTask.setRelatedSkills(skills);
         getCurrentActivity().saveAppData();
-        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+        Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
     }
 }

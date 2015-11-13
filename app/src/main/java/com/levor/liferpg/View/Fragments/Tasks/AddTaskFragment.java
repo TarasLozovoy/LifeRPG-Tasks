@@ -3,6 +3,7 @@ package com.levor.liferpg.View.Fragments.Tasks;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,16 +15,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.levor.liferpg.Adapters.TaskAddingAdapter;
-import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class AddTaskFragment extends DefaultFragment {
     public static final String RECEIVED_SKILL_TITLE_TAG = "received_skill_tag";
@@ -95,7 +92,7 @@ public class AddTaskFragment extends DefaultFragment {
             case R.id.create_task:
                 String title = newTaskTitleEditText.getText().toString();
                 if (title.isEmpty()) {
-                    Toast.makeText(getActivity(), "Task title can't be empty", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), "Task title can't be empty", Snackbar.LENGTH_LONG).show();
                     return true;
                 }
                 if (getController().getTaskByTitle(title) != null) {
@@ -149,7 +146,7 @@ public class AddTaskFragment extends DefaultFragment {
     protected void finishTask(String title, String message){
         getController().createNewTask(title, relatedSkills);
         getCurrentActivity().saveAppData();
-        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+        Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
     }
 

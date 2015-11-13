@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,7 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.levor.liferpg.Model.Characteristic;
 import com.levor.liferpg.R;
@@ -73,9 +73,9 @@ public class AddSkillFragment extends DefaultFragment {
         switch (item.getItemId()){
             case R.id.add_skill:
                 if (titleEditText.getText().toString().equals("")){
-                    Toast.makeText(getActivity(), "Skill title can't be empty", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), "Skill title can't be empty", Snackbar.LENGTH_LONG).show();
                 } else if (keyCharacteristic == null){
-                    Toast.makeText(getActivity(), "Key characteristic should be set", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), "Key characteristic should be set", Snackbar.LENGTH_LONG).show();
                 } else if (getController().getSkillByTitle(titleEditText.getText().toString()) != null){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Oops!")
@@ -135,7 +135,7 @@ public class AddSkillFragment extends DefaultFragment {
 
     protected void finish(String title, String message) {
         getController().createNewSkill(title, keyCharacteristic);
-        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+        Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         getCurrentActivity().saveAppData();
         getCurrentActivity().showPreviousFragment();
     }

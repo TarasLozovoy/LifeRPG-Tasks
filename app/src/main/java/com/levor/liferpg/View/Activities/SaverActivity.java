@@ -1,14 +1,15 @@
 package com.levor.liferpg.View.Activities;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.RESTUtility;
@@ -218,7 +219,7 @@ public class SaverActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(SaverActivity.this, "Dropbox authorozation is expired.\nPlease reconnect.", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(getCurrentFragment().getView(), "Dropbox authorozation is expired.\nPlease reconnect.", Snackbar.LENGTH_LONG).show();
                         }
                     });
                     startDropboxAuthorisation();
@@ -257,7 +258,7 @@ public class SaverActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 updateDataFromFile(fileName);
-                                Toast.makeText(SaverActivity.this, "Synchronization with DropBox...", Toast.LENGTH_SHORT).show();
+                                Snackbar.make(getCurrentFragment().getView(), "Synchronization with DropBox...", Snackbar.LENGTH_LONG).show();
                             }
                         });
                     }
@@ -266,7 +267,7 @@ public class SaverActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(SaverActivity.this, "Dropbox authorozation is expired.\nPlease reconnect.", Toast.LENGTH_LONG).show();
+                            Snackbar.make(getCurrentFragment().getView(), "Dropbox authorization is expired.\nPlease reconnect.", Snackbar.LENGTH_LONG).show();
                         }
                     });
                     startDropboxAuthorisation();
@@ -286,5 +287,9 @@ public class SaverActivity extends AppCompatActivity {
             isAvailable = true;
         }
         return isAvailable;
+    }
+
+    protected Fragment getCurrentFragment() {
+        return null;
     }
 }
