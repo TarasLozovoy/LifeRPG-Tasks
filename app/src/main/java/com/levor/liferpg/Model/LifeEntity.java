@@ -1,6 +1,11 @@
 package com.levor.liferpg.Model;
 
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.levor.liferpg.DataBase.DataBaseHelper;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +17,8 @@ import java.util.UUID;
 
 public class LifeEntity {
     private final Hero hero = new Hero();
+    private Context context;
+    private SQLiteDatabase mDatabase;
     private final Characteristic intelligence = new Characteristic("Intelligence", 1);
     private final Characteristic wisdom = new Characteristic("Wisdom", 1);
     private final Characteristic strength = new Characteristic("Strength", 1);
@@ -26,14 +33,16 @@ public class LifeEntity {
 
     private static LifeEntity lifeEntity;
 
-    public static LifeEntity getInstance(){
+    public static LifeEntity getInstance(Context context){
         if (lifeEntity == null){
-            lifeEntity = new LifeEntity();
+            lifeEntity = new LifeEntity(context);
         }
         return lifeEntity;
     }
 
-    private LifeEntity() {
+    private LifeEntity(Context context) {
+        this.context = context.getApplicationContext();
+        mDatabase = new DataBaseHelper(context).getWritableDatabase();
         addSkill("Android", intelligence);
         addSkill("Java", intelligence);
         addSkill("Erudition", wisdom);
@@ -47,28 +56,6 @@ public class LifeEntity {
         addTask("Learn Java", getSkillByTitle("Java"));
         addTask("Fix bug on Android", getSkillByTitle("Android"));
         addTask("Fix bug on Java", getSkillByTitle("Java"));
-//
-//        addTask("Read fiction book", skills.get("Erudition"));
-//        addTask("Read self-development book", skills.get("Erudition"));
-//        addTask("Read Android book", skills.get("Erudition"), skills.get("Android"));
-//        addTask("Read Java book", skills.get("Erudition"), skills.get("Java"));
-//
-//        addTask("Read fiction book on English", skills.get("Erudition"), skills.get("English"));
-//        addTask("Read self-development book on English", skills.get("Erudition"), skills.get("English"));
-//        addTask("Read Android book on English", skills.get("Erudition"), skills.get("Android"), skills.get("English"));
-//        addTask("Read Java book on English", skills.get("Erudition"), skills.get("Java"), skills.get("English"));
-//        addTask("Learn English", skills.get("English"));
-//
-//        addTask("Run 5 km", skills.get("Running"));
-//        addTask("Run 10 km", skills.get("Running"));
-//        addTask("Run 15 km", skills.get("Running"));
-//
-//        addTask("Ride for 10 km", skills.get("Roller skating"));
-//        addTask("Ride for 20 km", skills.get("Roller skating"));
-//        addTask("Ride for 30 km", skills.get("Roller skating"));
-//        addTask("Ride for 40 km", skills.get("Roller skating"));
-//
-//        addTask("Train in gym", skills.get("Powerlifting"));
     }
 
     public Hero getHero() {
@@ -122,38 +109,6 @@ public class LifeEntity {
         list.add(charisma);
         Collections.sort(list);
         return list;
-    }
-
-    public int getIntelligenceLevel(){
-        return intelligence.getLevel();
-    }
-
-    public int getWisdomLevel(){
-        return wisdom.getLevel();
-    }
-
-    public int getStrengthLevel(){
-        return strength.getLevel();
-    }
-
-    public int getStaminaLevel(){
-        return stamina.getLevel();
-    }
-
-    public int getDexterityLevel(){
-        return dexterity.getLevel();
-    }
-
-    public int getPerceptionLevel(){
-        return perception.getLevel();
-    }
-
-    public int getMemoryLevel(){
-        return memory.getLevel();
-    }
-
-    public int getCharismaLevel(){
-        return charisma.getLevel();
     }
 
     public String getCharacteristicTitleBySkill(UUID id){

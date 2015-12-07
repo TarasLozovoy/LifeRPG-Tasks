@@ -1,5 +1,7 @@
 package com.levor.liferpg.Controller;
 
+import android.content.Context;
+
 import com.levor.liferpg.Model.Characteristic;
 import com.levor.liferpg.Model.LifeEntity;
 import com.levor.liferpg.Model.Skill;
@@ -13,18 +15,20 @@ import java.util.TreeMap;
 import java.util.UUID;
 
 public class LifeController {
-    private LifeEntity lifeEntity = LifeEntity.getInstance();
+    private LifeEntity lifeEntity;
     private OnHeroChangedListener heroListener;
 
     private static LifeController LifeController;
-    public static LifeController getInstance(){
+    public static LifeController getInstance(Context context){
         if (LifeController == null){
-            LifeController = new LifeController();
+            LifeController = new LifeController(context);
         }
         return LifeController;
     }
 
-    private LifeController() {}
+    private LifeController(Context context) {
+        lifeEntity = LifeEntity.getInstance(context);
+    }
 
     //======================================
     //Getters
@@ -77,31 +81,6 @@ public class LifeController {
         return lifeEntity.getCharacteristicTitleBySkill(id);
     }
 
-    public int getIntelligenceLevel(){
-        return lifeEntity.getIntelligenceLevel();
-    }
-    public int getWisdomLevel(){
-        return lifeEntity.getWisdomLevel();
-    }
-    public int getStrengthLevel(){
-        return lifeEntity.getStrengthLevel();
-    }
-    public int getStaminaLevel(){
-        return lifeEntity.getStaminaLevel();
-    }
-    public int getDexterityLevel(){
-        return lifeEntity.getDexterityLevel();
-    }
-    public int getPerceptionLevel(){
-        return lifeEntity.getPerceptionLevel();
-    }
-    public int getMemoryLevel(){
-        return lifeEntity.getMemoryLevel();
-    }
-    public int getCharismaLevel(){
-        return lifeEntity.getCharismaLevel();
-    }
-
     public String getCurrentCharacteristicsString(){
         return lifeEntity.getCurrentCharacteristicsString();
     }
@@ -129,10 +108,6 @@ public class LifeController {
                 .append(lifeEntity.getHero().getXp());
         return sb.toString();
     }
-
-    //======================================
-    //Setters
-    //======================================
 
     /**
      * receives saved to file app data, encodes them and update app with it
