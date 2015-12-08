@@ -127,7 +127,7 @@ public class EditTaskFragment extends AddTaskFragment {
             skills.add(getController().getSkillByTitle(s));
         }
         currentTask.setRelatedSkills(skills);
-        getCurrentActivity().saveAppData();
+        getController().updateTask(currentTask);
         Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
     }

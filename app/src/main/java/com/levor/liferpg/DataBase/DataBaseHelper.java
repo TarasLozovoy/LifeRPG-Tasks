@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import static com.levor.liferpg.DataBase.DataBaseSchema.HeroTable;
+import static com.levor.liferpg.DataBase.DataBaseSchema.*;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
@@ -22,6 +22,33 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 HeroTable.Cols.LEVEL + ", " +
                 HeroTable.Cols.XP +
                 ")");
+
+        db.execSQL("create table " + CharacteristicsTable.NAME + " (" +
+                " _id integer primary key autoincrement, " +
+                CharacteristicsTable.Cols.TITLE + ", " +
+                CharacteristicsTable.Cols.LEVEL +
+                ")");
+
+        db.execSQL("create table " + SkillsTable.NAME + " (" +
+                " _id integer primary key autoincrement, " +
+                SkillsTable.Cols.UUID + ", " +
+                SkillsTable.Cols.TITLE + ", " +
+                SkillsTable.Cols.LEVEL + ", " +
+                SkillsTable.Cols.SUBLEVEL + ", " +
+                SkillsTable.Cols.KEY_CHARACTERISTC_TITLE +
+                ")");
+
+        db.execSQL("create table " + TasksTable.NAME + " (" +
+                " _id integer primary key autoincrement, " +
+                TasksTable.Cols.TITLE + ", " +
+                TasksTable.Cols.UUID + ", " +
+                TasksTable.Cols.RELATED_SKILLS +
+                ")");
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
     }
 
     @Override

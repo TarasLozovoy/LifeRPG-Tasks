@@ -36,10 +36,13 @@ import java.io.InputStreamReader;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
-public class MainActivity extends SaverActivity {
+public class MainActivity extends AppCompatActivity {
     public final static int HERO_FRAGMENT_ID = 0;
     public final static int TASKS_FRAGMENT_ID = 1;
     public final static int SETTINGS_FRAGMENT_ID = 2;
+    protected final String TAG = "com.levor.liferpg";
+
+    protected LifeController lifeController;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -51,6 +54,7 @@ public class MainActivity extends SaverActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        lifeController = LifeController.getInstance(this);
         setContentView(R.layout.activity_main_fragment);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
@@ -114,12 +118,6 @@ public class MainActivity extends SaverActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onPause() {
-        writeContentStringsToFile();
-        super.onPause();
     }
 
     @Override
@@ -229,11 +227,6 @@ public class MainActivity extends SaverActivity {
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
             showBack = false;
         }
-    }
-
-    @Override
-    protected Fragment getCurrentFragment() {
-        return fragmentsStack.peek();
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

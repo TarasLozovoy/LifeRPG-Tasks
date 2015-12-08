@@ -36,6 +36,7 @@ public class DataBaseSchema {
 
         public static final class Cols {
             public static final String TITLE = "task_title";
+            public static final String UUID = "task_uuid";
             public static final String RELATED_SKILLS = "task_related_skills";
         }
     }

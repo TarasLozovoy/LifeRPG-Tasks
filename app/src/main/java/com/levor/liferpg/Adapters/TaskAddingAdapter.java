@@ -12,9 +12,6 @@ import com.levor.liferpg.R;
 
 import java.util.List;
 
-/**
- * Created by Levor on 10/29/15.
- */
 public class TaskAddingAdapter extends BaseAdapter implements ListAdapter {
     private Context mContext;
     protected List<String> items;

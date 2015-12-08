@@ -49,22 +49,32 @@ public class Skill {
         this.keyCharacteristic = keyCharacteristic;
     }
 
-    public void increaseSublevel(){
+    /**
+     * @return true if level changed
+     */
+    public boolean increaseSublevel(){
         sublevel++;
         if (sublevel == level){
             level++;
             keyCharacteristic.increaseLevelByN(1 + level/10);
             sublevel = 0;
+            return true;
         }
+        return false;
     }
 
-    public void decreaseSublevel(){
+    /**
+     * @return true if level changed
+     */
+    public boolean decreaseSublevel(){
         sublevel--;
         if (sublevel < 0) {
             keyCharacteristic.increaseLevelByN(-(1 + level/10));
             level --;
             sublevel = level - 1;
+            return true;
         }
+        return false;
     }
 
     public UUID getId() {
@@ -73,5 +83,15 @@ public class Skill {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Skill){
+            Skill that = (Skill) o;
+            return id.equals(that.id);
+        } else {
+            return false;
+        }
     }
 }

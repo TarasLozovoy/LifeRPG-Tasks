@@ -1,5 +1,7 @@
 package com.levor.liferpg.Model;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,8 +13,12 @@ public class Task {
     private UUID id;
 
     public Task(String title, UUID id, Skill ... skills) {
+        this(title, id, Arrays.asList(skills));
+    }
+
+    public Task(String title, UUID id, List<Skill> skills) {
         this.title = title;
-        this.relatedSkills = Arrays.asList(skills);
+        this.relatedSkills = skills;
         this.id = id;
     }
 
@@ -22,6 +28,15 @@ public class Task {
 
     public List<Skill> getRelatedSkills() {
         return relatedSkills;
+    }
+
+    public String getRelatedSkillsString() {
+        StringBuilder sb = new StringBuilder();
+        for (Skill sk : relatedSkills) {
+            sb.append(sk.getId())
+                    .append("::");
+        }
+        return sb.toString();
     }
 
     public void setRelatedSkills(Skill... skills) {

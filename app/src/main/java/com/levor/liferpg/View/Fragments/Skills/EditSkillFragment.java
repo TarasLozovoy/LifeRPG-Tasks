@@ -94,7 +94,6 @@ public class EditSkillFragment extends AddSkillFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         getController().removeSkill(currentSkill);
-                        getCurrentActivity().saveAppData();
                         getCurrentActivity().showNthPreviousFragment(2);
                     }
                 })
@@ -111,7 +110,7 @@ public class EditSkillFragment extends AddSkillFragment {
     protected void finish(String title, String message) {
         currentSkill.setTitle(title);
         currentSkill.setKeyCharacteristic(keyCharacteristic);
-        getCurrentActivity().saveAppData();
+        getController().updateSkill(currentSkill);
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
     }

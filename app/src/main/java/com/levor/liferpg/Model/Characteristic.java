@@ -1,5 +1,7 @@
 package com.levor.liferpg.Model;
 
+import android.support.annotation.NonNull;
+
 public class Characteristic implements Comparable<Characteristic>{
     private String title;
     private int level;
@@ -40,7 +42,7 @@ public class Characteristic implements Comparable<Characteristic>{
     }
 
     @Override
-    public int compareTo(Characteristic another) {
+    public int compareTo(@NonNull Characteristic another) {
         if (this.level < another.level){
             return +1;
         } else if ( this.level > another.level){

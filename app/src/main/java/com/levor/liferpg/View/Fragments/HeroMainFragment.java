@@ -54,15 +54,8 @@ public class HeroMainFragment extends DefaultFragment {
 
     @Override
     public void onResume() {
-        getController().registerOnHeroChangedListener(new HeroChangeListener());
         updateUI();
         super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        getController().unregisterOnHeroChangedListener();
-        super.onPause();
     }
 
     @Override
@@ -93,13 +86,5 @@ public class HeroMainFragment extends DefaultFragment {
                 getCurrentActivity().showChildFragment(new CharacteristicsFragment(), null);
             }
         });
-    }
-
-    private class HeroChangeListener implements LifeController.OnHeroChangedListener {
-
-        @Override
-        public void onChanged() {
-            updateUI();
-        }
     }
 }

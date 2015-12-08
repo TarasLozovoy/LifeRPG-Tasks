@@ -21,19 +21,17 @@ import com.levor.liferpg.View.Fragments.HeroMainFragment;
 
 import java.util.List;
 
-/**
- * Created by Levor on 22.10.2015.
- */
 public class TasksAdapter extends BaseAdapter implements ListAdapter{
     private Context mContext;
     private List<String> items;
     private MainActivity activity;
-    private LifeController lifeController = LifeController.getInstance();
+    private LifeController lifeController;
 
     public TasksAdapter(Context context, List<String> array, MainActivity activity) {
         this.mContext = context;
         this.items = array;
         this.activity = activity;
+        lifeController = LifeController.getInstance(mContext);
     }
 
     @Override
@@ -110,7 +108,6 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                                             })
                                             .show();
                                 }
-                                activity.saveAppData();
                             }
                         })
                         .setNegativeButton("Undo", new DialogInterface.OnClickListener() {

@@ -1,35 +1,27 @@
 package com.levor.liferpg.Model;
 
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.levor.liferpg.DataBase.CharacteristicsCursorWrapper;
 import com.levor.liferpg.DataBase.DataBaseHelper;
+import com.levor.liferpg.DataBase.DataBaseSchema.*;
+import com.levor.liferpg.DataBase.HeroCursorWrapper;
+import com.levor.liferpg.DataBase.SkillsCursorWrapper;
+import com.levor.liferpg.DataBase.TasksCursorWrapper;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
 public class LifeEntity {
-    private final Hero hero = new Hero();
-    private Context context;
-    private SQLiteDatabase mDatabase;
-    private final Characteristic intelligence = new Characteristic("Intelligence", 1);
-    private final Characteristic wisdom = new Characteristic("Wisdom", 1);
-    private final Characteristic strength = new Characteristic("Strength", 1);
-    private final Characteristic stamina = new Characteristic("Stamina", 1);
-    private final Characteristic dexterity = new Characteristic("Dexterity", 1);
-    private final Characteristic perception = new Characteristic("Perception", 1);
-    private final Characteristic memory = new Characteristic("Memory", 1);
-    private final Characteristic charisma = new Characteristic("Charisma", 1);
-
-    private Map<UUID, Skill> skills = new TreeMap<>();  //title, skill
-    private Map<UUID, Task> tasks = new TreeMap<>();    //title, task
+    private SQLiteDatabase database;
 
     private static LifeEntity lifeEntity;
 
@@ -41,191 +33,126 @@ public class LifeEntity {
     }
 
     private LifeEntity(Context context) {
-        this.context = context.getApplicationContext();
-        mDatabase = new DataBaseHelper(context).getWritableDatabase();
-        addSkill("Android", intelligence);
-        addSkill("Java", intelligence);
-        addSkill("Erudition", wisdom);
-        addSkill("English", intelligence);
-        addSkill("Powerlifting", strength);
-        addSkill("Roller skating", stamina);
-        addSkill("Running", stamina);
+        database = new DataBaseHelper(context.getApplicationContext()).getWritableDatabase();
 
+        String count = "SELECT count(*) FROM " + HeroTable.NAME;
+        Cursor cursor = database.rawQuery(count, null);
+        cursor.moveToFirst();
+        if(cursor.getInt(0) < 1) {
+            Characteristic intelligence = new Characteristic("Intelligence", 1);
+            Characteristic wisdom = new Characteristic("Wisdom", 1);
+            Characteristic strength = new Characteristic("Strength", 1);
+            Characteristic stamina = new Characteristic("Stamina", 1);
+            Characteristic dexterity = new Characteristic("Dexterity", 1);
+            Characteristic perception = new Characteristic("Perception", 1);
+            Characteristic memory = new Characteristic("Memory", 1);
+            Characteristic charisma = new Characteristic("Charisma", 1);
 
-        addTask("Learn Android", getSkillByTitle("Android"));
-        addTask("Learn Java", getSkillByTitle("Java"));
-        addTask("Fix bug on Android", getSkillByTitle("Android"));
-        addTask("Fix bug on Java", getSkillByTitle("Java"));
-    }
+            addCharacteristic(intelligence);
+            addCharacteristic(wisdom);
+            addCharacteristic(strength);
+            addCharacteristic(stamina);
+            addCharacteristic(dexterity);
+            addCharacteristic(perception);
+            addCharacteristic(memory);
+            addCharacteristic(charisma);
 
-    public Hero getHero() {
-        return hero;
-    }
+            addSkill("Android", intelligence);
+            addSkill("Java", intelligence);
+            addSkill("Erudition", wisdom);
+            addSkill("English", intelligence);
+            addSkill("Powerlifting", strength);
+            addSkill("Roller skating", stamina);
+            addSkill("Running", stamina);
 
-    public Map<String, Integer[]> getSkillsTitlesAndLevels() {
-        Map<String, Integer[]> map = new TreeMap<>();
-        for (Skill s : skills.values()) {
-            map.put(s.getTitle(), new Integer[]{s.getLevel(), s.getSublevel()});
+            addTask("Learn Android", getSkillByTitle("Android"));
+            addTask("Learn Java", getSkillByTitle("Java"));
+            addTask("Fix bug on Android", getSkillByTitle("Android"));
+            addTask("Fix bug on Java", getSkillByTitle("Java"));
+
+            addHero(new Hero());
         }
-        return map;
-    }
-
-    public Map<UUID, Task> getTasks() {
-        return tasks;
+        cursor.close();
     }
 
     public void addTask(String title, Skill ... relatedSkills){
-        Task updTask = getTaskByTitle(title);
-        if (updTask != null){
-            tasks.remove(updTask.getId());
-        }
-        UUID id = UUID.randomUUID();
-        tasks.put(id, new Task(title, id, relatedSkills));
-    }
-
-    public void addSkill(String title, Characteristic keyCharacteristic){
-        addSkill(title, 1, 0, keyCharacteristic);
-    }
-
-    public void addSkill(String title, int level, int sublevel, Characteristic keyCharacteristic){
-        UUID id = UUID.randomUUID();
-        Skill updSkill = getSkillByTitle(title);
-        if (updSkill != null){
-            skills.remove(updSkill.getId());
-        }
-        Skill sk = new Skill(title, level, sublevel, id, keyCharacteristic);
-        skills.put(id, sk);
-    }
-
-    public List<Characteristic> getAllCharacteristics(){
-        ArrayList<Characteristic> list = new ArrayList<>();
-        list.add(intelligence);
-        list.add(wisdom);
-        list.add(strength);
-        list.add(stamina);
-        list.add(dexterity);
-        list.add(perception);
-        list.add(memory);
-        list.add(charisma);
-        Collections.sort(list);
-        return list;
-    }
-
-    public String getCharacteristicTitleBySkill(UUID id){
-        return skills.get(id).getKeyCharacteristic().getTitle();
-    }
-
-    public String getCurrentCharacteristicsString() {
-        StringBuilder sb = new StringBuilder();
-        for (Characteristic ch : getAllCharacteristics()){
-            sb.append(ch.getTitle())
-                    .append("::")
-                    .append(ch.getLevel())
-                    .append(":;");
-        }
-        return sb.toString();
-    }
-
-    public String getCurrentSkillsString() {
-        StringBuilder sb = new StringBuilder();
-        for (Skill sk : skills.values()){
-            sb.append(sk.getTitle())
-                    .append("::")
-                    .append(sk.getLevel())
-                    .append("::")
-                    .append(sk.getSublevel())
-                    .append("::")
-                    .append(sk.getId())
-                    .append("::")
-                    .append(sk.getKeyCharacteristic().getTitle())
-                    .append(":;");
-        }
-        return sb.toString();
-    }
-
-    public String getCurrentTasksString() {
-        StringBuilder sb = new StringBuilder();
-        for(Task t : tasks.values()){
-            sb.append(t.getTitle())
-                    .append("::")
-                    .append(t.getId())
-                    .append("::");
-            for (int i = 0; i < t.getRelatedSkills().size(); i++){
-                sb.append(t.getRelatedSkills().get(i).getTitle())
-                        .append(i == t.getRelatedSkills().size() - 1 ? ":;" : "::");
-            }
-        }
-        return sb.toString();
-    }
-
-    public void updateHero(String name, int level, int xp){
-        hero.setName(name);
-        hero.setLevel(level);
-        hero.setXp(xp);
-    }
-
-    public void updateCharacteristic(String title, int level) throws IOException {
-        getCharacteristicByTitle(title).setLevel(level);
-    }
-
-    public void updateSkill(String title, int level, int sublevel,UUID id, String keyCharacteristicTitle) throws IOException {
-        if (skills.containsKey(id)){
-            Skill updSkill = skills.get(id);
-            updSkill.setLevel(level);
-            updSkill.setSublevel(sublevel);
-            updSkill.setKeyCharacteristic(getCharacteristicByTitle(keyCharacteristicTitle));
+        Task oldTask = getTaskByTitle(title);
+        if (oldTask != null) {
+            oldTask.setRelatedSkills(Arrays.asList(relatedSkills));
+            updateTask(oldTask);
         } else {
-            addSkill(title, level, sublevel, getCharacteristicByTitle(keyCharacteristicTitle));
+            UUID id = UUID.randomUUID();
+            ContentValues values = getContentValuesForTask(new Task(title, id, relatedSkills));
+            database.insert(TasksTable.NAME, null, values);
         }
     }
 
-    public void updateTask(String title,UUID id, String ... relatedSkillsTitles) throws IOException {
-        if (tasks.containsKey(id)){
-            Task updTask = tasks.get(id);
-            Skill[] skills = new Skill[relatedSkillsTitles.length];
-            for (int i = 0; i < relatedSkillsTitles.length; i++){
-                skills[i] = getSkillByTitle(relatedSkillsTitles[i]);
-            }
-            updTask.setRelatedSkills(skills);
+    public void updateTask(Task task) {
+        String uuid = task.getId().toString();
+        ContentValues values = getContentValuesForTask(task);
+        database.update(TasksTable.NAME, values, TasksTable.Cols.UUID + " = ?", new String[]{uuid});
+    }
 
-        } else {
-            Skill[] relatedSkills = new Skill[relatedSkillsTitles.length];
-            for (int i = 0; i < relatedSkillsTitles.length; i++){
-                relatedSkills[i] = getSkillByTitle(relatedSkillsTitles[i]);
+    public void removeTask(Task task) {
+        database.delete(TasksTable.NAME, TasksTable.Cols.UUID + " = ?", new String[]{task.getId().toString()});
+    }
+
+    public List<Task> getTasks(){
+        List<Task> tasks = new ArrayList<>();
+        TasksCursorWrapper cursorWrapper = queryTasks(null, null);
+        try {
+            cursorWrapper.moveToFirst();
+            while (!cursorWrapper.isAfterLast()) {
+                tasks.add(cursorWrapper.getTask());
+                cursorWrapper.moveToNext();
+            }} finally {
+            cursorWrapper.close();
+        }
+        return tasks;
+    }
+
+    public Task getTaskByID(UUID id) {
+        TasksCursorWrapper cursor = queryTasks(TasksTable.Cols.UUID + " = ?", new String[]{id.toString()});
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
             }
-            addTask(title, relatedSkills);
+            cursor.moveToFirst();
+            return cursor.getTask();
+        } finally {
+            cursor.close();
         }
     }
 
-    public Characteristic getCharacteristicByTitle(String title) throws IOException {
-        for (Characteristic ch : getAllCharacteristics()){
-            if (ch.getTitle().equals(title)){
-                return ch;
+    public Task getTaskByTitle(String s) {
+        TasksCursorWrapper cursor = queryTasks(TasksTable.Cols.TITLE + " = ?", new String[]{s});
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
             }
+            cursor.moveToFirst();
+            return cursor.getTask();
+        } finally {
+            cursor.close();
         }
-        throw new IOException("Skill with current title not found");
     }
 
-    public Skill getSkillByTitle(String title) {
-        for (Skill sk : skills.values()){
-            if (sk.getTitle().equals(title)){
-                return sk;
-            }
-        }
-        return null;
-    }
-
-    public Skill getSkillByID(UUID id){
-        return skills.get(id);
-    }
-
-    public ArrayList<Skill> getAllSkills(){
-        return new ArrayList<>(skills.values());
+    private TasksCursorWrapper queryTasks(String whereClause, String[] whereArgs) {
+        Cursor cursor = database.query(
+                TasksTable.NAME,
+                null, // Columns - null selects all columns
+                whereClause,
+                whereArgs,
+                null, // groupBy
+                null, // having
+                null // orderBy
+        );
+        return new TasksCursorWrapper(cursor, this);
     }
 
     public ArrayList<Task> getTasksBySkill(Skill sk){
         ArrayList<Task> tasksBySkill = new ArrayList<>();
-        for (Task t : tasks.values()){
+        for (Task t : getTasks()){
             if (t.getRelatedSkills().contains(sk)){
                 tasksBySkill.add(t);
             }
@@ -233,9 +160,98 @@ public class LifeEntity {
         return tasksBySkill;
     }
 
+    private static ContentValues getContentValuesForTask(Task task) {
+        ContentValues values = new ContentValues();
+        values.put(TasksTable.Cols.TITLE, task.getTitle());
+        values.put(TasksTable.Cols.UUID, task.getId().toString());
+        values.put(TasksTable.Cols.RELATED_SKILLS, task.getRelatedSkillsString());
+        return values;
+    }
+
+    private SkillsCursorWrapper querySkills(String whereClause, String[] whereArgs) {
+        Cursor cursor = database.query(
+                SkillsTable.NAME,
+                null, // Columns - null selects all columns
+                whereClause,
+                whereArgs,
+                null, // groupBy
+                null, // having
+                null // orderBy
+        );
+        return new SkillsCursorWrapper(cursor, this);
+    }
+
+    private static ContentValues getContentValuesForSkill(Skill skill) {
+        ContentValues values = new ContentValues();
+        values.put(SkillsTable.Cols.TITLE, skill.getTitle());
+        values.put(SkillsTable.Cols.UUID, skill.getId().toString());
+        values.put(SkillsTable.Cols.LEVEL, skill.getLevel());
+        values.put(SkillsTable.Cols.SUBLEVEL, skill.getSublevel());
+        values.put(SkillsTable.Cols.KEY_CHARACTERISTC_TITLE, skill.getKeyCharacteristic().getTitle());
+        return values;
+    }
+
+    public void addSkill(String title, Characteristic keyCharacteristic){
+        addSkill(title, 1, 0, keyCharacteristic);
+    }
+
+    public void addSkill(String title, int level, int sublevel, Characteristic keyCharacteristic){
+        Skill oldSkill = getSkillByTitle(title);
+        if (oldSkill != null) {
+            oldSkill.setLevel(level);
+            oldSkill.setSublevel(sublevel);
+            oldSkill.setKeyCharacteristic(keyCharacteristic);
+            updateSkill(oldSkill);
+        } else {
+            UUID id = UUID.randomUUID();
+            ContentValues values = getContentValuesForSkill(new Skill(title, level, sublevel, id, keyCharacteristic));
+            database.insert(SkillsTable.NAME, null, values);
+        }
+    }
+
+    public List<Skill> getSkills(){
+        List<Skill> skills = new ArrayList<>();
+        SkillsCursorWrapper cursorWrapper = querySkills(null, null);
+        try {
+            cursorWrapper.moveToFirst();
+            while (!cursorWrapper.isAfterLast()) {
+                skills.add(cursorWrapper.getSkill());
+                cursorWrapper.moveToNext();
+            }} finally {
+            cursorWrapper.close();
+        }
+        return skills;
+    }
+
+    public Skill getSkillByID(UUID id){
+        SkillsCursorWrapper cursor = querySkills(SkillsTable.Cols.UUID + " = ?", new String[]{id.toString()});
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
+            cursor.moveToFirst();
+            return cursor.getSkill();
+        } finally {
+            cursor.close();
+        }
+    }
+
+    public Skill getSkillByTitle(String title) {
+        SkillsCursorWrapper cursor = querySkills(SkillsTable.Cols.TITLE + " = ?", new String[]{title});
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
+            cursor.moveToFirst();
+            return cursor.getSkill();
+        } finally {
+            cursor.close();
+        }
+    }
+
     public ArrayList<Skill> getSkillsByCharacteristic(Characteristic ch){
         ArrayList<Skill> sk = new ArrayList<>();
-        for (Skill skill : skills.values()){
+        for (Skill skill : getSkills()){
             if (skill.getKeyCharacteristic().equals(ch)){
                 sk.add(skill);
             }
@@ -243,25 +259,122 @@ public class LifeEntity {
         return sk;
     }
 
-
-    public void removeTask(Task task) {
-        tasks.remove(task.getId());
+    public void updateSkill(Skill skill) {
+        String uuid = skill.getId().toString();
+        ContentValues values = getContentValuesForSkill(skill);
+        database.update(SkillsTable.NAME, values, SkillsTable.Cols.UUID + " = ?", new String[]{uuid});
     }
 
-    public Task getTaskByID(UUID id) {
-        return tasks.get(id);
-    }
-
-    public Task getTaskByTitle(String s) {
-        for (Task t: tasks.values()){
-            if (t.getTitle().equals(s)){
-                return t;
-            }
+    public Map<String, Integer[]> getSkillsTitlesAndLevels() {
+        Map<String, Integer[]> map = new TreeMap<>();
+        for (Skill s : getSkills()) {
+            map.put(s.getTitle(), new Integer[]{s.getLevel(), s.getSublevel()});
         }
-        return null;
+        return map;
     }
 
     public void removeSkill(Skill skill) {
-        skills.remove(skill.getId());
+        database.delete(SkillsTable.NAME, SkillsTable.Cols.UUID + " = ?", new String[]{skill.getId().toString()});
+    }
+
+    private CharacteristicsCursorWrapper queryCharacteristics(String whereClause, String[] whereArgs) {
+        Cursor cursor = database.query(
+                CharacteristicsTable.NAME,
+                null, // Columns - null selects all columns
+                whereClause,
+                whereArgs,
+                null, // groupBy
+                null, // having
+                null // orderBy
+        );
+        return new CharacteristicsCursorWrapper(cursor, this);
+    }
+
+    private static ContentValues getContentValuesForCharacteristic(Characteristic characteristic) {
+        ContentValues values = new ContentValues();
+        values.put(CharacteristicsTable.Cols.TITLE, characteristic.getTitle());
+        values.put(CharacteristicsTable.Cols.LEVEL, characteristic.getLevel());
+        return values;
+    }
+
+    private void addCharacteristic(Characteristic characteristic){
+            ContentValues values = getContentValuesForCharacteristic(characteristic);
+            database.insert(CharacteristicsTable.NAME, null, values);
+    }
+
+    public List<Characteristic> getCharacteristics(){
+        ArrayList<Characteristic> chars = new ArrayList<>();
+        CharacteristicsCursorWrapper cursorWrapper = queryCharacteristics(null, null);
+        try {
+            cursorWrapper.moveToFirst();
+            while (!cursorWrapper.isAfterLast()) {
+                chars.add(cursorWrapper.getCharacteristic());
+                cursorWrapper.moveToNext();
+            }} finally {
+            cursorWrapper.close();
+        }
+        return chars;
+    }
+
+    public void updateCharacteristic(Characteristic characteristic) {
+        ContentValues values = getContentValuesForCharacteristic(characteristic);
+        database.update(CharacteristicsTable.NAME, values, CharacteristicsTable.Cols.TITLE + " = ?", new String[]{characteristic.getTitle()});
+    }
+
+    public Characteristic getCharacteristicByTitle(String title) {
+        CharacteristicsCursorWrapper cursor = queryCharacteristics(CharacteristicsTable.Cols.TITLE + " = ?", new String[]{title});
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
+            cursor.moveToFirst();
+            return cursor.getCharacteristic();
+        } finally {
+            cursor.close();
+        }
+    }
+
+    private HeroCursorWrapper queryHero(String whereClause, String[] whereArgs) {
+        Cursor cursor = database.query(
+                HeroTable.NAME,
+                null, // Columns - null selects all columns
+                whereClause,
+                whereArgs,
+                null, // groupBy
+                null, // having
+                null // orderBy
+        );
+        return new HeroCursorWrapper(cursor, this);
+    }
+
+    private static ContentValues getContentValuesForHero(Hero hero) {
+        ContentValues values = new ContentValues();
+        values.put(HeroTable.Cols.NAME, hero.getName());
+        values.put(HeroTable.Cols.LEVEL, hero.getLevel());
+        values.put(HeroTable.Cols.XP, hero.getXp());
+        return values;
+    }
+
+    private void addHero(Hero hero) {
+        ContentValues values = getContentValuesForHero(hero);
+        database.insert(HeroTable.NAME, null, values);
+    }
+
+    public void updateHero(Hero hero) {
+        ContentValues values = getContentValuesForHero(hero);
+        database.update(HeroTable.NAME, values, HeroTable.Cols.NAME + " = ?", new String[]{hero.getName()});
+    }
+
+    public Hero getHero() {
+        HeroCursorWrapper cursor = queryHero(null, null);
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
+            cursor.moveToFirst();
+            return cursor.getHero();
+        } finally {
+            cursor.close();
+        }
     }
 }

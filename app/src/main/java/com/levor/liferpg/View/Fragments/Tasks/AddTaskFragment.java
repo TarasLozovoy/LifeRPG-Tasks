@@ -99,7 +99,7 @@ public class AddTaskFragment extends DefaultFragment {
                     createIdenticalTaskRequestDialog(title);
                     return true;
                 } else {
-                    finishTask(title, "Task added");
+                    finishTask(title, "Task added: " + title);
                 }
                 return true;
             case android.R.id.home:
@@ -136,7 +136,7 @@ public class AddTaskFragment extends DefaultFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        finishTask(title, "Task added");
+                        finishTask(title, "Task added: " + title);
                     }
                 })
                 .show();
@@ -145,7 +145,6 @@ public class AddTaskFragment extends DefaultFragment {
 
     protected void finishTask(String title, String message){
         getController().createNewTask(title, relatedSkills);
-        getCurrentActivity().saveAppData();
         Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
     }

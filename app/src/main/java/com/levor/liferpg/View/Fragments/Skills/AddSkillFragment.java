@@ -134,9 +134,8 @@ public class AddSkillFragment extends DefaultFragment {
     }
 
     protected void finish(String title, String message) {
-        getController().createNewSkill(title, keyCharacteristic);
+        getController().addSkill(title, keyCharacteristic);
         Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
-        getCurrentActivity().saveAppData();
         getCurrentActivity().showPreviousFragment();
     }
 
