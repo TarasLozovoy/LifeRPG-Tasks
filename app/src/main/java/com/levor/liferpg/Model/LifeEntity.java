@@ -366,7 +366,7 @@ public class LifeEntity {
 
     public void updateHero(Hero hero) {
         ContentValues values = getContentValuesForHero(hero);
-        database.update(HeroTable.NAME, values, HeroTable.Cols.NAME + " = ?", new String[]{hero.getName()});
+        database.update(HeroTable.NAME, values, null, null);
     }
 
     public Hero getHero() {

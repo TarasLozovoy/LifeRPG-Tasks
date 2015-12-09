@@ -1,4 +1,4 @@
-package com.levor.liferpg.View.Fragments;
+package com.levor.liferpg.View.Fragments.Hero;
 
 
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.Characteristics.CharacteristicsFragment;
+import com.levor.liferpg.View.Fragments.DefaultFragment;
 import com.levor.liferpg.View.Fragments.Skills.SkillsFragment;
 
 /**
@@ -62,6 +64,17 @@ public class HeroMainFragment extends DefaultFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_hero_main_fragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.edit_hero:
+                getCurrentActivity().showChildFragment(new EditHeroFragment(), null);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void updateUI() {

@@ -154,6 +154,14 @@ public class LifeController {
         return result;
     }
 
+    public void updateSkill(Skill skill) {
+        lifeEntity.updateSkill(skill);
+    }
+
+    public Hero getHero(){
+        return lifeEntity.getHero();
+    }
+
     public String getHeroName(){
         return lifeEntity.getHero().getName();
     }
@@ -170,9 +178,9 @@ public class LifeController {
         return lifeEntity.getHero().getXpToNextLevel();
     }
 
-
-
-    public void updateSkill(Skill skill) {
-        lifeEntity.updateSkill(skill);
+    public void updateHeroName(String name){
+        Hero hero = lifeEntity.getHero();
+        hero.setName(name);
+        lifeEntity.updateHero(hero);
     }
 }

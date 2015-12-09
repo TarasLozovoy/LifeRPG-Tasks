@@ -72,5 +72,7 @@
     <string name="disabled">Disabled</string>
     <string name="disable">Disable</string>
     <string name="enable">Enable</string>
+    <string name="hero_name">Name:</string>
+    <string name="hero_name_hint_edit_hero_fragment">Your hero name.</string>
 
 </resources>

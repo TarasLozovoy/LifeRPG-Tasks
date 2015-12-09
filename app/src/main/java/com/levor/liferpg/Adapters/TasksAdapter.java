@@ -17,7 +17,7 @@ import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Activities.MainActivity;
-import com.levor.liferpg.View.Fragments.HeroMainFragment;
+import com.levor.liferpg.View.Fragments.Hero.HeroMainFragment;
 
 import java.util.List;
 

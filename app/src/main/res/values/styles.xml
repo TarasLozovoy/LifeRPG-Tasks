@@ -11,4 +11,9 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!-- Default text style -->
+    <style name="LifeRPGTextStyle">
+        <item name="android:textSize">22sp</item>
+    </style>
+
 </resources>
