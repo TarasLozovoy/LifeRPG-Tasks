@@ -33,7 +33,6 @@ public class TasksFragment extends DefaultFragment {
 
         listView = (ListView) view.findViewById(R.id.listViewTasks);
 
-        createAdapter();
         setupListView();
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Tasks");
@@ -56,11 +55,6 @@ public class TasksFragment extends DefaultFragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void createAdapter(){
-        adapter = new TasksAdapter(getActivity(), getController().getTasksTitlesAsList(), getCurrentActivity());
-        listView.setAdapter(adapter);
     }
 
     private void setupListView(){

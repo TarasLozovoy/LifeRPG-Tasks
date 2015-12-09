@@ -2,9 +2,13 @@ package com.levor.liferpg.Model;
 
 import android.support.annotation.NonNull;
 
+import java.util.Comparator;
+
 public class Characteristic implements Comparable<Characteristic>{
     private String title;
     private int level;
+
+    public static final Comparator<Characteristic> LEVEL_COMPARATOR = new CharacteristicByLevelComparator();
 
     public Characteristic(String title, int level) {
         this.title = title;
@@ -49,5 +53,17 @@ public class Characteristic implements Comparable<Characteristic>{
             return -1;
         }
         return this.title.compareTo(another.title);
+    }
+
+    private static class CharacteristicByLevelComparator implements Comparator<Characteristic> {
+
+        @Override
+        public int compare(Characteristic lhs, Characteristic rhs) {
+            if (rhs.getLevel() != lhs.getLevel()) {
+                return rhs.getLevel() - lhs.getLevel();
+            } else {
+                return lhs.getTitle().compareTo(rhs.getTitle());
+            }
+        }
     }
 }

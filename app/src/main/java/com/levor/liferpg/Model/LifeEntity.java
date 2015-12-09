@@ -15,6 +15,7 @@ import com.levor.liferpg.DataBase.TasksCursorWrapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -157,6 +158,7 @@ public class LifeEntity {
                 tasksBySkill.add(t);
             }
         }
+        Collections.sort(tasksBySkill, Task.TITLE_COMPARATOR);
         return tasksBySkill;
     }
 
@@ -220,6 +222,7 @@ public class LifeEntity {
             }} finally {
             cursorWrapper.close();
         }
+        Collections.sort(skills, Skill.LEVEL_COMPARATOR);
         return skills;
     }
 
@@ -303,7 +306,7 @@ public class LifeEntity {
     }
 
     public List<Characteristic> getCharacteristics(){
-        ArrayList<Characteristic> chars = new ArrayList<>();
+        List<Characteristic> chars = new ArrayList<>();
         CharacteristicsCursorWrapper cursorWrapper = queryCharacteristics(null, null);
         try {
             cursorWrapper.moveToFirst();
@@ -313,6 +316,7 @@ public class LifeEntity {
             }} finally {
             cursorWrapper.close();
         }
+        Collections.sort(chars, Characteristic.LEVEL_COMPARATOR);
         return chars;
     }
 

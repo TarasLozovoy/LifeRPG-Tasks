@@ -1,6 +1,7 @@
 package com.levor.liferpg.View.Fragments.Tasks;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -10,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -39,6 +41,15 @@ public class AddTaskFragment extends DefaultFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_task, container, false);
         newTaskTitleEditText = (EditText) view.findViewById(R.id.new_task_title_edit_text);
+        newTaskTitleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(newTaskTitleEditText, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }
+        });
 
         relatedSkillListView = (ListView) view.findViewById(R.id.related_skills_to_add);
         addSkillButton = (Button) view.findViewById(R.id.add_related_skill);
@@ -78,6 +89,19 @@ public class AddTaskFragment extends DefaultFragment {
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        newTaskTitleEditText.requestFocus();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
     @Override

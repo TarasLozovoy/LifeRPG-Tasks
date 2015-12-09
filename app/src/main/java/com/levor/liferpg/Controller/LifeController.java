@@ -9,6 +9,8 @@ import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -33,6 +35,7 @@ public class LifeController {
         for (Task t : lifeEntity.getTasks()){
             titles.add(t.getTitle());
         }
+        Collections.sort(titles);
         return titles;
     }
 
@@ -69,7 +72,7 @@ public class LifeController {
         return lifeEntity.getSkillByTitle(title);
     }
 
-    public ArrayList<Task> getTasksBySkill(Skill sk){
+    public List<Task> getTasksBySkill(Skill sk){
         return lifeEntity.getTasksBySkill(sk);
     }
 

@@ -24,6 +24,7 @@ import com.levor.liferpg.View.Fragments.Tasks.AddTaskFragment;
 import com.levor.liferpg.View.Fragments.Tasks.DetailedTaskFragment;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -40,7 +41,7 @@ public class DetailedSkillFragment extends DefaultFragment {
     private ListView listView;
 
     private Skill currentSkill;
-    private ArrayList<String> currentTasks;
+    private List<String> currentTasks;
     private TasksAdapter adapter;
 
     @Override
@@ -70,7 +71,7 @@ public class DetailedSkillFragment extends DefaultFragment {
                 getCurrentActivity().showChildFragment(fragment, bundle);
             }
         });
-        createAdapter();
+        setupListView();
         createFooterView();
         adapter.registerDataSetObserver(new DataSetObserver() {
             @Override
@@ -106,9 +107,9 @@ public class DetailedSkillFragment extends DefaultFragment {
         }
     }
 
-    private void createAdapter(){
-        ArrayList<Task> tasks = getController().getTasksBySkill(currentSkill);
-        ArrayList<String> titles = new ArrayList<>();
+    private void setupListView(){
+        List<Task> tasks = getController().getTasksBySkill(currentSkill);
+        List<String> titles = new ArrayList<>();
         for (Task t: tasks){
             titles.add(t.getTitle());
         }

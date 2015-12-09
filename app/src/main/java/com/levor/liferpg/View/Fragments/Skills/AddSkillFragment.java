@@ -2,6 +2,7 @@ package com.levor.liferpg.View.Fragments.Skills;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,6 +43,15 @@ public class AddSkillFragment extends DefaultFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_skill, container, false);
         titleEditText = (EditText) v.findViewById(R.id.new_skill_title_edit_text);
+        titleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(titleEditText, InputMethodManager.SHOW_IMPLICIT);
+                }
+            }
+        });
         keyCharacteristicTV = (TextView) v.findViewById(R.id.key_characteristic_value);
         setKeyCharacteristicButton = (Button) v.findViewById(R.id.set_key_characteristic_button);
         setKeyCharacteristicButton.setOnClickListener(new ChangeCharacteristicOnClickListener());
@@ -60,6 +71,19 @@ public class AddSkillFragment extends DefaultFragment {
         getCurrentActivity().setActionBarTitle(R.string.new_skill);
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        titleEditText.requestFocus();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
     @Override
