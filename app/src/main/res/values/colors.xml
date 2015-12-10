@@ -3,4 +3,5 @@
     <item name="light_blue" type="color">#fff0ff</item>
     <item name="white" type="color">#ffffff</item>
     <item name="light_gray" type="color">#c4c1c1</item>
+    <color name="black">#000000</color>
 </resources>

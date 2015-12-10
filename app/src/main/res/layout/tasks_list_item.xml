@@ -26,7 +26,8 @@
             android:paddingTop="3dp"
             android:id="@+id/repeatability_tasks_list_item"
             android:gravity="center_horizontal|center_vertical"
-            android:textSize="7sp"/>
+            android:textSize="7sp"
+            android:textColor="@color/black"/>
     </LinearLayout>
 
 

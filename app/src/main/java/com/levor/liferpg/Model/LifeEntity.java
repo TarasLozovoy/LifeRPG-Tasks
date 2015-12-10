@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 
 import com.levor.liferpg.DataBase.CharacteristicsCursorWrapper;
 import com.levor.liferpg.DataBase.DataBaseHelper;
@@ -25,6 +26,11 @@ public class LifeEntity {
     private SQLiteDatabase database;
 
     private static LifeEntity lifeEntity;
+
+    private List<Task> tasks;
+    private List<Skill> skills;
+    private List<Characteristic> characteristics;
+    private Hero hero;
 
     public static LifeEntity getInstance(Context context){
         if (lifeEntity == null){
@@ -74,6 +80,11 @@ public class LifeEntity {
             addHero(new Hero());
         }
         cursor.close();
+
+        hero = getHero();
+        characteristics = getCharacteristics();
+        skills = getSkills();
+        tasks = getTasks();
     }
 
     public void addTask(String title,int repeatability, Skill ... relatedSkills){
@@ -84,59 +95,77 @@ public class LifeEntity {
             updateTask(oldTask);
         } else {
             UUID id = UUID.randomUUID();
-            ContentValues values = getContentValuesForTask(new Task(title, id, repeatability, relatedSkills));
-            database.insert(TasksTable.NAME, null, values);
+            Task newTask = new Task(title, id, repeatability, relatedSkills);
+            tasks.add(newTask);
+            final ContentValues values = getContentValuesForTask(newTask);
+            new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... params) {
+                    database.insert(TasksTable.NAME, null, values);
+                    return null;
+                }
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 
     public void updateTask(Task task) {
-        String uuid = task.getId().toString();
-        ContentValues values = getContentValuesForTask(task);
-        database.update(TasksTable.NAME, values, TasksTable.Cols.UUID + " = ?", new String[]{uuid});
+        final String uuid = task.getId().toString();
+        if (tasks.remove(task)) {
+            tasks.add(task);
+            final ContentValues values = getContentValuesForTask(task);
+            new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... params) {
+                    database.update(TasksTable.NAME, values, TasksTable.Cols.UUID + " = ?", new String[]{uuid});
+                    return null;
+                }
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
     }
 
-    public void removeTask(Task task) {
-        database.delete(TasksTable.NAME, TasksTable.Cols.UUID + " = ?", new String[]{task.getId().toString()});
+    public void removeTask(final Task task) {
+        tasks.remove(task);
+        new AsyncTask<Void, Void, Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+                database.delete(TasksTable.NAME, TasksTable.Cols.UUID + " = ?", new String[]{task.getId().toString()});
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public List<Task> getTasks(){
-        List<Task> tasks = new ArrayList<>();
-        TasksCursorWrapper cursorWrapper = queryTasks(null, null);
-        try {
-            cursorWrapper.moveToFirst();
-            while (!cursorWrapper.isAfterLast()) {
-                tasks.add(cursorWrapper.getTask());
-                cursorWrapper.moveToNext();
-            }} finally {
-            cursorWrapper.close();
+        if (tasks != null){
+            Collections.sort(tasks, Task.COMPARATOR);
+            return tasks;
+        } else {
+            List<Task> tasksList = new ArrayList<>();
+            TasksCursorWrapper cursorWrapper = queryTasks(null, null);
+            try {
+                cursorWrapper.moveToFirst();
+                while (!cursorWrapper.isAfterLast()) {
+                    tasksList.add(cursorWrapper.getTask());
+                    cursorWrapper.moveToNext();
+                }
+            } finally {
+                cursorWrapper.close();
+            }
+            return tasksList;
         }
-        return tasks;
     }
 
     public Task getTaskByID(UUID id) {
-        TasksCursorWrapper cursor = queryTasks(TasksTable.Cols.UUID + " = ?", new String[]{id.toString()});
-        try {
-            if (cursor.getCount() == 0) {
-                return null;
-            }
-            cursor.moveToFirst();
-            return cursor.getTask();
-        } finally {
-            cursor.close();
+        for (Task t : tasks){
+            if (t.getId().equals(id)) return t;
         }
+        return null;
     }
 
     public Task getTaskByTitle(String s) {
-        TasksCursorWrapper cursor = queryTasks(TasksTable.Cols.TITLE + " = ?", new String[]{s});
-        try {
-            if (cursor.getCount() == 0) {
-                return null;
-            }
-            cursor.moveToFirst();
-            return cursor.getTask();
-        } finally {
-            cursor.close();
+        for (Task t : tasks){
+            if (t.getTitle().equals(s)) return t;
         }
+        return null;
     }
 
     private TasksCursorWrapper queryTasks(String whereClause, String[] whereArgs) {
@@ -208,50 +237,49 @@ public class LifeEntity {
             updateSkill(oldSkill);
         } else {
             UUID id = UUID.randomUUID();
-            ContentValues values = getContentValuesForSkill(new Skill(title, level, sublevel, id, keyCharacteristic));
-            database.insert(SkillsTable.NAME, null, values);
+            Skill newSkill = new Skill(title, level, sublevel, id, keyCharacteristic);
+            skills.add(newSkill);
+            final ContentValues values = getContentValuesForSkill(newSkill);
+            new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... params) {
+                    database.insert(SkillsTable.NAME, null, values);
+                    return null;
+                }
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 
     public List<Skill> getSkills(){
-        List<Skill> skills = new ArrayList<>();
+        if (skills != null){
+            return skills;
+        }
+        List<Skill> skillsList = new ArrayList<>();
         SkillsCursorWrapper cursorWrapper = querySkills(null, null);
         try {
             cursorWrapper.moveToFirst();
             while (!cursorWrapper.isAfterLast()) {
-                skills.add(cursorWrapper.getSkill());
+                skillsList.add(cursorWrapper.getSkill());
                 cursorWrapper.moveToNext();
             }} finally {
             cursorWrapper.close();
         }
-        Collections.sort(skills, Skill.LEVEL_COMPARATOR);
-        return skills;
+        Collections.sort(skillsList, Skill.LEVEL_COMPARATOR);
+        return skillsList;
     }
 
     public Skill getSkillByID(UUID id){
-        SkillsCursorWrapper cursor = querySkills(SkillsTable.Cols.UUID + " = ?", new String[]{id.toString()});
-        try {
-            if (cursor.getCount() == 0) {
-                return null;
-            }
-            cursor.moveToFirst();
-            return cursor.getSkill();
-        } finally {
-            cursor.close();
+        for (Skill sk : skills){
+            if (sk.getId().equals(id)) return sk;
         }
+        return null;
     }
 
     public Skill getSkillByTitle(String title) {
-        SkillsCursorWrapper cursor = querySkills(SkillsTable.Cols.TITLE + " = ?", new String[]{title});
-        try {
-            if (cursor.getCount() == 0) {
-                return null;
-            }
-            cursor.moveToFirst();
-            return cursor.getSkill();
-        } finally {
-            cursor.close();
+        for (Skill sk : skills){
+            if (sk.getTitle().equals(title)) return sk;
         }
+        return null;
     }
 
     public ArrayList<Skill> getSkillsByCharacteristic(Characteristic ch){
@@ -265,9 +293,29 @@ public class LifeEntity {
     }
 
     public void updateSkill(Skill skill) {
-        String uuid = skill.getId().toString();
-        ContentValues values = getContentValuesForSkill(skill);
-        database.update(SkillsTable.NAME, values, SkillsTable.Cols.UUID + " = ?", new String[]{uuid});
+        final String uuid = skill.getId().toString();
+        final ContentValues values = getContentValuesForSkill(skill);
+        if (skills.remove(skill)) {
+            skills.add(skill);
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    database.update(SkillsTable.NAME, values, SkillsTable.Cols.UUID + " = ?", new String[]{uuid});
+                    return null;
+                }
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
+
+    public void removeSkill(final Skill skill) {
+        skills.remove(skill);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                database.delete(SkillsTable.NAME, SkillsTable.Cols.UUID + " = ?", new String[]{skill.getId().toString()});
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public Map<String, Integer[]> getSkillsTitlesAndLevels() {
@@ -276,10 +324,6 @@ public class LifeEntity {
             map.put(s.getTitle(), new Integer[]{s.getLevel(), s.getSublevel()});
         }
         return map;
-    }
-
-    public void removeSkill(Skill skill) {
-        database.delete(SkillsTable.NAME, SkillsTable.Cols.UUID + " = ?", new String[]{skill.getId().toString()});
     }
 
     private CharacteristicsCursorWrapper queryCharacteristics(String whereClause, String[] whereArgs) {
@@ -303,11 +347,21 @@ public class LifeEntity {
     }
 
     private void addCharacteristic(Characteristic characteristic){
-            ContentValues values = getContentValuesForCharacteristic(characteristic);
-            database.insert(CharacteristicsTable.NAME, null, values);
+        characteristics.add(characteristic);
+        final ContentValues values = getContentValuesForCharacteristic(characteristic);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                database.insert(CharacteristicsTable.NAME, null, values);
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public List<Characteristic> getCharacteristics(){
+        if (characteristics != null) {
+            return characteristics;
+        }
         List<Characteristic> chars = new ArrayList<>();
         CharacteristicsCursorWrapper cursorWrapper = queryCharacteristics(null, null);
         try {
@@ -322,22 +376,25 @@ public class LifeEntity {
         return chars;
     }
 
-    public void updateCharacteristic(Characteristic characteristic) {
-        ContentValues values = getContentValuesForCharacteristic(characteristic);
-        database.update(CharacteristicsTable.NAME, values, CharacteristicsTable.Cols.TITLE + " = ?", new String[]{characteristic.getTitle()});
+    public void updateCharacteristic(final Characteristic characteristic) {
+        if (characteristics.remove(characteristic)) {
+            characteristics.add(characteristic);
+            final ContentValues values = getContentValuesForCharacteristic(characteristic);
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    database.update(CharacteristicsTable.NAME, values, CharacteristicsTable.Cols.TITLE + " = ?", new String[]{characteristic.getTitle()});
+                    return null;
+                }
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
     }
 
     public Characteristic getCharacteristicByTitle(String title) {
-        CharacteristicsCursorWrapper cursor = queryCharacteristics(CharacteristicsTable.Cols.TITLE + " = ?", new String[]{title});
-        try {
-            if (cursor.getCount() == 0) {
-                return null;
-            }
-            cursor.moveToFirst();
-            return cursor.getCharacteristic();
-        } finally {
-            cursor.close();
+        for (Characteristic ch : getCharacteristics()){
+            if (ch.getTitle().equals(title)) return ch;
         }
+        return null;
     }
 
     private HeroCursorWrapper queryHero(String whereClause, String[] whereArgs) {
@@ -362,16 +419,33 @@ public class LifeEntity {
     }
 
     private void addHero(Hero hero) {
-        ContentValues values = getContentValuesForHero(hero);
-        database.insert(HeroTable.NAME, null, values);
+        this.hero = hero;
+        final ContentValues values = getContentValuesForHero(hero);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                database.insert(HeroTable.NAME, null, values);
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void updateHero(Hero hero) {
-        ContentValues values = getContentValuesForHero(hero);
-        database.update(HeroTable.NAME, values, null, null);
+        this.hero = hero;
+        final ContentValues values = getContentValuesForHero(hero);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                database.update(HeroTable.NAME, values, null, null);
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public Hero getHero() {
+        if (hero != null) {
+            return hero;
+        }
         HeroCursorWrapper cursor = queryHero(null, null);
         try {
             if (cursor.getCount() == 0) {

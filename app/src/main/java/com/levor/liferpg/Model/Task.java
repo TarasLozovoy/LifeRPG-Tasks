@@ -74,6 +74,12 @@ public class Task {
         this.repeatability = repeatability;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Task)) return false;
+        else return this.id.equals(((Task) o).id);
+    }
+
     private static class TasksComparator implements Comparator<Task> {
 
         @Override

@@ -91,12 +91,8 @@ public class Skill {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Skill){
-            Skill that = (Skill) o;
-            return id.equals(that.id);
-        } else {
-            return false;
-        }
+        if (!(o instanceof Skill)) return false;
+        else return this.id.equals(((Skill) o).id);
     }
 
     private static class SkillByTitleComparator implements Comparator<Skill>{

@@ -31,9 +31,7 @@ public class LifeController {
 
     public List<String> getTasksTitlesAsList(){
         List<String> titles = new ArrayList<>();
-        List<Task> tasks = lifeEntity.getTasks();
-        Collections.sort(tasks, Task.COMPARATOR);
-        for (Task t : tasks){
+        for (Task t : lifeEntity.getTasks()){
             titles.add(t.getTitle());
         }
         return titles;
