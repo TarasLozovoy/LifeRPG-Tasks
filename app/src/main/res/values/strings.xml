@@ -14,7 +14,7 @@
     <string name="dexterity">Dexterity -</string>
     <string name="title_activity_skills">Skills</string>
 
-    <string name="tasks_list_view_positive_button">Done</string>
+    <string name="tasks_list_view_positive_button">Do</string>
     <string name="title_activity_detailed_task">DetailedTaskActivity</string>
     <string name="new_task_title">Title:</string>
     <string name="new_task_title_edit_text">Type task title</string>
@@ -74,5 +74,11 @@
     <string name="enable">Enable</string>
     <string name="hero_name">Name:</string>
     <string name="hero_name_hint_edit_hero_fragment">Your hero name.</string>
+    <string name="repeat">Repeat</string>
+    <string name="repeat_times_edit_text_hint">leave blank for infinit</string>
+    <string name="times">times</string>
+    <string name="infinite_number_of">Repeat task infinitely</string>
+    <string name="task_finished">Task finished.</string>
+    <string name="max_task_repeat">Task can be repeated for 999 times max.</string>
 
 </resources>

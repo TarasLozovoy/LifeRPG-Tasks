@@ -24,13 +24,14 @@ public class TasksCursorWrapper extends CursorWrapper {
         String uuid = getString(getColumnIndex(TasksTable.Cols.UUID));
         String title = getString(getColumnIndex(TasksTable.Cols.TITLE));
         String relatedSkills = getString(getColumnIndex(TasksTable.Cols.RELATED_SKILLS));
+        int repeatability = getInt(getColumnIndex(TasksTable.Cols.REPEATABILITY));
         List<Skill> skills = new ArrayList<>();
         String[] skillsArray = relatedSkills.split("::");
         for (String s : skillsArray) {
             if (s.equals("")) continue;
             skills.add(lifeEntity.getSkillByID(UUID.fromString(s)));
         }
-        return new Task(title, UUID.fromString(uuid), skills);
+        return new Task(title, UUID.fromString(uuid), repeatability, skills);
     }
 
 }

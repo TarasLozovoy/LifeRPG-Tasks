@@ -33,9 +33,13 @@ public class EditTaskFragment extends AddTaskFragment {
         View v = super.onCreateView(inflater, container, savedInstanceState);
         currentTask = getController().getTaskByTitle(getArguments().getString(CURRENT_TASK_TAG));
         if (savedInstanceState == null) {
-            newTaskTitleEditText.setText(currentTask.getTitle());
+            taskTitleEditText.setText(currentTask.getTitle());
             for (Skill sk : currentTask.getRelatedSkills()) {
                 relatedSkills.add(sk.getTitle());
+            }
+            int repeat = currentTask.getRepeatability();
+            if (repeat >= 0) {
+                taskRepeatEditText.setText(Integer.toString(repeat));
             }
         }
         setHasOptionsMenu(true);
@@ -54,7 +58,7 @@ public class EditTaskFragment extends AddTaskFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.save_task:
-                String title = newTaskTitleEditText.getText().toString();
+                String title = taskTitleEditText.getText().toString();
                 if (title.isEmpty()) {
                     Snackbar.make(getView(), "Task title can't be empty", Snackbar.LENGTH_LONG).show();
                     return true;
@@ -121,6 +125,11 @@ public class EditTaskFragment extends AddTaskFragment {
 
     @Override
     protected void finishTask(String title, String message) {
+        String repeatTimesString = taskRepeatEditText.getText().toString();
+        if (repeatTimesString.isEmpty()) repeatTimesString = "-1";
+        int repeat = Integer.parseInt(repeatTimesString);
+        currentTask.setRepeatability(repeat);
+
         currentTask.setTitle(title);
         List<Skill> skills = new ArrayList<>();
         for (String s: relatedSkills){

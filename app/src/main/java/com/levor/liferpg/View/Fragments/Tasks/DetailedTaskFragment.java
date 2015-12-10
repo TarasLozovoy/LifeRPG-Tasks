@@ -32,7 +32,8 @@ import java.util.UUID;
 public class DetailedTaskFragment extends DefaultFragment {
     public final static String SELECTED_TASK_UUID_TAG = "selected_task_uuid_tag";
 
-    private TextView taskTitle;
+    private TextView taskTitleTV;
+    private TextView taskRepeatTV;
     private ListView listView;
     private Task currentTask;
 
@@ -42,12 +43,23 @@ public class DetailedTaskFragment extends DefaultFragment {
                              Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_detailed_task, container, false);
 
-        taskTitle = (TextView) v.findViewById(R.id.task_title);
+        taskTitleTV = (TextView) v.findViewById(R.id.task_title);
+        taskRepeatTV = (TextView) v.findViewById(R.id.task_repeat_times_text_view);
         listView = (ListView) v.findViewById(R.id.list_view);
 
         UUID id = (UUID)getArguments().get(SELECTED_TASK_UUID_TAG);
         currentTask = getController().getTaskByID(id);
-        taskTitle.setText(currentTask.getTitle());
+        taskTitleTV.setText(currentTask.getTitle());
+        int repeat = currentTask.getRepeatability();
+        if (repeat == 0) {
+            taskRepeatTV.setText(v.getResources().getString(R.string.task_finished));
+        } else if (repeat < 0) {
+            taskRepeatTV.setText(v.getResources().getString(R.string.infinite_number_of));
+        } else {
+            taskRepeatTV.setText(v.getResources().getString(R.string.repeat) + " " +
+                            repeat + " " +
+                            v.getResources().getString(R.string.times));
+        }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Task");
         getCurrentActivity().showActionBarHomeButtonAsBack(true);

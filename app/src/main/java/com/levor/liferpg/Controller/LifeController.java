@@ -9,7 +9,6 @@ import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -32,10 +31,11 @@ public class LifeController {
 
     public List<String> getTasksTitlesAsList(){
         List<String> titles = new ArrayList<>();
-        for (Task t : lifeEntity.getTasks()){
+        List<Task> tasks = lifeEntity.getTasks();
+        Collections.sort(tasks, Task.COMPARATOR);
+        for (Task t : tasks){
             titles.add(t.getTitle());
         }
-        Collections.sort(titles);
         return titles;
     }
 
@@ -51,12 +51,12 @@ public class LifeController {
         return lifeEntity.getTaskByTitle(s);
     }
 
-    public void createNewTask(String title, List<String> relatedSkills) {
+    public void createNewTask(String title, int repeatability, List<String> relatedSkills) {
         Skill[] skills = new Skill[relatedSkills.size()];
         for (int i = 0; i < relatedSkills.size(); i++){
             skills[i] = lifeEntity.getSkillByTitle(relatedSkills.get(i));
         }
-        lifeEntity.addTask(title, skills);
+        lifeEntity.addTask(title,repeatability, skills);
     }
 
 

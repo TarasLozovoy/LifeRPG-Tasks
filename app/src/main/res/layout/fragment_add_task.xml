@@ -17,17 +17,48 @@
             android:textSize="22sp"/>
 
         <EditText
-            android:id="@+id/new_task_title_edit_text"
+            android:id="@+id/task_title_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/new_task_title_edit_text" />
     </LinearLayout>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_title_layout"
+        android:id="@+id/task_repeat_times_linear_layout"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/repeat"
+            android:gravity="center_vertical"
+            style="@style/LifeRPGTextStyle"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/task_repeat_times_edit_text"
+            android:hint="@string/repeat_times_edit_text_hint"
+            android:inputType="number"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/times"
+            android:gravity="center_vertical"
+            style="@style/LifeRPGTextStyle"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/add_skill_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/add_title_layout"
+        android:layout_below="@id/task_repeat_times_linear_layout"
         android:orientation="vertical">
 
         <TextView

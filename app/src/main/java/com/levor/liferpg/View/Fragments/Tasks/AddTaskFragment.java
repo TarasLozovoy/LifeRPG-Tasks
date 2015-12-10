@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,8 +31,10 @@ public class AddTaskFragment extends DefaultFragment {
 
     private final String TASK_TITLE_TAG = "task_title_tag";
     private final String RELATED_SKILLS_TAG = "related_skills_tag";
+    private final String REPEAT_TAG = "repeat_tag";
 
-    protected EditText newTaskTitleEditText;
+    protected EditText taskTitleEditText;
+    protected EditText taskRepeatEditText;
     private ListView relatedSkillListView;
     private Button addSkillButton;
 
@@ -39,15 +43,38 @@ public class AddTaskFragment extends DefaultFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_task, container, false);
-        newTaskTitleEditText = (EditText) view.findViewById(R.id.new_task_title_edit_text);
-        newTaskTitleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        final View view = inflater.inflate(R.layout.fragment_add_task, container, false);
+        taskTitleEditText = (EditText) view.findViewById(R.id.task_title_edit_text);
+        taskTitleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(newTaskTitleEditText, InputMethodManager.SHOW_IMPLICIT);
+                    imm.showSoftInput(taskTitleEditText, InputMethodManager.SHOW_IMPLICIT);
                 }
+            }
+        });
+
+        taskRepeatEditText = (EditText) view.findViewById(R.id.task_repeat_times_edit_text);
+        taskRepeatEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int repeat = Integer.parseInt(s.toString());
+                if (repeat > 999) {
+                    taskRepeatEditText.setText(Integer.toString(999));
+                    taskRepeatEditText.setSelection(taskRepeatEditText.getText().length());
+                    Snackbar.make(view, view.getResources().getString(R.string.max_task_repeat), Snackbar.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -75,8 +102,9 @@ public class AddTaskFragment extends DefaultFragment {
             }
         });
         if (savedInstanceState != null) {
-            newTaskTitleEditText.setText(savedInstanceState.getString(TASK_TITLE_TAG));
+            taskTitleEditText.setText(savedInstanceState.getString(TASK_TITLE_TAG));
             relatedSkills = savedInstanceState.getStringArrayList(RELATED_SKILLS_TAG);
+            taskRepeatEditText.setText(savedInstanceState.getString(REPEAT_TAG));
         }
         setupListView();
         String skillTitle;
@@ -94,7 +122,7 @@ public class AddTaskFragment extends DefaultFragment {
     @Override
     public void onResume() {
         super.onResume();
-        newTaskTitleEditText.requestFocus();
+        taskTitleEditText.requestFocus();
     }
 
     @Override
@@ -114,7 +142,7 @@ public class AddTaskFragment extends DefaultFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.create_task:
-                String title = newTaskTitleEditText.getText().toString();
+                String title = taskTitleEditText.getText().toString();
                 if (title.isEmpty()) {
                     Snackbar.make(getView(), "Task title can't be empty", Snackbar.LENGTH_LONG).show();
                     return true;
@@ -136,8 +164,9 @@ public class AddTaskFragment extends DefaultFragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(TASK_TITLE_TAG, newTaskTitleEditText.getText().toString());
+        outState.putSerializable(TASK_TITLE_TAG, taskTitleEditText.getText().toString());
         outState.putSerializable(RELATED_SKILLS_TAG, relatedSkills);
+        outState.putSerializable(REPEAT_TAG, taskRepeatEditText.getText().toString());
         super.onSaveInstanceState(outState);
     }
 
@@ -168,7 +197,10 @@ public class AddTaskFragment extends DefaultFragment {
     }
 
     protected void finishTask(String title, String message){
-        getController().createNewTask(title, relatedSkills);
+        String repeatTimesString = taskRepeatEditText.getText().toString();
+        if (repeatTimesString.isEmpty()) repeatTimesString = "-1";
+        int repeat = Integer.parseInt(repeatTimesString);
+        getController().createNewTask(title, repeat, relatedSkills);
         Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
     }

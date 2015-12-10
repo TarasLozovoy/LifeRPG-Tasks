@@ -1,7 +1,5 @@
 package com.levor.liferpg.Model;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,15 +11,17 @@ public class Task {
     private String title;
     private List<Skill> relatedSkills = new ArrayList<>();
     private UUID id;
+    private int repeatability = -1;
 
-    public static final Comparator<Task> TITLE_COMPARATOR = new TaskByTitleComparator();
+    public static final Comparator<Task> COMPARATOR = new TasksComparator();
 
-    public Task(String title, UUID id, Skill ... skills) {
-        this(title, id, Arrays.asList(skills));
+    public Task(String title, UUID id, int repeatability, Skill ... skills) {
+        this(title, id, repeatability, Arrays.asList(skills));
     }
 
-    public Task(String title, UUID id, List<Skill> skills) {
+    public Task(String title, UUID id, int repeatability, List<Skill> skills) {
         this.title = title;
+        this.repeatability = repeatability;
         this.relatedSkills = skills;
         this.id = id;
     }
@@ -66,10 +66,25 @@ public class Task {
         return id;
     }
 
-    private static class TaskByTitleComparator implements Comparator<Task> {
+    public int getRepeatability() {
+        return repeatability;
+    }
+
+    public void setRepeatability(int repeatability) {
+        this.repeatability = repeatability;
+    }
+
+    private static class TasksComparator implements Comparator<Task> {
 
         @Override
         public int compare(Task lhs, Task rhs) {
+            if (lhs.repeatability != rhs.repeatability){
+                if (lhs.repeatability == 0) return 1;
+                if (rhs.repeatability == 0) return -1;
+                if (lhs.repeatability < 0) return -1;
+                if (rhs.repeatability < 0) return 1;
+                return rhs.repeatability - lhs.repeatability;
+            }
             return lhs.getTitle().compareTo(rhs.getTitle());
         }
     }

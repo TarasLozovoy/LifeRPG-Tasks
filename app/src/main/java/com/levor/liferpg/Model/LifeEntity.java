@@ -66,24 +66,25 @@ public class LifeEntity {
             addSkill("Roller skating", stamina);
             addSkill("Running", stamina);
 
-            addTask("Learn Android", getSkillByTitle("Android"));
-            addTask("Learn Java", getSkillByTitle("Java"));
-            addTask("Fix bug on Android", getSkillByTitle("Android"));
-            addTask("Fix bug on Java", getSkillByTitle("Java"));
+            addTask("Learn Android", -1, getSkillByTitle("Android"));
+            addTask("Learn Java", 0, getSkillByTitle("Java"));
+            addTask("Fix bug on Android", 1, getSkillByTitle("Android"));
+            addTask("Fix bug on Java", 25, getSkillByTitle("Java"));
 
             addHero(new Hero());
         }
         cursor.close();
     }
 
-    public void addTask(String title, Skill ... relatedSkills){
+    public void addTask(String title,int repeatability, Skill ... relatedSkills){
         Task oldTask = getTaskByTitle(title);
         if (oldTask != null) {
             oldTask.setRelatedSkills(Arrays.asList(relatedSkills));
+            oldTask.setRepeatability(repeatability);
             updateTask(oldTask);
         } else {
             UUID id = UUID.randomUUID();
-            ContentValues values = getContentValuesForTask(new Task(title, id, relatedSkills));
+            ContentValues values = getContentValuesForTask(new Task(title, id, repeatability, relatedSkills));
             database.insert(TasksTable.NAME, null, values);
         }
     }
@@ -158,7 +159,7 @@ public class LifeEntity {
                 tasksBySkill.add(t);
             }
         }
-        Collections.sort(tasksBySkill, Task.TITLE_COMPARATOR);
+        Collections.sort(tasksBySkill, Task.COMPARATOR);
         return tasksBySkill;
     }
 
@@ -166,6 +167,7 @@ public class LifeEntity {
         ContentValues values = new ContentValues();
         values.put(TasksTable.Cols.TITLE, task.getTitle());
         values.put(TasksTable.Cols.UUID, task.getId().toString());
+        values.put(TasksTable.Cols.REPEATABILITY, task.getRepeatability());
         values.put(TasksTable.Cols.RELATED_SKILLS, task.getRelatedSkillsString());
         return values;
     }

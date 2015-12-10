@@ -42,6 +42,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 " _id integer primary key autoincrement, " +
                 TasksTable.Cols.TITLE + ", " +
                 TasksTable.Cols.UUID + ", " +
+                TasksTable.Cols.REPEATABILITY + ", " +
                 TasksTable.Cols.RELATED_SKILLS +
                 ")");
     }

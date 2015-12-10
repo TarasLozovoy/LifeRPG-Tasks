@@ -1,29 +1,36 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.levor.liferpg.View.Fragments.Tasks.DetailedTaskFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.levor.liferpg.View.Fragments.Tasks.DetailedTaskFragment">
 
     <TextView
         android:id="@+id/task_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25sp"/>
+        android:textSize="25sp" />
 
     <TextView
-        android:id="@+id/increases"
-        android:text="@string/related_skills"
+        android:id="@+id/task_repeat_times_text_view"
+        style="@style/LifeRPGTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/task_title" />
+
+    <TextView
+        android:id="@+id/related_skills"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/task_title"
-        android:textSize="19sp"/>
+        android:layout_below="@id/task_repeat_times_text_view"
+        android:text="@string/related_skills"
+        android:textSize="19sp" />
 
-    <ListView android:id="@+id/list_view" android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_below="@id/increases"
-              android:listSelector="@android:color/transparent"
-              android:cacheColorHint="@android:color/transparent"
-        >
-    </ListView>
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/related_skills"
+        android:cacheColorHint="@android:color/transparent"
+        android:listSelector="@android:color/transparent"> </ListView>
 
 </RelativeLayout>
