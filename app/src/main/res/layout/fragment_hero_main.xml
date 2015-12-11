@@ -1,77 +1,57 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingRight="2dp"
-                tools:context=".View.Fragments.Hero.HeroFragment">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/hero_ll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
-    <LinearLayout android:id="@+id/hero_ll"
-                  android:layout_width="180dp"
-                  android:layout_height="wrap_content"
-                  android:gravity="center_horizontal"
-                  android:orientation="vertical">
+    <TextView
+        android:id="@+id/hero_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="20sp" />
 
-        <TextView android:id="@+id/hero_name"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:gravity="center_horizontal"
-                  android:textSize="20sp"/>
+    <TextView
+        android:id="@+id/hero_level"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="20sp" />
 
-        <TextView android:id="@+id/hero_level"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:gravity="center_horizontal"
-                  android:textSize="20sp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginBottom="5dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
-        <ImageView android:id="@+id/hero_image"
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"/>
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/xp_progressbar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:progressDrawable="@drawable/progressbar" />
 
-    <LinearLayout android:id="@+id/buttons_ll"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_alignParentEnd="true"
-                  android:layout_alignParentRight="true"
-                  android:layout_alignParentTop="true"
-                  android:layout_toRightOf="@id/hero_ll"
-                  android:gravity="center_horizontal"
-                  android:orientation="vertical">
+        <TextView
+            android:id="@+id/xp_progress_TV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@id/xp_progressbar"
+            android:layout_alignLeft="@id/xp_progressbar"
+            android:layout_alignRight="@id/xp_progressbar"
+            android:layout_alignTop="@id/xp_progressbar"
+            android:gravity="center_horizontal|center_vertical"
+            android:textSize="18sp"
 
-        <Button android:id="@+id/open_characteristics_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/open_characteristics"/>
+            />
+    </RelativeLayout>
 
-        <Button android:id="@+id/open_skills_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/open_skills"/>
-
-        <RelativeLayout android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center_vertical|center_horizontal"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp">
-            <ProgressBar android:id="@+id/xp_progressbar"
-                         style="?android:attr/progressBarStyleHorizontal"
-                         android:layout_width="match_parent"
-                         android:layout_height="match_parent"
-                         android:progressDrawable="@drawable/progressbar"
-                />
-            <TextView android:id="@+id/xp_progress_TV"
-                      android:layout_width="match_parent"
-                      android:layout_height="match_parent"
-                      android:layout_alignBottom="@id/xp_progressbar"
-                      android:layout_alignLeft="@id/xp_progressbar"
-                      android:layout_alignRight="@id/xp_progressbar"
-                      android:layout_alignTop="@id/xp_progressbar"
-                      android:gravity="center_horizontal|center_vertical"
-                      android:textSize="18sp"
-
-                />
-        </RelativeLayout>
-    </LinearLayout>
-
-
-</RelativeLayout>
+    <ImageView
+        android:id="@+id/hero_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment;
 import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.View.Activities.MainActivity;
 
-public class DefaultFragment  extends Fragment {
+public  class DefaultFragment  extends Fragment {
     protected MainActivity getCurrentActivity(){
         return (MainActivity) getActivity();
     }
@@ -15,4 +15,12 @@ public class DefaultFragment  extends Fragment {
     protected LifeController getController(){
         return getCurrentActivity().getController();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
+    protected void updateUI(){}
 }

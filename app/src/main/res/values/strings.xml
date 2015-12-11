@@ -75,7 +75,7 @@
     <string name="hero_name">Name:</string>
     <string name="hero_name_hint_edit_hero_fragment">Your hero name.</string>
     <string name="repeat">Repeat</string>
-    <string name="repeat_times_edit_text_hint">leave blank for infinit</string>
+    <string name="repeat_times_edit_text_hint">leave blank for infinite</string>
     <string name="times">times</string>
     <string name="infinite_number_of">Repeat task infinitely</string>
     <string name="task_finished">Task finished.</string>
@@ -83,5 +83,11 @@
     <string name="hero_fragment_name">Hero</string>
     <string name="characteristics_fragment_name">Characeristics</string>
     <string name="skills_fragment_name">Skills</string>
+    <string name="real_liferpg">RealLife RPG</string>
+    <string name="all_tasks">All</string>
+    <string name="every_day_tasks">Habits</string>
+    <string name="simple_tasks">To do</string>
+    <string name="finished_tasks">Done</string>
+    <string name="tasks">Tasks</string>
 
 </resources>

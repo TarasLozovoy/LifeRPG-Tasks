@@ -35,28 +35,11 @@ public class CharacteristicsFragment extends DefaultFragment {
                 getCurrentActivity().showChildFragment(f, b);
             }
         });
-        getCurrentActivity().setActionBarTitle("Characteristics");
-        getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return view;
     }
 
     @Override
-    public void onResume() {
-        createAdapter();
-        super.onResume();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                getCurrentActivity().showPreviousFragment();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void createAdapter(){
+    protected void updateUI(){
         String[] chars = getController().getCharacteristicsTitleAndLevelAsArray();
         listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, chars));
     }

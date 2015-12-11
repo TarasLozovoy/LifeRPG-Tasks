@@ -25,7 +25,6 @@ import com.levor.liferpg.View.Fragments.Skills.SkillsFragment;
 public class HeroFragment extends DefaultFragment {
     TextView heroNameTV, heroLevelTV, xpProgressTV;
     ImageView heroImageIV;
-    Button openSkillsButton, openCharacteristicsButton;
     ProgressBar xpProgress;
 
     @Override
@@ -34,29 +33,18 @@ public class HeroFragment extends DefaultFragment {
         View v = inflater.inflate(R.layout.fragment_hero_main, container, false);
         heroNameTV = (TextView) v.findViewById(R.id.hero_name);
         heroImageIV = (ImageView) v.findViewById(R.id.hero_image);
-        openSkillsButton = (Button) v.findViewById(R.id.open_skills_button);
-        openCharacteristicsButton = (Button) v.findViewById(R.id.open_characteristics_button);
         xpProgress = (ProgressBar) v.findViewById(R.id.xp_progressbar);
         xpProgressTV = (TextView) v.findViewById(R.id.xp_progress_TV);
         heroLevelTV = (TextView) v.findViewById(R.id.hero_level);
 
-        setButtonsOnClickListener();
         heroImageIV.setImageResource(R.drawable.default_hero);
         setHasOptionsMenu(true);
-        getCurrentActivity().setActionBarTitle(R.id.hero);
-        getCurrentActivity().showActionBarHomeButtonAsBack(false);
         return v;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        updateUI();
-        super.onResume();
     }
 
     @Override
@@ -76,27 +64,11 @@ public class HeroFragment extends DefaultFragment {
         }
     }
 
-    private void updateUI() {
+    protected void updateUI() {
         xpProgress.setMax(getController().getHeroXpToNextLevel());
         xpProgress.setProgress(getController().getHeroXp());
         xpProgressTV.setText("XP : " + xpProgress.getProgress() + "/" + xpProgress.getMax());
         heroNameTV.setText(getController().getHeroName());
         heroLevelTV.setText("Level " + getController().getHeroLevel());
-    }
-
-    private void setButtonsOnClickListener() {
-        openSkillsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getCurrentActivity().showChildFragment(new SkillsFragment(), null);
-            }
-        });
-
-        openCharacteristicsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getCurrentActivity().showChildFragment(new CharacteristicsFragment(), null);
-            }
-        });
     }
 }

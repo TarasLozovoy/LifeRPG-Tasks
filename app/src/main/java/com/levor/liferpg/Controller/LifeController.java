@@ -29,12 +29,8 @@ public class LifeController {
         lifeEntity = LifeEntity.getInstance(context);
     }
 
-    public List<String> getTasksTitlesAsList(){
-        List<String> titles = new ArrayList<>();
-        for (Task t : lifeEntity.getTasks()){
-            titles.add(t.getTitle());
-        }
-        return titles;
+    public List<Task> getAllTasks(){
+        return lifeEntity.getTasks();
     }
 
     public Map<String, Integer[]> getSkillsTitlesAndLevels(){

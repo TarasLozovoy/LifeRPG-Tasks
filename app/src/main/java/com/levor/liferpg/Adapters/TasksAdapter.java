@@ -23,16 +23,14 @@ import com.levor.liferpg.View.Fragments.Hero.HeroFragment;
 import java.util.List;
 
 public class TasksAdapter extends BaseAdapter implements ListAdapter{
-    private Context mContext;
     private List<String> items;
     private MainActivity activity;
     private LifeController lifeController;
 
-    public TasksAdapter(Context context, List<String> array, MainActivity activity) {
-        this.mContext = context;
+    public TasksAdapter(List<String> array, MainActivity activity) {
         this.items = array;
         this.activity = activity;
-        lifeController = LifeController.getInstance(mContext);
+        lifeController = LifeController.getInstance(activity);
     }
 
     @Override
@@ -54,7 +52,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null){
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.tasks_list_item, null);
         }
 
@@ -87,7 +85,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                             .append(")")
                             .append("\n");
                 }
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 final boolean finalHeroLevelIncreased = heroLevelIncreased;
                 builder.setTitle(items.get(position))
                         .setCancelable(false)

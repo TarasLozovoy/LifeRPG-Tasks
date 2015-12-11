@@ -19,6 +19,7 @@ import android.widget.ListView;
 
 import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.R;
+import com.levor.liferpg.SwipeOutViewPager;
 import com.levor.liferpg.View.Fragments.Hero.HeroFragment;
 import com.levor.liferpg.View.Fragments.MainFragment;
 import com.levor.liferpg.View.Fragments.SettingsFragment;
@@ -27,7 +28,7 @@ import com.levor.liferpg.View.Fragments.Tasks.TasksFragment;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeOutViewPager.OnSwipeOutListener{
     public final static int HERO_FRAGMENT_ID = 0;
     public final static int TASKS_FRAGMENT_ID = 1;
     public final static int SETTINGS_FRAGMENT_ID = 2;
@@ -60,13 +61,11 @@ public class MainActivity extends AppCompatActivity {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.mipmap.ic_drawer, R.string.drawer_open, R.string.drawer_close){
             public void onDrawerOpened(View view) {
-                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.light_blue)));
                 getSupportActionBar().setHomeAsUpIndicator(0);
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
                 getSupportActionBar().setHomeAsUpIndicator(showBack ? 0 : R.drawable.ic_menu_black_24dp);
             }
         };
@@ -107,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
         if (fragmentsStack.peek().onOptionsItemSelected(item)) return true;
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
+        } else {
+            mDrawerLayout.closeDrawer(mDrawerList);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment;
         switch (fragmentNumber) {
             case HERO_FRAGMENT_ID :
-                fragment = new HeroFragment();
+                fragment = new MainFragment();
                 break;
             case TASKS_FRAGMENT_ID :
                 fragment = new TasksFragment();
@@ -218,6 +219,16 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
             showBack = false;
         }
+    }
+
+    @Override
+    public void onSwipeOutAtStart() {
+        mDrawerLayout.openDrawer(mDrawerList);
+    }
+
+    @Override
+    public void onSwipeOutAtEnd() {
+        //Do nothing
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

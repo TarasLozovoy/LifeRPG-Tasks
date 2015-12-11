@@ -1,42 +1,48 @@
 package com.levor.liferpg.View.Fragments.Tasks;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListView;
 
-import com.levor.liferpg.Adapters.TasksAdapter;
+import com.levor.liferpg.Adapters.CustomPagerAdapter;
 import com.levor.liferpg.R;
+import com.levor.liferpg.SwipeOutViewPager;
+import com.levor.liferpg.View.Fragments.Characteristics.CharacteristicsFragment;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
-import com.levor.liferpg.View.Fragments.Skills.AddSkillFragment;
-import com.levor.liferpg.View.Fragments.Tasks.AddTaskFragment;
-import com.levor.liferpg.View.Fragments.Tasks.DetailedTaskFragment;
-
-import java.util.UUID;
+import com.levor.liferpg.View.Fragments.Hero.HeroFragment;
+import com.levor.liferpg.View.Fragments.Skills.SkillsFragment;
 
 public class TasksFragment extends DefaultFragment {
-    private ListView listView;
-
-    private TasksAdapter adapter;
+    private SwipeOutViewPager viewPager;
+    private TabLayout tabLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tasks, container, false);
+        View view = inflater.inflate(R.layout.fragment_pager_with_tabs, container, false);
+        tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.all_tasks));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.every_day_tasks));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.simple_tasks));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.finished_tasks));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        listView = (ListView) view.findViewById(R.id.listViewTasks);
-
-        setupListView();
-        setHasOptionsMenu(true);
-        getCurrentActivity().setActionBarTitle("Tasks");
+        viewPager = (SwipeOutViewPager) view.findViewById(R.id.pager);
+        viewPager.setOnSwipeOutListener(getCurrentActivity());
+        getCurrentActivity().getSupportActionBar().setElevation(0);
+        getCurrentActivity().setActionBarTitle(R.string.tasks);
         getCurrentActivity().showActionBarHomeButtonAsBack(false);
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -57,18 +63,60 @@ public class TasksFragment extends DefaultFragment {
         }
     }
 
-    private void setupListView(){
-        TasksAdapter adapter = new TasksAdapter(getActivity(), getController().getTasksTitlesAsList(), getCurrentActivity());
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    @Override
+    public void onStart() {
+        super.onStart();
+        createViewPager();
+    }
+
+    private void createViewPager(){
+        PagerAdapter adapter = new PagerAdapter
+                (getChildFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedTaskTitle = getController().getTasksTitlesAsList().get(position);
-                UUID taskID = getController().getTaskByTitle(selectedTaskTitle).getId();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, taskID);
-                getCurrentActivity().showChildFragment(new DetailedTaskFragment(), bundle);
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
+    }
+
+    public class PagerAdapter extends CustomPagerAdapter {
+
+        public PagerAdapter(FragmentManager fm, int NumOfTabs) {
+            super(fm, NumOfTabs);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            Bundle b = new Bundle();
+            switch (position) {
+                case FilteredTasksFragment.ALL:
+                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.ALL);
+                    break;
+                case FilteredTasksFragment.INFINITE:
+                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.INFINITE);
+                    break;
+                case FilteredTasksFragment.SIMPLE:
+                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.SIMPLE);
+                    break;
+                case FilteredTasksFragment.DONE:
+                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.DONE);
+                    break;
+                default:
+            }
+            Fragment f = new FilteredTasksFragment();
+            f.setArguments(b);
+            return f;
+        }
     }
 }

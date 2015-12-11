@@ -41,20 +41,12 @@ public class SkillsFragment extends DefaultFragment {
         });
 
         setHasOptionsMenu(true);
-        getCurrentActivity().setActionBarTitle("Skills");
-        getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        updateAdapter();
-        super.onResume();
     }
 
     @Override
@@ -70,15 +62,13 @@ public class SkillsFragment extends DefaultFragment {
                 Fragment f = new AddSkillFragment();
                 getCurrentActivity().showChildFragment(f, null);
                 return true;
-            case android.R.id.home:
-                getCurrentActivity().showPreviousFragment();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void updateAdapter() {
+    @Override
+    protected void updateUI() {
         List<Skill> skills = getController().getAllSkills();
         List<String> rows = new ArrayList<>(skills.size());
         for (Skill sk : skills) {

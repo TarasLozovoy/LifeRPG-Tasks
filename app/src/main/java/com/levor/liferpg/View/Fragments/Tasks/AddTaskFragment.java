@@ -45,15 +45,6 @@ public class AddTaskFragment extends DefaultFragment {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_add_task, container, false);
         taskTitleEditText = (EditText) view.findViewById(R.id.task_title_edit_text);
-        taskTitleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(taskTitleEditText, InputMethodManager.SHOW_IMPLICIT);
-                }
-            }
-        });
 
         taskRepeatEditText = (EditText) view.findViewById(R.id.task_repeat_times_edit_text);
         taskRepeatEditText.addTextChangedListener(new TextWatcher() {
@@ -117,12 +108,6 @@ public class AddTaskFragment extends DefaultFragment {
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
 
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        taskTitleEditText.requestFocus();
     }
 
     @Override
