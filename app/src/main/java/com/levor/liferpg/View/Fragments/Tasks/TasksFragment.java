@@ -85,7 +85,7 @@ public class TasksFragment extends DefaultFragment {
             }
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                viewPager.setCurrentItem(tab.getPosition());
             }
         });
     }

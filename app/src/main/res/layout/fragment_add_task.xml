@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/new_task_title"
-            android:textSize="22sp"/>
+            style="@style/LifeRPGTextStyle"/>
 
         <EditText
             android:id="@+id/task_title_edit_text"
@@ -55,17 +55,38 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/task_repeat_times_linear_layout"
+        android:id="@+id/difficulty_linear_layout"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/difficulty"
+            android:gravity="center_vertical"
+            style="@style/LifeRPGTextStyle"/>
+
+        <Spinner
+            android:id="@+id/difficulty_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/add_skill_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/task_repeat_times_linear_layout"
+        android:layout_below="@id/difficulty_linear_layout"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/add_skills_to_task"
-            android:textSize="22sp"/>
+            style="@style/LifeRPGTextStyle"/>
 
         <ListView
             android:layout_width="wrap_content"

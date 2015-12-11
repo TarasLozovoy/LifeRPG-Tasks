@@ -39,13 +39,6 @@
     <string name="characteristic_level">Level:</string>
     <string name="characteristic_related_skills">Can be improved by enhancing next skills:</string>
 
-    <string-array
-        name="activities_array">
-        <item>Hero</item>
-        <item>Tasks</item>
-        <item>Settings</item>
-    </string-array>
-
     <string name="title_activity_main_fragment">MainActivity</string>
     <string name="finish_editing">Finish edit</string>
     <string name="edit_task">Edit</string>
@@ -85,9 +78,10 @@
     <string name="skills_fragment_name">Skills</string>
     <string name="real_liferpg">RealLife RPG</string>
     <string name="all_tasks">All</string>
-    <string name="every_day_tasks">Habits</string>
+    <string name="every_day_tasks">Repeatable</string>
     <string name="simple_tasks">To do</string>
     <string name="finished_tasks">Done</string>
     <string name="tasks">Tasks</string>
+    <string name="difficulty">Difficulty:</string>
 
 </resources>

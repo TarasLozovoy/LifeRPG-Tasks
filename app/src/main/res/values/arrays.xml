@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+        name="activities_array">
+        <item>Hero</item>
+        <item>Tasks</item>
+        <item>Settings</item>
+    </string-array>
+
+    <string-array
+        name="difficulties_array">
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+        <item>Insane</item>
+    </string-array>
+</resources>

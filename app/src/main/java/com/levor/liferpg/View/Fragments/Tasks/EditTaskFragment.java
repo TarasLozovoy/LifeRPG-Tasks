@@ -41,6 +41,7 @@ public class EditTaskFragment extends AddTaskFragment {
             if (repeat >= 0) {
                 taskRepeatEditText.setText(Integer.toString(repeat));
             }
+            difficultySpinner.setSelection(currentTask.getDifficulty());
         }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Edit task");

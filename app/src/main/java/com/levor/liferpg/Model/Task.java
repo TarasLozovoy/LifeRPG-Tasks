@@ -8,21 +8,27 @@ import java.util.List;
 import java.util.UUID;
 
 public class Task {
+    public final static int DIFFICULTY_EASY = 0;
+    public final static int DIFFICULTY_MEDIUM = 1;
+    public final static int DIFFICULTY_HARD = 2;
+    public final static int DIFFICULTY_INSANE = 3;
     private String title;
     private List<Skill> relatedSkills = new ArrayList<>();
     private UUID id;
     private int repeatability = -1;
+    private int difficulty = DIFFICULTY_EASY;
 
     public static final Comparator<Task> COMPARATOR = new TasksComparator();
 
-    public Task(String title, UUID id, int repeatability, Skill ... skills) {
-        this(title, id, repeatability, Arrays.asList(skills));
+    public Task(String title, UUID id, int repeatability, int difficulty, Skill ... skills) {
+        this(title, id, repeatability, difficulty, Arrays.asList(skills));
     }
 
-    public Task(String title, UUID id, int repeatability, List<Skill> skills) {
+    public Task(String title, UUID id, int repeatability, int difficulty, List<Skill> skills) {
         this.title = title;
         this.repeatability = repeatability;
         this.relatedSkills = skills;
+        this.difficulty = difficulty;
         this.id = id;
     }
 
@@ -72,6 +78,18 @@ public class Task {
 
     public void setRepeatability(int repeatability) {
         this.repeatability = repeatability;
+    }
+
+    public boolean isTaskDone(){
+        return repeatability == 0;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
     }
 
     @Override

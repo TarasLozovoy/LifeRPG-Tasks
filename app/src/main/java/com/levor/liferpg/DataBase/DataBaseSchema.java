@@ -39,6 +39,7 @@ public class DataBaseSchema {
             public static final String UUID = "task_uuid";
             public static final String RELATED_SKILLS = "task_related_skills";
             public static final String REPEATABILITY = "task_repeatability";
+            public static final String DIFFICULTY = "task_difficulty";
         }
     }
 }

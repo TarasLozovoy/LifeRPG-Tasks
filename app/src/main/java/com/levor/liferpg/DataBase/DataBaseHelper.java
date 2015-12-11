@@ -43,6 +43,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 TasksTable.Cols.TITLE + ", " +
                 TasksTable.Cols.UUID + ", " +
                 TasksTable.Cols.REPEATABILITY + ", " +
+                TasksTable.Cols.DIFFICULTY + ", " +
                 TasksTable.Cols.RELATED_SKILLS +
                 ")");
     }

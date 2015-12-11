@@ -45,8 +45,8 @@ public class LifeController {
         return lifeEntity.getTaskByTitle(s);
     }
 
-    public void createNewTask(String title, int repeatability, List<String> relatedSkills) {
-        lifeEntity.addTask(title,repeatability, relatedSkills);
+    public void createNewTask(String title, int repeatability, int difficulty, List<String> relatedSkills) {
+        lifeEntity.addTask(title,repeatability, difficulty, relatedSkills);
     }
 
 

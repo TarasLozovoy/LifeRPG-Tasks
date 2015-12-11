@@ -24,13 +24,12 @@ import com.levor.liferpg.View.Fragments.DefaultFragment;
 import com.levor.liferpg.View.Fragments.Skills.DetailedSkillFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class DetailedTaskFragment extends DefaultFragment {
     public final static String SELECTED_TASK_UUID_TAG = "selected_task_uuid_tag";
 
-    private TextView taskTitleTV;
-    private TextView taskRepeatTV;
     private ListView listView;
     private Task currentTask;
 
@@ -40,22 +39,28 @@ public class DetailedTaskFragment extends DefaultFragment {
                              Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_detailed_task, container, false);
 
-        taskTitleTV = (TextView) v.findViewById(R.id.task_title);
-        taskRepeatTV = (TextView) v.findViewById(R.id.task_repeat_times_text_view);
+        TextView taskTitleTV = (TextView) v.findViewById(R.id.task_title);
+        TextView taskDifficultyTV = (TextView) v.findViewById(R.id.task_difficulty_text_view);
+        TextView taskRepeatTV = (TextView) v.findViewById(R.id.task_repeat_times_text_view);
         listView = (ListView) v.findViewById(R.id.list_view);
 
         UUID id = (UUID)getArguments().get(SELECTED_TASK_UUID_TAG);
         currentTask = getController().getTaskByID(id);
         taskTitleTV.setText(currentTask.getTitle());
+        int difficulty = currentTask.getDifficulty();
+        String difficultyString = Arrays.asList(getResources()
+                .getStringArray(R.array.difficulties_array)).get(difficulty);
+        taskDifficultyTV.setText(getResources().getString(R.string.difficulty) +
+                " " + difficultyString);
         int repeat = currentTask.getRepeatability();
         if (repeat == 0) {
-            taskRepeatTV.setText(v.getResources().getString(R.string.task_finished));
+            taskRepeatTV.setText(getResources().getString(R.string.task_finished));
         } else if (repeat < 0) {
-            taskRepeatTV.setText(v.getResources().getString(R.string.infinite_number_of));
+            taskRepeatTV.setText(getResources().getString(R.string.infinite_number_of));
         } else {
-            taskRepeatTV.setText(v.getResources().getString(R.string.repeat) + " " +
-                            repeat + " " +
-                            v.getResources().getString(R.string.times));
+            taskRepeatTV.setText(getResources().getString(R.string.repeat) + " " +
+                    repeat + " " +
+                    getResources().getString(R.string.times));
         }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Task");
@@ -78,6 +83,12 @@ public class DetailedTaskFragment extends DefaultFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_detailed_task, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.perform_task).setEnabled(currentTask.isTaskDone());
     }
 
     @Override

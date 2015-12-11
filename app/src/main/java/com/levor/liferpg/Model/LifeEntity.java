@@ -76,10 +76,10 @@ public class LifeEntity {
             addSkill("Roller skating", stamina);
             addSkill("Running", stamina);
 
-            addTask("Learn Android", -1, getSkillByTitle("Android"));
-            addTask("Learn Java", 0, getSkillByTitle("Java"));
-            addTask("Fix bug on Android", 1, getSkillByTitle("Android"));
-            addTask("Fix bug on Java", 25, getSkillByTitle("Java"));
+            addTask("Learn Android", -1, Task.DIFFICULTY_EASY, getSkillByTitle("Android"));
+            addTask("Learn Java", 0, Task.DIFFICULTY_MEDIUM, getSkillByTitle("Java"));
+            addTask("Fix bug on Android", 1, Task.DIFFICULTY_HARD, getSkillByTitle("Android"));
+            addTask("Fix bug on Java", 25, Task.DIFFICULTY_INSANE, getSkillByTitle("Java"));
 
             addHero(new Hero());
         } else {
@@ -91,15 +91,16 @@ public class LifeEntity {
         cursor.close();
     }
 
-    public void addTask(String title,int repeatability, Skill ... relatedSkills){
+    public void addTask(String title,int repeatability, int difficulty, Skill ... relatedSkills){
         Task oldTask = getTaskByTitle(title);
         if (oldTask != null) {
             oldTask.setRelatedSkills(Arrays.asList(relatedSkills));
             oldTask.setRepeatability(repeatability);
+            oldTask.setDifficulty(difficulty);
             updateTask(oldTask);
         } else {
             UUID id = UUID.randomUUID();
-            Task newTask = new Task(title, id, repeatability, relatedSkills);
+            Task newTask = new Task(title, id, repeatability, difficulty, relatedSkills);
             tasks.add(newTask);
             final ContentValues values = getContentValuesForTask(newTask);
             new AsyncTask<Void, Void, Void>(){
@@ -112,12 +113,12 @@ public class LifeEntity {
         }
     }
 
-    public void addTask(String title, int repeatability, List<String> relatedSkills){
+    public void addTask(String title, int repeatability, int difficulty, List<String> relatedSkills){
         Skill[] skills = new Skill[relatedSkills.size()];
         for (int i = 0; i < relatedSkills.size(); i++){
             skills[i] = lifeEntity.getSkillByTitle(relatedSkills.get(i));
         }
-        addTask(title, repeatability, skills);
+        addTask(title, repeatability, difficulty, skills);
     }
 
     public void updateTask(Task task) {
@@ -209,6 +210,7 @@ public class LifeEntity {
         values.put(TasksTable.Cols.TITLE, task.getTitle());
         values.put(TasksTable.Cols.UUID, task.getId().toString());
         values.put(TasksTable.Cols.REPEATABILITY, task.getRepeatability());
+        values.put(TasksTable.Cols.DIFFICULTY, task.getDifficulty());
         values.put(TasksTable.Cols.RELATED_SKILLS, task.getRelatedSkillsString());
         return values;
     }
