@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.Characteristics.CharacteristicsFragment;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
@@ -23,7 +22,7 @@ import com.levor.liferpg.View.Fragments.Skills.SkillsFragment;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HeroMainFragment extends DefaultFragment {
+public class HeroFragment extends DefaultFragment {
     TextView heroNameTV, heroLevelTV, xpProgressTV;
     ImageView heroImageIV;
     Button openSkillsButton, openCharacteristicsButton;

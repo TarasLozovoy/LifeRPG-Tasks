@@ -3,7 +3,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingRight="2dp"
-                tools:context=".View.Fragments.Hero.HeroMainFragment">
+                tools:context=".View.Fragments.Hero.HeroFragment">
 
     <LinearLayout android:id="@+id/hero_ll"
                   android:layout_width="180dp"

@@ -3,7 +3,7 @@ package com.levor.liferpg.View.Fragments.Skills;
 
 import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,9 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class DetailedSkillFragment extends DefaultFragment {
 
     public final static String SELECTED_SKILL_UUID_TAG = "selected_skill_UUID_tag";

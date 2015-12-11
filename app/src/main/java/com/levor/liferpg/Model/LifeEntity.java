@@ -46,6 +46,10 @@ public class LifeEntity {
         Cursor cursor = database.rawQuery(count, null);
         cursor.moveToFirst();
         if(cursor.getInt(0) < 1) {
+            hero = new Hero();
+            characteristics = new ArrayList<>();
+            skills = new ArrayList<>();
+            tasks = new ArrayList<>();
             Characteristic intelligence = new Characteristic("Intelligence", 1);
             Characteristic wisdom = new Characteristic("Wisdom", 1);
             Characteristic strength = new Characteristic("Strength", 1);
@@ -78,13 +82,13 @@ public class LifeEntity {
             addTask("Fix bug on Java", 25, getSkillByTitle("Java"));
 
             addHero(new Hero());
+        } else {
+            hero = getHero();
+            characteristics = getCharacteristics();
+            skills = getSkills();
+            tasks = getTasks();
         }
         cursor.close();
-
-        hero = getHero();
-        characteristics = getCharacteristics();
-        skills = getSkills();
-        tasks = getTasks();
     }
 
     public void addTask(String title,int repeatability, Skill ... relatedSkills){

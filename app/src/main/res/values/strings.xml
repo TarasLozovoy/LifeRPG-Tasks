@@ -80,5 +80,8 @@
     <string name="infinite_number_of">Repeat task infinitely</string>
     <string name="task_finished">Task finished.</string>
     <string name="max_task_repeat">Task can be repeated for 999 times max.</string>
+    <string name="hero_fragment_name">Hero</string>
+    <string name="characteristics_fragment_name">Characeristics</string>
+    <string name="skills_fragment_name">Skills</string>
 
 </resources>

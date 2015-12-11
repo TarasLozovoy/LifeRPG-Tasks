@@ -3,7 +3,6 @@ package com.levor.liferpg.Adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Paint;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,7 @@ import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Activities.MainActivity;
-import com.levor.liferpg.View.Fragments.Hero.HeroMainFragment;
+import com.levor.liferpg.View.Fragments.Hero.HeroFragment;
 
 import java.util.List;
 
@@ -108,7 +107,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                                             .setAction("Go to Hero page", new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
-                                                    activity.showRootFragment(new HeroMainFragment(), null);
+                                                    activity.showRootFragment(new HeroFragment(), null);
                                                 }
                                             })
                                             .show();

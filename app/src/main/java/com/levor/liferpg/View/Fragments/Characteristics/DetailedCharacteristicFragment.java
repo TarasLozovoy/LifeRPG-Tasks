@@ -2,7 +2,7 @@ package com.levor.liferpg.View.Fragments.Characteristics;
 
 
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,13 +19,9 @@ import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
 import com.levor.liferpg.View.Fragments.Skills.AddSkillFragment;
 import com.levor.liferpg.View.Fragments.Skills.DetailedSkillFragment;
-import com.levor.liferpg.View.Fragments.Tasks.AddTaskFragment;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class DetailedCharacteristicFragment extends DefaultFragment {
     public final static String CHARACTERISTIC_TITLE = "characteristic_title";
 

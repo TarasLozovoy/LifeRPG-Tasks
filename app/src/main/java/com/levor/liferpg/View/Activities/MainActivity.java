@@ -1,11 +1,10 @@
 package com.levor.liferpg.View.Activities;
 
-import android.app.Fragment;
-
-import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +19,8 @@ import android.widget.ListView;
 
 import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.R;
-import com.levor.liferpg.View.Fragments.Hero.HeroMainFragment;
+import com.levor.liferpg.View.Fragments.Hero.HeroFragment;
+import com.levor.liferpg.View.Fragments.MainFragment;
 import com.levor.liferpg.View.Fragments.SettingsFragment;
 import com.levor.liferpg.View.Fragments.Tasks.TasksFragment;
 
@@ -80,9 +80,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (savedInstanceState == null) {
-            Fragment fragment = new HeroMainFragment();
+            Fragment fragment = new MainFragment();
             fragmentsStack.push(fragment);
-            FragmentManager fm = getFragmentManager();
+            FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction()
                     .add(R.id.content_frame, fragment)
                     .commit();
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment;
         switch (fragmentNumber) {
             case HERO_FRAGMENT_ID :
-                fragment = new HeroMainFragment();
+                fragment = new HeroFragment();
                 break;
             case TASKS_FRAGMENT_ID :
                 fragment = new TasksFragment();
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (EmptyStackException e){
             return false;
         }
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)
                 .replace(R.id.content_frame, fragment)
                 .commit();
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
     public void showChildFragment(Fragment fragment, Bundle bundle){
         fragment.setArguments(bundle);
         fragmentsStack.push(fragment);
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.enter_right, R.anim.exit_left)
                 .replace(R.id.content_frame, fragment)
                 .commit();
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         fragment.setArguments(bundle);
         fragmentsStack.clear();
         fragmentsStack.push(fragment);
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)
                 .replace(R.id.content_frame, fragment)
                 .commit();

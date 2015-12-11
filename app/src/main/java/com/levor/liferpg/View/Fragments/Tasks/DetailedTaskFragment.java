@@ -4,8 +4,8 @@ package com.levor.liferpg.View.Fragments.Tasks;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,9 +26,6 @@ import com.levor.liferpg.View.Fragments.Skills.DetailedSkillFragment;
 import java.util.ArrayList;
 import java.util.UUID;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class DetailedTaskFragment extends DefaultFragment {
     public final static String SELECTED_TASK_UUID_TAG = "selected_task_uuid_tag";
 
