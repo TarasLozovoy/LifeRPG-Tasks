@@ -23,4 +23,6 @@ public  class DefaultFragment  extends Fragment {
     }
 
     protected void updateUI(){}
+
+    public void onRestoreFromBackStack(){}
 }

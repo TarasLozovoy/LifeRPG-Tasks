@@ -46,11 +46,7 @@ public class LifeController {
     }
 
     public void createNewTask(String title, int repeatability, List<String> relatedSkills) {
-        Skill[] skills = new Skill[relatedSkills.size()];
-        for (int i = 0; i < relatedSkills.size(); i++){
-            skills[i] = lifeEntity.getSkillByTitle(relatedSkills.get(i));
-        }
-        lifeEntity.addTask(title,repeatability, skills);
+        lifeEntity.addTask(title,repeatability, relatedSkills);
     }
 
 

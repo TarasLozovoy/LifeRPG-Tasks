@@ -64,7 +64,7 @@ public class DetailedSkillFragment extends DefaultFragment {
                 UUID taskID = getController().getTaskByTitle(selectedTaskTitle).getId();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, taskID);
-                Fragment fragment = new DetailedTaskFragment();
+                DefaultFragment fragment = new DetailedTaskFragment();
                 getCurrentActivity().showChildFragment(fragment, bundle);
             }
         });
@@ -93,7 +93,7 @@ public class DetailedSkillFragment extends DefaultFragment {
             case R.id.edit_skill:
                 Bundle b = new Bundle();
                 b.putSerializable(EditSkillFragment.EDIT_SKILL_UUID_TAG, currentSkill.getId());
-                Fragment f = new EditSkillFragment();
+                DefaultFragment f = new EditSkillFragment();
                 getCurrentActivity().showChildFragment(f, b);
                 return true;
             case android.R.id.home:
@@ -129,7 +129,7 @@ public class DetailedSkillFragment extends DefaultFragment {
         footerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment f = new AddTaskFragment();
+                DefaultFragment f = new AddTaskFragment();
                 Bundle b = new Bundle();
                 b.putSerializable(AddTaskFragment.RECEIVED_SKILL_TITLE_TAG, currentSkill.getTitle());
                 getCurrentActivity().showChildFragment(f, b);

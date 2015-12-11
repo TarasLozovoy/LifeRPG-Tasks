@@ -67,7 +67,7 @@ public class DetailedTaskFragment extends DefaultFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle b = new Bundle();
                 b.putSerializable(DetailedSkillFragment.SELECTED_SKILL_UUID_TAG, currentTask.getRelatedSkills().get(position).getId());
-                Fragment f = new DetailedSkillFragment();
+                DefaultFragment f = new DetailedSkillFragment();
                 getCurrentActivity().showChildFragment(f, b);
             }
         });
@@ -86,7 +86,7 @@ public class DetailedTaskFragment extends DefaultFragment {
             case R.id.edit_task:
                 Bundle b = new Bundle();
                 b.putSerializable(EditTaskFragment.CURRENT_TASK_TAG, currentTask.getTitle());
-                Fragment f = new EditTaskFragment();
+                DefaultFragment f = new EditTaskFragment();
                 getCurrentActivity().showChildFragment(f, b);
                 return true;
             case R.id.perform_task:

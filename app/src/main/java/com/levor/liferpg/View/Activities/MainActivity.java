@@ -1,9 +1,7 @@
 package com.levor.liferpg.View.Activities;
 
 import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -20,7 +18,7 @@ import android.widget.ListView;
 import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.R;
 import com.levor.liferpg.SwipeOutViewPager;
-import com.levor.liferpg.View.Fragments.Hero.HeroFragment;
+import com.levor.liferpg.View.Fragments.DefaultFragment;
 import com.levor.liferpg.View.Fragments.MainFragment;
 import com.levor.liferpg.View.Fragments.SettingsFragment;
 import com.levor.liferpg.View.Fragments.Tasks.TasksFragment;
@@ -40,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements SwipeOutViewPager
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerList;
     private String[] activities;
-    private static Stack<Fragment> fragmentsStack = new Stack<>();
+    private static Stack<DefaultFragment> fragmentsStack = new Stack<>();
     private boolean showBack;
 
     @Override
@@ -79,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements SwipeOutViewPager
 
 
         if (savedInstanceState == null) {
-            Fragment fragment = new MainFragment();
+            DefaultFragment fragment = new MainFragment();
             fragmentsStack.push(fragment);
             FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction()
@@ -125,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements SwipeOutViewPager
     }
 
     private void switchRootFragment(int fragmentNumber) {
-        Fragment fragment;
+        DefaultFragment fragment;
         switch (fragmentNumber) {
             case HERO_FRAGMENT_ID :
                 fragment = new MainFragment();
@@ -147,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements SwipeOutViewPager
 
     public boolean showPreviousFragment() {
         fragmentsStack.pop();
-        Fragment fragment;
+        DefaultFragment fragment;
         try {
             fragment = fragmentsStack.peek();
         } catch (EmptyStackException e){
@@ -157,6 +155,8 @@ public class MainActivity extends AppCompatActivity implements SwipeOutViewPager
                 .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)
                 .replace(R.id.content_frame, fragment)
                 .commit();
+        getSupportFragmentManager().executePendingTransactions();
+        fragment.onRestoreFromBackStack();
         mDrawerLayout.closeDrawer(mDrawerList);
         return true;
     }
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements SwipeOutViewPager
         return showNthPreviousFragment(n - 1);
     }
 
-    public void showChildFragment(Fragment fragment, Bundle bundle){
+    public void showChildFragment(DefaultFragment fragment, Bundle bundle){
         fragment.setArguments(bundle);
         fragmentsStack.push(fragment);
         getSupportFragmentManager().beginTransaction()
@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements SwipeOutViewPager
                 .commit();
     }
 
-    public void showRootFragment(Fragment fragment, Bundle bundle){
+    public void showRootFragment(DefaultFragment fragment, Bundle bundle){
         fragment.setArguments(bundle);
         fragmentsStack.clear();
         fragmentsStack.push(fragment);

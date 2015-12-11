@@ -31,7 +31,7 @@ public class CharacteristicsFragment extends DefaultFragment {
                 Bundle b = new Bundle();
                 b.putSerializable(DetailedCharacteristicFragment.CHARACTERISTIC_TITLE
                         , getController().getCharacteristicsTitleAndLevelAsArray()[position].split(" ")[0]);
-                Fragment f = new DetailedCharacteristicFragment();
+                DefaultFragment f = new DetailedCharacteristicFragment();
                 getCurrentActivity().showChildFragment(f, b);
             }
         });

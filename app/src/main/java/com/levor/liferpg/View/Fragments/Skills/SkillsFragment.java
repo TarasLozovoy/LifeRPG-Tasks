@@ -35,7 +35,7 @@ public class SkillsFragment extends DefaultFragment {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(DetailedSkillFragment.SELECTED_SKILL_UUID_TAG
                         , currentId);
-                Fragment fragment = new DetailedSkillFragment();
+                DefaultFragment fragment = new DetailedSkillFragment();
                 getCurrentActivity().showChildFragment(fragment, bundle);
             }
         });
@@ -59,7 +59,7 @@ public class SkillsFragment extends DefaultFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.add_new_skill:
-                Fragment f = new AddSkillFragment();
+                DefaultFragment f = new AddSkillFragment();
                 getCurrentActivity().showChildFragment(f, null);
                 return true;
             default:

@@ -112,6 +112,14 @@ public class LifeEntity {
         }
     }
 
+    public void addTask(String title, int repeatability, List<String> relatedSkills){
+        Skill[] skills = new Skill[relatedSkills.size()];
+        for (int i = 0; i < relatedSkills.size(); i++){
+            skills[i] = lifeEntity.getSkillByTitle(relatedSkills.get(i));
+        }
+        addTask(title, repeatability, skills);
+    }
+
     public void updateTask(Task task) {
         final String uuid = task.getId().toString();
         if (tasks.remove(task)) {

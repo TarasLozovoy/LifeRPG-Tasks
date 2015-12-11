@@ -54,7 +54,7 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle b = new Bundle();
                 b.putSerializable(DetailedSkillFragment.SELECTED_SKILL_UUID_TAG, currentSkills.get(position).getId());
-                Fragment f = new DetailedSkillFragment();
+                DefaultFragment f = new DetailedSkillFragment();
                 getCurrentActivity().showChildFragment(f, b);
             }
         });
@@ -77,7 +77,7 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
         footerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment f = new AddSkillFragment();
+                DefaultFragment f = new AddSkillFragment();
                 Bundle b = new Bundle();
                 b.putSerializable(AddSkillFragment.RECEIVED_CHARACTERISTIC_TITLE_TAG, currentCharacteristic.getTitle());
                 getCurrentActivity().showChildFragment(f, b);
