@@ -8,6 +8,7 @@ public class DataBaseSchema {
             public static final String NAME = "hero_name";
             public static final String LEVEL = "hero_level";
             public static final String XP = "hero_xp";
+            public static final String BASEXP = "hero_basexp";
         }
     }
 
@@ -40,6 +41,7 @@ public class DataBaseSchema {
             public static final String RELATED_SKILLS = "task_related_skills";
             public static final String REPEATABILITY = "task_repeatability";
             public static final String DIFFICULTY = "task_difficulty";
+            public static final String IMPORTANCE = "task_importance";
         }
     }
 }

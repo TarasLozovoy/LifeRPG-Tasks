@@ -17,7 +17,6 @@ import android.widget.ListView;
 
 import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.R;
-import com.levor.liferpg.SwipeOutViewPager;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
 import com.levor.liferpg.View.Fragments.MainFragment;
 import com.levor.liferpg.View.Fragments.SettingsFragment;
@@ -26,7 +25,7 @@ import com.levor.liferpg.View.Fragments.Tasks.TasksFragment;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
-public class MainActivity extends AppCompatActivity implements SwipeOutViewPager.OnSwipeOutListener{
+public class MainActivity extends AppCompatActivity{
     public final static int HERO_FRAGMENT_ID = 0;
     public final static int TASKS_FRAGMENT_ID = 1;
     public final static int SETTINGS_FRAGMENT_ID = 2;
@@ -219,16 +218,6 @@ public class MainActivity extends AppCompatActivity implements SwipeOutViewPager
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
             showBack = false;
         }
-    }
-
-    @Override
-    public void onSwipeOutAtStart() {
-        mDrawerLayout.openDrawer(mDrawerList);
-    }
-
-    @Override
-    public void onSwipeOutAtEnd() {
-        //Do nothing
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

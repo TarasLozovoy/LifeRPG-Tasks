@@ -42,6 +42,7 @@ public class EditTaskFragment extends AddTaskFragment {
                 taskRepeatEditText.setText(Integer.toString(repeat));
             }
             difficultySpinner.setSelection(currentTask.getDifficulty());
+            importanceSpinner.setSelection(currentTask.getImportance());
         }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Edit task");
@@ -131,6 +132,8 @@ public class EditTaskFragment extends AddTaskFragment {
         int repeat = Integer.parseInt(repeatTimesString);
         currentTask.setRepeatability(repeat);
 
+        currentTask.setDifficulty(difficultySpinner.getSelectedItemPosition());
+        currentTask.setImportance(importanceSpinner.getSelectedItemPosition());
         currentTask.setTitle(title);
         List<Skill> skills = new ArrayList<>();
         for (String s: relatedSkills){

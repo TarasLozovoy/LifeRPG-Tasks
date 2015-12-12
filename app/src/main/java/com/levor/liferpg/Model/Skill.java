@@ -6,7 +6,7 @@ import java.util.UUID;
 public class Skill {
     private String title;
     private int level;
-    private int sublevel;
+    private double sublevel;
     private Characteristic keyCharacteristic;
     private UUID id;
 
@@ -14,10 +14,10 @@ public class Skill {
     public static final Comparator<Skill> LEVEL_COMPARATOR = new SkillByLevelComparator();
 
     public Skill(String title, UUID id, Characteristic keyCharacteristic) {
-        this(title, 1, 0, id, keyCharacteristic);
+        this(title, 1, 0.0f, id, keyCharacteristic);
     }
 
-    public Skill(String title, int level, int sublevel, UUID id, Characteristic keyCharacteristic) {
+    public Skill(String title, int level, double sublevel, UUID id, Characteristic keyCharacteristic) {
         this.title = title;
         this.level = level;
         this.sublevel = sublevel;
@@ -37,11 +37,11 @@ public class Skill {
         this.level = level;
     }
 
-    public int getSublevel() {
+    public double getSublevel() {
         return sublevel;
     }
 
-    public void setSublevel(int sublevel) {
+    public void setSublevel(double sublevel) {
         this.sublevel = sublevel;
     }
 
@@ -56,12 +56,12 @@ public class Skill {
     /**
      * @return true if level changed
      */
-    public boolean increaseSublevel(){
-        sublevel++;
-        if (sublevel == level){
+    public boolean increaseSublevel(double value){
+        sublevel += value;
+        if (sublevel >= level){
             level++;
             keyCharacteristic.increaseLevelByN(1 + level/10);
-            sublevel = 0;
+            sublevel = 0.0d;
             return true;
         }
         return false;
@@ -110,7 +110,7 @@ public class Skill {
             if (rhs.getLevel() != lhs.getLevel()) {
                 return rhs.getLevel() - lhs.getLevel();
             } else if (rhs.getSublevel() != lhs.getSublevel()) {
-                return rhs.getSublevel() - lhs.getSublevel();
+                return (int)(rhs.getSublevel() - lhs.getSublevel());
             } else {
                 return lhs.getTitle().compareTo(rhs.getTitle());
             }

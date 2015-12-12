@@ -8,27 +8,29 @@ import java.util.List;
 import java.util.UUID;
 
 public class Task {
-    public final static int DIFFICULTY_EASY = 0;
-    public final static int DIFFICULTY_MEDIUM = 1;
-    public final static int DIFFICULTY_HARD = 2;
-    public final static int DIFFICULTY_INSANE = 3;
+    public final static int EASY = 0;
+    public final static int MEDIUM = 1;
+    public final static int HARD = 2;
+    public final static int INSANE = 3;
     private String title;
     private List<Skill> relatedSkills = new ArrayList<>();
     private UUID id;
     private int repeatability = -1;
-    private int difficulty = DIFFICULTY_EASY;
+    private int difficulty = EASY;
+    private int importance = EASY;
 
     public static final Comparator<Task> COMPARATOR = new TasksComparator();
 
-    public Task(String title, UUID id, int repeatability, int difficulty, Skill ... skills) {
-        this(title, id, repeatability, difficulty, Arrays.asList(skills));
+    public Task(String title, UUID id, int repeatability, int difficulty, int importance, Skill ... skills) {
+        this(title, id, repeatability, difficulty, importance, Arrays.asList(skills));
     }
 
-    public Task(String title, UUID id, int repeatability, int difficulty, List<Skill> skills) {
+    public Task(String title, UUID id, int repeatability, int difficulty, int importance, List<Skill> skills) {
         this.title = title;
         this.repeatability = repeatability;
         this.relatedSkills = skills;
         this.difficulty = difficulty;
+        this.importance = importance;
         this.id = id;
     }
 
@@ -90,6 +92,18 @@ public class Task {
 
     public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public int getImportance() {
+        return importance;
+    }
+
+    public void setImportance(int importance) {
+        this.importance = importance;
+    }
+
+    public double getMultiplier(){
+        return (1 + (0.25 * difficulty) + (0.25 * importance));
     }
 
     @Override

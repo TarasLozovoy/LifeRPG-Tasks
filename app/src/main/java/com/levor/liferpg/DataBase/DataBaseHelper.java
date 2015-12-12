@@ -20,6 +20,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 " _id integer primary key autoincrement, " +
                 HeroTable.Cols.NAME + ", " +
                 HeroTable.Cols.LEVEL + ", " +
+                HeroTable.Cols.BASEXP + ", " +
                 HeroTable.Cols.XP +
                 ")");
 
@@ -44,6 +45,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 TasksTable.Cols.UUID + ", " +
                 TasksTable.Cols.REPEATABILITY + ", " +
                 TasksTable.Cols.DIFFICULTY + ", " +
+                TasksTable.Cols.IMPORTANCE + ", " +
                 TasksTable.Cols.RELATED_SKILLS +
                 ")");
     }

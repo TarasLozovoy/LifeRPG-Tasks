@@ -9,9 +9,7 @@ import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class LifeController {
@@ -29,12 +27,13 @@ public class LifeController {
         lifeEntity = LifeEntity.getInstance(context);
     }
 
+
     public List<Task> getAllTasks(){
         return lifeEntity.getTasks();
     }
 
-    public Map<String, Integer[]> getSkillsTitlesAndLevels(){
-        return lifeEntity.getSkillsTitlesAndLevels();
+    public List<String> getSkillsTitles(){
+        return lifeEntity.getSkillsTitles();
     }
 
     public List<Skill> getAllSkills(){
@@ -45,8 +44,8 @@ public class LifeController {
         return lifeEntity.getTaskByTitle(s);
     }
 
-    public void createNewTask(String title, int repeatability, int difficulty, List<String> relatedSkills) {
-        lifeEntity.addTask(title,repeatability, difficulty, relatedSkills);
+    public void createNewTask(String title, int repeatability, int difficulty, int reproducibility,  List<String> relatedSkills) {
+        lifeEntity.addTask(title, repeatability, difficulty, reproducibility, relatedSkills);
     }
 
 
@@ -118,30 +117,24 @@ public class LifeController {
         lifeEntity.removeSkill(skill);
     }
 
-    /**
-     * Increases or decreases skill sublevel and hero xp.
-     * @param sk skill to update
-     * @param increase increases values if true, decreases if false.
-     * @return true if hero level changed, false otherwise.
-     */
-    public boolean changeSkillSubLevel(Skill sk, boolean increase){
-        //TODO move to LifeEntity
+    public boolean performTask(Task task){
         Hero hero = lifeEntity.getHero();
-        boolean result;
-        if (increase){
-            if (sk.increaseSublevel()){
-                lifeEntity.updateCharacteristic(sk.getKeyCharacteristic());
-            }
-            result = hero.increaseXP();
-        } else {
-            if (sk.decreaseSublevel()){
-                lifeEntity.updateCharacteristic(sk.getKeyCharacteristic());
-            }
-            result = hero.decreaseXP();
+        if (task.getRepeatability() > 0){
+            task.setRepeatability(task.getRepeatability() - 1);
+            updateTask(task);
         }
-        lifeEntity.updateSkill(sk);
+        double multiplier = task.getMultiplier();
+        double finalXP = hero.getBaseXP() * multiplier;
+        for (Skill sk : task.getRelatedSkills()) {
+            if (sk.increaseSublevel(finalXP)){
+                lifeEntity.updateCharacteristic(sk.getKeyCharacteristic());
+            }
+            updateSkill(sk);
+        }
+        boolean isLevelIncreased = hero.increaseXP(finalXP);
         lifeEntity.updateHero(hero);
-        return result;
+
+        return isLevelIncreased;
     }
 
     public void updateSkill(Skill skill) {
@@ -160,11 +153,11 @@ public class LifeController {
         return lifeEntity.getHero().getLevel();
     }
 
-    public int getHeroXp(){
+    public double getHeroXp(){
         return lifeEntity.getHero().getXp();
     }
 
-    public int getHeroXpToNextLevel(){
+    public double getHeroXpToNextLevel(){
         return lifeEntity.getHero().getXpToNextLevel();
     }
 

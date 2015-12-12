@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.UUID;
 
 public class LifeEntity {
@@ -76,10 +74,10 @@ public class LifeEntity {
             addSkill("Roller skating", stamina);
             addSkill("Running", stamina);
 
-            addTask("Learn Android", -1, Task.DIFFICULTY_EASY, getSkillByTitle("Android"));
-            addTask("Learn Java", 0, Task.DIFFICULTY_MEDIUM, getSkillByTitle("Java"));
-            addTask("Fix bug on Android", 1, Task.DIFFICULTY_HARD, getSkillByTitle("Android"));
-            addTask("Fix bug on Java", 25, Task.DIFFICULTY_INSANE, getSkillByTitle("Java"));
+            addTask("Learn Android", -1, Task.EASY, Task.EASY, getSkillByTitle("Android"));
+            addTask("Learn Java", 0, Task.MEDIUM, Task.MEDIUM, getSkillByTitle("Java"));
+            addTask("Fix bug on Android", 1, Task.HARD, Task.HARD, getSkillByTitle("Android"));
+            addTask("Fix bug on Java", 25, Task.INSANE, Task.INSANE, getSkillByTitle("Java"));
 
             addHero(new Hero());
         } else {
@@ -91,7 +89,7 @@ public class LifeEntity {
         cursor.close();
     }
 
-    public void addTask(String title,int repeatability, int difficulty, Skill ... relatedSkills){
+    public void addTask(String title,int repeatability, int difficulty, int importance,  Skill ... relatedSkills){
         Task oldTask = getTaskByTitle(title);
         if (oldTask != null) {
             oldTask.setRelatedSkills(Arrays.asList(relatedSkills));
@@ -100,7 +98,7 @@ public class LifeEntity {
             updateTask(oldTask);
         } else {
             UUID id = UUID.randomUUID();
-            Task newTask = new Task(title, id, repeatability, difficulty, relatedSkills);
+            Task newTask = new Task(title, id, repeatability, difficulty, importance, relatedSkills);
             tasks.add(newTask);
             final ContentValues values = getContentValuesForTask(newTask);
             new AsyncTask<Void, Void, Void>(){
@@ -113,12 +111,12 @@ public class LifeEntity {
         }
     }
 
-    public void addTask(String title, int repeatability, int difficulty, List<String> relatedSkills){
+    public void addTask(String title, int repeatability, int difficulty, int importance,  List<String> relatedSkills){
         Skill[] skills = new Skill[relatedSkills.size()];
         for (int i = 0; i < relatedSkills.size(); i++){
             skills[i] = lifeEntity.getSkillByTitle(relatedSkills.get(i));
         }
-        addTask(title, repeatability, difficulty, skills);
+        addTask(title, repeatability, difficulty, importance, skills);
     }
 
     public void updateTask(Task task) {
@@ -211,6 +209,7 @@ public class LifeEntity {
         values.put(TasksTable.Cols.UUID, task.getId().toString());
         values.put(TasksTable.Cols.REPEATABILITY, task.getRepeatability());
         values.put(TasksTable.Cols.DIFFICULTY, task.getDifficulty());
+        values.put(TasksTable.Cols.IMPORTANCE, task.getImportance());
         values.put(TasksTable.Cols.RELATED_SKILLS, task.getRelatedSkillsString());
         return values;
     }
@@ -239,10 +238,10 @@ public class LifeEntity {
     }
 
     public void addSkill(String title, Characteristic keyCharacteristic){
-        addSkill(title, 1, 0, keyCharacteristic);
+        addSkill(title, 1, 0.0f, keyCharacteristic);
     }
 
-    public void addSkill(String title, int level, int sublevel, Characteristic keyCharacteristic){
+    public void addSkill(String title, int level, float sublevel, Characteristic keyCharacteristic){
         Skill oldSkill = getSkillByTitle(title);
         if (oldSkill != null) {
             oldSkill.setLevel(level);
@@ -266,6 +265,7 @@ public class LifeEntity {
 
     public List<Skill> getSkills(){
         if (skills != null){
+            Collections.sort(skills, Skill.LEVEL_COMPARATOR);
             return skills;
         }
         List<Skill> skillsList = new ArrayList<>();
@@ -332,12 +332,12 @@ public class LifeEntity {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public Map<String, Integer[]> getSkillsTitlesAndLevels() {
-        Map<String, Integer[]> map = new TreeMap<>();
+    public List<String> getSkillsTitles() {
+        List<String> titles = new ArrayList<>();
         for (Skill s : getSkills()) {
-            map.put(s.getTitle(), new Integer[]{s.getLevel(), s.getSublevel()});
+            titles.add(s.getTitle());
         }
-        return map;
+        return titles;
     }
 
     private CharacteristicsCursorWrapper queryCharacteristics(String whereClause, String[] whereArgs) {
@@ -374,6 +374,7 @@ public class LifeEntity {
 
     public List<Characteristic> getCharacteristics(){
         if (characteristics != null) {
+            Collections.sort(characteristics, Characteristic.LEVEL_COMPARATOR);
             return characteristics;
         }
         List<Characteristic> chars = new ArrayList<>();
@@ -429,6 +430,7 @@ public class LifeEntity {
         values.put(HeroTable.Cols.NAME, hero.getName());
         values.put(HeroTable.Cols.LEVEL, hero.getLevel());
         values.put(HeroTable.Cols.XP, hero.getXp());
+        values.put(HeroTable.Cols.BASEXP, hero.getBaseXP());
         return values;
     }
 

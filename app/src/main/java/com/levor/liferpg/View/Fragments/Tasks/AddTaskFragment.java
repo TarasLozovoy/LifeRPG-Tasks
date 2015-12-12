@@ -27,7 +27,6 @@ import com.levor.liferpg.View.Fragments.DefaultFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 public class AddTaskFragment extends DefaultFragment {
     public static final String RECEIVED_SKILL_TITLE_TAG = "received_skill_tag";
@@ -35,10 +34,13 @@ public class AddTaskFragment extends DefaultFragment {
     private final String TASK_TITLE_TAG = "task_title_tag";
     private final String RELATED_SKILLS_TAG = "related_skills_tag";
     private final String REPEAT_TAG = "repeat_tag";
+    private final String DIFFICULTY_TAG = "difficulty_tag";
+    private final String IMPORTANCE_TAG = "importance_tag";
 
     protected EditText taskTitleEditText;
     protected EditText taskRepeatEditText;
     protected Spinner difficultySpinner;
+    protected Spinner importanceSpinner;
     private ListView relatedSkillListView;
     private Button addSkillButton;
 
@@ -54,11 +56,14 @@ public class AddTaskFragment extends DefaultFragment {
         addSkillButton = (Button) view.findViewById(R.id.add_related_skill);
         taskRepeatEditText = (EditText) view.findViewById(R.id.task_repeat_times_edit_text);
         difficultySpinner = (Spinner) view.findViewById(R.id.difficulty_spinner);
+        importanceSpinner = (Spinner) view.findViewById(R.id.importance_spinner);
 
         if (savedInstanceState != null) {
             taskTitleEditText.setText(savedInstanceState.getString(TASK_TITLE_TAG));
             relatedSkills = savedInstanceState.getStringArrayList(RELATED_SKILLS_TAG);
             taskRepeatEditText.setText(savedInstanceState.getString(REPEAT_TAG));
+            difficultySpinner.setSelection(savedInstanceState.getInt(DIFFICULTY_TAG));
+            importanceSpinner.setSelection(savedInstanceState.getInt(IMPORTANCE_TAG));
         }
 
         registerListeners(view);
@@ -118,6 +123,8 @@ public class AddTaskFragment extends DefaultFragment {
         outState.putSerializable(TASK_TITLE_TAG, taskTitleEditText.getText().toString());
         outState.putSerializable(RELATED_SKILLS_TAG, relatedSkills);
         outState.putSerializable(REPEAT_TAG, taskRepeatEditText.getText().toString());
+        outState.putSerializable(DIFFICULTY_TAG, difficultySpinner.getSelectedItemPosition());
+        outState.putSerializable(IMPORTANCE_TAG, importanceSpinner.getSelectedItemPosition());
         super.onSaveInstanceState(outState);
     }
 
@@ -148,15 +155,17 @@ public class AddTaskFragment extends DefaultFragment {
     }
 
     protected void finishTask(String title, String message){
-        String difficultyString = difficultySpinner.getSelectedItem().toString();
-        String[] difficultyArray = getResources().getStringArray(R.array.difficulties_array);
-        int difficulty = Arrays.asList(difficultyArray).indexOf(difficultyString);
+//        String difficultyString = difficultySpinner.getSelectedItem().toString();
+//        String[] difficultyArray = getResources().getStringArray(R.array.difficulties_array);
+//        int difficulty = Arrays.asList(difficultyArray).indexOf(difficultyString);
+        int difficulty = difficultySpinner.getSelectedItemPosition();
+        int importance = importanceSpinner.getSelectedItemPosition();
 
         String repeatTimesString = taskRepeatEditText.getText().toString();
         if (repeatTimesString.isEmpty()) repeatTimesString = "-1";
         int repeat = Integer.parseInt(repeatTimesString);
 
-        getController().createNewTask(title, repeat, difficulty, relatedSkills);
+        getController().createNewTask(title, repeat, difficulty, importance, relatedSkills);
 
         Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
@@ -200,7 +209,7 @@ public class AddTaskFragment extends DefaultFragment {
             @Override
             public void onClick(View v) {
                 final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_item
-                        , getController().getSkillsTitlesAndLevels().keySet().toArray(new String[getController().getSkillsTitlesAndLevels().size()]));
+                        , getController().getSkillsTitles());
 
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
                 dialog.setTitle("Choose skill to add");
@@ -235,5 +244,8 @@ public class AddTaskFragment extends DefaultFragment {
         difficultySpinner.setAdapter(new ArrayAdapter<>(getActivity(),
                 android.R.layout.select_dialog_item,
                 getResources().getStringArray(R.array.difficulties_array)));
+        importanceSpinner.setAdapter(new ArrayAdapter<>(getActivity(),
+                android.R.layout.select_dialog_item,
+                getResources().getStringArray(R.array.importance_array)));
     }
 }

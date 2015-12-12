@@ -1,11 +1,9 @@
 package com.levor.liferpg.View.Fragments.Tasks;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,14 +14,10 @@ import android.view.ViewGroup;
 
 import com.levor.liferpg.Adapters.CustomPagerAdapter;
 import com.levor.liferpg.R;
-import com.levor.liferpg.SwipeOutViewPager;
-import com.levor.liferpg.View.Fragments.Characteristics.CharacteristicsFragment;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
-import com.levor.liferpg.View.Fragments.Hero.HeroFragment;
-import com.levor.liferpg.View.Fragments.Skills.SkillsFragment;
 
 public class TasksFragment extends DefaultFragment {
-    private SwipeOutViewPager viewPager;
+    private ViewPager viewPager;
     private TabLayout tabLayout;
 
     @Override
@@ -37,8 +31,7 @@ public class TasksFragment extends DefaultFragment {
         tabLayout.addTab(tabLayout.newTab().setText(R.string.finished_tasks));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        viewPager = (SwipeOutViewPager) view.findViewById(R.id.pager);
-        viewPager.setOnSwipeOutListener(getCurrentActivity());
+        viewPager = (ViewPager) view.findViewById(R.id.pager);
         getCurrentActivity().getSupportActionBar().setElevation(0);
         getCurrentActivity().setActionBarTitle(R.string.tasks);
         getCurrentActivity().showActionBarHomeButtonAsBack(false);

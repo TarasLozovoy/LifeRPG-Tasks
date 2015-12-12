@@ -5,19 +5,19 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.levor.liferpg.Adapters.CustomPagerAdapter;
 import com.levor.liferpg.R;
-import com.levor.liferpg.SwipeOutViewPager;
 import com.levor.liferpg.View.Fragments.Characteristics.CharacteristicsFragment;
 import com.levor.liferpg.View.Fragments.Hero.HeroFragment;
 import com.levor.liferpg.View.Fragments.Skills.SkillsFragment;
 
 public class MainFragment extends DefaultFragment{
-    private SwipeOutViewPager viewPager;
+    private ViewPager viewPager;
     private TabLayout tabLayout;
 
     @Nullable
@@ -31,8 +31,7 @@ public class MainFragment extends DefaultFragment{
         tabLayout.addTab(tabLayout.newTab().setText(R.string.skills_fragment_name));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        viewPager = (SwipeOutViewPager) v.findViewById(R.id.pager);
-        viewPager.setOnSwipeOutListener(getCurrentActivity());
+        viewPager = (ViewPager) v.findViewById(R.id.pager);
         getCurrentActivity().getSupportActionBar().setElevation(0);
         getCurrentActivity().setActionBarTitle(R.string.real_liferpg);
         getCurrentActivity().showActionBarHomeButtonAsBack(false);

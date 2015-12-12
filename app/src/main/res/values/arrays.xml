@@ -14,4 +14,12 @@
         <item>Hard</item>
         <item>Insane</item>
     </string-array>
+
+    <string-array
+        name="importance_array">
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+        <item>Insane</item>
+    </string-array>
 </resources>

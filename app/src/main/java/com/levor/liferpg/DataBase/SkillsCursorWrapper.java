@@ -22,7 +22,7 @@ public class SkillsCursorWrapper extends CursorWrapper {
         String title = getString(getColumnIndex(SkillsTable.Cols.TITLE));
         String keyChar = getString(getColumnIndex(SkillsTable.Cols.KEY_CHARACTERISTC_TITLE));
         int level = getInt(getColumnIndex(SkillsTable.Cols.LEVEL));
-        int sublevel = getInt(getColumnIndex(SkillsTable.Cols.SUBLEVEL));
+        double sublevel = getFloat(getColumnIndex(SkillsTable.Cols.SUBLEVEL));
         return new Skill(title, level, sublevel, UUID.fromString(uuid), lifeEntity.getCharacteristicByTitle(keyChar));
     }
 }

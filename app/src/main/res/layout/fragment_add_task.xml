@@ -70,7 +70,28 @@
 
         <Spinner
             android:id="@+id/difficulty_spinner"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/difficulty_linear_layout"
+        android:id="@+id/importance_linear_layout"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/importance"
+            android:gravity="center_vertical"
+            style="@style/LifeRPGTextStyle"/>
+
+        <Spinner
+            android:id="@+id/importance_spinner"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
     </LinearLayout>
@@ -79,7 +100,7 @@
         android:id="@+id/add_skill_ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/difficulty_linear_layout"
+        android:layout_below="@id/importance_linear_layout"
         android:orientation="vertical">
 
         <TextView

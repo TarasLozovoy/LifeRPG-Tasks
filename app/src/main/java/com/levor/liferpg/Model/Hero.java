@@ -2,42 +2,31 @@ package com.levor.liferpg.Model;
 
 public class Hero {
     private int level;
-    private int xp;
-    private int xpToNextLevel;
+    private double xp;
+    private double xpToNextLevel;
+    private double baseXP;
     private String name;
 
     public Hero(){
-        this(0, 0, "Johnny");
+        this(0, 0, 1, "Johnny");
     }
 
-    public Hero(int level, int xp, String name){
+    public Hero(int level, double xp, double baseXP, String name){
         this.level = level;
         this.xp = xp;
         this.name = name;
+        this.baseXP = baseXP;
         xpToNextLevel = xpToLevel(level);
     }
 
-    /**
-     * Increases xp. When xp is reached to xpToNextLevelValue - increases hero level.
-     * @return true - if level increased, false - if not.
-     */
-    public boolean increaseXP(){
-        xp++;
+    public boolean increaseXP(double value){
+        xp += value;
         return checkXPCeiling();
     }
 
-    /**
-     * Decreases xp. When xp below xp for current level - decreases hero level.
-     * @return true - if level decreased, false - if not.
-     */
-    public boolean decreaseXP(){
-        xp--;
-        if (xp < xpToLevel(level - 1)){
-            level--;
-            xpToNextLevel = xpToLevel(level);
-            return true;
-        }
-        return false;
+    public boolean decreaseXP(double value){
+        xp -= value;
+        return checkXPCeiling();
     }
 
     public void setLevel(int level) {
@@ -46,7 +35,7 @@ public class Hero {
         checkXPCeiling();
     }
 
-    public void setXp(int xp) {
+    public void setXp(double xp) {
         this.xp = xp;
         checkXPCeiling();
     }
@@ -59,11 +48,19 @@ public class Hero {
         return level;
     }
 
-    public int getXp() {
+    public double getXp() {
         return xp;
     }
 
-    public int getXpToNextLevel() {
+    public double getBaseXP() {
+        return baseXP;
+    }
+
+    public void setBaseXP(double baseXP) {
+        this.baseXP = baseXP;
+    }
+
+    public double getXpToNextLevel() {
         return xpToNextLevel;
     }
 
@@ -71,15 +68,15 @@ public class Hero {
         return name;
     }
 
-    private int xpToLevel(int level){
+    private double xpToLevel(int level){
         if (level < 0) return 0;
-        return (int) (10 + 10*Math.pow(level, 1.75));
+        return (10 + 10*Math.pow(level, 2));
     }
 
     private boolean checkXPCeiling(){
-        if (xp == xpToNextLevel){
+        if (xp >= xpToNextLevel){
             level++;
-            xp = 0;
+            xp = xp - xpToNextLevel;
             xpToNextLevel = xpToLevel(level);
             return true;
         }

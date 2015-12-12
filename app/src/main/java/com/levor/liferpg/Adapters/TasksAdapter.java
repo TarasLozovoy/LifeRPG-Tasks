@@ -56,50 +56,26 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
             view = inflater.inflate(R.layout.tasks_list_item, null);
         }
 
-        Task task = lifeController.getTaskByTitle(items.get(position));
+        final Task task = lifeController.getTaskByTitle(items.get(position));
 
         Button doBtn = (Button) view.findViewById(R.id.check_button);
         final View finalView = view;
         doBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Task task = lifeController.getTaskByTitle(items.get(position));
-                boolean heroLevelIncreased = false;
                 StringBuilder sb = new StringBuilder();
-                sb.append("Task successfully performed!\n")
-                        .append("Skill(s) improved:\n");
-                for (Skill sk : task.getRelatedSkills()) {
-                    sb.append(sk.getTitle())
-                            .append(": ")
-                            .append(sk.getLevel())
-                            .append("(")
-                            .append(sk.getSublevel())
-                            .append(")");
-                    if (lifeController.changeSkillSubLevel(sk, true) && !heroLevelIncreased) {
-                        heroLevelIncreased = true;
-                    }
-                    sb.append(" -> ")
-                            .append(sk.getLevel())
-                            .append("(")
-                            .append(sk.getSublevel())
-                            .append(")")
-                            .append("\n");
-                }
+                sb.append("Are you sure you want perform this task?\n");
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                final boolean finalHeroLevelIncreased = heroLevelIncreased;
                 builder.setTitle(items.get(position))
                         .setCancelable(false)
                         .setMessage(sb.toString())
-                        .setPositiveButton("Nice!", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if (task.getRepeatability() > 0){
-                                    task.setRepeatability(task.getRepeatability() - 1);
-                                    lifeController.updateTask(task);
-                                }
+                                boolean isHeroLevelIncreased = lifeController.performTask(task);
                                 dialog.dismiss();
                                 notifyDataSetChanged();
-                                if (finalHeroLevelIncreased) {
+                                if (isHeroLevelIncreased) {
                                     Snackbar.make(finalView, "Congratulations!\n" + lifeController.getHeroName()
                                             + "'s level increased!", Snackbar.LENGTH_LONG)
                                             .setAction("Go to Hero page", new View.OnClickListener() {
@@ -112,16 +88,10 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                                 }
                             }
                         })
-                        .setNegativeButton("Undo", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                StringBuilder sb = new StringBuilder();
-                                sb.append("Task undone.");
-                                for (Skill sk : task.getRelatedSkills()) {
-                                    lifeController.changeSkillSubLevel(sk, false);
-                                    sb.append("\n").append(sk.getTitle()).append(" skill returned to previous state");
-                                }
-                                Snackbar.make(finalView, sb.toString(), Snackbar.LENGTH_LONG).show();
+                                dialog.dismiss();
                             }
                         });
                 AlertDialog alert = builder.create();

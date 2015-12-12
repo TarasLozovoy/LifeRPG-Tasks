@@ -83,5 +83,6 @@
     <string name="finished_tasks">Done</string>
     <string name="tasks">Tasks</string>
     <string name="difficulty">Difficulty:</string>
+    <string name="importance">Importance:</string>
 
 </resources>
