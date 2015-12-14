@@ -43,6 +43,7 @@ public class EditTaskFragment extends AddTaskFragment {
             }
             difficultySpinner.setSelection(currentTask.getDifficulty());
             importanceSpinner.setSelection(currentTask.getImportance());
+            setupDateButton(currentTask.getDate());
         }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Edit task");
@@ -135,6 +136,7 @@ public class EditTaskFragment extends AddTaskFragment {
         currentTask.setDifficulty(difficultySpinner.getSelectedItemPosition());
         currentTask.setImportance(importanceSpinner.getSelectedItemPosition());
         currentTask.setTitle(title);
+        currentTask.setDate(date);
         List<Skill> skills = new ArrayList<>();
         for (String s: relatedSkills){
             skills.add(getController().getSkillByTitle(s));

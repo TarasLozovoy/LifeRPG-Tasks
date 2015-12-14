@@ -11,11 +11,18 @@
         android:textSize="25sp" />
 
     <TextView
-        android:id="@+id/task_repeat_times_text_view"
+        android:id="@+id/task_date_text_view"
         style="@style/LifeRPGTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/task_title" />
+
+    <TextView
+        android:id="@+id/task_repeat_times_text_view"
+        style="@style/LifeRPGTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/task_date_text_view" />
 
     <TextView
         android:id="@+id/task_difficulty_text_view"

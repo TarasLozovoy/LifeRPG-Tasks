@@ -69,7 +69,6 @@ public class DetailedSkillFragment extends DefaultFragment {
             }
         });
         setupListView();
-        createFooterView();
         adapter.registerDataSetObserver(new DataSetObserver() {
             @Override
             public void onChanged() {
@@ -113,6 +112,7 @@ public class DetailedSkillFragment extends DefaultFragment {
         currentTasks = titles;
         adapter = new TasksAdapter(titles, getCurrentActivity());
         listView.setAdapter(adapter);
+        createFooterView();
     }
 
     private void updateSkillDetails(){

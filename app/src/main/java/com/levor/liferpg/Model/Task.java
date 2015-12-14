@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,20 +19,22 @@ public class Task {
     private int repeatability = -1;
     private int difficulty = EASY;
     private int importance = EASY;
+    private Date date;
 
     public static final Comparator<Task> COMPARATOR = new TasksComparator();
 
-    public Task(String title, UUID id, int repeatability, int difficulty, int importance, Skill ... skills) {
-        this(title, id, repeatability, difficulty, importance, Arrays.asList(skills));
+    public Task(String title, UUID id, int repeatability, int difficulty, int importance, Date date, Skill ... skills) {
+        this(title, id, repeatability, difficulty, importance, date,  Arrays.asList(skills));
     }
 
-    public Task(String title, UUID id, int repeatability, int difficulty, int importance, List<Skill> skills) {
+    public Task(String title, UUID id, int repeatability, int difficulty, int importance, Date date, List<Skill> skills) {
         this.title = title;
         this.repeatability = repeatability;
         this.relatedSkills = skills;
         this.difficulty = difficulty;
         this.importance = importance;
         this.id = id;
+        this.date = date;
     }
 
     public String getTitle() {
@@ -102,6 +105,14 @@ public class Task {
         this.importance = importance;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public double getMultiplier(){
         return (1 + (0.25 * difficulty) + (0.25 * importance));
     }
@@ -110,6 +121,10 @@ public class Task {
     public boolean equals(Object o) {
         if (!(o instanceof Task)) return false;
         else return this.id.equals(((Task) o).id);
+    }
+
+    public static String getFormatting() {
+        return "MMM dd, yyyy";
     }
 
     private static class TasksComparator implements Comparator<Task> {

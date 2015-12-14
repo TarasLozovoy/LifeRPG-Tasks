@@ -2,6 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
         <!-- Customize your theme here. -->
     </style>
     <style name="AppTheme.NoActionBar">
@@ -13,7 +14,15 @@
 
     <!-- Default text style -->
     <style name="LifeRPGTextStyle">
-        <item name="android:textSize">22sp</item>
+        <item name="android:textSize">20sp</item>
     </style>
+
+
+    <!--Style of text in tabs-->
+    <style name="CustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+
 
 </resources>

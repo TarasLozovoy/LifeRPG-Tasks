@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,11 +44,17 @@ public class DetailedTaskFragment extends DefaultFragment {
         TextView taskDifficultyTV = (TextView) v.findViewById(R.id.task_difficulty_text_view);
         TextView taskImportanceTV = (TextView) v.findViewById(R.id.task_importance_text_view);
         TextView taskRepeatTV = (TextView) v.findViewById(R.id.task_repeat_times_text_view);
+        TextView taskDateTV = (TextView) v.findViewById(R.id.task_date_text_view);
         listView = (ListView) v.findViewById(R.id.list_view);
 
         UUID id = (UUID)getArguments().get(SELECTED_TASK_UUID_TAG);
         currentTask = getController().getTaskByID(id);
         taskTitleTV.setText(currentTask.getTitle());
+
+        //setup task date
+        String dateString = getResources().getString(R.string.date) + " " +
+                DateFormat.format(Task.getFormatting(), currentTask.getDate());
+        taskDateTV.setText(dateString);
 
         //setup difficulty TextView
         int difficulty = currentTask.getDifficulty();

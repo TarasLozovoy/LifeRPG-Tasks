@@ -46,6 +46,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 TasksTable.Cols.REPEATABILITY + ", " +
                 TasksTable.Cols.DIFFICULTY + ", " +
                 TasksTable.Cols.IMPORTANCE + ", " +
+                TasksTable.Cols.DATE + ", " +
                 TasksTable.Cols.RELATED_SKILLS +
                 ")");
     }

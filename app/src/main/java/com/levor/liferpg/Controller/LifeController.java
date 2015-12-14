@@ -9,6 +9,7 @@ import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,8 +45,8 @@ public class LifeController {
         return lifeEntity.getTaskByTitle(s);
     }
 
-    public void createNewTask(String title, int repeatability, int difficulty, int reproducibility,  List<String> relatedSkills) {
-        lifeEntity.addTask(title, repeatability, difficulty, reproducibility, relatedSkills);
+    public void createNewTask(String title, int repeatability, int difficulty, int reproducibility, Date date, List<String> relatedSkills) {
+        lifeEntity.addTask(title, repeatability, difficulty, reproducibility, date,  relatedSkills);
     }
 
 

@@ -84,5 +84,9 @@
     <string name="tasks">Tasks</string>
     <string name="difficulty">Difficulty:</string>
     <string name="importance">Importance:</string>
+    <string name="date">Date:</string>
+    <string name="choose_date_time">Select date and time</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
 
 </resources>

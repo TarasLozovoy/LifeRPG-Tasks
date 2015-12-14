@@ -24,9 +24,28 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/date_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/add_title_layout"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date"
+            style="@style/LifeRPGTextStyle"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/date_button"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/date_layout"
         android:id="@+id/task_repeat_times_linear_layout"
         android:orientation="horizontal">
 
