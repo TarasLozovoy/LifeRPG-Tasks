@@ -33,7 +33,6 @@ public class TasksFragment extends DefaultFragment {
 
         viewPager = (ViewPager) view.findViewById(R.id.pager);
         getCurrentActivity().getSupportActionBar().setElevation(0);
-        getCurrentActivity().setActionBarTitle(R.string.tasks);
         getCurrentActivity().showActionBarHomeButtonAsBack(false);
         setHasOptionsMenu(true);
         return view;

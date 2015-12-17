@@ -22,4 +22,12 @@
         <item>Hard</item>
         <item>Insane</item>
     </string-array>
+
+    <string-array
+        name="tasks_sorting_order">
+        <item>Time asc.</item>
+        <item>Time desc.</item>
+        <item>Importance</item>
+        <item>Difficulty</item>
+    </string-array>
 </resources>

@@ -154,7 +154,6 @@ public class LifeEntity {
 
     public List<Task> getTasks(){
         if (tasks != null){
-            Collections.sort(tasks, Task.COMPARATOR);
             return tasks;
         } else {
             List<Task> tasksList = new ArrayList<>();
@@ -206,7 +205,7 @@ public class LifeEntity {
                 tasksBySkill.add(t);
             }
         }
-        Collections.sort(tasksBySkill, Task.COMPARATOR);
+        Collections.sort(tasksBySkill, Task.TITLE_DESC_TASKS_COMPARATOR);
         return tasksBySkill;
     }
 

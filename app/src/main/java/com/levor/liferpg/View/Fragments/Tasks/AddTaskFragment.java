@@ -179,9 +179,18 @@ public class AddTaskFragment extends DefaultFragment {
         int repeat = Integer.parseInt(repeatTimesString);
 
         getController().createNewTask(title, repeat, difficulty, importance, date, relatedSkills);
-
+        closeKeyboard();
         Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
+    }
+
+    protected void closeKeyboard(){
+        View view = getCurrentActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getCurrentActivity()
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private void setupListView(){

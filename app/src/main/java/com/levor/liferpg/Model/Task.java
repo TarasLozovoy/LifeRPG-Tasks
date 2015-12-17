@@ -21,7 +21,15 @@ public class Task {
     private int importance = EASY;
     private Date date;
 
-    public static final Comparator<Task> COMPARATOR = new TasksComparator();
+    public static final Comparator<Task> COMPLETION_TASKS_COMPARATOR = new CompletionTasksComparator();
+    public static final Comparator<Task> TITLE_ASC_TASKS_COMPARATOR = new TitleAscTasksComparator();
+    public static final Comparator<Task> TITLE_DESC_TASKS_COMPARATOR = new TitleDescTasksComparator();
+    public static final Comparator<Task> IMPORTANCE_ASC_TASKS_COMPARATOR = new ImportanceAscTasksComparator();
+    public static final Comparator<Task> IMPORTANCE_DESC_TASKS_COMPARATOR = new ImportanceDescTasksComparator();
+    public static final Comparator<Task> DIFFICULTY_ASC_TASKS_COMPARATOR = new DifficultyAscTasksComparator();
+    public static final Comparator<Task> DIFFICULTY_DESC_TASKS_COMPARATOR = new DifficultyDescTasksComparator();
+    public static final Comparator<Task> DATE_ASC_TASKS_COMPARATOR = new DateAscTasksComparator();
+    public static final Comparator<Task> DATE_DESC_TASKS_COMPARATOR = new DateDescTasksComparator();
 
     public Task(String title, UUID id, int repeatability, int difficulty, int importance, Date date, Skill ... skills) {
         this(title, id, repeatability, difficulty, importance, date,  Arrays.asList(skills));
@@ -127,7 +135,19 @@ public class Task {
         return "MMM dd, yyyy";
     }
 
-    private static class TasksComparator implements Comparator<Task> {
+    public static class SortingOrder{
+        public static final int COMPLETION = 0;
+        public static final int TITLE_ASC = 1;
+        public static final int TITLE_DESC = 2;
+        public static final int IMPORTANCE_ASC = 3;
+        public static final int IMPORTANCE_DESC = 4;
+        public static final int DIFFICULTY_ASC = 5;
+        public static final int DIFFICULTY_DESC = 6;
+        public static final int DATE_ASC = 7;
+        public static final int DATE_DESC = 8;
+    }
+
+    private static class CompletionTasksComparator implements Comparator<Task> {
 
         @Override
         public int compare(Task lhs, Task rhs) {
@@ -139,6 +159,88 @@ public class Task {
                 return rhs.repeatability - lhs.repeatability;
             }
             return lhs.getTitle().compareTo(rhs.getTitle());
+        }
+    }
+
+    private static class TitleAscTasksComparator implements Comparator<Task> {
+
+        @Override
+        public int compare(Task lhs, Task rhs) {
+            return lhs.getTitle().compareTo(rhs.getTitle());
+        }
+    }
+
+    private static class TitleDescTasksComparator implements Comparator<Task> {
+
+        @Override
+        public int compare(Task lhs, Task rhs) {
+            return rhs.getTitle().compareTo(lhs.getTitle());
+        }
+    }
+
+    private static class ImportanceAscTasksComparator implements Comparator<Task> {
+
+        @Override
+        public int compare(Task lhs, Task rhs) {
+            if (lhs.getImportance() != rhs.getImportance()){
+                return lhs.getImportance() - rhs.getImportance();
+            }
+            return rhs.getTitle().compareTo(lhs.getTitle());
+        }
+    }
+
+    private static class ImportanceDescTasksComparator implements Comparator<Task> {
+
+        @Override
+        public int compare(Task lhs, Task rhs) {
+            if (lhs.getImportance() != rhs.getImportance()){
+                return rhs.getImportance() - lhs.getImportance();
+            }
+            return rhs.getTitle().compareTo(lhs.getTitle());
+        }
+    }
+
+    private static class DifficultyAscTasksComparator implements Comparator<Task> {
+
+        @Override
+        public int compare(Task lhs, Task rhs) {
+            if (lhs.getDifficulty() != rhs.getDifficulty()){
+                return lhs.getDifficulty() - rhs.getDifficulty();
+            }
+            return rhs.getTitle().compareTo(lhs.getTitle());
+        }
+    }
+
+    private static class DifficultyDescTasksComparator implements Comparator<Task> {
+
+        @Override
+        public int compare(Task lhs, Task rhs) {
+            if (lhs.getDifficulty() != rhs.getDifficulty()){
+                return rhs.getDifficulty() - lhs.getDifficulty();
+            }
+            return rhs.getTitle().compareTo(lhs.getTitle());
+        }
+    }
+
+    private static class DateAscTasksComparator implements Comparator<Task> {
+
+        @Override
+        public int compare(Task lhs, Task rhs) {
+            if (lhs.getDate() != rhs.getDate()){
+                return lhs.getDate().compareTo(rhs.getDate());
+            }
+            return rhs.getTitle().compareTo(lhs.getTitle());
+        }
+    }
+
+    private static class DateDescTasksComparator implements Comparator<Task> {
+
+        @Override
+        public int compare(Task lhs, Task rhs) {
+            if (lhs.getDate() != rhs.getDate()){
+                return rhs.getDate().compareTo(lhs.getDate());
+            }
+            return rhs.getTitle().compareTo(lhs.getTitle());
         }
     }
 }

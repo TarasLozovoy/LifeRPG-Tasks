@@ -88,5 +88,16 @@
     <string name="choose_date_time">Select date and time</string>
     <string name="ok">OK</string>
     <string name="cancel">CANCEL</string>
+    <string name="tasks_order_title" />
+    <string name="completion_task_order">Completion</string>
+    <string name="title_asc_task_order">Name asc.</string>
+    <string name="title_desc_task_order">Name desc.</string>
+    <string name="importance_ask_task_order">Importance asc.</string>
+    <string name="importance_desc_task_order">Importance desc.</string>
+    <string name="difficulty_asc_task_order">Difficulty asc.</string>
+    <string name="difficulty_desc_task_order">Difficulty desc.</string>
+    <string name="date_asc_task_order">Date asc.</string>
+    <string name="date_desc_task_order">Date desc.</string>
+    <string name="sort_image">Sort image</string>
 
 </resources>
