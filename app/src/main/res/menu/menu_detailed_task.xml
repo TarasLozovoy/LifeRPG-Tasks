@@ -4,15 +4,21 @@
 
     <item android:id="@+id/perform_task"
           android:title="@string/do_task"
-          android:orderInCategory="2"
-          app:showAsAction="ifRoom"
+          android:orderInCategory="3"
+          app:showAsAction="always"
         />
 
 
     <item android:id="@+id/edit_task"
           android:title="@string/edit_task"
           android:icon="@drawable/ic_mode_edit_black_24dp"
-          android:orderInCategory="1"
+          android:orderInCategory="2"
           app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/undo_task"
+        android:title="@string/undo"
+        android:orderInCategory="3"
+        app:showAsAction="always"
+        />
 
 </menu>

@@ -112,6 +112,8 @@ public class DetailedTaskFragment extends DefaultFragment {
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.perform_task).setEnabled(!currentTask.isTaskDone());
+        menu.findItem(R.id.undo_task).setVisible(currentTask.isUndonable())
+                .setEnabled(currentTask.isUndonable());
     }
 
     @Override
@@ -125,6 +127,12 @@ public class DetailedTaskFragment extends DefaultFragment {
                 return true;
             case R.id.perform_task:
                 performTask();
+                getActivity().invalidateOptionsMenu();
+                return true;
+            case R.id.undo_task:
+                getController().undoTask(currentTask);
+                item.setVisible(false).setEnabled(false);
+                setupListView();
                 return true;
             case android.R.id.home:
                 getCurrentActivity().showPreviousFragment();
@@ -187,6 +195,20 @@ public class DetailedTaskFragment extends DefaultFragment {
 
         @Override
         public void onClick(DialogInterface dialog, int which){
+            boolean heroLevelIncreased = getController().performTask(getController().getTaskByTitle(taskTitle));
+            if (heroLevelIncreased){
+                Snackbar.make(getCurrentActivity().getCurrentFocus(), "Congratulations!\n" + getController().getHeroName()
+                        + "'s level increased!", Snackbar.LENGTH_LONG)
+                        .setAction("Go to Hero page", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                getCurrentActivity().showRootFragment(new HeroFragment(), null);
+                            }
+                        })
+                        .show();
+            }
+            setupListView();
+
             ShareDialog shareDialog = new ShareDialog(getActivity());
             if (ShareDialog.canShow(ShareLinkContent.class)) {
                 ShareLinkContent linkContent = new ShareLinkContent.Builder()

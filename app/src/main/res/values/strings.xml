@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Real Life RPG</string>
+    <string name="app_name">RealLifeRPG</string>
 
     <string name="action_settings">Settings</string>
 
@@ -106,7 +106,7 @@
     <string name="sort_image">Sort image</string>
     <string name="task_performed">Task successfully performed\n</string>
     <string name="close">Close</string>
-    <string name="share">Share</string>
+    <string name="share">Share(XP x2)</string>
     <string name="done">done!</string>
     <string name="undo">Undo</string>
     <string name="edit">Edit</string>

@@ -78,6 +78,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                             })
                             .show();
                 }
+                notifyDataSetChanged();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 builder.setTitle(items.get(position))
@@ -87,7 +88,6 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
-                                notifyDataSetChanged();
                             }
                         })
                         .setPositiveButton(finalView.getResources().getString(R.string.share), new ShareClickListener(items.get(position)));
@@ -95,14 +95,6 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                 alert.show();
             }
         });
-//        view.setLongClickable(true);
-//        view.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//
-//                return true;
-//            }
-//        });
 
         TextView listItemTV = (TextView) view.findViewById(R.id.list_item_string);
         listItemTV.setText(task.getTitle());
@@ -135,6 +127,20 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
 
         @Override
         public void onClick(DialogInterface dialog, int which){
+            boolean heroLevelIncreased = lifeController.performTask(lifeController.getTaskByTitle(taskTitle));
+            if (heroLevelIncreased){
+                Snackbar.make(activity.getCurrentFocus(), "Congratulations!\n" + lifeController.getHeroName()
+                        + "'s level increased!", Snackbar.LENGTH_LONG)
+                        .setAction("Go to Hero page", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                activity.showRootFragment(new HeroFragment(), null);
+                            }
+                        })
+                        .show();
+            }
+            notifyDataSetChanged();
+
             ShareDialog shareDialog = new ShareDialog(activity);
             if (ShareDialog.canShow(ShareLinkContent.class)) {
                 ShareLinkContent linkContent = new ShareLinkContent.Builder()
