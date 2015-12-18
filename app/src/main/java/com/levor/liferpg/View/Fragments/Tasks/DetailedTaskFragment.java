@@ -3,6 +3,7 @@ package com.levor.liferpg.View.Fragments.Tasks;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.text.format.DateFormat;
@@ -17,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
@@ -146,38 +149,55 @@ public class DetailedTaskFragment extends DefaultFragment {
     }
 
     private void performTask(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("Are you sure you want perform this task?\n");
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        boolean isHeroLevelIncreased = getController().performTask(currentTask);
+        if (isHeroLevelIncreased) {
+            Snackbar.make(getView(), "Congratulations!\n" + getController().getHeroName()
+                    + "'s level increased!", Snackbar.LENGTH_LONG)
+                    .setAction("Go to Hero page", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getCurrentActivity().showRootFragment(new HeroFragment(), null);
+                        }
+                    })
+                    .show();
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getCurrentActivity());
         builder.setTitle(currentTask.getTitle())
                 .setCancelable(false)
-                .setMessage(sb.toString())
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setMessage(getView().getResources().getString(R.string.task_performed))
+                .setNeutralButton(getView().getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        boolean isHeroLevelIncreased = getController().performTask(currentTask);
                         dialog.dismiss();
                         createAdapter();
-                        if (isHeroLevelIncreased) {
-                            Snackbar.make(getView(), "Congratulations!\n" + getController().getHeroName()
-                                    + "'s level increased!", Snackbar.LENGTH_LONG)
-                                    .setAction("Go to Hero page", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            getCurrentActivity().showRootFragment(new HeroFragment(), null);
-                                        }
-                                    })
-                                    .show();
-                        }
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                .setPositiveButton(getView().getResources().getString(R.string.share), new ShareClickListener(currentTask.getTitle()));
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private class ShareClickListener implements DialogInterface.OnClickListener{
+        private String taskTitle;
+
+        public ShareClickListener(String task){
+            this.taskTitle = task;
+        }
+
+        @Override
+        public void onClick(DialogInterface dialog, int which){
+            ShareDialog shareDialog = new ShareDialog(getActivity());
+            if (ShareDialog.canShow(ShareLinkContent.class)) {
+                ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                        .setContentTitle(taskTitle + " " + getActivity().getResources().getString(R.string.done))
+                        .setContentDescription(
+                                "I have just finished task " + taskTitle + "!")
+                        .setContentUrl(Uri.parse(getActivity().getResources().getString(R.string.facebook_app_link)))
+                        .build();
+
+                shareDialog.show(linkContent);
+            }
+        }
     }
 }

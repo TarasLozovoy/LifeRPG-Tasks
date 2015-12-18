@@ -19,10 +19,12 @@ android {
     }
 }
 
+repositories { mavenCentral() }
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:design:23.1.0'
-    compile files('libs/dropbox-android-sdk-1.6.3.jar')
+    compile 'com.facebook.android:facebook-android-sdk:4.7.0'
 }

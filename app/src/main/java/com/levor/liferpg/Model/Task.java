@@ -20,6 +20,7 @@ public class Task {
     private int difficulty = EASY;
     private int importance = EASY;
     private Date date;
+    private boolean undonable = false;
 
     public static final Comparator<Task> COMPLETION_TASKS_COMPARATOR = new CompletionTasksComparator();
     public static final Comparator<Task> TITLE_ASC_TASKS_COMPARATOR = new TitleAscTasksComparator();
@@ -119,6 +120,14 @@ public class Task {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public boolean isUndonable() {
+        return undonable;
+    }
+
+    public void setUndonable(boolean undonable) {
+        this.undonable = undonable;
     }
 
     public double getMultiplier(){

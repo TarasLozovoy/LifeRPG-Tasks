@@ -1,6 +1,7 @@
 package com.levor.liferpg.View.Activities;
 
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -8,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.facebook.FacebookSdk;
 import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
@@ -24,6 +27,8 @@ import com.levor.liferpg.View.Fragments.Tasks.TasksFragment;
 
 import java.util.EmptyStackException;
 import java.util.Stack;
+
+import bolts.AppLinks;
 
 public class MainActivity extends AppCompatActivity{
     public final static int HERO_FRAGMENT_ID = 0;
@@ -43,6 +48,11 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initializeSocialNetworksSDK();
+        Uri targetUrl = AppLinks.getTargetUrlFromInboundIntent(this, getIntent());
+        if (targetUrl != null) {
+            Log.i("Activity", "App Link Target URL: " + targetUrl.toString());
+        }
         lifeController = LifeController.getInstance(this);
         setContentView(R.layout.activity_main_fragment);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -218,6 +228,10 @@ public class MainActivity extends AppCompatActivity{
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
             showBack = false;
         }
+    }
+
+    private void initializeSocialNetworksSDK(){
+        FacebookSdk.sdkInitialize(getApplicationContext());
     }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {

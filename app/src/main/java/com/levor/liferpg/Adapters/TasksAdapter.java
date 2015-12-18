@@ -3,6 +3,7 @@ package com.levor.liferpg.Adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.levor.liferpg.Controller.LifeController;
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
@@ -63,37 +66,31 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
         doBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("Are you sure you want perform this task?\n");
+                boolean isHeroLevelIncreased = lifeController.performTask(task);
+                if (isHeroLevelIncreased) {
+                    Snackbar.make(finalView, "Congratulations!\n" + lifeController.getHeroName()
+                            + "'s level increased!", Snackbar.LENGTH_LONG)
+                            .setAction("Go to Hero page", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    activity.showRootFragment(new HeroFragment(), null);
+                                }
+                            })
+                            .show();
+                }
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 builder.setTitle(items.get(position))
                         .setCancelable(false)
-                        .setMessage(sb.toString())
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setMessage(finalView.getResources().getString(R.string.task_performed))
+                        .setNeutralButton(finalView.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                boolean isHeroLevelIncreased = lifeController.performTask(task);
                                 dialog.dismiss();
                                 notifyDataSetChanged();
-                                if (isHeroLevelIncreased) {
-                                    Snackbar.make(finalView, "Congratulations!\n" + lifeController.getHeroName()
-                                            + "'s level increased!", Snackbar.LENGTH_LONG)
-                                            .setAction("Go to Hero page", new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    activity.showRootFragment(new HeroFragment(), null);
-                                                }
-                                            })
-                                            .show();
-                                }
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
+                        .setPositiveButton(finalView.getResources().getString(R.string.share), new ShareClickListener(items.get(position)));
                 AlertDialog alert = builder.create();
                 alert.show();
             }
@@ -119,5 +116,28 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
             doBtn.setEnabled(false);
         }
         return view;
+    }
+
+    private class ShareClickListener implements DialogInterface.OnClickListener{
+        private String taskTitle;
+
+        public ShareClickListener(String task){
+            this.taskTitle = task;
+        }
+
+        @Override
+        public void onClick(DialogInterface dialog, int which){
+            ShareDialog shareDialog = new ShareDialog(activity);
+            if (ShareDialog.canShow(ShareLinkContent.class)) {
+                ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                        .setContentTitle(taskTitle + " " + activity.getResources().getString(R.string.done))
+                        .setContentDescription(
+                                "I have just finished task " + taskTitle + "!")
+                        .setContentUrl(Uri.parse(activity.getResources().getString(R.string.facebook_app_link)))
+                        .build();
+
+                shareDialog.show(linkContent);
+            }
+        }
     }
 }
