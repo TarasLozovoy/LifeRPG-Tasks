@@ -95,6 +95,14 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                 alert.show();
             }
         });
+//        view.setLongClickable(true);
+//        view.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//
+//                return true;
+//            }
+//        });
 
         TextView listItemTV = (TextView) view.findViewById(R.id.list_item_string);
         listItemTV.setText(task.getTitle());

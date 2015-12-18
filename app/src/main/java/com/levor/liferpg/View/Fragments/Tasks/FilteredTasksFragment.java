@@ -1,8 +1,11 @@
 package com.levor.liferpg.View.Fragments.Tasks;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.levor.liferpg.Adapters.TasksAdapter;
 import com.levor.liferpg.Model.Task;
@@ -35,10 +39,15 @@ public class FilteredTasksFragment extends DefaultFragment {
     public static final int SIMPLE = 2;
     public static final int DONE = 3;
 
+    private static final int UNDO_CONTEXT_MENU_ITEM = 0;
+    private static final int EDIT_CONTEXT_MENU_ITEM = 1;
+    private static final int DELETE_CONTEXT_MENU_ITEM = 2;
+
     private int filter;
     private ListView listView;
     private Spinner orderSpinner;
     private List<String> sortingOrdersList = new ArrayList<>();
+    private List<String> sortedTasksTitles = new ArrayList<>();
     private int sorting;
 
     @Override
@@ -100,6 +109,62 @@ public class FilteredTasksFragment extends DefaultFragment {
         }
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.listViewTasks){
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+            String selectedTitle = sortedTasksTitles.get(info.position);
+            Task selectedTask = getController().getTaskByTitle(selectedTitle);
+            menu.setHeaderTitle(selectedTitle);
+            menu.add(Menu.NONE, UNDO_CONTEXT_MENU_ITEM, UNDO_CONTEXT_MENU_ITEM, R.string.undo)
+                    .setEnabled(selectedTask.isUndonable());
+            menu.add(Menu.NONE, EDIT_CONTEXT_MENU_ITEM, EDIT_CONTEXT_MENU_ITEM, R.string.edit);
+            menu.add(Menu.NONE, DELETE_CONTEXT_MENU_ITEM, DELETE_CONTEXT_MENU_ITEM, R.string.delete);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        String selectedTitle = sortedTasksTitles.get(info.position);
+        final Task currentTask = getController().getTaskByTitle(selectedTitle);
+
+        int menuItemIndex = item.getItemId();
+        switch (menuItemIndex) {
+            case UNDO_CONTEXT_MENU_ITEM:
+                getController().undoTask(currentTask);
+                setupListView();
+                return true;
+            case EDIT_CONTEXT_MENU_ITEM:
+                DefaultFragment f = new EditTaskFragment();
+                Bundle b = new Bundle();
+                b.putSerializable(EditTaskFragment.CURRENT_TASK_TITLE_TAG, selectedTitle);
+                getCurrentActivity().showChildFragment(f, b);
+                return true;
+            case DELETE_CONTEXT_MENU_ITEM:
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setTitle("Removing " + currentTask.getTitle())
+                        .setMessage("Are you really want to remove this task?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                getController().removeTask(currentTask);
+                                dialog.dismiss();
+                                setupListView();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+                return true;
+        }
+        return false;
+    }
+
     private void setupListView() {
         List<Task> tasks = getController().getAllTasks();
         Comparator<Task> comparator = null;
@@ -134,25 +199,25 @@ public class FilteredTasksFragment extends DefaultFragment {
 
         }
         Collections.sort(tasks, comparator);
-        List<String> filteredTasks = new ArrayList<>();
+        sortedTasksTitles = new ArrayList<>();
         for (Task t : tasks) {
             switch (filter) {
                 case ALL:
-                    filteredTasks.add(t.getTitle());
+                    sortedTasksTitles.add(t.getTitle());
                     break;
                 case INFINITE:
                     if (t.getRepeatability() < 0) {
-                        filteredTasks.add(t.getTitle());
+                        sortedTasksTitles.add(t.getTitle());
                     }
                     break;
                 case SIMPLE:
                     if (t.getRepeatability() > 0) {
-                        filteredTasks.add(t.getTitle());
+                        sortedTasksTitles.add(t.getTitle());
                     }
                     break;
                 case DONE:
                     if (t.getRepeatability() == 0) {
-                        filteredTasks.add(t.getTitle());
+                        sortedTasksTitles.add(t.getTitle());
                     }
                     break;
                 default:
@@ -160,8 +225,9 @@ public class FilteredTasksFragment extends DefaultFragment {
             }
         }
 
-        TasksAdapter adapter = new TasksAdapter(filteredTasks, getCurrentActivity());
+        TasksAdapter adapter = new TasksAdapter(sortedTasksTitles, getCurrentActivity());
         listView.setAdapter(adapter);
+        registerForContextMenu(listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LifeRPG</string>
+    <string name="app_name">Real Life RPG</string>
 
     <string name="action_settings">Settings</string>
 
@@ -108,5 +108,8 @@
     <string name="close">Close</string>
     <string name="share">Share</string>
     <string name="done">done!</string>
+    <string name="undo">Undo</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
 </resources>

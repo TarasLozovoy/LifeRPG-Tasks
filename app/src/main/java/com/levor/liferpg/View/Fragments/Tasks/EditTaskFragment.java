@@ -24,14 +24,14 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class EditTaskFragment extends AddTaskFragment {
-    public final static String CURRENT_TASK_TAG = "current_task_tag";
+    public final static String CURRENT_TASK_TITLE_TAG = "current_task_tag";
     private Task currentTask;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
-        currentTask = getController().getTaskByTitle(getArguments().getString(CURRENT_TASK_TAG));
+        currentTask = getController().getTaskByTitle(getArguments().getString(CURRENT_TASK_TITLE_TAG));
         if (savedInstanceState == null) {
             taskTitleEditText.setText(currentTask.getTitle());
             for (Skill sk : currentTask.getRelatedSkills()) {

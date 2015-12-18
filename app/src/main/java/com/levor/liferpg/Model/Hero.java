@@ -26,7 +26,7 @@ public class Hero {
 
     public boolean decreaseXP(double value){
         xp -= value;
-        return checkXPCeiling();
+        return checkXPFloor();
     }
 
     public void setLevel(int level) {
@@ -78,6 +78,16 @@ public class Hero {
             level++;
             xp = xp - xpToNextLevel;
             xpToNextLevel = xpToLevel(level);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkXPFloor(){
+        if (xp < 0){
+            level--;
+            xpToNextLevel = xpToLevel(level);
+            xp = xpToNextLevel + xp;
             return true;
         }
         return false;

@@ -120,6 +120,7 @@ public class LifeController {
 
     public boolean performTask(Task task){
         Hero hero = lifeEntity.getHero();
+        task.setUndonable(true);
         if (task.getRepeatability() > 0){
             task.setRepeatability(task.getRepeatability() - 1);
             updateTask(task);
@@ -136,6 +137,27 @@ public class LifeController {
         lifeEntity.updateHero(hero);
 
         return isLevelIncreased;
+    }
+
+    public boolean undoTask(Task task){
+        Hero hero = lifeEntity.getHero();
+        task.setUndonable(false);
+        if (task.getRepeatability() >= 0){
+            task.setRepeatability(task.getRepeatability() + 1);
+            updateTask(task);
+        }
+        double multiplier = task.getMultiplier();
+        double finalXP = hero.getBaseXP() * multiplier;
+        for (Skill sk : task.getRelatedSkills()) {
+            if (sk.decreaseSublevel(finalXP)){
+                lifeEntity.updateCharacteristic(sk.getKeyCharacteristic());
+            }
+            updateSkill(sk);
+        }
+        boolean isLevelChanged = hero.decreaseXP(finalXP);
+        lifeEntity.updateHero(hero);
+
+        return isLevelChanged;
     }
 
     public void updateSkill(Skill skill) {

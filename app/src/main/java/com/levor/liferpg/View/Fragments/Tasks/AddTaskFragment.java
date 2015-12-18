@@ -215,7 +215,7 @@ public class AddTaskFragment extends DefaultFragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.toString().equals("")) s = "-1";
                 int repeat = Integer.parseInt(s.toString());
-                if (repeat > 999999) {
+                if (repeat > 999) {
                     taskRepeatEditText.setText(Integer.toString(999));
                     taskRepeatEditText.setSelection(taskRepeatEditText.getText().length());
                     Snackbar.make(view, view.getResources().getString(R.string.max_task_repeat), Snackbar.LENGTH_LONG).show();

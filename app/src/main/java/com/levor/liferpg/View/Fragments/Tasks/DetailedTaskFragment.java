@@ -89,7 +89,7 @@ public class DetailedTaskFragment extends DefaultFragment {
         getCurrentActivity().setActionBarTitle("Task");
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
 
-        createAdapter();
+        setupListView();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -119,7 +119,7 @@ public class DetailedTaskFragment extends DefaultFragment {
         switch (item.getItemId()){
             case R.id.edit_task:
                 Bundle b = new Bundle();
-                b.putSerializable(EditTaskFragment.CURRENT_TASK_TAG, currentTask.getTitle());
+                b.putSerializable(EditTaskFragment.CURRENT_TASK_TITLE_TAG, currentTask.getTitle());
                 DefaultFragment f = new EditTaskFragment();
                 getCurrentActivity().showChildFragment(f, b);
                 return true;
@@ -134,7 +134,7 @@ public class DetailedTaskFragment extends DefaultFragment {
         }
     }
 
-    private void createAdapter(){
+    private void setupListView(){
         ArrayList<String> skills = new ArrayList<>();
         for (Skill sk : currentTask.getRelatedSkills()) {
             StringBuilder sb = new StringBuilder(sk.getTitle());
@@ -170,7 +170,7 @@ public class DetailedTaskFragment extends DefaultFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        createAdapter();
+                        setupListView();
                     }
                 })
                 .setPositiveButton(getView().getResources().getString(R.string.share), new ShareClickListener(currentTask.getTitle()));

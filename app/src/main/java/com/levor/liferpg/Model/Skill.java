@@ -70,12 +70,12 @@ public class Skill {
     /**
      * @return true if level changed
      */
-    public boolean decreaseSublevel(){
-        sublevel--;
+    public boolean decreaseSublevel(double value){
+        sublevel -= value;
         if (sublevel < 0) {
             keyCharacteristic.increaseLevelByN(-(1 + level/10));
             level --;
-            sublevel = level - 1;
+            sublevel = level + sublevel;
             return true;
         }
         return false;
