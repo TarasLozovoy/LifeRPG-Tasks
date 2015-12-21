@@ -30,6 +30,7 @@ public class TasksFragment extends DefaultFragment {
         tabLayout.addTab(tabLayout.newTab().setText(R.string.simple_tasks));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.finished_tasks));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.blue));
 
         viewPager = (ViewPager) view.findViewById(R.id.pager);
         getCurrentActivity().getSupportActionBar().setElevation(0);

@@ -157,7 +157,7 @@ public class DetailedTaskFragment extends DefaultFragment {
     }
 
     private void performTask(){
-        boolean isHeroLevelIncreased = getController().performTask(currentTask);
+        boolean isHeroLevelIncreased = getController().performTask(currentTask, true);
         if (isHeroLevelIncreased) {
             Snackbar.make(getView(), "Congratulations!\n" + getController().getHeroName()
                     + "'s level increased!", Snackbar.LENGTH_LONG)
@@ -195,7 +195,7 @@ public class DetailedTaskFragment extends DefaultFragment {
 
         @Override
         public void onClick(DialogInterface dialog, int which){
-            boolean heroLevelIncreased = getController().performTask(getController().getTaskByTitle(taskTitle));
+            boolean heroLevelIncreased = getController().performTask(getController().getTaskByTitle(taskTitle), false);
             if (heroLevelIncreased){
                 Snackbar.make(getCurrentActivity().getCurrentFocus(), "Congratulations!\n" + getController().getHeroName()
                         + "'s level increased!", Snackbar.LENGTH_LONG)

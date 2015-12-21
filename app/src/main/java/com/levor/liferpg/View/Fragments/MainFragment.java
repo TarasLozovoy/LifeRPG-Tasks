@@ -30,6 +30,7 @@ public class MainFragment extends DefaultFragment{
         tabLayout.addTab(tabLayout.newTab().setText(R.string.characteristics_fragment_name));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.skills_fragment_name));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.blue));
 
         viewPager = (ViewPager) v.findViewById(R.id.pager);
         getCurrentActivity().getSupportActionBar().setElevation(0);

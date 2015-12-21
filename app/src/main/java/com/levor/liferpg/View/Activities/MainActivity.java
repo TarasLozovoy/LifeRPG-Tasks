@@ -2,6 +2,7 @@ package com.levor.liferpg.View.Activities;
 
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -38,12 +39,8 @@ public class MainActivity extends AppCompatActivity{
 
     protected LifeController lifeController;
 
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private ListView mDrawerList;
-    private String[] activities;
+    private TabLayout navigationTabLayout;
     private static Stack<DefaultFragment> fragmentsStack = new Stack<>();
-    private boolean showBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,36 +51,34 @@ public class MainActivity extends AppCompatActivity{
             Log.i("Activity", "App Link Target URL: " + targetUrl.toString());
         }
         lifeController = LifeController.getInstance(this);
-        setContentView(R.layout.activity_main_fragment);
+        setContentView(R.layout.activity_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
+        navigationTabLayout = (TabLayout) findViewById(R.id.navigation_tab_layout);
+        navigationTabLayout.addTab(navigationTabLayout.newTab().setIcon(getHeroImageID()));
+        navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.tasks));
+        navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.action_settings));
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        activities = getResources().getStringArray(R.array.activities_array);
-
-        mDrawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, activities));
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.mipmap.ic_drawer, R.string.drawer_open, R.string.drawer_close){
-            public void onDrawerOpened(View view) {
-                getSupportActionBar().setHomeAsUpIndicator(0);
+        navigationTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        navigationTabLayout.setSelectedTabIndicatorHeight(6);
+        navigationTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.blue));
+        navigationTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switchRootFragment(tab.getPosition());
             }
 
             @Override
-            public void onDrawerClosed(View drawerView) {
-                getSupportActionBar().setHomeAsUpIndicator(showBack ? 0 : R.drawable.ic_menu_black_24dp);
+            public void onTabUnselected(TabLayout.Tab tab) {
             }
-        };
 
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
-
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(false);
 
         if (savedInstanceState == null) {
             DefaultFragment fragment = new MainFragment();
@@ -95,27 +90,11 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-    }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (fragmentsStack.peek().onOptionsItemSelected(item)) return true;
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        } else {
-            mDrawerLayout.closeDrawer(mDrawerList);
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -129,6 +108,10 @@ public class MainActivity extends AppCompatActivity{
 
     public LifeController getController(){
         return lifeController;
+    }
+
+    public int getHeroImageID(){
+        return R.drawable.default_hero;
     }
 
     private void switchRootFragment(int fragmentNumber) {
@@ -146,8 +129,6 @@ public class MainActivity extends AppCompatActivity{
             default:
                 throw new RuntimeException("No such menu item!");
         }
-        mDrawerList.setItemChecked(fragmentNumber, true);
-        mDrawerLayout.closeDrawer(mDrawerList);
         if (fragmentsStack.peek().getClass() == fragment.getClass()) return;
         showRootFragment(fragment, null);
     }
@@ -166,7 +147,6 @@ public class MainActivity extends AppCompatActivity{
                 .commit();
         getSupportFragmentManager().executePendingTransactions();
         fragment.onRestoreFromBackStack();
-        mDrawerLayout.closeDrawer(mDrawerList);
         return true;
     }
 
@@ -199,10 +179,6 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(mDrawerList)){
-            mDrawerLayout.closeDrawer(mDrawerList);
-            return;
-        }
         if (!showPreviousFragment()){
             super.onBackPressed();
         }
@@ -222,22 +198,16 @@ public class MainActivity extends AppCompatActivity{
 
     public void showActionBarHomeButtonAsBack(boolean isBack) {
         if (isBack) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(0);
-            showBack = true;
         } else {
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp);
-            showBack = false;
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setHomeButtonEnabled(false);
         }
     }
 
     private void initializeSocialNetworksSDK(){
         FacebookSdk.sdkInitialize(getApplicationContext());
-    }
-
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            switchRootFragment(position);
-        }
     }
 }

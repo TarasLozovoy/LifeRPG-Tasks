@@ -118,13 +118,13 @@ public class LifeController {
         lifeEntity.removeSkill(skill);
     }
 
-    public boolean performTask(Task task){
+    public boolean performTask(Task task, boolean changeRepeatability){
         Hero hero = lifeEntity.getHero();
         task.setUndonable(true);
-        if (task.getRepeatability() > 0){
+        if (changeRepeatability && task.getRepeatability() > 0){
             task.setRepeatability(task.getRepeatability() - 1);
-            updateTask(task);
         }
+        updateTask(task);
         double multiplier = task.getMultiplier();
         double finalXP = hero.getBaseXP() * multiplier;
         for (Skill sk : task.getRelatedSkills()) {

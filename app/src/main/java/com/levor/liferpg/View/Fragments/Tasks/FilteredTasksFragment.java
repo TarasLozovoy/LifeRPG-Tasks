@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -29,7 +30,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-public class FilteredTasksFragment extends DefaultFragment {
+public class FilteredTasksFragment extends DefaultFragment{
     public static final String FILTER_ARG = "filter_arg";
     public static final String SHARED_PREFS_TAG = "shared_prefs_tag";
     public static final String SORTING_KEY = "sorting_key";
@@ -45,6 +46,7 @@ public class FilteredTasksFragment extends DefaultFragment {
 
     private int filter;
     private ListView listView;
+    private TasksAdapter adapter;
     private Spinner orderSpinner;
     private List<String> sortingOrdersList = new ArrayList<>();
     private List<String> sortedTasksTitles = new ArrayList<>();
@@ -165,6 +167,8 @@ public class FilteredTasksFragment extends DefaultFragment {
         return false;
     }
 
+
+
     private void setupListView() {
         List<Task> tasks = getController().getAllTasks();
         Comparator<Task> comparator = null;
@@ -225,13 +229,13 @@ public class FilteredTasksFragment extends DefaultFragment {
             }
         }
 
-        TasksAdapter adapter = new TasksAdapter(sortedTasksTitles, getCurrentActivity());
+        adapter = new TasksAdapter(sortedTasksTitles, getCurrentActivity());
         listView.setAdapter(adapter);
         registerForContextMenu(listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedTaskTitle = getController().getAllTasks().get(position).getTitle();
+                String selectedTaskTitle = sortedTasksTitles.get(position);
                 UUID taskID = getController().getTaskByTitle(selectedTaskTitle).getId();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, taskID);

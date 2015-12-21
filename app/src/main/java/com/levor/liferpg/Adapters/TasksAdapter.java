@@ -66,7 +66,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
         doBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isHeroLevelIncreased = lifeController.performTask(task);
+                boolean isHeroLevelIncreased = lifeController.performTask(task, true);
                 if (isHeroLevelIncreased) {
                     Snackbar.make(finalView, "Congratulations!\n" + lifeController.getHeroName()
                             + "'s level increased!", Snackbar.LENGTH_LONG)
@@ -127,7 +127,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
 
         @Override
         public void onClick(DialogInterface dialog, int which){
-            boolean heroLevelIncreased = lifeController.performTask(lifeController.getTaskByTitle(taskTitle));
+            boolean heroLevelIncreased = lifeController.performTask(lifeController.getTaskByTitle(taskTitle), false);
             if (heroLevelIncreased){
                 Snackbar.make(activity.getCurrentFocus(), "Congratulations!\n" + lifeController.getHeroName()
                         + "'s level increased!", Snackbar.LENGTH_LONG)

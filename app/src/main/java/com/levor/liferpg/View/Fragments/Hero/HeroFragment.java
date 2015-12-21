@@ -37,7 +37,7 @@ public class HeroFragment extends DefaultFragment {
         xpProgressTV = (TextView) v.findViewById(R.id.xp_progress_TV);
         heroLevelTV = (TextView) v.findViewById(R.id.hero_level);
 
-        heroImageIV.setImageResource(R.drawable.default_hero);
+        heroImageIV.setImageResource(getCurrentActivity().getHeroImageID());
         setHasOptionsMenu(true);
         return v;
     }
