@@ -43,7 +43,7 @@ public class EditTaskFragment extends AddTaskFragment {
             }
             difficultySpinner.setSelection(currentTask.getDifficulty());
             importanceSpinner.setSelection(currentTask.getImportance());
-            setupDateButton(currentTask.getDate());
+            setupDateTimeButtons(currentTask.getDate());
         }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Edit task");

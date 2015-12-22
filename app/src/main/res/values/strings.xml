@@ -112,5 +112,6 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="XP_gained">+ %.2f XP!</string>
+    <string name="time">Time:</string>
 
 </resources>

@@ -140,8 +140,12 @@ public class Task {
         else return this.id.equals(((Task) o).id);
     }
 
-    public static String getFormatting() {
+    public static String getDateFormatting() {
         return "MMM dd, yyyy";
+    }
+
+    public static String getTimeFormatting() {
+        return "kk:mm";
     }
 
     public static class SortingOrder{

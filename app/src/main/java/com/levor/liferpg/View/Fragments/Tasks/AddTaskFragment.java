@@ -3,9 +3,11 @@ package com.levor.liferpg.View.Fragments.Tasks;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
@@ -25,6 +27,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 
 import com.levor.liferpg.Adapters.TaskAddingAdapter;
 import com.levor.liferpg.Model.Task;
@@ -51,6 +54,7 @@ public class AddTaskFragment extends DefaultFragment {
     protected Spinner importanceSpinner;
     private ListView relatedSkillListView;
     private Button dateButton;
+    private Button timeButton;
 
     Date date;
     protected ArrayList<String> relatedSkills = new ArrayList<>();
@@ -63,6 +67,7 @@ public class AddTaskFragment extends DefaultFragment {
         taskTitleEditText = (EditText) view.findViewById(R.id.task_title_edit_text);
         relatedSkillListView = (ListView) view.findViewById(R.id.related_skills_to_add);
         dateButton = (Button) view.findViewById(R.id.date_button);
+        timeButton = (Button) view.findViewById(R.id.time_button);
         taskRepeatEditText = (EditText) view.findViewById(R.id.task_repeat_times_edit_text);
         difficultySpinner = (Spinner) view.findViewById(R.id.difficulty_spinner);
         importanceSpinner = (Spinner) view.findViewById(R.id.importance_spinner);
@@ -78,7 +83,7 @@ public class AddTaskFragment extends DefaultFragment {
         } else {
             date = new Date();
         }
-        setupDateButton(date);
+        setupDateTimeButtons(date);
 
         setupListView();
         registerListeners(view);
@@ -230,7 +235,7 @@ public class AddTaskFragment extends DefaultFragment {
         taskTitleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus){
+                if (!hasFocus) {
                     getCurrentActivity().showSoftKeyboard(false, getView());
                 }
             }
@@ -238,7 +243,7 @@ public class AddTaskFragment extends DefaultFragment {
         taskRepeatEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus){
+                if (!hasFocus) {
                     getCurrentActivity().showSoftKeyboard(false, getView());
                 }
             }
@@ -273,33 +278,61 @@ public class AddTaskFragment extends DefaultFragment {
                 newFragment.show(getFragmentManager(), "DatePicker");
             }
         });
+
+        timeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = new SelectTimeFragmentTrans();
+                newFragment.show(getFragmentManager(), "TimePickerPicker");
+            }
+        });
     }
 
     private void setupSpinners(){
-        difficultySpinner.setAdapter(new ArrayAdapter<>(getActivity(),
-                android.R.layout.select_dialog_item,
-                getResources().getStringArray(R.array.difficulties_array)));
-        importanceSpinner.setAdapter(new ArrayAdapter<>(getActivity(),
-                android.R.layout.select_dialog_item,
-                getResources().getStringArray(R.array.importance_array)));
+        ArrayAdapter<CharSequence> difficultyAdapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.difficulties_array,
+                R.layout.default_spinner_item);
+        difficultyAdapter.setDropDownViewResource(R.layout.default_spinner_drop_down_view);
+        difficultySpinner.setAdapter(difficultyAdapter);
+
+        ArrayAdapter<CharSequence> importanceAdapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.importance_array,
+                R.layout.default_spinner_item);
+        importanceAdapter.setDropDownViewResource(R.layout.default_spinner_drop_down_view);
+        importanceSpinner.setAdapter(importanceAdapter);
     }
 
-    protected void setupDateButton(Date d){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(d);
-        cal.set(Calendar.HOUR, 1);
-        cal.set(Calendar.MINUTE, 1);
-        cal.set(Calendar.SECOND, 1);
-        cal.set(Calendar.MILLISECOND, 1);
-        this.date = cal.getTime();
-        String formatting = Task.getFormatting();
-        dateButton.setText(DateFormat.format(formatting, this.date));
+    protected void setupDateTimeButtons(Date d){
+        setupDateButton(d);
+        setupTimeButton(d);
+    }
+
+    private void setupDateButton(Date d){
+        Calendar newCal = Calendar.getInstance();
+        newCal.setTime(d);
+        Calendar oldCal = Calendar.getInstance();
+        oldCal.setTime(date);
+        newCal.set(Calendar.HOUR_OF_DAY, oldCal.get(Calendar.HOUR_OF_DAY));
+        newCal.set(Calendar.MINUTE, oldCal.get(Calendar.MINUTE));
+        date = newCal.getTime();
+        dateButton.setText(DateFormat.format(Task.getDateFormatting(), date));
+    }
+
+    private void setupTimeButton(Date d){
+        Calendar newCal = Calendar.getInstance();
+        newCal.setTime(d);
+        Calendar oldCal = Calendar.getInstance();
+        oldCal.setTime(date);
+        newCal.set(Calendar.YEAR, oldCal.get(Calendar.YEAR));
+        newCal.set(Calendar.MONTH, oldCal.get(Calendar.MONTH));
+        newCal.set(Calendar.DAY_OF_MONTH, oldCal.get(Calendar.DAY_OF_MONTH));
+        date = newCal.getTime();
+        timeButton.setText(DateFormat.format(Task.getTimeFormatting(), date));
     }
 
     public class SelectDateFragmentTrans extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
-        public SelectDateFragmentTrans(){}
-
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Calendar calendar = Calendar.getInstance();
@@ -312,10 +345,30 @@ public class AddTaskFragment extends DefaultFragment {
 
         public void onDateSet(DatePicker view, int yy, int mm, int dd) {
             Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
             cal.set(yy, mm, dd);
             setupDateButton(cal.getTime());
         }
+    }
 
+    public class SelectTimeFragmentTrans extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            int hh = calendar.get(Calendar.HOUR_OF_DAY);
+            int mm = calendar.get(Calendar.MINUTE);
+            return new TimePickerDialog(getActivity(), this, hh, mm, true);
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            cal.set(Calendar.MINUTE, minute);
+            setupTimeButton(cal.getTime());
+        }
     }
 }

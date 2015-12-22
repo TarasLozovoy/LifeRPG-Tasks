@@ -7,7 +7,7 @@
         android:id="@+id/list_item_string"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
+        android:paddingLeft="4dp"
         android:textSize="15sp"
         android:layout_toLeftOf="@+id/repeatability_container_tasks_list_item"
         android:layout_alignParentLeft="true"

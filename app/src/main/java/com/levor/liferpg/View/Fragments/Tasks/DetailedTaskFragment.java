@@ -56,7 +56,8 @@ public class DetailedTaskFragment extends DefaultFragment {
 
         //setup task date
         String dateString = getResources().getString(R.string.date) + " " +
-                DateFormat.format(Task.getFormatting(), currentTask.getDate());
+                DateFormat.format(Task.getDateFormatting(), currentTask.getDate()) + " - " +
+                DateFormat.format(Task.getTimeFormatting(), currentTask.getDate());
         taskDateTV.setText(dateString);
 
         //setup difficulty TextView

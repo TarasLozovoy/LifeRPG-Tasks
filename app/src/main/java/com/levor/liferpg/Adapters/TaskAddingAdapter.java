@@ -45,7 +45,7 @@ public class TaskAddingAdapter extends BaseAdapter implements ListAdapter {
             view = inflater.inflate(R.layout.task_add_list_view, null);
         }
 
-        TextView listItemText = (TextView) view.findViewById(R.id.list_item_string);
+        TextView listItemText = (TextView) view;
         listItemText.setText(items.get(position));
         return view;
     }

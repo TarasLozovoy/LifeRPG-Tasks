@@ -29,29 +29,11 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/date_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/add_title_layout"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/LifeRPGTextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/date" />
-
-            <Button
-                android:id="@+id/date_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/task_repeat_times_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/date_layout"
+            android:layout_below="@id/add_title_layout"
+            android:layout_marginTop="@dimen/add_task_fragment_default_margin"
             android:orientation="horizontal">
 
             <TextView
@@ -79,53 +61,112 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/difficulty_linear_layout"
+            android:id="@+id/date_time_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/task_repeat_times_linear_layout"
+            android:layout_marginTop="@dimen/add_task_fragment_default_margin"
             android:orientation="horizontal">
 
-            <TextView
-                style="@style/LifeRPGTextStyle"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="@string/difficulty" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-            <Spinner
-                android:id="@+id/difficulty_spinner"
+                <TextView
+                    style="@style/LifeRPGTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/date" />
+
+                <Button
+                    android:id="@+id/date_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
+                <TextView
+                    style="@style/LifeRPGTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/time" />
+
+                <Button
+                    android:id="@+id/time_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/importance_linear_layout"
+            android:id="@+id/difficulty_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/difficulty_linear_layout"
+            android:layout_below="@id/date_time_layout"
+            android:layout_marginTop="@dimen/add_task_fragment_default_margin"
             android:orientation="horizontal">
 
-            <TextView
-                style="@style/LifeRPGTextStyle"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="@string/importance" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-            <Spinner
-                android:id="@+id/importance_spinner"
+                <TextView
+                    style="@style/LifeRPGTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/difficulty" />
+
+                <Spinner
+                    android:id="@+id/difficulty_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
+                <TextView
+                    style="@style/LifeRPGTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/importance" />
+
+                <Spinner
+                    android:id="@+id/importance_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/add_skill_ll"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/importance_linear_layout"
-            android:orientation="vertical">
+            android:layout_below="@id/difficulty_linear_layout"
+            android:layout_marginTop="@dimen/add_task_fragment_default_margin"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
             <TextView
                 style="@style/LifeRPGTextStyle"
@@ -135,7 +176,7 @@
 
             <ListView
                 android:id="@+id/related_skills_to_add"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
