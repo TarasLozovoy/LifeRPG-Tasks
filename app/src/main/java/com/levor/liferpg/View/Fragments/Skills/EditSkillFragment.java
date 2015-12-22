@@ -48,7 +48,7 @@ public class EditSkillFragment extends AddSkillFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.save:
+            case R.id.ok_menu_item:
                 if (titleEditText.getText().toString().equals("")){
                     Toast.makeText(getActivity(), "Skill title can't be empty", Toast.LENGTH_SHORT).show();
                 } else if (keyCharacteristic == null){
@@ -108,6 +108,7 @@ public class EditSkillFragment extends AddSkillFragment {
 
     @Override
     protected void finish(String title, String message) {
+        getCurrentActivity().showSoftKeyboard(false, getView());
         currentSkill.setTitle(title);
         currentSkill.setKeyCharacteristic(keyCharacteristic);
         getController().updateSkill(currentSkill);

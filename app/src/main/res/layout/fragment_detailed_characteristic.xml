@@ -1,38 +1,51 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.levor.liferpg.View.Fragments.Characteristics.DetailedCharacteristicFragment">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context="com.levor.liferpg.View.Fragments.Tasks.DetailedTaskFragment">
 
-    <TextView
-        android:id="@+id/characteristic_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"/>
-
-    <TextView
-        android:id="@+id/level"
-        android:text="@string/characteristic_level"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:layout_below="@id/characteristic_title"/>
-    <TextView
-        android:id="@+id/level_value"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/level"
-        android:textSize="20sp"
-        android:layout_below="@id/characteristic_title"/>
-    <TextView
-        android:id="@+id/related_skill"
-        android:text="@string/characteristic_related_skills"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/level"
-        android:textSize="20sp"/>
-    <ListView android:layout_width="match_parent" android:layout_height="wrap_content"
-              android:id="@+id/list_view"
-    android:layout_below="@id/related_skill"> </ListView>
+        android:layout_height="wrap_content">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/characteristic_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/LifeRPGTextTitleStyle" />
+
+        <TextView
+            android:id="@+id/level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/characteristic_title"
+            android:text="@string/characteristic_level"
+            style="@style/LifeRPGTextStyle" />
+
+        <TextView
+            android:id="@+id/level_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/characteristic_title"
+            android:layout_toRightOf="@id/level"
+            style="@style/LifeRPGTextStyle" />
+
+        <TextView
+            android:id="@+id/related_skill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/level"
+            android:text="@string/characteristic_related_skills"
+            style="@style/LifeRPGTextStyle" />
+
+        <ListView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/related_skill">
+
+        </ListView>
+
+    </RelativeLayout>
+</ScrollView>

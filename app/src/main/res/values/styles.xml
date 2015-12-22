@@ -14,7 +14,12 @@
 
     <!-- Default text style -->
     <style name="LifeRPGTextStyle">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <!-- Default text style -->
+    <style name="LifeRPGTextTitleStyle">
+        <item name="android:textSize">22sp</item>
     </style>
 
 

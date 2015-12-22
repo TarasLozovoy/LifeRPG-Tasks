@@ -57,17 +57,6 @@ public class DetailedSkillFragment extends DefaultFragment {
         getCurrentActivity().setActionBarTitle("Skill");
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedTaskTitle = currentTasks.get(position);
-                UUID taskID = getController().getTaskByTitle(selectedTaskTitle).getId();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, taskID);
-                DefaultFragment fragment = new DetailedTaskFragment();
-                getCurrentActivity().showChildFragment(fragment, bundle);
-            }
-        });
         setupListView();
         adapter.registerDataSetObserver(new DataSetObserver() {
             @Override
@@ -104,6 +93,18 @@ public class DetailedSkillFragment extends DefaultFragment {
     }
 
     private void setupListView(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedTaskTitle = currentTasks.get(position);
+                UUID taskID = getController().getTaskByTitle(selectedTaskTitle).getId();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, taskID);
+                DefaultFragment fragment = new DetailedTaskFragment();
+                getCurrentActivity().showChildFragment(fragment, bundle);
+            }
+        });
+
         List<Task> tasks = getController().getTasksBySkill(currentSkill);
         List<String> titles = new ArrayList<>();
         for (Task t: tasks){

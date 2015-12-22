@@ -79,11 +79,12 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                             .show();
                 }
                 notifyDataSetChanged();
+                double xp = lifeController.getHero().getBaseXP() * task.getMultiplier();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 builder.setTitle(items.get(position))
                         .setCancelable(false)
-                        .setMessage(finalView.getResources().getString(R.string.task_performed))
+                        .setMessage(finalView.getResources().getString(R.string.task_performed) + "\n" + finalView.getResources().getString(R.string.XP_gained, xp))
                         .setNeutralButton(finalView.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -103,7 +104,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
         LinearLayout repeatabilityLL = (LinearLayout) view.findViewById(R.id.repeatability_container_tasks_list_item);
         int repeat = task.getRepeatability();
         if (repeat < 0) {
-            repeatabilityLL.setBackground(view.getResources().getDrawable(R.drawable.ic_sync_black_24dp));
+            repeatabilityLL.setBackground(view.getResources().getDrawable(R.drawable.infinity));
             repeatabilityTV.setText("");
             doBtn.setEnabled(true);
         } else if (repeat > 0) {

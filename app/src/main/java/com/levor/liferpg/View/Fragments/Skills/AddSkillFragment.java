@@ -58,6 +58,14 @@ public class AddSkillFragment extends DefaultFragment {
 
             }
         }
+        titleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
+                    getCurrentActivity().showSoftKeyboard(false, getView());
+                }
+            }
+        });
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(R.string.new_skill);
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
@@ -80,7 +88,7 @@ public class AddSkillFragment extends DefaultFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.add_skill:
+            case R.id.ok_menu_item:
                 if (titleEditText.getText().toString().equals("")){
                     Snackbar.make(getView(), "Skill title can't be empty", Snackbar.LENGTH_LONG).show();
                 } else if (keyCharacteristic == null){

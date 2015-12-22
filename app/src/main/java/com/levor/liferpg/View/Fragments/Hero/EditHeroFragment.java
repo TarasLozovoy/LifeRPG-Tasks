@@ -22,6 +22,14 @@ public class EditHeroFragment extends DefaultFragment{
         View view = inflater.inflate(R.layout.fragment_edit_hero, container, false);
         editHeroName = (EditText) view.findViewById(R.id.edit_name_edit_hero_fragment);
         editHeroName.setText(getController().getHeroName());
+        editHeroName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    getCurrentActivity().showSoftKeyboard(false, getView());
+                }
+            }
+        });
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Edit hero");
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
@@ -37,7 +45,7 @@ public class EditHeroFragment extends DefaultFragment{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.save:
+            case R.id.ok_menu_item:
                 getController().updateHeroName(editHeroName.getText().toString());
                 getCurrentActivity().showPreviousFragment();
                 return true;

@@ -50,7 +50,6 @@ public class AddTaskFragment extends DefaultFragment {
     protected Spinner difficultySpinner;
     protected Spinner importanceSpinner;
     private ListView relatedSkillListView;
-    private Button addSkillButton;
     private Button dateButton;
 
     Date date;
@@ -63,7 +62,6 @@ public class AddTaskFragment extends DefaultFragment {
 
         taskTitleEditText = (EditText) view.findViewById(R.id.task_title_edit_text);
         relatedSkillListView = (ListView) view.findViewById(R.id.related_skills_to_add);
-        addSkillButton = (Button) view.findViewById(R.id.add_related_skill);
         dateButton = (Button) view.findViewById(R.id.date_button);
         taskRepeatEditText = (EditText) view.findViewById(R.id.task_repeat_times_edit_text);
         difficultySpinner = (Spinner) view.findViewById(R.id.difficulty_spinner);
@@ -82,8 +80,8 @@ public class AddTaskFragment extends DefaultFragment {
         }
         setupDateButton(date);
 
-        registerListeners(view);
         setupListView();
+        registerListeners(view);
 
         String skillTitle;
         if (getArguments() != null && (skillTitle = getArguments().getString(RECEIVED_SKILL_TITLE_TAG)) != null) {
@@ -113,7 +111,7 @@ public class AddTaskFragment extends DefaultFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.create_task:
+            case R.id.finish_creating_task:
                 String title = taskTitleEditText.getText().toString();
                 if (title.isEmpty()) {
                     Snackbar.make(getView(), "Task title can't be empty", Snackbar.LENGTH_LONG).show();
@@ -201,10 +199,50 @@ public class AddTaskFragment extends DefaultFragment {
                 updateListView();
             }
         });
+        Button footerButton = new Button(getActivity());
+        footerButton.setText(R.string.add_skill_to_task);
+        footerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
+                        android.R.layout.select_dialog_item, getController().getSkillsTitles());
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                dialog.setTitle("Choose skill to add");
+                dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (!relatedSkills.contains(adapter.getItem(which))) {
+                            relatedSkills.add(adapter.getItem(which));
+                            updateListView();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
+        relatedSkillListView.addFooterView(footerButton);
         updateListView();
     }
 
     private void registerListeners(final View view) {
+        taskTitleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
+                    getCurrentActivity().showSoftKeyboard(false, getView());
+                }
+            }
+        });
+        taskRepeatEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
+                    getCurrentActivity().showSoftKeyboard(false, getView());
+                }
+            }
+        });
         taskRepeatEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -225,28 +263,6 @@ public class AddTaskFragment extends DefaultFragment {
             @Override
             public void afterTextChanged(Editable s) {
 
-            }
-        });
-
-        addSkillButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_item
-                        , getController().getSkillsTitles());
-
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                dialog.setTitle("Choose skill to add");
-                dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (!relatedSkills.contains(adapter.getItem(which))) {
-                            relatedSkills.add(adapter.getItem(which));
-                            updateListView();
-                        }
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
             }
         });
 

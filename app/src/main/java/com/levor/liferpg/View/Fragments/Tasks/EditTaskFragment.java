@@ -128,6 +128,7 @@ public class EditTaskFragment extends AddTaskFragment {
 
     @Override
     protected void finishTask(String title, String message) {
+        getCurrentActivity().showSoftKeyboard(false, getView());
         String repeatTimesString = taskRepeatEditText.getText().toString();
         if (repeatTimesString.isEmpty()) repeatTimesString = "-1";
         int repeat = Integer.parseInt(repeatTimesString);

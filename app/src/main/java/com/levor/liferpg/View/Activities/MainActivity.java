@@ -1,11 +1,9 @@
 package com.levor.liferpg.View.Activities;
 
-import android.content.res.Configuration;
+import android.app.Service;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,9 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.inputmethod.InputMethodManager;
 
 import com.facebook.FacebookSdk;
 import com.levor.liferpg.Controller.LifeController;
@@ -58,7 +54,7 @@ public class MainActivity extends AppCompatActivity{
         navigationTabLayout = (TabLayout) findViewById(R.id.navigation_tab_layout);
         navigationTabLayout.addTab(navigationTabLayout.newTab().setIcon(getHeroImageID()));
         navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.tasks));
-        navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.action_settings));
+        navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.settings));
 
         navigationTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         navigationTabLayout.setSelectedTabIndicatorHeight(6);
@@ -209,5 +205,14 @@ public class MainActivity extends AppCompatActivity{
 
     private void initializeSocialNetworksSDK(){
         FacebookSdk.sdkInitialize(getApplicationContext());
+    }
+
+    public void showSoftKeyboard(boolean show, View rootView){
+        InputMethodManager imm = (InputMethodManager)getSystemService(Service.INPUT_METHOD_SERVICE);
+        if (show){
+            imm.showSoftInput(rootView, 0);
+        } else {
+            imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
+        }
     }
 }

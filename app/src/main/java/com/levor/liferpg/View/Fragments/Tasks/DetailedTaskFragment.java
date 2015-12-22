@@ -169,19 +169,20 @@ public class DetailedTaskFragment extends DefaultFragment {
                     })
                     .show();
         }
+        double xp = getController().getHero().getBaseXP() * currentTask.getMultiplier();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getCurrentActivity());
         builder.setTitle(currentTask.getTitle())
                 .setCancelable(false)
-                .setMessage(getView().getResources().getString(R.string.task_performed))
-                .setNeutralButton(getView().getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
+                .setMessage(getResources().getString(R.string.task_performed) + "\n" + getResources().getString(R.string.XP_gained, xp))
+                .setNeutralButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         setupListView();
                     }
                 })
-                .setPositiveButton(getView().getResources().getString(R.string.share), new ShareClickListener(currentTask.getTitle()));
+                .setPositiveButton(getResources().getString(R.string.share), new ShareClickListener(currentTask.getTitle()));
         AlertDialog alert = builder.create();
         alert.show();
     }
@@ -197,7 +198,7 @@ public class DetailedTaskFragment extends DefaultFragment {
         public void onClick(DialogInterface dialog, int which){
             boolean heroLevelIncreased = getController().performTask(getController().getTaskByTitle(taskTitle), false);
             if (heroLevelIncreased){
-                Snackbar.make(getCurrentActivity().getCurrentFocus(), "Congratulations!\n" + getController().getHeroName()
+                Snackbar.make(getView(), "Congratulations!\n" + getController().getHeroName()
                         + "'s level increased!", Snackbar.LENGTH_LONG)
                         .setAction("Go to Hero page", new View.OnClickListener() {
                             @Override
