@@ -21,11 +21,12 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.facebook.FacebookSdk;
 import com.levor.liferpg.Controller.LifeController;
-import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
 import com.levor.liferpg.View.Fragments.MainFragment;
 import com.levor.liferpg.View.Fragments.SettingsFragment;
+import com.levor.liferpg.View.Fragments.Tasks.AddTaskFragment;
+import com.levor.liferpg.View.Fragments.Tasks.DetailedTaskFragment;
 import com.levor.liferpg.View.Fragments.Tasks.TasksFragment;
 
 import java.io.IOException;
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity{
         navigationTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                switchRootFragment(tab.getPosition());
+                showRootFragment(tab.getPosition());
             }
 
             @Override
@@ -98,6 +99,18 @@ public class MainActivity extends AppCompatActivity{
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String taskFromNotification = extras.getString(AddTaskFragment.TASK_TITLE_TAG);
+            if (taskFromNotification != null) {
+                switchToRootFragment(TASKS_FRAGMENT_ID);
+
+                Bundle b = new Bundle();
+                b.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, lifeController.getTaskByTitle(taskFromNotification).getId());
+                showChildFragment(new DetailedTaskFragment(), b);
+            }
+        }
     }
 
     @Override
@@ -138,7 +151,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    private void switchRootFragment(int fragmentID) {
+    private void showRootFragment(int fragmentID) {
         DefaultFragment fragment;
         switch (fragmentID) {
             case MAIN_FRAGMENT_ID:

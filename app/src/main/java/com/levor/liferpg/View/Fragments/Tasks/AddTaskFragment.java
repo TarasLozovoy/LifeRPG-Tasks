@@ -1,11 +1,17 @@
 package com.levor.liferpg.View.Fragments.Tasks;
 
+import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -32,6 +38,7 @@ import android.widget.TimePicker;
 import com.levor.liferpg.Adapters.TaskAddingAdapter;
 import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
+import com.levor.liferpg.View.Activities.MainActivity;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
 
 import java.util.ArrayList;
@@ -41,7 +48,7 @@ import java.util.Date;
 public class AddTaskFragment extends DefaultFragment {
     public static final String RECEIVED_SKILL_TITLE_TAG = "received_skill_tag";
 
-    private final String TASK_TITLE_TAG = "task_title_tag";
+    public static final String TASK_TITLE_TAG = "task_title_tag";
     private final String RELATED_SKILLS_TAG = "related_skills_tag";
     private final String REPEAT_TAG = "repeat_tag";
     private final String DIFFICULTY_TAG = "difficulty_tag";
@@ -182,6 +189,7 @@ public class AddTaskFragment extends DefaultFragment {
         int repeat = Integer.parseInt(repeatTimesString);
 
         getController().createNewTask(title, repeat, difficulty, importance, date, relatedSkills);
+        createNotification(title);
         closeKeyboard();
         Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
@@ -328,6 +336,21 @@ public class AddTaskFragment extends DefaultFragment {
         newCal.set(Calendar.DAY_OF_MONTH, oldCal.get(Calendar.DAY_OF_MONTH));
         date = newCal.getTime();
         timeButton.setText(DateFormat.format(Task.getTimeFormatting(), date));
+    }
+
+    protected void createNotification(String tasktitle){
+        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        AlarmManager alarmManager =(AlarmManager)getActivity().getSystemService(Activity.ALARM_SERVICE);
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        intent.putExtra(TASK_TITLE_TAG, tasktitle);
+        PendingIntent pIntent = PendingIntent.getActivity(getActivity(), (int) System.currentTimeMillis(), intent, 0);
+        Notification n  = new Notification.Builder(getActivity())
+                .setContentTitle(tasktitle)
+                .setContentText("Task need to be performed")
+                .setSmallIcon(R.drawable.app_icon)
+                .setContentIntent(pIntent)
+                .setAutoCancel(true).build();
+        notificationManager.notify(0, n);
     }
 
     public class SelectDateFragmentTrans extends DialogFragment implements DatePickerDialog.OnDateSetListener {

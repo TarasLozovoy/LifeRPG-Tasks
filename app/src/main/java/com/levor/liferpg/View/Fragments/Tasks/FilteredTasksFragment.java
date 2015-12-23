@@ -60,7 +60,7 @@ public class FilteredTasksFragment extends DefaultFragment{
         listView = (ListView) view.findViewById(R.id.listViewTasks);
         SharedPreferences prefs = getActivity()
                 .getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-        sorting = prefs.getInt(SORTING_KEY, Task.SortingOrder.COMPLETION);
+        sorting = prefs.getInt(SORTING_KEY, Task.SortingOrder.DATE_DESC);
         setupListView();
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Tasks");
