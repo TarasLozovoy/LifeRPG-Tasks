@@ -23,8 +23,8 @@ import com.facebook.share.widget.ShareDialog;
 import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
+import com.levor.liferpg.View.Activities.MainActivity;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
-import com.levor.liferpg.View.Fragments.Hero.HeroFragment;
 import com.levor.liferpg.View.Fragments.Skills.DetailedSkillFragment;
 
 import java.util.ArrayList;
@@ -165,7 +165,7 @@ public class DetailedTaskFragment extends DefaultFragment {
                     .setAction("Go to Hero page", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            getCurrentActivity().showRootFragment(new HeroFragment(), null);
+                            getCurrentActivity().switchToRootFragment(MainActivity.MAIN_FRAGMENT_ID);
                         }
                     })
                     .show();
@@ -204,7 +204,7 @@ public class DetailedTaskFragment extends DefaultFragment {
                         .setAction("Go to Hero page", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                getCurrentActivity().showRootFragment(new HeroFragment(), null);
+                                getCurrentActivity().switchToRootFragment(MainActivity.MAIN_FRAGMENT_ID);
                             }
                         })
                         .show();

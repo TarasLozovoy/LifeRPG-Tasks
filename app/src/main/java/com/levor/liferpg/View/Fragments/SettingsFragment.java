@@ -16,6 +16,7 @@ public class SettingsFragment extends DefaultFragment {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(getResources().getString(R.string.settings));
+        getCurrentActivity().showActionBarHomeButtonAsBack(false);
         return v;
     }
 }

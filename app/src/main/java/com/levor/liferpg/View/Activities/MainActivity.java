@@ -28,7 +28,7 @@ import java.util.Stack;
 import bolts.AppLinks;
 
 public class MainActivity extends AppCompatActivity{
-    public final static int HERO_FRAGMENT_ID = 0;
+    public final static int MAIN_FRAGMENT_ID = 0;
     public final static int TASKS_FRAGMENT_ID = 1;
     public final static int SETTINGS_FRAGMENT_ID = 2;
     protected final String TAG = "com.levor.liferpg";
@@ -36,7 +36,11 @@ public class MainActivity extends AppCompatActivity{
     protected LifeController lifeController;
 
     private TabLayout navigationTabLayout;
-    private static Stack<DefaultFragment> fragmentsStack = new Stack<>();
+    private static Stack<DefaultFragment> mainFragmentsStack = new Stack<>();
+    private static Stack<DefaultFragment> tasksFragmentsStack = new Stack<>();
+    private static Stack<DefaultFragment> settingsFragmentsStack = new Stack<>();
+
+    private int currentFragmentID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +77,11 @@ public class MainActivity extends AppCompatActivity{
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        getSupportActionBar().setHomeButtonEnabled(false);
 
         if (savedInstanceState == null) {
             DefaultFragment fragment = new MainFragment();
-            fragmentsStack.push(fragment);
+            currentFragmentID = MAIN_FRAGMENT_ID;
+            mainFragmentsStack.push(fragment);
             FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction()
                     .add(R.id.content_frame, fragment)
@@ -86,11 +89,9 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (fragmentsStack.peek().onOptionsItemSelected(item)) return true;
+        if (getCurrentFragmentsStack().peek().onOptionsItemSelected(item)) return true;
         return super.onOptionsItemSelected(item);
     }
 
@@ -106,34 +107,65 @@ public class MainActivity extends AppCompatActivity{
         return lifeController;
     }
 
+    private Stack<DefaultFragment> getCurrentFragmentsStack(){
+        switch (currentFragmentID){
+            case MAIN_FRAGMENT_ID :
+                return mainFragmentsStack;
+            case TASKS_FRAGMENT_ID :
+                return tasksFragmentsStack;
+            case SETTINGS_FRAGMENT_ID :
+                return settingsFragmentsStack;
+            default:
+                throw new RuntimeException("Unexpected fragment ID");
+        }
+    }
+
     public int getHeroImageID(){
         return R.drawable.default_hero;
     }
 
-    private void switchRootFragment(int fragmentNumber) {
+    private void switchRootFragment(int fragmentID) {
         DefaultFragment fragment;
-        switch (fragmentNumber) {
-            case HERO_FRAGMENT_ID :
-                fragment = new MainFragment();
+        switch (fragmentID) {
+            case MAIN_FRAGMENT_ID:
+                if (mainFragmentsStack.empty()){
+                    fragment = new MainFragment();
+                    mainFragmentsStack.push(fragment);
+                } else {
+                    fragment = mainFragmentsStack.peek();
+                }
                 break;
             case TASKS_FRAGMENT_ID :
-                fragment = new TasksFragment();
+                if (tasksFragmentsStack.empty()){
+                    fragment = new TasksFragment();
+                    tasksFragmentsStack.push(fragment);
+                } else {
+                    fragment = tasksFragmentsStack.peek();
+                }
                 break;
             case SETTINGS_FRAGMENT_ID:
-                fragment = new SettingsFragment();
+                if (settingsFragmentsStack.empty()){
+                    fragment = new SettingsFragment();
+                    settingsFragmentsStack.push(fragment);
+                } else {
+                    fragment = settingsFragmentsStack.peek();
+                }
                 break;
             default:
                 throw new RuntimeException("No such menu item!");
         }
-        if (fragmentsStack.peek().getClass() == fragment.getClass()) return;
-        showRootFragment(fragment, null);
+        if (getCurrentFragmentsStack().peek().getClass() == fragment.getClass()) return;
+        currentFragmentID = fragmentID;
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commit();
     }
 
     public boolean showPreviousFragment() {
-        fragmentsStack.pop();
+        getCurrentFragmentsStack().pop();
         DefaultFragment fragment;
         try {
-            fragment = fragmentsStack.peek();
+            fragment = getCurrentFragmentsStack().peek();
         } catch (EmptyStackException e){
             return false;
         }
@@ -147,30 +179,24 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public boolean showNthPreviousFragment(int n) {
-        if (n <= 1 || fragmentsStack.size() == 1) {
+        if (n <= 1 || getCurrentFragmentsStack().size() == 1) {
             return showPreviousFragment();
         }
-        fragmentsStack.pop();
+        getCurrentFragmentsStack().pop();
         return showNthPreviousFragment(n - 1);
     }
 
     public void showChildFragment(DefaultFragment fragment, Bundle bundle){
         fragment.setArguments(bundle);
-        fragmentsStack.push(fragment);
+        getCurrentFragmentsStack().push(fragment);
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.enter_right, R.anim.exit_left)
                 .replace(R.id.content_frame, fragment)
                 .commit();
     }
 
-    public void showRootFragment(DefaultFragment fragment, Bundle bundle){
-        fragment.setArguments(bundle);
-        fragmentsStack.clear();
-        fragmentsStack.push(fragment);
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)
-                .replace(R.id.content_frame, fragment)
-                .commit();
+    public void switchToRootFragment(int id){
+        navigationTabLayout.getTabAt(id).select();
     }
 
     @Override

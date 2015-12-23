@@ -17,11 +17,9 @@ import android.widget.TextView;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.levor.liferpg.Controller.LifeController;
-import com.levor.liferpg.Model.Skill;
 import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Activities.MainActivity;
-import com.levor.liferpg.View.Fragments.Hero.HeroFragment;
 
 import java.util.List;
 
@@ -73,7 +71,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                             .setAction("Go to Hero page", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    activity.showRootFragment(new HeroFragment(), null);
+                                    activity.switchToRootFragment(MainActivity.MAIN_FRAGMENT_ID);
                                 }
                             })
                             .show();
@@ -135,7 +133,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                         .setAction("Go to Hero page", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                activity.showRootFragment(new HeroFragment(), null);
+                                activity.switchToRootFragment(MainActivity.MAIN_FRAGMENT_ID);
                             }
                         })
                         .show();
