@@ -1,6 +1,11 @@
 package com.levor.liferpg.View.Activities;
 
 import android.app.Service;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -16,12 +21,15 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.facebook.FacebookSdk;
 import com.levor.liferpg.Controller.LifeController;
+import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
 import com.levor.liferpg.View.Fragments.MainFragment;
 import com.levor.liferpg.View.Fragments.SettingsFragment;
 import com.levor.liferpg.View.Fragments.Tasks.TasksFragment;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
@@ -31,6 +39,8 @@ public class MainActivity extends AppCompatActivity{
     public final static int MAIN_FRAGMENT_ID = 0;
     public final static int TASKS_FRAGMENT_ID = 1;
     public final static int SETTINGS_FRAGMENT_ID = 2;
+    private static final String SHARED_PREFS_TAG = "shared_prefs_tag";
+    private static final String HERO_ICON_NAME_TAG = "shared_prefs_tag";
     protected final String TAG = "com.levor.liferpg";
 
     protected LifeController lifeController;
@@ -39,8 +49,9 @@ public class MainActivity extends AppCompatActivity{
     private static Stack<DefaultFragment> mainFragmentsStack = new Stack<>();
     private static Stack<DefaultFragment> tasksFragmentsStack = new Stack<>();
     private static Stack<DefaultFragment> settingsFragmentsStack = new Stack<>();
-
     private int currentFragmentID;
+
+    private String heroDefaultIconName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +66,20 @@ public class MainActivity extends AppCompatActivity{
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
+        if (savedInstanceState == null) {
+            DefaultFragment fragment = new MainFragment();
+            currentFragmentID = MAIN_FRAGMENT_ID;
+            mainFragmentsStack.push(fragment);
+            FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction()
+                    .add(R.id.content_frame, fragment)
+                    .commit();
+        }
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+        heroDefaultIconName = prefs.getString(HERO_ICON_NAME_TAG, "elegant5.png");
+
         navigationTabLayout = (TabLayout) findViewById(R.id.navigation_tab_layout);
-        navigationTabLayout.addTab(navigationTabLayout.newTab().setIcon(getHeroImageID()));
-        navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.tasks));
-        navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.settings));
+        setupNavigationTabs();
 
         navigationTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         navigationTabLayout.setSelectedTabIndicatorHeight(6);
@@ -77,16 +98,6 @@ public class MainActivity extends AppCompatActivity{
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-
-        if (savedInstanceState == null) {
-            DefaultFragment fragment = new MainFragment();
-            currentFragmentID = MAIN_FRAGMENT_ID;
-            mainFragmentsStack.push(fragment);
-            FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction()
-                    .add(R.id.content_frame, fragment)
-                    .commit();
-        }
     }
 
     @Override
@@ -101,6 +112,13 @@ public class MainActivity extends AppCompatActivity{
 //        getMenuInflater().inflate(R.menu.menu_main, menu);
 
         return true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+        prefs.edit().putString(SHARED_PREFS_TAG, heroDefaultIconName).apply();
     }
 
     public LifeController getController(){
@@ -118,10 +136,6 @@ public class MainActivity extends AppCompatActivity{
             default:
                 throw new RuntimeException("Unexpected fragment ID");
         }
-    }
-
-    public int getHeroImageID(){
-        return R.drawable.default_hero;
     }
 
     private void switchRootFragment(int fragmentID) {
@@ -240,5 +254,35 @@ public class MainActivity extends AppCompatActivity{
         } else {
             imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
         }
+    }
+
+    public void setHeroImageName(String name){
+        if (name != null) {
+            heroDefaultIconName = name;
+            setupNavigationTabs();
+        }
+    }
+
+    public Bitmap getHeroIconBitmap(){
+        try {
+            InputStream is = getAssets().open(heroDefaultIconName);
+            return BitmapFactory.decodeStream(is);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void setupNavigationTabs(){
+        Drawable d;
+        try {
+            InputStream is = getAssets().open(heroDefaultIconName);
+            d = Drawable.createFromStream(is, null);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        navigationTabLayout.removeAllTabs();
+        navigationTabLayout.addTab(navigationTabLayout.newTab().setIcon(d));
+        navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.tasks));
+        navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.settings));
     }
 }

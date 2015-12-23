@@ -113,5 +113,6 @@
     <string name="delete">Delete</string>
     <string name="XP_gained">+ %.2f XP!</string>
     <string name="time">Time:</string>
+    <string name="change_hero_icon">Change picture</string>
 
 </resources>

@@ -2,18 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <TextView
-        style="@style/LifeRPGTextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hero_name" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/edit_name_edit_hero_fragment"
+        <TextView
+            style="@style/LifeRPGTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hero_name" />
+
+        <EditText
+            android:id="@+id/edit_name_edit_hero_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hero_name_hint_edit_hero_fragment" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/change_hero_icon_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/hero_name_hint_edit_hero_fragment" />
+        android:text="@string/change_hero_icon" />
 
 </LinearLayout>
