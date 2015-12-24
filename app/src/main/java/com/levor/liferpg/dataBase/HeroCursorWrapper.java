@@ -1,11 +1,11 @@
-package com.levor.liferpg.DataBase;
+package com.levor.liferpg.dataBase;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
-import com.levor.liferpg.DataBase.DataBaseSchema.HeroTable;
-import com.levor.liferpg.Model.Hero;
-import com.levor.liferpg.Model.LifeEntity;
+import com.levor.liferpg.dataBase.DataBaseSchema.HeroTable;
+import com.levor.liferpg.model.Hero;
+import com.levor.liferpg.model.LifeEntity;
 
 public class HeroCursorWrapper extends CursorWrapper {
     private LifeEntity lifeEntity;

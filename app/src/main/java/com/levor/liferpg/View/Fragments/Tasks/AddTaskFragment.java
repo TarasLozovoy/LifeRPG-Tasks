@@ -34,7 +34,7 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.levor.liferpg.adapters.TaskAddingAdapter;
-import com.levor.liferpg.Model.Task;
+import com.levor.liferpg.model.Task;
 import com.levor.liferpg.R;
 import com.levor.liferpg.broadcastReceivers.TaskNotification;
 import com.levor.liferpg.View.Fragments.DefaultFragment;

@@ -13,8 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.levor.liferpg.Model.Skill;
-import com.levor.liferpg.Model.Task;
+import com.levor.liferpg.model.Skill;
+import com.levor.liferpg.model.Task;
 import com.levor.liferpg.R;
 
 import java.util.ArrayList;

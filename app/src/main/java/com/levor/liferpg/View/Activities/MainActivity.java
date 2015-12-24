@@ -20,7 +20,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.facebook.FacebookSdk;
-import com.levor.liferpg.Controller.LifeController;
+import com.levor.liferpg.controller.LifeController;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
 import com.levor.liferpg.View.Fragments.MainFragment;

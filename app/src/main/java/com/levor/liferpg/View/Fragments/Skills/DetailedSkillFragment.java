@@ -3,7 +3,6 @@ package com.levor.liferpg.View.Fragments.Skills;
 
 import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,9 +14,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.levor.liferpg.Adapters.TasksAdapter;
-import com.levor.liferpg.Model.Skill;
-import com.levor.liferpg.Model.Task;
+import com.levor.liferpg.adapters.TasksAdapter;
+import com.levor.liferpg.model.Skill;
+import com.levor.liferpg.model.Task;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
 import com.levor.liferpg.View.Fragments.Tasks.AddTaskFragment;

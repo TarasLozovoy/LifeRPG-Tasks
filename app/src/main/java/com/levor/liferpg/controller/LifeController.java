@@ -1,12 +1,12 @@
-package com.levor.liferpg.Controller;
+package com.levor.liferpg.controller;
 
 import android.content.Context;
 
-import com.levor.liferpg.Model.Characteristic;
-import com.levor.liferpg.Model.Hero;
-import com.levor.liferpg.Model.LifeEntity;
-import com.levor.liferpg.Model.Skill;
-import com.levor.liferpg.Model.Task;
+import com.levor.liferpg.model.Characteristic;
+import com.levor.liferpg.model.Hero;
+import com.levor.liferpg.model.LifeEntity;
+import com.levor.liferpg.model.Skill;
+import com.levor.liferpg.model.Task;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -1,4 +1,4 @@
-package com.levor.liferpg.Model;
+package com.levor.liferpg.model;
 
 public class Hero {
     private int level;

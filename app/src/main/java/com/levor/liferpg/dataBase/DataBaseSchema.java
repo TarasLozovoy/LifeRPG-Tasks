@@ -1,4 +1,4 @@
-package com.levor.liferpg.DataBase;
+package com.levor.liferpg.dataBase;
 
 public class DataBaseSchema {
     public static final class HeroTable {

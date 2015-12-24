@@ -2,7 +2,6 @@ package com.levor.liferpg.View.Fragments.Characteristics;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,8 +12,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.levor.liferpg.Model.Characteristic;
-import com.levor.liferpg.Model.Skill;
+import com.levor.liferpg.model.Characteristic;
+import com.levor.liferpg.model.Skill;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
 import com.levor.liferpg.View.Fragments.Skills.AddSkillFragment;

@@ -1,4 +1,4 @@
-package com.levor.liferpg.Model;
+package com.levor.liferpg.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;

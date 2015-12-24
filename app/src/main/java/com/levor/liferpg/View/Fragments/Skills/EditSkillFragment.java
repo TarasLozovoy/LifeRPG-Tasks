@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.levor.liferpg.Model.Skill;
+import com.levor.liferpg.model.Skill;
 import com.levor.liferpg.R;
 
 import java.util.UUID;

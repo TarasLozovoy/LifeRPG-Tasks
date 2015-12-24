@@ -1,4 +1,4 @@
-package com.levor.liferpg.Model;
+package com.levor.liferpg.model;
 
 import java.util.Comparator;
 import java.util.UUID;

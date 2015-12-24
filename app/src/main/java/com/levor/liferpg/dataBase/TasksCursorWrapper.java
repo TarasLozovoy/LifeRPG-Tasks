@@ -1,15 +1,14 @@
-package com.levor.liferpg.DataBase;
+package com.levor.liferpg.dataBase;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
-import com.levor.liferpg.DataBase.DataBaseSchema.TasksTable;
-import com.levor.liferpg.Model.LifeEntity;
-import com.levor.liferpg.Model.Skill;
-import com.levor.liferpg.Model.Task;
+import com.levor.liferpg.dataBase.DataBaseSchema.TasksTable;
+import com.levor.liferpg.model.LifeEntity;
+import com.levor.liferpg.model.Skill;
+import com.levor.liferpg.model.Task;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;

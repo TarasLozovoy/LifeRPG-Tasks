@@ -1,10 +1,10 @@
-package com.levor.liferpg.DataBase;
+package com.levor.liferpg.dataBase;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import static com.levor.liferpg.DataBase.DataBaseSchema.*;
+import static com.levor.liferpg.dataBase.DataBaseSchema.*;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;

@@ -1,4 +1,4 @@
-package com.levor.liferpg.Model;
+package com.levor.liferpg.model;
 
 
 import android.content.ContentValues;
@@ -7,12 +7,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
-import com.levor.liferpg.DataBase.CharacteristicsCursorWrapper;
-import com.levor.liferpg.DataBase.DataBaseHelper;
-import com.levor.liferpg.DataBase.DataBaseSchema.*;
-import com.levor.liferpg.DataBase.HeroCursorWrapper;
-import com.levor.liferpg.DataBase.SkillsCursorWrapper;
-import com.levor.liferpg.DataBase.TasksCursorWrapper;
+import com.levor.liferpg.dataBase.CharacteristicsCursorWrapper;
+import com.levor.liferpg.dataBase.DataBaseHelper;
+import com.levor.liferpg.dataBase.DataBaseSchema.*;
+import com.levor.liferpg.dataBase.HeroCursorWrapper;
+import com.levor.liferpg.dataBase.SkillsCursorWrapper;
+import com.levor.liferpg.dataBase.TasksCursorWrapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;

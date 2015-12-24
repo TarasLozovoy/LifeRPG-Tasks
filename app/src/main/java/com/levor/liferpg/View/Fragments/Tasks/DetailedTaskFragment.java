@@ -20,8 +20,8 @@ import android.widget.TextView;
 
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
-import com.levor.liferpg.Model.Skill;
-import com.levor.liferpg.Model.Task;
+import com.levor.liferpg.model.Skill;
+import com.levor.liferpg.model.Task;
 import com.levor.liferpg.R;
 import com.levor.liferpg.View.Activities.MainActivity;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
