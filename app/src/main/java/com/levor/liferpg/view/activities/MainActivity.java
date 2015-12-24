@@ -99,10 +99,11 @@ public class MainActivity extends AppCompatActivity{
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+        lifeController.setupTasksNotifications();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String taskFromNotification = extras.getString(AddTaskFragment.TASK_TITLE_TAG);
+            String taskFromNotification = extras.getString(LifeController.TASK_TITLE_NOTIFICATION_TAG);
             if (taskFromNotification != null) {
                 switchToRootFragment(TASKS_FRAGMENT_ID);
 

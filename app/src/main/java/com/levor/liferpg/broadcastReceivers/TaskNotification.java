@@ -9,18 +9,18 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.levor.liferpg.R;
+import com.levor.liferpg.controller.LifeController;
 import com.levor.liferpg.view.activities.MainActivity;
-import com.levor.liferpg.view.fragments.tasks.AddTaskFragment;
 
 public class TaskNotification extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Toast.makeText(context, "MyAlarmService.onCreate()", Toast.LENGTH_LONG).show();
-        String taskTitle = intent.getExtras().getString(AddTaskFragment.TASK_TITLE_TAG);
+        String taskTitle = intent.getExtras().getString(LifeController.TASK_TITLE_NOTIFICATION_TAG);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent notificationIntent = new Intent(context, MainActivity.class);
-        notificationIntent.putExtra(AddTaskFragment.TASK_TITLE_TAG, taskTitle);
+        notificationIntent.putExtra(LifeController.TASK_TITLE_NOTIFICATION_TAG, taskTitle);
         PendingIntent pIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), notificationIntent, 0);
         Notification n  = new Notification.Builder(context)
                 .setContentTitle(taskTitle)

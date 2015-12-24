@@ -341,15 +341,15 @@ public class AddTaskFragment extends DefaultFragment {
     }
 
     protected void createNotification(String taskTitle){
-        Intent intent = new Intent(getActivity(), TaskNotification.class);
-        intent.putExtra(TASK_TITLE_TAG, taskTitle);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(),
-                (int) System.currentTimeMillis(), intent, 0);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Activity.ALARM_SERVICE);
-        int repeatTime = 24*60*60*1000;
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), repeatTime, pendingIntent);
+        Task task = getController().getTaskByTitle(taskTitle);
+
+        AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(Activity.ALARM_SERVICE);
+        Intent i = new Intent(getContext(), TaskNotification.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), task.getId().hashCode(), i, 0);
+        alarmManager.cancel(pendingIntent);
+        pendingIntent.cancel();
+
+        getController().addTaskNotification(task);
     }
 
     public class SelectDateFragmentTrans extends DialogFragment implements DatePickerDialog.OnDateSetListener {
