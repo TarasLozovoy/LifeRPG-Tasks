@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.levor.liferpg.View.Fragments.Tasks.DetailedTaskFragment"
+    tools:context="com.levor.liferpg.view.fragments.tasks.DetailedTaskFragment"
     android:fillViewport="true">
 
     <RelativeLayout

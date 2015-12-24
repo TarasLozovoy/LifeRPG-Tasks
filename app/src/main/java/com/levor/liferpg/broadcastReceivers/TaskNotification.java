@@ -9,8 +9,8 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.levor.liferpg.R;
-import com.levor.liferpg.View.Activities.MainActivity;
-import com.levor.liferpg.View.Fragments.Tasks.AddTaskFragment;
+import com.levor.liferpg.view.activities.MainActivity;
+import com.levor.liferpg.view.fragments.tasks.AddTaskFragment;
 
 public class TaskNotification extends BroadcastReceiver {
 
