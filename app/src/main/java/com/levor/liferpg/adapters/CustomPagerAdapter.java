@@ -1,4 +1,4 @@
-package com.levor.liferpg.Adapters;
+package com.levor.liferpg.adapters;
 
 
 import android.os.Parcelable;

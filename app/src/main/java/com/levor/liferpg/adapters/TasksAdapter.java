@@ -1,4 +1,4 @@
-package com.levor.liferpg.Adapters;
+package com.levor.liferpg.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;

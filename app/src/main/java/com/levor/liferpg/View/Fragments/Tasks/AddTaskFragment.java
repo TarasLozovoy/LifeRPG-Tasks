@@ -5,8 +5,6 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -35,10 +33,10 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
-import com.levor.liferpg.Adapters.TaskAddingAdapter;
+import com.levor.liferpg.adapters.TaskAddingAdapter;
 import com.levor.liferpg.Model.Task;
 import com.levor.liferpg.R;
-import com.levor.liferpg.View.Activities.MainActivity;
+import com.levor.liferpg.broadcastReceivers.TaskNotification;
 import com.levor.liferpg.View.Fragments.DefaultFragment;
 
 import java.util.ArrayList;
@@ -322,6 +320,8 @@ public class AddTaskFragment extends DefaultFragment {
         oldCal.setTime(date);
         newCal.set(Calendar.HOUR_OF_DAY, oldCal.get(Calendar.HOUR_OF_DAY));
         newCal.set(Calendar.MINUTE, oldCal.get(Calendar.MINUTE));
+        newCal.set(Calendar.SECOND, 0);
+        newCal.set(Calendar.MILLISECOND, 0);
         date = newCal.getTime();
         dateButton.setText(DateFormat.format(Task.getDateFormatting(), date));
     }
@@ -334,23 +334,22 @@ public class AddTaskFragment extends DefaultFragment {
         newCal.set(Calendar.YEAR, oldCal.get(Calendar.YEAR));
         newCal.set(Calendar.MONTH, oldCal.get(Calendar.MONTH));
         newCal.set(Calendar.DAY_OF_MONTH, oldCal.get(Calendar.DAY_OF_MONTH));
+        newCal.set(Calendar.SECOND, 0);
+        newCal.set(Calendar.MILLISECOND, 0);
         date = newCal.getTime();
         timeButton.setText(DateFormat.format(Task.getTimeFormatting(), date));
     }
 
-    protected void createNotification(String tasktitle){
-        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-        AlarmManager alarmManager =(AlarmManager)getActivity().getSystemService(Activity.ALARM_SERVICE);
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        intent.putExtra(TASK_TITLE_TAG, tasktitle);
-        PendingIntent pIntent = PendingIntent.getActivity(getActivity(), (int) System.currentTimeMillis(), intent, 0);
-        Notification n  = new Notification.Builder(getActivity())
-                .setContentTitle(tasktitle)
-                .setContentText("Task need to be performed")
-                .setSmallIcon(R.drawable.app_icon)
-                .setContentIntent(pIntent)
-                .setAutoCancel(true).build();
-        notificationManager.notify(0, n);
+    protected void createNotification(String taskTitle){
+        Intent intent = new Intent(getActivity(), TaskNotification.class);
+        intent.putExtra(TASK_TITLE_TAG, taskTitle);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(),
+                (int) System.currentTimeMillis(), intent, 0);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Activity.ALARM_SERVICE);
+        int repeatTime = 24*60*60*1000;
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), repeatTime, pendingIntent);
     }
 
     public class SelectDateFragmentTrans extends DialogFragment implements DatePickerDialog.OnDateSetListener {
