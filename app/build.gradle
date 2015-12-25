@@ -27,4 +27,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:design:23.1.0'
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
+    compile project(':vksdk_library')
 }

@@ -27,6 +27,9 @@ import com.levor.liferpgtasks.view.fragments.MainFragment;
 import com.levor.liferpgtasks.view.fragments.SettingsFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.TasksFragment;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKApi;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity{
     private int currentFragmentID;
 
     private String heroDefaultIconName;
+    private int vkUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -261,6 +265,7 @@ public class MainActivity extends AppCompatActivity{
 
     private void initializeSocialNetworksSDK(){
         FacebookSdk.sdkInitialize(getApplicationContext());
+//        VKSdk.initialize(getApplicationContext());
     }
 
     public void showSoftKeyboard(boolean show, View rootView){

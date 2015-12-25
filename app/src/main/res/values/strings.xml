@@ -10,6 +10,8 @@
     <!-- Social networks-->
     <string name="facebook_app_id">471263939742325</string>
     <string name="facebook_app_link">https://fb.me/473226542879398</string>
+
+    <string name="com_vk_sdk_AppId">5202032</string>
     <!-- -->
 
     <string name="intelligence">Intelligence -</string>
