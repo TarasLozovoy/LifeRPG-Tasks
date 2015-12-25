@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.levor.liferpg.view.fragments.tasks.DetailedTaskFragment"
+    tools:context="com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment"
     android:fillViewport="true">
 
     <RelativeLayout
@@ -31,11 +31,19 @@
             android:layout_below="@id/task_date_text_view" />
 
         <TextView
+            android:id="@+id/notification_text_view"
+            style="@style/LifeRPGTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/task_repeat_times_text_view"
+            android:text="@string/show_notification"/>
+
+        <TextView
             android:id="@+id/task_difficulty_text_view"
             style="@style/LifeRPGTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/task_repeat_times_text_view" />
+            android:layout_below="@id/notification_text_view" />
 
         <TextView
             android:id="@+id/task_importance_text_view"

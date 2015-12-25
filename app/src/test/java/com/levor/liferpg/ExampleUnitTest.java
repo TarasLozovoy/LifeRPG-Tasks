@@ -1,4 +1,4 @@
-package com.levor.liferpg;
+package com.levor.liferpgtasks;
 
 import org.junit.Test;
 

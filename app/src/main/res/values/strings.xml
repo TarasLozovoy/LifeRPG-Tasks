@@ -114,5 +114,10 @@
     <string name="XP_gained">+ %.2f XP!</string>
     <string name="time">Time:</string>
     <string name="change_hero_icon">Change picture</string>
+    <string name="repeat_question">Repeat?</string>
+    <string name="notify_question">Notify?</string>
+    <string name="show_notification">Task notification will be shown.</string>
+    <string name="overdue">- overdue!</string>
+    <string name="no_internet">There are no active internet connection. Please enable connection to share.</string>
 
 </resources>

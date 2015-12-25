@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.levor.liferpg" >
+    package="com.levor.liferpgtasks" >
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-            android:name=".view.activities.MainActivity"
+            android:name="com.levor.liferpgtasks.view.activities.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +26,7 @@
                 "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:label="@string/app_name" />
-        <receiver android:name="com.levor.liferpg.broadcastReceivers.TaskNotification"/>
+        <receiver android:name="com.levor.liferpgtasks.broadcastReceivers.TaskNotification"/>
 
         <provider android:authorities="com.facebook.app.FacebookContentProvider471263939742325"
             android:name="com.facebook.FacebookContentProvider"

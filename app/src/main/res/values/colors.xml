@@ -4,5 +4,6 @@
     <item name="light_gray" type="color">#c4c1c1</item>
     <item name="gray" type="color">#6c6a6a</item>
     <item name="blue" type="color">#3b67b9</item>
-    <color name="black">#000000</color>
+    <item name="black" type="color">#000000</item>
+    <item name="red" type="color">#dd2c00</item>
 </resources>
