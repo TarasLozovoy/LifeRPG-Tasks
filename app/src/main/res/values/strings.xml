@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RealLifeRPG</string>
+    <string name="app_name">LifeRPG Tasks</string>
 
     <string name="settings">Settings</string>
 
@@ -11,7 +11,7 @@
     <string name="facebook_app_id">471263939742325</string>
     <string name="facebook_app_link">https://fb.me/473226542879398</string>
 
-    <string name="com_vk_sdk_AppId">5202032</string>
+    <integer name="com_vk_sdk_AppId">5202032</integer>
     <!-- -->
 
     <string name="intelligence">Intelligence -</string>
@@ -121,5 +121,6 @@
     <string name="show_notification">Task notification will be shown.</string>
     <string name="overdue">- overdue!</string>
     <string name="no_internet">There are no active internet connection. Please enable connection to share.</string>
+    <string name="please_login">You are not logged in. Please log in.</string>
 
 </resources>
