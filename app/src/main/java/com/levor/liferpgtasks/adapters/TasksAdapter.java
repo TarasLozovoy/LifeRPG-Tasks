@@ -21,11 +21,14 @@ import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.activities.MainActivity;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKShareDialog;
 import com.vk.sdk.dialogs.VKShareDialogBuilder;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -175,35 +178,45 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
 //            }
 
             //vk share dialog
-            if (!VKSdk.isLoggedIn()){
-                lifeController.performVKLogin(activity);
-                Toast.makeText(activity, activity.getString(R.string.please_login), Toast.LENGTH_SHORT)
-                        .show();
-                return;
-            }
-            VKShareDialogBuilder vkShareDialog = new VKShareDialogBuilder();
-            vkShareDialog.setText(taskTitle + " " + activity.getResources().getString(R.string.done) +
+//            if (!VKSdk.isLoggedIn()){
+//                lifeController.performVKLogin(activity);
+//                Toast.makeText(activity, activity.getString(R.string.please_login), Toast.LENGTH_SHORT)
+//                        .show();
+//                return;
+//            }
+//            VKShareDialogBuilder vkShareDialog = new VKShareDialogBuilder();
+//            vkShareDialog.setText(taskTitle + " " + activity.getResources().getString(R.string.done) +
+//                            "\n" + "I have just finished task " + taskTitle + "!")
+//                    .setAttachmentLink(activity.getString(R.string.app_name),
+//                            activity.getString(R.string.facebook_app_link))
+//                    .setShareDialogListener(new VKShareDialogBuilder.VKShareDialogListener() {
+//                        @Override
+//                        public void onVkShareComplete(int postId) {
+//                            //TODO move here additional XP gaining
+//                        }
+//
+//                        @Override
+//                        public void onVkShareCancel() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onVkShareError(VKError error) {
+//
+//                        }
+//                    })
+//                    .show(activity.getSupportFragmentManager(), "VKShareDialog");
+
+            //twitter share dialog
+            try {
+                new TweetComposer.Builder(activity)
+                        .text(taskTitle + " " + activity.getResources().getString(R.string.done) +
                             "\n" + "I have just finished task " + taskTitle + "!")
-                    .setAttachmentLink(activity.getString(R.string.app_name),
-                            activity.getString(R.string.facebook_app_link))
-                    .setShareDialogListener(new VKShareDialogBuilder.VKShareDialogListener() {
-                        @Override
-                        public void onVkShareComplete(int postId) {
-                            //TODO move here additional XP gaining
-                        }
-
-                        @Override
-                        public void onVkShareCancel() {
-
-                        }
-
-                        @Override
-                        public void onVkShareError(VKError error) {
-
-                        }
-                    })
-                    .show(activity.getSupportFragmentManager(), "VKShareDialog");
-
+                        .url(new URL(activity.getString(R.string.facebook_app_link)))
+                        .show();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
 
             dialog.dismiss();
         }

@@ -38,6 +38,10 @@
             android:exported="true"/>
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="w4GMxIA6anN7qWmqgyGFGGd2r" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="70a55a83c8d77fbbddd91744faa435ed78f7eada" />
     </application>
 
 </manifest>
