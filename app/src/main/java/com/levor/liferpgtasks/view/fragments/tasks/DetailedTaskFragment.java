@@ -185,7 +185,7 @@ public class DetailedTaskFragment extends DefaultFragment {
     }
 
     private void performTask(){
-        boolean isHeroLevelIncreased = getController().performTask(currentTask, true);
+        boolean isHeroLevelIncreased = getController().performTask(currentTask);
         if (currentTask.getRepeatability() == -1 || currentTask.getRepeatability() > 0){
             currentTask.increaseDateByOneDay();
             getController().updateTaskNotification(currentTask);

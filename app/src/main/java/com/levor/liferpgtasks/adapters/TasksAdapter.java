@@ -75,7 +75,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
         doBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean isHeroLevelIncreased = lifeController.performTask(task, true);
+                boolean isHeroLevelIncreased = lifeController.performTask(task);
                 if (task.getRepeatability() == -1 || task.getRepeatability() > 0){
                     task.increaseDateByOneDay();
                     lifeController.updateTaskNotification(task);

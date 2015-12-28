@@ -81,7 +81,7 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
         ImageView imageView = (ImageView) view.findViewById(R.id.social_image_logo);
 
         title.setText(items.get(position));
-        double xp = lifeController.getHero().getBaseXP() * lifeController.getTaskByTitle(taskTitle).getMultiplier();
+        double xp = lifeController.getHero().getBaseXP() * lifeController.getTaskByTitle(taskTitle).getShareMultiplier();
         shareButton.setText(context.getString(R.string.share_with_xp, xp));
         switch (position){
             case FACEBOOK_ID:
@@ -113,7 +113,7 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
     }
 
     private void gainAdditionalXP(String taskTitle){
-        boolean heroLevelIncreased = lifeController.performTask(lifeController.getTaskByTitle(taskTitle), false);
+        boolean heroLevelIncreased = lifeController.shareTask(lifeController.getTaskByTitle(taskTitle));
         if (heroLevelIncreased){
             Toast.makeText(context, "Congratulations!\n" + lifeController.getHeroName()
                     + "'s level increased!", Toast.LENGTH_LONG)
@@ -141,7 +141,8 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
                 @Override
                 public void run() {
                     gainAdditionalXP(taskTitle);
-                    double xp = lifeController.getHero().getBaseXP() * lifeController.getTaskByTitle(taskTitle).getMultiplier();
+                    double xp = lifeController.getHero().getBaseXP() *
+                            lifeController.getTaskByTitle(taskTitle).getShareMultiplier();
                     Button currentButton = (Button) v;
                     currentButton.setText(context.getString(R.string.XP_gained, xp));
                     currentButton.setEnabled(false);
@@ -168,7 +169,8 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
                 @Override
                 public void run() {
                     gainAdditionalXP(taskTitle);
-                    double xp = lifeController.getHero().getBaseXP() * lifeController.getTaskByTitle(taskTitle).getMultiplier();
+                    double xp = lifeController.getHero().getBaseXP() *
+                            lifeController.getTaskByTitle(taskTitle).getShareMultiplier();
                     Button currentButton = (Button) v;
                     currentButton.setText(context.getString(R.string.XP_gained, xp));
                     currentButton.setEnabled(false);
@@ -194,7 +196,8 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
                 @Override
                 public void run() {
                     gainAdditionalXP(taskTitle);
-                    double xp = lifeController.getHero().getBaseXP() * lifeController.getTaskByTitle(taskTitle).getMultiplier();
+                    double xp = lifeController.getHero().getBaseXP() *
+                            lifeController.getTaskByTitle(taskTitle).getShareMultiplier();
                     Button currentButton = (Button) v;
                     currentButton.setText(context.getString(R.string.XP_gained, xp));
                     currentButton.setEnabled(false);
@@ -223,7 +226,8 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
                         @Override
                         public void onVkShareComplete(int postId) {
                             gainAdditionalXP(taskTitle);
-                            double xp = lifeController.getHero().getBaseXP() * lifeController.getTaskByTitle(taskTitle).getMultiplier();
+                            double xp = lifeController.getHero().getBaseXP() *
+                                    lifeController.getTaskByTitle(taskTitle).getShareMultiplier();
                             Button currentButton = (Button) v;
                             currentButton.setText(context.getString(R.string.XP_gained, xp));
                             currentButton.setEnabled(false);

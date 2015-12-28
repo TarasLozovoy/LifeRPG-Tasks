@@ -154,6 +154,10 @@ public class Task {
         return (1 + (0.25 * difficulty) + (0.25 * importance));
     }
 
+    public double getShareMultiplier(){
+        return getMultiplier() * 0.5d;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Task)) return false;
