@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_id": "liferpg-tasks",
+    "project_number": "185314484801",
+    "name": "LifeRPG Tasks"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:185314484801:android:38a0947661d33a9f",
+        "client_id": "android:com.levor.liferpgtasks",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.levor.liferpgtasks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "185314484801-2vp7s71biuf8n5sars87jqn8srb5mam5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.levor.liferpgtasks",
+            "certificate_hash": "E67E2C8953F18FDF18E02B681B6E31DFB3B5C5B0"
+          }
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

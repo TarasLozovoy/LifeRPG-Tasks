@@ -3,6 +3,7 @@ package com.levor.liferpgtasks.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.google.android.gms.plus.PlusShare;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
@@ -208,15 +210,26 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
 //                    .show(activity.getSupportFragmentManager(), "VKShareDialog");
 
             //twitter share dialog
-            try {
-                new TweetComposer.Builder(activity)
-                        .text(taskTitle + " " + activity.getResources().getString(R.string.done) +
+//            try {
+//                new TweetComposer.Builder(activity)
+//                        .text(taskTitle + " " + activity.getResources().getString(R.string.done) +
+//                            "\n" + "I have just finished task " + taskTitle + "!")
+//                        .url(new URL(activity.getString(R.string.facebook_app_link)))
+//                        .show();
+//            } catch (MalformedURLException e) {
+//                e.printStackTrace();
+//            }
+
+            //google+ share dialog
+            Intent shareIntent = new PlusShare.Builder(activity)
+                    .setType("text/plain")
+                    .setText(taskTitle + " " + activity.getResources().getString(R.string.done) +
                             "\n" + "I have just finished task " + taskTitle + "!")
-                        .url(new URL(activity.getString(R.string.facebook_app_link)))
-                        .show();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+                    .setContentUrl(Uri.parse(activity.getString(R.string.facebook_app_link)))
+                    .getIntent();
+
+            activity.startActivity(shareIntent);
+
 
             dialog.dismiss();
         }
