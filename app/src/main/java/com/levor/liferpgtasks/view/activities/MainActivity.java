@@ -55,17 +55,15 @@ public class MainActivity extends AppCompatActivity{
     private int currentFragmentID;
 
     private String heroDefaultIconName;
-    private int vkUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initializeSocialNetworksSDK();
         Uri targetUrl = AppLinks.getTargetUrlFromInboundIntent(this, getIntent());
         if (targetUrl != null) {
             Log.i("Activity", "App Link Target URL: " + targetUrl.toString());
         }
-        lifeController = LifeController.getInstance(this);
+        lifeController = LifeController.getInstance(getApplicationContext());
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
@@ -138,6 +136,13 @@ public class MainActivity extends AppCompatActivity{
         super.onPause();
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
         prefs.edit().putString(SHARED_PREFS_TAG, heroDefaultIconName).apply();
+        lifeController.setActivityPaused(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        lifeController.setActivityPaused(false);
     }
 
     public LifeController getController(){
@@ -261,11 +266,6 @@ public class MainActivity extends AppCompatActivity{
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setHomeButtonEnabled(false);
         }
-    }
-
-    private void initializeSocialNetworksSDK(){
-        FacebookSdk.sdkInitialize(getApplicationContext());
-//        VKSdk.initialize(getApplicationContext());
     }
 
     public void showSoftKeyboard(boolean show, View rootView){

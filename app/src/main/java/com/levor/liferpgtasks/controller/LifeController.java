@@ -2,10 +2,13 @@ package com.levor.liferpgtasks.controller;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Fragment;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.os.Handler;
+import android.widget.Toast;
 
 import com.levor.liferpgtasks.broadcastReceivers.TaskNotification;
 import com.levor.liferpgtasks.model.Characteristic;
@@ -13,6 +16,9 @@ import com.levor.liferpgtasks.model.Hero;
 import com.levor.liferpgtasks.model.LifeEntity;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
+import com.levor.liferpgtasks.view.fragments.DefaultFragment;
+import com.vk.sdk.VKScope;
+import com.vk.sdk.VKSdk;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,6 +30,8 @@ public class LifeController {
     public static final String TASK_TITLE_NOTIFICATION_TAG = "task_id_notification_ tag";
     private LifeEntity lifeEntity;
     private Context context;
+
+    private boolean activityPaused;
 
     private static LifeController LifeController;
     public static LifeController getInstance(Context context){
@@ -38,6 +46,13 @@ public class LifeController {
         this.context = context;
     }
 
+    public boolean isActivityPaused() {
+        return activityPaused;
+    }
+
+    public void setActivityPaused(boolean activityPaused) {
+        this.activityPaused = activityPaused;
+    }
 
     public List<Task> getAllTasks(){
         return lifeEntity.getTasks();
@@ -139,7 +154,7 @@ public class LifeController {
         double multiplier = task.getMultiplier();
         double finalXP = hero.getBaseXP() * multiplier;
         for (Skill sk : task.getRelatedSkills()) {
-            if (sk.increaseSublevel(finalXP)){
+            if (changeRepeatability && sk.increaseSublevel(finalXP)){
                 lifeEntity.updateCharacteristic(sk.getKeyCharacteristic());
             }
             updateSkill(sk);
@@ -242,5 +257,11 @@ public class LifeController {
     public boolean isInternetConnectionActive(){
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+
+    public void performVKLogin(Activity activity){
+        if (!VKSdk.isLoggedIn()){
+            VKSdk.login(activity, VKScope.WALL);
+        }
     }
 }

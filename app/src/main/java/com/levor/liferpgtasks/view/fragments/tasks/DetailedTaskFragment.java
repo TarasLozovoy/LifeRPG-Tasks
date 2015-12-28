@@ -28,7 +28,13 @@ import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.activities.MainActivity;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.skills.DetailedSkillFragment;
+import com.twitter.sdk.android.tweetcomposer.TweetComposer;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.dialogs.VKShareDialogBuilder;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -249,17 +255,61 @@ public class DetailedTaskFragment extends DefaultFragment {
             }
             setupListView();
 
-            ShareDialog shareDialog = new ShareDialog(getActivity());
-            if (ShareDialog.canShow(ShareLinkContent.class)) {
-                ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                        .setContentTitle(taskTitle + " " + getActivity().getResources().getString(R.string.done))
-                        .setContentDescription(
-                                "I have just finished task " + taskTitle + "!")
-                        .setContentUrl(Uri.parse(getActivity().getResources().getString(R.string.facebook_app_link)))
-                        .build();
+            //facebook share dialog
+//            ShareDialog shareDialog = new ShareDialog(getActivity());
+//            if (ShareDialog.canShow(ShareLinkContent.class)) {
+//                ShareLinkContent linkContent = new ShareLinkContent.Builder()
+//                        .setContentTitle(taskTitle + " " + getActivity().getResources().getString(R.string.done))
+//                        .setContentDescription(
+//                                "I have just finished task " + taskTitle + "!")
+//                        .setContentUrl(Uri.parse(getActivity().getResources().getString(R.string.facebook_app_link)))
+//                        .build();
+//
+//                shareDialog.show(linkContent);
+//            }
 
-                shareDialog.show(linkContent);
+            //vk share dialog
+//            if (!VKSdk.isLoggedIn()){
+//                getController().performVKLogin(getCurrentActivity());
+//                Toast.makeText(getCurrentActivity(), getCurrentActivity().getString(R.string.please_login),
+//                        Toast.LENGTH_SHORT)
+//                        .show();
+//                return;
+//            }
+//            VKShareDialogBuilder vkShareDialog = new VKShareDialogBuilder();
+//            vkShareDialog.setText(taskTitle + " " + getCurrentActivity().getResources().getString(R.string.done) +
+//                    "\n" + "I have just finished task " + taskTitle + "!")
+//                    .setAttachmentLink(getCurrentActivity().getString(R.string.app_name),
+//                            getCurrentActivity().getString(R.string.facebook_app_link))
+//                    .setShareDialogListener(new VKShareDialogBuilder.VKShareDialogListener() {
+//                        @Override
+//                        public void onVkShareComplete(int postId) {
+//                            //TODO move here additional XP gaining
+//                        }
+//
+//                        @Override
+//                        public void onVkShareCancel() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onVkShareError(VKError error) {
+//
+//                        }
+//                    })
+//                    .show(getCurrentActivity().getSupportFragmentManager(), "VKShareDialog");
+
+            //twitter share dialog
+            try {
+                new TweetComposer.Builder(getCurrentActivity())
+                        .text(taskTitle + " " + getCurrentActivity().getResources().getString(R.string.done) +
+                                "\n" + "I have just finished task " + taskTitle + "!")
+                        .url(new URL(getCurrentActivity().getString(R.string.facebook_app_link)))
+                        .show();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
             }
+
             dialog.dismiss();
         }
     }
