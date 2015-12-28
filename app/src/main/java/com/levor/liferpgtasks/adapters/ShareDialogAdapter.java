@@ -75,7 +75,6 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.share_dialog_list_item, null);
         }
-
         TextView title = (TextView) view.findViewById(R.id.social_network_title);
         Button shareButton = (Button) view.findViewById(R.id.social_network_button);
         ImageView imageView = (ImageView) view.findViewById(R.id.social_image_logo);
