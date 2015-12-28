@@ -158,79 +158,18 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                 Toast.makeText(activity, activity.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                 return;
             }
-            boolean heroLevelIncreased = lifeController.performTask(lifeController.getTaskByTitle(taskTitle), false);
-            if (heroLevelIncreased){
-                Toast.makeText(activity, "Congratulations!\n" + lifeController.getHeroName()
-                        + "'s level increased!", Toast.LENGTH_LONG)
-                        .show();
-            }
-            notifyDataSetChanged();
 
-            //facebook share dialog
-//            ShareDialog shareDialog = new ShareDialog(activity);
-//            if (ShareDialog.canShow(ShareLinkContent.class)) {
-//                ShareLinkContent linkContent = new ShareLinkContent.Builder()
-//                        .setContentTitle(taskTitle + " " + activity.getResources().getString(R.string.done))
-//                        .setContentDescription(
-//                                "I have just finished task " + taskTitle + "!")
-//                        .setContentUrl(Uri.parse(activity.getString(R.string.facebook_app_link)))
-//                        .build();
-//
-//                shareDialog.show(linkContent);
-//            }
-
-            //vk share dialog
-//            if (!VKSdk.isLoggedIn()){
-//                lifeController.performVKLogin(activity);
-//                Toast.makeText(activity, activity.getString(R.string.please_login), Toast.LENGTH_SHORT)
-//                        .show();
-//                return;
-//            }
-//            VKShareDialogBuilder vkShareDialog = new VKShareDialogBuilder();
-//            vkShareDialog.setText(taskTitle + " " + activity.getResources().getString(R.string.done) +
-//                            "\n" + "I have just finished task " + taskTitle + "!")
-//                    .setAttachmentLink(activity.getString(R.string.app_name),
-//                            activity.getString(R.string.facebook_app_link))
-//                    .setShareDialogListener(new VKShareDialogBuilder.VKShareDialogListener() {
-//                        @Override
-//                        public void onVkShareComplete(int postId) {
-//                            //TODO move here additional XP gaining
-//                        }
-//
-//                        @Override
-//                        public void onVkShareCancel() {
-//
-//                        }
-//
-//                        @Override
-//                        public void onVkShareError(VKError error) {
-//
-//                        }
-//                    })
-//                    .show(activity.getSupportFragmentManager(), "VKShareDialog");
-
-            //twitter share dialog
-//            try {
-//                new TweetComposer.Builder(activity)
-//                        .text(taskTitle + " " + activity.getResources().getString(R.string.done) +
-//                            "\n" + "I have just finished task " + taskTitle + "!")
-//                        .url(new URL(activity.getString(R.string.facebook_app_link)))
-//                        .show();
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            }
-
-            //google+ share dialog
-            Intent shareIntent = new PlusShare.Builder(activity)
-                    .setType("text/plain")
-                    .setText(taskTitle + " " + activity.getResources().getString(R.string.done) +
-                            "\n" + "I have just finished task " + taskTitle + "!")
-                    .setContentUrl(Uri.parse(activity.getString(R.string.facebook_app_link)))
-                    .getIntent();
-
-            activity.startActivity(shareIntent);
-
-
+            AlertDialog.Builder shareDialog = new AlertDialog.Builder(activity);
+            shareDialog.setAdapter(new ShareDialogAdapter(activity, taskTitle), null)
+                    .setTitle(activity.getString(R.string.share_additional_xp))
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            notifyDataSetChanged();
+                            dialog.dismiss();
+                        }
+                    }).show();
             dialog.dismiss();
         }
     }

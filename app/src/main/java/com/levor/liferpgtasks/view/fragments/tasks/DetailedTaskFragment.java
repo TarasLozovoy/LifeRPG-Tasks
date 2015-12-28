@@ -3,6 +3,7 @@ package com.levor.liferpgtasks.view.fragments.tasks;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -22,6 +23,8 @@ import android.widget.Toast;
 
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.google.android.gms.plus.PlusShare;
+import com.levor.liferpgtasks.adapters.ShareDialogAdapter;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
@@ -241,74 +244,17 @@ public class DetailedTaskFragment extends DefaultFragment {
                 Toast.makeText(getContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
                 return;
             }
-            boolean heroLevelIncreased = getController().performTask(getController().getTaskByTitle(taskTitle), false);
-            if (heroLevelIncreased){
-                Snackbar.make(getView(), "Congratulations!\n" + getController().getHeroName()
-                        + "'s level increased!", Snackbar.LENGTH_LONG)
-                        .setAction("Go to Hero page", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                getCurrentActivity().switchToRootFragment(MainActivity.MAIN_FRAGMENT_ID);
-                            }
-                        })
-                        .show();
-            }
-            setupListView();
-
-            //facebook share dialog
-//            ShareDialog shareDialog = new ShareDialog(getActivity());
-//            if (ShareDialog.canShow(ShareLinkContent.class)) {
-//                ShareLinkContent linkContent = new ShareLinkContent.Builder()
-//                        .setContentTitle(taskTitle + " " + getActivity().getResources().getString(R.string.done))
-//                        .setContentDescription(
-//                                "I have just finished task " + taskTitle + "!")
-//                        .setContentUrl(Uri.parse(getActivity().getResources().getString(R.string.facebook_app_link)))
-//                        .build();
-//
-//                shareDialog.show(linkContent);
-//            }
-
-            //vk share dialog
-//            if (!VKSdk.isLoggedIn()){
-//                getController().performVKLogin(getCurrentActivity());
-//                Toast.makeText(getCurrentActivity(), getCurrentActivity().getString(R.string.please_login),
-//                        Toast.LENGTH_SHORT)
-//                        .show();
-//                return;
-//            }
-//            VKShareDialogBuilder vkShareDialog = new VKShareDialogBuilder();
-//            vkShareDialog.setText(taskTitle + " " + getCurrentActivity().getResources().getString(R.string.done) +
-//                    "\n" + "I have just finished task " + taskTitle + "!")
-//                    .setAttachmentLink(getCurrentActivity().getString(R.string.app_name),
-//                            getCurrentActivity().getString(R.string.facebook_app_link))
-//                    .setShareDialogListener(new VKShareDialogBuilder.VKShareDialogListener() {
-//                        @Override
-//                        public void onVkShareComplete(int postId) {
-//                            //TODO move here additional XP gaining
-//                        }
-//
-//                        @Override
-//                        public void onVkShareCancel() {
-//
-//                        }
-//
-//                        @Override
-//                        public void onVkShareError(VKError error) {
-//
-//                        }
-//                    })
-//                    .show(getCurrentActivity().getSupportFragmentManager(), "VKShareDialog");
-
-            //twitter share dialog
-            try {
-                new TweetComposer.Builder(getCurrentActivity())
-                        .text(taskTitle + " " + getCurrentActivity().getResources().getString(R.string.done) +
-                                "\n" + "I have just finished task " + taskTitle + "!")
-                        .url(new URL(getCurrentActivity().getString(R.string.facebook_app_link)))
-                        .show();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            AlertDialog.Builder shareDialog = new AlertDialog.Builder(getCurrentActivity());
+            shareDialog.setAdapter(new ShareDialogAdapter(getCurrentActivity(), taskTitle), null)
+                    .setTitle(getCurrentActivity().getString(R.string.share_additional_xp))
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            setupListView();
+                            dialog.dismiss();
+                        }
+                    }).show();
 
             dialog.dismiss();
         }

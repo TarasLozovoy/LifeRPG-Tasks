@@ -16,7 +16,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.levor.liferpg"
+        applicationId "com.levor.liferpgtasks"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1

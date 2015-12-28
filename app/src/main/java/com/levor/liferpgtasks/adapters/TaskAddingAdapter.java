@@ -13,12 +13,12 @@ import com.levor.liferpgtasks.R;
 import java.util.List;
 
 public class TaskAddingAdapter extends BaseAdapter implements ListAdapter {
-    private Context mContext;
+    private Context context;
     protected List<String> items;
 
 
     public TaskAddingAdapter(Context context, List<String> array){
-        this.mContext = context;
+        this.context = context;
         this.items = array;
     }
 
@@ -41,7 +41,7 @@ public class TaskAddingAdapter extends BaseAdapter implements ListAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null){
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.task_add_list_view, null);
         }
 

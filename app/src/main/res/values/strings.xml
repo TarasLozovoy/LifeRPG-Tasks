@@ -108,7 +108,8 @@
     <string name="sort_image">Sort image</string>
     <string name="task_performed">Task successfully performed\n</string>
     <string name="close">Close</string>
-    <string name="share">Share(XP x2)</string>
+    <string name="share">Share(+XP)</string>
+    <string name="share_with_xp">Share(+%.2f XP)</string>
     <string name="done">done!</string>
     <string name="undo">Undo</string>
     <string name="edit">Edit</string>
@@ -122,5 +123,10 @@
     <string name="overdue">- overdue!</string>
     <string name="no_internet">There are no active internet connection. Please enable connection to share.</string>
     <string name="please_login">You are not logged in. Please log in.</string>
+    <string name="facebook">Facebook</string>
+    <string name="twitter">Twitter</string>
+    <string name="g_plus">Google+</string>
+    <string name="vk">Vkontakte</string>
+    <string name="share_additional_xp">Share to get additional XP</string>
 
 </resources>
