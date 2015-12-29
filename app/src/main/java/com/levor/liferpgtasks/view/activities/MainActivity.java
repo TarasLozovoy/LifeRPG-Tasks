@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.levor.liferpgtasks.controller.LifeController;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity{
     public final static int SETTINGS_FRAGMENT_ID = 2;
     private static final String SHARED_PREFS_TAG = "shared_prefs_tag";
     private static final String HERO_ICON_NAME_TAG = "shared_prefs_tag";
+    private static final String SELECTED_FRAGMENT_TAG = "shared_prefs_tag";
     protected final String TAG = "com.levor.liferpg";
 
     protected LifeController lifeController;
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity{
     private int currentFragmentID;
 
     private String heroDefaultIconName;
+    private long appClosingTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,15 +71,6 @@ public class MainActivity extends AppCompatActivity{
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
-        if (savedInstanceState == null) {
-            DefaultFragment fragment = new MainFragment();
-            currentFragmentID = MAIN_FRAGMENT_ID;
-            mainFragmentsStack.push(fragment);
-            FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction()
-                    .add(R.id.content_frame, fragment)
-                    .commit();
-        }
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
         heroDefaultIconName = prefs.getString(HERO_ICON_NAME_TAG, "elegant5.png");
 
@@ -114,6 +108,18 @@ public class MainActivity extends AppCompatActivity{
                 showChildFragment(new DetailedTaskFragment(), b);
             }
         }
+        if (savedInstanceState == null) {
+            DefaultFragment fragment = new MainFragment();
+            currentFragmentID = MAIN_FRAGMENT_ID;
+            mainFragmentsStack.push(fragment);
+            FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction()
+                    .add(R.id.content_frame, fragment)
+                    .commit();
+        } else {
+            currentFragmentID = savedInstanceState.getInt(SELECTED_FRAGMENT_TAG);
+            navigationTabLayout.getTabAt(currentFragmentID).select();
+        }
     }
 
     @Override
@@ -143,6 +149,12 @@ public class MainActivity extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
         lifeController.setActivityPaused(false);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(SELECTED_FRAGMENT_TAG, currentFragmentID);
+        super.onSaveInstanceState(outState);
     }
 
     public LifeController getController(){
@@ -201,6 +213,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public boolean showPreviousFragment() {
+        if (getCurrentFragmentsStack().isEmpty()) return false;
         getCurrentFragmentsStack().pop();
         DefaultFragment fragment;
         try {
@@ -241,7 +254,12 @@ public class MainActivity extends AppCompatActivity{
     @Override
     public void onBackPressed() {
         if (!showPreviousFragment()){
-            super.onBackPressed();
+            if (System.currentTimeMillis() - appClosingTime > 2500){
+                appClosingTime = System.currentTimeMillis();
+                Toast.makeText(this, getString(R.string.closing_app_toast), Toast.LENGTH_SHORT).show();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 

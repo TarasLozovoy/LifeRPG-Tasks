@@ -1,10 +1,7 @@
 package com.levor.liferpgtasks.view.fragments.tasks;
 
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.text.format.DateFormat;
@@ -16,28 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
-import com.google.android.gms.plus.PlusShare;
-import com.levor.liferpgtasks.adapters.ShareDialogAdapter;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
 import com.levor.liferpgtasks.view.activities.MainActivity;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.skills.DetailedSkillFragment;
-import com.twitter.sdk.android.tweetcomposer.TweetComposer;
-import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.dialogs.VKShareDialogBuilder;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -204,59 +188,16 @@ public class DetailedTaskFragment extends DefaultFragment {
                     })
                     .show();
         }
-        double xp = getController().getHero().getBaseXP() * currentTask.getMultiplier();
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getCurrentActivity());
-        builder.setTitle(currentTask.getTitle())
-                .setCancelable(false)
-                .setMessage(getResources().getString(R.string.task_performed) + "\n" + getResources().getString(R.string.XP_gained, xp))
-                .setNeutralButton(getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        setupListView();
-                    }
-                })
-                .setPositiveButton(getResources().getString(R.string.share), null);
-        final AlertDialog alert = builder.create();
-        alert.setOnShowListener(new DialogInterface.OnShowListener() {
+        PerformTaskAlertBuilder alert = new PerformTaskAlertBuilder(getCurrentActivity(),
+                currentTask,
+                getView());
+        AlertDialog alertDialog = alert.create();
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onShow(DialogInterface dialog) {
-                Button b = alert.getButton(AlertDialog.BUTTON_POSITIVE);
-                b.setOnClickListener(new ShareClickListener(currentTask.getTitle(), alert));
+            public void onDismiss(DialogInterface dialog) {
+                setupListView();
             }
         });
-        alert.show();
-    }
-
-    private class ShareClickListener implements View.OnClickListener{
-        private String taskTitle;
-        private AlertDialog dialog;
-
-        public ShareClickListener(String task, AlertDialog dialog){
-            this.taskTitle = task;
-            this.dialog = dialog;
-        }
-
-        @Override
-        public void onClick(View v){
-            if (!getController().isInternetConnectionActive()) {
-                Toast.makeText(getContext(), getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                return;
-            }
-            AlertDialog.Builder shareDialog = new AlertDialog.Builder(getCurrentActivity());
-            shareDialog.setAdapter(new ShareDialogAdapter(getCurrentActivity(), taskTitle), null)
-                    .setTitle(getCurrentActivity().getString(R.string.share_additional_xp))
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            setupListView();
-                            dialog.dismiss();
-                        }
-                    }).show();
-
-            dialog.dismiss();
-        }
+        alertDialog.show();
     }
 }

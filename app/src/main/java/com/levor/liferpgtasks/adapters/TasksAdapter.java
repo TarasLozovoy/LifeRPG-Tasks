@@ -3,8 +3,6 @@ package com.levor.liferpgtasks.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,21 +14,12 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareDialog;
-import com.google.android.gms.plus.PlusShare;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
 import com.levor.liferpgtasks.view.activities.MainActivity;
-import com.twitter.sdk.android.tweetcomposer.TweetComposer;
-import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.dialogs.VKShareDialog;
-import com.vk.sdk.dialogs.VKShareDialogBuilder;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -92,28 +81,19 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                             .show();
                 }
                 notifyDataSetChanged();
-                double xp = lifeController.getHero().getBaseXP() * task.getMultiplier();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle(items.get(position))
-                        .setCancelable(false)
-                        .setMessage(finalView.getResources().getString(R.string.task_performed) + "\n" + finalView.getResources().getString(R.string.XP_gained, xp))
-                        .setNeutralButton(finalView.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .setPositiveButton(finalView.getResources().getString(R.string.share), null);
-                final AlertDialog alert = builder.create();
-                alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                PerformTaskAlertBuilder alert = new PerformTaskAlertBuilder(activity,
+                        lifeController.getTaskByTitle(items.get(position)),
+                        finalView);
+                AlertDialog alertDialog = alert.create();
+                alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
-                    public void onShow(DialogInterface dialog) {
-                        Button b = alert.getButton(AlertDialog.BUTTON_POSITIVE);
-                        b.setOnClickListener(new ShareClickListener(items.get(position), alert));
+                    public void onDismiss(DialogInterface dialog) {
+                        notifyDataSetChanged();
                     }
                 });
-                alert.show();
+                alertDialog.show();
+
             }
         });
 
@@ -141,36 +121,5 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
             doBtn.setEnabled(false);
         }
         return view;
-    }
-
-    private class ShareClickListener implements View.OnClickListener{
-        private String taskTitle;
-        private AlertDialog dialog;
-
-        public ShareClickListener(String task, AlertDialog dialog){
-            this.taskTitle = task;
-            this.dialog = dialog;
-        }
-
-        @Override
-        public void onClick(View v){
-            if (!lifeController.isInternetConnectionActive()) {
-                Toast.makeText(activity, activity.getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            AlertDialog.Builder shareDialog = new AlertDialog.Builder(activity);
-            shareDialog.setAdapter(new ShareDialogAdapter(activity, taskTitle), null)
-                    .setTitle(activity.getString(R.string.share_additional_xp))
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            notifyDataSetChanged();
-                            dialog.dismiss();
-                        }
-                    }).show();
-            dialog.dismiss();
-        }
     }
 }

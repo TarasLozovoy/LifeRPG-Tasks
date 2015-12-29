@@ -128,5 +128,6 @@
     <string name="g_plus">Google+</string>
     <string name="vk">Vkontakte</string>
     <string name="share_additional_xp">Share to get additional XP</string>
+    <string name="closing_app_toast">Press back again to exit</string>
 
 </resources>
