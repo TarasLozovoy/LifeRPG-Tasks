@@ -129,5 +129,10 @@
     <string name="vk">Vkontakte</string>
     <string name="share_additional_xp">Share to get additional XP</string>
     <string name="closing_app_toast">Press back again to exit</string>
+    <string name="task_already_done">This task has been already done. Are you sure you want to make this task active?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="empty_skill_error">Skill title can\'t be empty</string>
+    <string name="no_key_characteristic_error">Key characteristic should be set</string>
 
 </resources>

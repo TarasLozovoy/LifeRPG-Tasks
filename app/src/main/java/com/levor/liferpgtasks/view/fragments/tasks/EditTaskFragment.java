@@ -60,6 +60,9 @@ public class EditTaskFragment extends AddTaskFragment {
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Edit task");
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
+        if (currentTask.isTaskDone()){
+            showTaskAlreadyDoneDialog();
+        }
         return v;
     }
 
@@ -118,6 +121,24 @@ public class EditTaskFragment extends AddTaskFragment {
                 .show();
     }
 
+    private void showTaskAlreadyDoneDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getCurrentActivity());
+        builder.setTitle(currentTask.getTitle())
+                .setMessage(getString(R.string.task_already_done))
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getCurrentActivity().showPreviousFragment();
+                    }
+                })
+                .show();
+    }
     private void removeTask(){
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert.setTitle("Removing " + currentTask.getTitle())
@@ -158,11 +179,5 @@ public class EditTaskFragment extends AddTaskFragment {
         closeKeyboard();
         Snackbar.make(repeatDetailedLayout, message, Snackbar.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
-    }
-
-    @Override
-    protected int getRepeatability() {
-        if (currentTask.getRepeatability() == 0 && !repeatCheckbox.isChecked()) return 0;
-        return super.getRepeatability();
     }
 }

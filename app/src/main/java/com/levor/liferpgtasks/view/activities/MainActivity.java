@@ -3,6 +3,7 @@ package com.levor.liferpgtasks.view.activities;
 import android.app.Service;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -96,18 +97,7 @@ public class MainActivity extends AppCompatActivity{
         });
         lifeController.setupTasksNotifications();
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            String taskFromNotification = extras.getString(LifeController.TASK_TITLE_NOTIFICATION_TAG);
-            if (taskFromNotification != null) {
-                tasksFragmentsStack.clear();
-                switchToRootFragment(TASKS_FRAGMENT_ID);
-
-                Bundle b = new Bundle();
-                b.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, lifeController.getTaskByTitle(taskFromNotification).getId());
-                showChildFragment(new DetailedTaskFragment(), b);
-            }
-        }
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         if (savedInstanceState == null) {
             DefaultFragment fragment = new MainFragment();
             currentFragmentID = MAIN_FRAGMENT_ID;
@@ -119,6 +109,19 @@ public class MainActivity extends AppCompatActivity{
         } else {
             currentFragmentID = savedInstanceState.getInt(SELECTED_FRAGMENT_TAG);
             navigationTabLayout.getTabAt(currentFragmentID).select();
+        }
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String taskFromNotification = extras.getString(LifeController.TASK_TITLE_NOTIFICATION_TAG);
+            if (taskFromNotification != null) {
+                tasksFragmentsStack.clear();
+                switchToRootFragment(TASKS_FRAGMENT_ID);
+
+                Bundle b = new Bundle();
+                b.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, lifeController.getTaskByTitle(taskFromNotification).getId());
+                showChildFragment(new DetailedTaskFragment(), b);
+            }
         }
     }
 

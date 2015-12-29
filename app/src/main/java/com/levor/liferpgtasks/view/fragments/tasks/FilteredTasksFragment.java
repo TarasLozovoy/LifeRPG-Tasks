@@ -134,6 +134,9 @@ public class FilteredTasksFragment extends DefaultFragment{
             case UNDO_CONTEXT_MENU_ITEM:
                 getController().undoTask(currentTask);
                 setupListView();
+                currentTask.increaseDateByNDays(-1);
+                getController().updateTaskNotification(currentTask);
+                getController().updateTask(currentTask);
                 return true;
             case EDIT_CONTEXT_MENU_ITEM:
                 DefaultFragment f = new EditTaskFragment();

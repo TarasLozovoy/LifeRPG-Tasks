@@ -119,9 +119,9 @@ public class DetailedTaskFragment extends DefaultFragment {
                 getActivity().invalidateOptionsMenu();
                 return true;
             case R.id.undo_task:
-                getController().undoTask(currentTask);
                 item.setVisible(false).setEnabled(false);
-                setupListView();
+                undoTask();
+                getActivity().invalidateOptionsMenu();
                 return true;
             case android.R.id.home:
                 getCurrentActivity().showPreviousFragment();
@@ -135,7 +135,7 @@ public class DetailedTaskFragment extends DefaultFragment {
         String dateString = getString(R.string.date) + " " +
                 DateFormat.format(Task.getTimeFormatting(), currentTask.getDate()) + " - " +
                 DateFormat.format(Task.getDateFormatting(), currentTask.getDate()) + " ";
-        if (currentTask.getDate().before(new Date(System.currentTimeMillis()))){
+        if (!currentTask.isTaskDone() && currentTask.getDate().before(new Date(System.currentTimeMillis()))){
             dateString = dateString + getString(R.string.overdue);
         }
         taskDateTV.setText(dateString);
@@ -171,7 +171,7 @@ public class DetailedTaskFragment extends DefaultFragment {
     private void performTask(){
         boolean isHeroLevelIncreased = getController().performTask(currentTask);
         if (currentTask.getRepeatability() == -1 || currentTask.getRepeatability() > 0){
-            currentTask.increaseDateByOneDay();
+            currentTask.increaseDateByNDays(1);
             getController().updateTaskNotification(currentTask);
             getController().updateTask(currentTask);
         }
@@ -199,5 +199,15 @@ public class DetailedTaskFragment extends DefaultFragment {
             }
         });
         alertDialog.show();
+    }
+
+    private void undoTask(){
+        getController().undoTask(currentTask);
+        setupListView();
+        setupTaskDate();
+        setupRepeatability();
+        currentTask.increaseDateByNDays(-1);
+        getController().updateTaskNotification(currentTask);
+        getController().updateTask(currentTask);
     }
 }

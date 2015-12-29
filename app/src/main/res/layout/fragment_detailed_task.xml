@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:layout_marginLeft="@dimen/save_zone_margin">
 
     <RelativeLayout
         android:layout_width="match_parent"

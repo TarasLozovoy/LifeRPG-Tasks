@@ -143,10 +143,10 @@ public class Task {
         this.notify = notify;
     }
 
-    public void increaseDateByOneDay(){
+    public void increaseDateByNDays(int N){
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        cal.add(Calendar.DATE, 1);
+        cal.add(Calendar.DATE, N);
         date.setTime(cal.getTimeInMillis());
     }
 

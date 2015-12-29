@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.levor.liferpgtasks.model.Characteristic;
 import com.levor.liferpgtasks.R;
@@ -90,9 +91,9 @@ public class AddSkillFragment extends DefaultFragment {
         switch (item.getItemId()){
             case R.id.ok_menu_item:
                 if (titleEditText.getText().toString().equals("")){
-                    Snackbar.make(getView(), "Skill title can't be empty", Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(R.string.empty_skill_error), Toast.LENGTH_SHORT).show();
                 } else if (keyCharacteristic == null){
-                    Snackbar.make(getView(), "Key characteristic should be set", Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(R.string.no_key_characteristic_error), Toast.LENGTH_SHORT).show();
                 } else if (getController().getSkillByTitle(titleEditText.getText().toString()) != null){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Oops!")

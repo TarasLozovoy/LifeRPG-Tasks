@@ -18,10 +18,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="?attr/colorPrimary"
+        android:background="@drawable/navigation_tab_color_selector"
         android:minHeight="?attr/actionBarSize"
         app:tabBackground="@drawable/navigation_tab_color_selector"
-        app:tabTextAppearance="@style/CustomTabText" />
+        app:tabTextAppearance="@style/CustomTabText"
+        app:tabMode="fixed"/>
 
     <FrameLayout
         android:id="@+id/content_frame"

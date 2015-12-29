@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Task;
@@ -66,7 +65,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
             public void onClick(View v) {
                 boolean isHeroLevelIncreased = lifeController.performTask(task);
                 if (task.getRepeatability() == -1 || task.getRepeatability() > 0){
-                    task.increaseDateByOneDay();
+                    task.increaseDateByNDays(1);
                     lifeController.updateTaskNotification(task);
                 }
                 if (isHeroLevelIncreased) {
