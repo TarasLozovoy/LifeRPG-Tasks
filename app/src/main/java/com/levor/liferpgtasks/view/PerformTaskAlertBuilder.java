@@ -7,10 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.adapters.ShareDialogAdapter;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Task;
+import com.levor.liferpgtasks.view.activities.MainActivity;
 
 
 public class PerformTaskAlertBuilder extends AlertDialog.Builder {
@@ -83,6 +85,10 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
                             dialog.dismiss();
                         }
                     }).show();
+            lifeController.getGATracker().send(new HitBuilders.EventBuilder()
+                    .setCategory(context.getString(R.string.GA_action))
+                    .setAction(context.getString(R.string.GA_share_button))
+                    .build());
             dialog.dismiss();
         }
     }

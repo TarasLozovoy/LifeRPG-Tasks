@@ -19,4 +19,10 @@ public class SettingsFragment extends DefaultFragment {
         getCurrentActivity().showActionBarHomeButtonAsBack(false);
         return v;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Settings Fragment");
+    }
 }

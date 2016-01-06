@@ -70,6 +70,12 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Detailed Characteristic Fragment");
+    }
+
     private void createFooterView() {
         Button footerButton = new Button(getActivity());
         footerButton.setText(R.string.create_new_skill);

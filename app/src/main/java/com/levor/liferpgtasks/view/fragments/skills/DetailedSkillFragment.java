@@ -91,6 +91,12 @@ public class DetailedSkillFragment extends DefaultFragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Detailed Skill Fragment");
+    }
+
     private void setupListView(){
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

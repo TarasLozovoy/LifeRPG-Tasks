@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
@@ -92,6 +93,19 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                     }
                 });
                 alertDialog.show();
+
+                lifeController.getGATracker().send(new HitBuilders.EventBuilder()
+                        .setCategory(activity.getString(R.string.GA_action))
+                        .setAction(activity.getString(R.string.GA_task_performed))
+                        .setValue(1)
+                        .build());
+
+                if (task.getRepeatability() == 0){
+                    lifeController.getGATracker().send(new HitBuilders.EventBuilder()
+                            .setCategory(activity.getString(R.string.GA_action))
+                            .setAction(activity.getString(R.string.GA_task_finished))
+                            .build());
+                }
 
             }
         });

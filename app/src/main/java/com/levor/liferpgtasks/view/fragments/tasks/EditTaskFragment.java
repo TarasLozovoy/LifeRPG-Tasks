@@ -100,6 +100,12 @@ public class EditTaskFragment extends AddTaskFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Edit Task Fragment");
+    }
+
+    @Override
     protected void createIdenticalTaskRequestDialog(final String title) {
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
         b.setTitle("Oops!")

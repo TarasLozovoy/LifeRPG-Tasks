@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.plus.PlusShare;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
@@ -147,6 +148,11 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
                     currentButton.setEnabled(false);
                 }
             }, DELAY_MILLIS);
+
+            lifeController.getGATracker().send(new HitBuilders.EventBuilder()
+                    .setCategory(context.getString(R.string.GA_action))
+                    .setAction(context.getString(R.string.GA_facebook_sharing))
+                    .build());
         }
     }
 
@@ -175,6 +181,11 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
                     currentButton.setEnabled(false);
                 }
             }, DELAY_MILLIS);
+
+            lifeController.getGATracker().send(new HitBuilders.EventBuilder()
+                    .setCategory(context.getString(R.string.GA_action))
+                    .setAction(context.getString(R.string.GA_twitter_sharing))
+                    .build());
         }
     }
 
@@ -202,6 +213,11 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
                     currentButton.setEnabled(false);
                 }
             }, DELAY_MILLIS);
+
+            lifeController.getGATracker().send(new HitBuilders.EventBuilder()
+                    .setCategory(context.getString(R.string.GA_action))
+                    .setAction(context.getString(R.string.GA_g_plus_sharing))
+                    .build());
         }
     }
 
@@ -230,6 +246,11 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
                             Button currentButton = (Button) v;
                             currentButton.setText(context.getString(R.string.XP_gained, xp));
                             currentButton.setEnabled(false);
+
+                            lifeController.getGATracker().send(new HitBuilders.EventBuilder()
+                                    .setCategory(context.getString(R.string.GA_action))
+                                    .setAction(context.getString(R.string.GA_VK_sharing))
+                                    .build());
                         }
 
                         @Override

@@ -32,6 +32,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.adapters.TaskAddingAdapter;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
@@ -111,6 +112,12 @@ public class AddTaskFragment extends DefaultFragment {
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Add Task Fragment");
     }
 
     @Override
@@ -194,8 +201,13 @@ public class AddTaskFragment extends DefaultFragment {
         int importance = importanceSpinner.getSelectedItemPosition();
         int repeat = getRepeatability();
         boolean notify = notifyCheckbox.isChecked();
-
         getController().createNewTask(title, repeat, difficulty, importance, date, notify, relatedSkills);
+
+        getController().getGATracker().send(new HitBuilders.EventBuilder()
+                .setCategory(getString(R.string.GA_action))
+                .setAction(getString(R.string.GA_add_new_task))
+                .build());
+
         createNotification(title);
         closeKeyboard();
         Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();

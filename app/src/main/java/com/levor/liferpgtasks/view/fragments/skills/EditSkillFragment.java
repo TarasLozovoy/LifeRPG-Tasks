@@ -86,6 +86,12 @@ public class EditSkillFragment extends AddSkillFragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Edit Skill Fragment");
+    }
+
     private void removeSkill(){
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert.setTitle("Removing " + currentSkill.getTitle())

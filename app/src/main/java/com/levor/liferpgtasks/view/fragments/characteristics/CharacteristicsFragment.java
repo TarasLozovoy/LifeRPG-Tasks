@@ -38,6 +38,12 @@ public class CharacteristicsFragment extends DefaultFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Characteristics Fragment");
+    }
+
+    @Override
     protected void updateUI(){
         String[] chars = getController().getCharacteristicsTitleAndLevelAsArray();
         listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, chars));

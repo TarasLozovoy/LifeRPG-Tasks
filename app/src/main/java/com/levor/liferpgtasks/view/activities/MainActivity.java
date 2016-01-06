@@ -7,21 +7,19 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.facebook.FacebookSdk;
+import com.levor.liferpgtasks.LifeRPGApplication;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
@@ -29,16 +27,11 @@ import com.levor.liferpgtasks.view.fragments.MainFragment;
 import com.levor.liferpgtasks.view.fragments.SettingsFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.TasksFragment;
-import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKApi;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.EmptyStackException;
 import java.util.Stack;
-
-import bolts.AppLinks;
 
 public class MainActivity extends AppCompatActivity{
     public final static int MAIN_FRAGMENT_ID = 0;
@@ -63,11 +56,12 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Uri targetUrl = AppLinks.getTargetUrlFromInboundIntent(this, getIntent());
-        if (targetUrl != null) {
-            Log.i("Activity", "App Link Target URL: " + targetUrl.toString());
-        }
         lifeController = LifeController.getInstance(getApplicationContext());
+
+        //setting up Google Analytics
+        LifeRPGApplication application = (LifeRPGApplication) getApplication();
+        lifeController.setGATracker(application.getDefaultTracker());
+
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);

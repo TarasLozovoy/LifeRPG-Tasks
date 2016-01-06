@@ -35,7 +35,7 @@
         android:id="@+id/check_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tasks_list_view_positive_button"
+        android:text="@string/do_task"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

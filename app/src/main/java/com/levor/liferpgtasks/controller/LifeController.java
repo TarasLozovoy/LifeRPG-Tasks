@@ -10,6 +10,10 @@ import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.levor.liferpgtasks.LifeRPGApplication;
+import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.broadcastReceivers.TaskNotification;
 import com.levor.liferpgtasks.model.Characteristic;
 import com.levor.liferpgtasks.model.Hero;
@@ -30,6 +34,7 @@ public class LifeController {
     public static final String TASK_TITLE_NOTIFICATION_TAG = "task_id_notification_ tag";
     private LifeEntity lifeEntity;
     private Context context;
+    private Tracker tracker;
 
     private boolean activityPaused;
 
@@ -44,6 +49,19 @@ public class LifeController {
     private LifeController(Context context) {
         lifeEntity = LifeEntity.getInstance(context);
         this.context = context;
+    }
+
+    public void setGATracker(Tracker tracker){
+        this.tracker = tracker;
+    }
+
+    public Tracker getGATracker() {
+        return tracker;
+    }
+
+    public void sendScreenNameToAnalytics(String name){
+        tracker.setScreenName("/" + name);
+        tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
     public boolean isActivityPaused() {
@@ -162,6 +180,13 @@ public class LifeController {
         boolean isLevelIncreased = hero.increaseXP(finalXP);
         lifeEntity.updateHero(hero);
 
+        if (isLevelIncreased){
+            getGATracker().send(new HitBuilders.EventBuilder()
+                    .setCategory(context.getString(R.string.GA_action))
+                    .setAction(context.getString(R.string.GA_hero_level_increased) + " " + hero.getLevel())
+                    .build());
+        }
+
         return isLevelIncreased;
     }
 
@@ -192,6 +217,13 @@ public class LifeController {
         double finalXP = hero.getBaseXP() * multiplier;
         boolean isLevelIncreased = hero.increaseXP(finalXP);
         lifeEntity.updateHero(hero);
+
+        if (isLevelIncreased){
+            getGATracker().send(new HitBuilders.EventBuilder()
+                    .setCategory(context.getString(R.string.GA_action))
+                    .setAction(context.getString(R.string.GA_hero_level_increased) + " " + hero.getLevel())
+                    .build());
+        }
         return  isLevelIncreased;
     }
 

@@ -34,7 +34,7 @@ public class MainFragment extends DefaultFragment{
 
         viewPager = (ViewPager) v.findViewById(R.id.pager);
         getCurrentActivity().getSupportActionBar().setElevation(0);
-        getCurrentActivity().setActionBarTitle(R.string.real_liferpg);
+        getCurrentActivity().setActionBarTitle(R.string.app_name);
         getCurrentActivity().showActionBarHomeButtonAsBack(false);
         return v;
     }

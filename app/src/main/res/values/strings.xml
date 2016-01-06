@@ -1,89 +1,30 @@
 <resources>
     <string name="app_name">LifeRPG Tasks</string>
 
-    <string name="settings">Settings</string>
-
-    <string name="open_skills">Skills</string>
-    <string name="open_characteristics">Characteristics</string>
-    <string name="title_activity_characteristic">Characteristics</string>
-
-    <!-- Social networks-->
+    <!-- Social networks data-->
     <string name="facebook_app_id">471263939742325</string>
     <string name="facebook_app_link">https://fb.me/473226542879398</string>
 
     <integer name="com_vk_sdk_AppId">5202032</integer>
     <!-- -->
 
-    <string name="intelligence">Intelligence -</string>
-    <string name="wisdom">Wisdom -</string>
-    <string name="strength">Strength -</string>
-    <string name="stamina">Stamina -</string>
-    <string name="dexterity">Dexterity -</string>
-    <string name="title_activity_skills">Skills</string>
-
-    <string name="tasks_list_view_positive_button">Do</string>
-    <string name="title_activity_detailed_task">DetailedTaskActivity</string>
+    <!-- Tasks-->
     <string name="new_task_title">Title:</string>
     <string name="new_task_title_edit_text">Type task title</string>
     <string name="add_skills_to_task">Related skills: </string>
     <string name="add_skill_to_task">Add related skill</string>
     <string name="add_new_task">New task</string>
-    <string name="create_task">Create</string>
-    <string name="title_activity_detailed_skill">DetailedSkillActivity</string>
-
-    <string name="hello_world">Hello world!</string>
-    <string name="increases">Increases: </string>
-    <string name="tasks_enhancing_skill">Skill sublevel may be increased by performing next tasks:
-    </string>
-    <string name="level">Level:</string>
-    <string name="sublevel">Sublevel:</string>
-    <string name="to_next_lvl">Points left to next level:</string>
     <string name="related_skills">Related skills:</string>
-    <string name="perform_task">Perform</string>
-    <string name="tasks_activity_title">Tasks</string>
-    <string name="title_activity_add_task">Add new task</string>
-    <string name="title_activity_detailed_characteristic">DetailedCharacteristicActivity</string>
     <string name="characteristic_level">Level:</string>
     <string name="characteristic_related_skills">Can be improved by enhancing next skills:</string>
-
-    <string name="title_activity_main_fragment">MainActivity</string>
-    <string name="finish_editing">Finish edit</string>
     <string name="edit_task">Edit</string>
-    <string name="new_skill_title">Title:</string>
-    <string name="new_skill_title_edit_text">type skill title</string>
-    <string name="key_characteristic">Key characteristic:</string>
-    <string name="set_key_characteristic">Set characteristic</string>
-    <string name="create_new_skill">Add new skill</string>
-    <string name="add_new_skill">New skill</string>
     <string name="do_task">DO</string>
-
-    <string name="edit_skill_button">Edit</string>
-    <string name="change_characteristic">Change characteristic</string>
-    <string name="drawer_open">Open drawer</string>
-    <string name="drawer_close">Close drawer</string>
-    <string name="select_category">Select category</string>
-    <string name="new_skill">Add new skill</string>
-    <string name="edit_skill">Edit</string>
-    <string name="add_skill">Add</string>
-    <string name="save">Save</string>
-    <string name="remove">Delete</string>
-    <string name="edit_hero">Edit</string>
-    <string name="enabled">Enabled</string>
-    <string name="disabled">Disabled</string>
-    <string name="disable">Disable</string>
-    <string name="enable">Enable</string>
-    <string name="hero_name">Name:</string>
-    <string name="hero_name_hint_edit_hero_fragment">Your hero name.</string>
     <string name="repeat">Repeat</string>
     <string name="repeat_times_edit_text_hint">leave blank for infinite</string>
     <string name="times">times</string>
     <string name="infinite_number_of">Repeat task infinitely</string>
     <string name="task_finished">Task finished.</string>
     <string name="max_task_repeat">Task can be repeated for 999 times max.</string>
-    <string name="hero_fragment_name">Hero</string>
-    <string name="characteristics_fragment_name">Characeristics</string>
-    <string name="skills_fragment_name">Skills</string>
-    <string name="real_liferpg">RealLife RPG</string>
     <string name="all_tasks">All</string>
     <string name="every_day_tasks">Dailies</string>
     <string name="simple_tasks">To do</string>
@@ -92,10 +33,8 @@
     <string name="difficulty">Difficulty:</string>
     <string name="importance">Importance:</string>
     <string name="date">Date:</string>
-    <string name="choose_date_time">Select date and time</string>
-    <string name="ok">OK</string>
-    <string name="cancel">CANCEL</string>
-    <string name="tasks_order_title" />
+    <string name="time">Time:</string>
+    <string name="tasks_order_title">Tasks order</string>
     <string name="completion_task_order">Completion</string>
     <string name="title_asc_task_order">Name asc.</string>
     <string name="title_desc_task_order">Name desc.</string>
@@ -108,19 +47,65 @@
     <string name="sort_image">Sort image</string>
     <string name="task_performed">Task successfully performed\n</string>
     <string name="close">Close</string>
-    <string name="share">Share(+XP)</string>
-    <string name="share_with_xp">Share(+%.2f XP)</string>
     <string name="done">done!</string>
     <string name="undo">Undo</string>
-    <string name="edit">Edit</string>
-    <string name="delete">Delete</string>
-    <string name="XP_gained">+ %.2f XP!</string>
-    <string name="time">Time:</string>
-    <string name="change_hero_icon">Change picture</string>
     <string name="repeat_question">Repeat?</string>
     <string name="notify_question">Notify?</string>
     <string name="show_notification">Task notification will be shown.</string>
     <string name="overdue">- overdue!</string>
+    <string name="task_already_done">This task has been already done. Are you sure you want to make this task active?</string>
+    <!-- -->
+
+    <!-- Skills-->
+    <string name="new_skill_title">Title:</string>
+    <string name="new_skill_title_edit_text">type skill title</string>
+    <string name="key_characteristic">Key characteristic:</string>
+    <string name="set_key_characteristic">Set characteristic</string>
+    <string name="create_new_skill">Add new skill</string>
+    <string name="add_new_skill">New skill</string>
+    <string name="edit_skill_button">Edit</string>
+    <string name="new_skill">Add new skill</string>
+    <string name="edit_skill">Edit</string>
+    <string name="increases">Increases: </string>
+    <string name="tasks_enhancing_skill">Skill sublevel may be increased by performing next tasks:
+    </string>
+    <string name="level">Level:</string>
+    <string name="sublevel">Sublevel:</string>
+    <string name="to_next_lvl">Points left to next level:</string>
+    <string name="empty_skill_title_error">Skill title can\'t be empty</string>
+    <string name="no_key_characteristic_error">Key characteristic should be set</string>
+    <!-- -->
+
+    <!-- Hero-->
+    <string name="edit_hero">Edit</string>
+    <string name="hero_name">Name:</string>
+    <string name="hero_name_hint_edit_hero_fragment">Your hero name.</string>
+    <string name="change_hero_icon">Change picture</string>
+    <!-- -->
+
+    <!-- Characteristics-->
+    <string name="change_characteristic">Change characteristic</string>
+    <!-- -->
+
+    <!-- Main fragment child fragments names-->
+    <string name="hero_fragment_name">Hero</string>
+    <string name="characteristics_fragment_name">Characeristics</string>
+    <string name="skills_fragment_name">Skills</string>
+    <!-- -->
+
+    <!-- Other-->
+    <string name="settings">Settings</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+    <string name="remove">Delete</string>
+    <string name="closing_app_toast">Press back again to exit</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <!-- -->
+
+    <!-- Sharing-->
+    <string name="share">Share(+XP)</string>
+    <string name="share_with_xp">Share(+%.2f XP)</string>
     <string name="no_internet">There are no active internet connection. Please enable connection to share.</string>
     <string name="please_login">You are not logged in. Please log in.</string>
     <string name="facebook">Facebook</string>
@@ -128,11 +113,22 @@
     <string name="g_plus">Google+</string>
     <string name="vk">Vkontakte</string>
     <string name="share_additional_xp">Share to get additional XP</string>
-    <string name="closing_app_toast">Press back again to exit</string>
-    <string name="task_already_done">This task has been already done. Are you sure you want to make this task active?</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="empty_skill_error">Skill title can\'t be empty</string>
-    <string name="no_key_characteristic_error">Key characteristic should be set</string>
+    <string name="XP_gained">+ %.2f XP!</string>
+    <!-- /Sharing-->
+
+    <!-- Google Analytics-->
+    <string name="GA_action">Action</string>
+    <string name="GA_add_new_task">Add new task</string>
+    <string name="GA_add_new_skill">Add new skill</string>
+    <string name="GA_task_performed">Task performed</string>
+    <string name="GA_task_finished">Task finished</string>
+    <string name="GA_hero_level_increased">Hero level increased to </string>
+    <string name="GA_share_button">Share button pressed</string>
+    <string name="GA_change_hero_icon">Hero icon changed</string>
+    <string name="GA_facebook_sharing">Facebook sharing performed</string>
+    <string name="GA_twitter_sharing">Twitter sharing performed</string>
+    <string name="GA_g_plus_sharing">G+ sharing performed</string>
+    <string name="GA_VK_sharing">VK sharing performed</string>
+    <!-- /Google Analytics-->
 
 </resources>

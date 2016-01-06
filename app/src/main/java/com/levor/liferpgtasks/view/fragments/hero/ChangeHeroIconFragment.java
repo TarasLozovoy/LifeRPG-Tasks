@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
@@ -57,6 +58,12 @@ public class ChangeHeroIconFragment extends DefaultFragment{
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Change Hero Icon Fragment");
+    }
+
     private class ImageHolder extends RecyclerView.ViewHolder {
         private ImageView image;
 
@@ -78,6 +85,10 @@ public class ChangeHeroIconFragment extends DefaultFragment{
                 public void onClick(View v) {
                     getCurrentActivity().setHeroImageName(name);
                     getCurrentActivity().showNthPreviousFragment(2);
+                    getController().getGATracker().send(new HitBuilders.EventBuilder()
+                            .setCategory(getContext().getString(R.string.GA_action))
+                            .setAction(getContext().getString(R.string.GA_change_hero_icon))
+                            .build());
                 }
             });
         }

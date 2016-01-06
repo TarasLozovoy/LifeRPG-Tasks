@@ -118,8 +118,8 @@ public class FilteredTasksFragment extends DefaultFragment{
             menu.setHeaderTitle(selectedTitle);
             menu.add(Menu.NONE, UNDO_CONTEXT_MENU_ITEM, UNDO_CONTEXT_MENU_ITEM, R.string.undo)
                     .setEnabled(selectedTask.isUndonable());
-            menu.add(Menu.NONE, EDIT_CONTEXT_MENU_ITEM, EDIT_CONTEXT_MENU_ITEM, R.string.edit);
-            menu.add(Menu.NONE, DELETE_CONTEXT_MENU_ITEM, DELETE_CONTEXT_MENU_ITEM, R.string.delete);
+            menu.add(Menu.NONE, EDIT_CONTEXT_MENU_ITEM, EDIT_CONTEXT_MENU_ITEM, R.string.edit_task);
+            menu.add(Menu.NONE, DELETE_CONTEXT_MENU_ITEM, DELETE_CONTEXT_MENU_ITEM, R.string.remove);
         }
     }
 
@@ -168,7 +168,11 @@ public class FilteredTasksFragment extends DefaultFragment{
         return false;
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Tasks Fragment");
+    }
 
     private void setupListView() {
         List<Task> tasks = getController().getAllTasks();

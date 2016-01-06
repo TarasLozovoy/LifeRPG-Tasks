@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
@@ -131,6 +133,12 @@ public class DetailedTaskFragment extends DefaultFragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Detailed Task Fragment");
+    }
+
     private void setupTaskDate() {
         String dateString = getString(R.string.date) + " " +
                 DateFormat.format(Task.getTimeFormatting(), currentTask.getDate()) + " - " +
@@ -199,6 +207,19 @@ public class DetailedTaskFragment extends DefaultFragment {
             }
         });
         alertDialog.show();
+
+        getController().getGATracker().send(new HitBuilders.EventBuilder()
+                .setCategory(getString(R.string.GA_action))
+                .setAction(getString(R.string.GA_task_performed))
+                .setValue(1)
+                .build());
+
+        if (currentTask.getRepeatability() == 0){
+            getController().getGATracker().send(new HitBuilders.EventBuilder()
+                    .setCategory(getString(R.string.GA_action))
+                    .setAction(getString(R.string.GA_task_finished))
+                    .build());
+        }
     }
 
     private void undoTask(){

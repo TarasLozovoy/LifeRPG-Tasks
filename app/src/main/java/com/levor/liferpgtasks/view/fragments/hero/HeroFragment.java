@@ -61,6 +61,12 @@ public class HeroFragment extends DefaultFragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Hero Fragment");
+    }
+
     protected void updateUI() {
         xpProgress.setMax((int) getController().getHeroXpToNextLevel());
         xpProgress.setProgress((int) getController().getHeroXp());

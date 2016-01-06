@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.model.Characteristic;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
@@ -74,6 +75,12 @@ public class AddSkillFragment extends DefaultFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Add Skill Fragment");
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -91,7 +98,7 @@ public class AddSkillFragment extends DefaultFragment {
         switch (item.getItemId()){
             case R.id.ok_menu_item:
                 if (titleEditText.getText().toString().equals("")){
-                    Toast.makeText(getContext(), getString(R.string.empty_skill_error), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.empty_skill_title_error), Toast.LENGTH_SHORT).show();
                 } else if (keyCharacteristic == null){
                     Toast.makeText(getContext(), getString(R.string.no_key_characteristic_error), Toast.LENGTH_SHORT).show();
                 } else if (getController().getSkillByTitle(titleEditText.getText().toString()) != null){
@@ -155,6 +162,11 @@ public class AddSkillFragment extends DefaultFragment {
         getController().addSkill(title, keyCharacteristic);
         Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
+
+        getController().getGATracker().send(new HitBuilders.EventBuilder()
+                .setCategory(getString(R.string.GA_action))
+                .setAction(getString(R.string.GA_add_new_skill))
+                .build());
     }
 
     protected void setKeyCharacteristicByTitle(String title) {

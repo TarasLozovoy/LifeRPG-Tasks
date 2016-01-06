@@ -63,6 +63,12 @@ public class EditHeroFragment extends DefaultFragment{
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Edit Hero Fragment");
+    }
+
     private class ChangeIconClickListener implements View.OnClickListener{
 
         @Override

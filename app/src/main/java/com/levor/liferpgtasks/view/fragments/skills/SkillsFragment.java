@@ -67,6 +67,12 @@ public class SkillsFragment extends DefaultFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Skills Fragment");
+    }
+
+    @Override
     protected void updateUI() {
         List<Skill> skills = getController().getAllSkills();
         List<String> rows = new ArrayList<>(skills.size());
