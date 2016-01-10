@@ -54,6 +54,7 @@
     <string name="show_notification">Task notification will be shown.</string>
     <string name="overdue">- overdue!</string>
     <string name="task_already_done">This task has been already done. Are you sure you want to make this task active?</string>
+    <string name="all_related_skills_added">All available skills already added</string>
     <!-- -->
 
     <!-- Skills-->
@@ -129,6 +130,7 @@
     <string name="GA_twitter_sharing">Twitter sharing performed</string>
     <string name="GA_g_plus_sharing">G+ sharing performed</string>
     <string name="GA_VK_sharing">VK sharing performed</string>
+    <string name="empty_widget">All tasks are done!</string>
     <!-- /Google Analytics-->
 
 </resources>

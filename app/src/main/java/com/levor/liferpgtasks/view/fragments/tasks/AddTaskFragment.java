@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.adapters.TaskAddingAdapter;
@@ -41,6 +42,7 @@ import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class AddTaskFragment extends DefaultFragment {
     public static final String RECEIVED_SKILL_TITLE_TAG = "received_skill_tag";
@@ -236,8 +238,15 @@ public class AddTaskFragment extends DefaultFragment {
         footerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                List<String> skillsList = getController().getSkillsTitles();
+                skillsList.removeAll(relatedSkills);
+                if(skillsList.isEmpty()){
+                    Toast.makeText(getContext(), getString(R.string.all_related_skills_added), Toast.LENGTH_LONG)
+                            .show();
+                    return;
+                }
                 final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                        android.R.layout.select_dialog_item, getController().getSkillsTitles());
+                        android.R.layout.select_dialog_item, skillsList);
 
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
                 dialog.setTitle("Choose skill to add");

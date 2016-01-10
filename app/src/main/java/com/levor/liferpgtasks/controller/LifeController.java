@@ -2,17 +2,15 @@ package com.levor.liferpgtasks.controller;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.Fragment;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.os.Handler;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.levor.liferpgtasks.LifeRPGApplication;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.broadcastReceivers.TaskNotification;
 import com.levor.liferpgtasks.model.Characteristic;
@@ -20,7 +18,7 @@ import com.levor.liferpgtasks.model.Hero;
 import com.levor.liferpgtasks.model.LifeEntity;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
-import com.levor.liferpgtasks.view.fragments.DefaultFragment;
+import com.levor.liferpgtasks.widget.LifeRPGWidgetProvider;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 
@@ -91,11 +89,12 @@ public class LifeController {
     public void createNewTask(String title, int repeatability, int difficulty, int reproducibility,
                               Date date, boolean notify, List<String> relatedSkills) {
         lifeEntity.addTask(title, repeatability, difficulty, reproducibility, date, notify, relatedSkills);
+        updateHomeScreenWidgets();
     }
-
 
     public void updateTask(Task task) {
         lifeEntity.updateTask(task);
+        updateHomeScreenWidgets();
     }
 
     public void addSkill(String title, Characteristic keyChar){
@@ -112,6 +111,7 @@ public class LifeController {
 
     public void removeTask(Task task) {
         lifeEntity.removeTask(task);
+        updateHomeScreenWidgets();
     }
 
     public String[] getCharacteristicsTitleAndLevelAsArray(){
@@ -304,5 +304,12 @@ public class LifeController {
         if (!VKSdk.isLoggedIn()){
             VKSdk.login(activity, VKScope.WALL);
         }
+    }
+
+    private void updateHomeScreenWidgets(){
+        int ids[] = AppWidgetManager.getInstance(context).
+                getAppWidgetIds(new ComponentName(context, LifeRPGWidgetProvider.class));
+        for (int id : ids)
+            AppWidgetManager.getInstance(context).notifyAppWidgetViewDataChanged(id, R.id.widget_list_view);
     }
 }

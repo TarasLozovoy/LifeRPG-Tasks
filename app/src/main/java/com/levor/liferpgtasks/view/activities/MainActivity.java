@@ -1,6 +1,8 @@
 package com.levor.liferpgtasks.view.activities;
 
 import android.app.Service;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -27,6 +29,7 @@ import com.levor.liferpgtasks.view.fragments.MainFragment;
 import com.levor.liferpgtasks.view.fragments.SettingsFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.TasksFragment;
+import com.levor.liferpgtasks.widget.LifeRPGWidgetProvider;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -74,7 +77,6 @@ public class MainActivity extends AppCompatActivity{
 
         navigationTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         navigationTabLayout.setSelectedTabIndicatorHeight(6);
-        navigationTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.blue));
         navigationTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -139,6 +141,7 @@ public class MainActivity extends AppCompatActivity{
         super.onPause();
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
         prefs.edit().putString(SHARED_PREFS_TAG, heroDefaultIconName).apply();
+//        updateHomeScreenWidgets();
         lifeController.setActivityPaused(true);
     }
 
@@ -321,4 +324,11 @@ public class MainActivity extends AppCompatActivity{
         navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.tasks));
         navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.settings));
     }
+//
+//    private void updateHomeScreenWidgets(){
+//        int ids[] = AppWidgetManager.getInstance(this).
+//                getAppWidgetIds(new ComponentName(this, LifeRPGWidgetProvider.class));
+//        for (int id : ids)
+//            AppWidgetManager.getInstance(this).notifyAppWidgetViewDataChanged(id, R.id.widget_list_view);
+//    }
 }

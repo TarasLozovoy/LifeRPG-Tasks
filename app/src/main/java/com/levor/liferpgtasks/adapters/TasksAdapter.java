@@ -58,7 +58,9 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
         }
 
         final Task task = lifeController.getTaskByTitle(items.get(position));
-
+        if (task == null) {
+            return null;
+        }
         Button doBtn = (Button) view.findViewById(R.id.check_button);
         final View finalView = view;
         doBtn.setOnClickListener(new View.OnClickListener() {

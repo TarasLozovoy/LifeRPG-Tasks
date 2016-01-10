@@ -87,6 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/add_task_fragment_default_margin"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
