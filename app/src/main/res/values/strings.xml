@@ -145,6 +145,15 @@
     <string name="total_hero_xp_achievement">Total hero XP - %1d</string>
     <string name="total_skills_xp_achievement">Sum XP for all skills - %1d</string>
     <string name="performed_tasks_achievement">%1d performed tasks</string>
+    <string name="finished_tasks_achievement">%1d finished tasks</string>
+    <string name="added_tasks_achievement">%1d added tasks</string>
+    <string name="top_level_skill_achievement">Max skill level - %1d</string>
+    <string name="top_level_characteristic_achievement">Max characteristic level - %1d</string>
+    <string name="n_skills_level_10_achievement">%1d skills with level 10</string>
+    <string name="n_skills_level_25_achievement">%1d skills with level 25</string>
+    <string name="n_skills_level_50_achievement">%1d skills with level 50</string>
+    <string name="n_skills_level_100_achievement">%1d skills with level 100</string>
+    <string name="achievement_unlocked">Achievement "%1s" unlocked!</string>
     <!-- -->
 
     <!-- Other-->

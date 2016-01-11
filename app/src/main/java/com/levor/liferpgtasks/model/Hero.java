@@ -52,6 +52,14 @@ public class Hero {
         return xp;
     }
 
+    public double getTotalXP(){
+        double total = 0;
+        for (int i = 1; i <= level; i++) {
+            total += xpToLevel(i);
+        }
+        return total;
+    }
+
     public double getBaseXP() {
         return baseXP;
     }

@@ -5,8 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
+import com.levor.liferpgtasks.AchievsList;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.adapters.TwoStringsRowAdapter;
 
@@ -31,91 +31,28 @@ public class AchievementsFragment extends DefaultFragment {
 
     public List<String[]> getAvailableAchievementsList() {
         List<String[]> list = new ArrayList<>();
+        for (int i = 0; i < getController().getAchievementsLevels().size(); i++) {
+            addAchievementToList(list, AchievsList.values()[i], getController().getAchievementsLevels().get(i));
+        }
+//        addAchievementToList(list, TOTAL_HERO_XP, 1);
+//        addAchievementToList(list, TOTAL_SKILLS_XP, 2);
+//        addAchievementToList(list, PERFORMED_TASKS, 3);
+//        addAchievementToList(list, FINISHED_TASKS, 4);
+//        addAchievementToList(list, ADDED_TASKS, 5);
+//        addAchievementToList(list, TOP_LEVEL_SKILL, 6);
+//        addAchievementToList(list, TOP_LEVEL_CHARACTERISTIC, 7);
+//        addAchievementToList(list, HERO_LEVEL, 8);
+//        addAchievementToList(list, NUMBER_OF_SKILLS_WITH_LEVEL_10, 9);
+//        addAchievementToList(list, NUMBER_OF_SKILLS_WITH_LEVEL_25, 10);
+//        addAchievementToList(list, NUMBER_OF_SKILLS_WITH_LEVEL_50, 11);
+//        addAchievementToList(list, NUMBER_OF_SKILLS_WITH_LEVEL_100, 12);
 
-        list.add(new String[]
-                {getString(R.string.total_hero_xp_achievement, AchievsList.TOTAL_HERO_XP.getThresholdForPosition(0)),
-                        getString(R.string.xp_multiplier_reward, AchievsList.TOTAL_HERO_XP.getReward())});
-        list.add(new String[]
-                {getString(R.string.total_skills_xp_achievement, AchievsList.TOTAL_SKILLS_XP.getThresholdForPosition(0)),
-                        getString(R.string.xp_multiplier_reward, AchievsList.TOTAL_SKILLS_XP.getReward())});
-        list.add(new String[]
-                {getString(R.string.performed_tasks_achievement, AchievsList.PERFORMED_TASKS.getThresholdForPosition(0)),
-                        getString(R.string.xp_multiplier_reward, AchievsList.PERFORMED_TASKS.getReward())});
-        list.add(new String[]
-                {getString(R.string.hero_level_achievement, AchievsList.HERO_LEVEL.getThresholdForPosition(1)),
-                getString(R.string.xp_multiplier_reward, AchievsList.HERO_LEVEL.getReward())});
         return list;
     }
 
-    enum AchievsList {
-        TOTAL_HERO_XP(0),
-        TOTAL_SKILLS_XP(0),
-        PERFORMED_TASKS(1),
-        FINISHED_TASKS(1),
-        ADDED_TASKS(1),
-        TOP_LEVEL_SKILL(2),
-        TOP_LEVEL_CHARACTERISTIC(2),
-        HERO_LEVEL(3),
-        NUMBER_OF_SKILLS_WITH_LEVEL_10(3),
-        NUMBER_OF_SKILLS_WITH_LEVEL_25(3),
-        NUMBER_OF_SKILLS_WITH_LEVEL_50(3),
-        NUMBER_OF_SKILLS_WITH_LEVEL_100(3);
-
-        private List<Long> count = new ArrayList<>();
-        private int maxCount = 10000;
-        private int reward;
-
-        AchievsList(int difficulty) {
-            switch (difficulty) {
-                case 0:
-                    for (int i = 0; i < maxCount; i++) {
-                        if (i == 0){
-                            count.add(10L);
-                            continue;
-                        }
-                        count.add((long) (i * 100 * i));
-                    }
-                    reward = 1;
-                    break;
-                case 1:
-                    for (int i = 0; i < maxCount; i++) {
-                        if (i == 0){
-                            count.add(1L);
-                            continue;
-                        }
-                        count.add((long) (i * 5 * (i + 1)));
-                    }
-                    reward = 1;
-                    break;
-                case 2:
-                    for (int i = 0; i < maxCount; i++) {
-                        if (i == 0){
-                            count.add(5L);
-                            continue;
-                        }
-                        count.add((long) (i * 5 + 5));
-                    }
-                    reward = 2;
-                    break;
-                case 3:
-                    for (int i = 0; i < maxCount; i++) {
-                        if (i == 0){
-                            count.add(2L);
-                            continue;
-                        }
-                        count.add((long) (i * 5));
-                    }
-                    reward = 3;
-                    break;
-            }
-        }
-
-        public int getReward() {
-            return reward;
-        }
-
-        public long getThresholdForPosition(int position){
-            return count.get(position);
-        }
+    private void addAchievementToList(List<String[]> list, AchievsList achievement, int level){
+        list.add(new String[]
+                {String.format(achievement.getDescription(), achievement.getThresholdForLevel(level)),
+                        getString(R.string.xp_multiplier_reward, achievement.getReward())});
     }
 }
