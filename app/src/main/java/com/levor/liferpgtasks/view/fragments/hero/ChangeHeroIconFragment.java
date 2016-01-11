@@ -7,10 +7,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -55,7 +53,7 @@ public class ChangeHeroIconFragment extends DefaultFragment{
         private ImageView image;
 
         public ImageHolder(LayoutInflater inflater, ViewGroup container) {
-            super(inflater.inflate(R.layout.list_item_change_hero_image, container, false));
+            super(inflater.inflate(R.layout.recycler_view_item_change_image, container, false));
             image = (ImageView) itemView.findViewById(R.id.change_hero_image_item);
         }
 

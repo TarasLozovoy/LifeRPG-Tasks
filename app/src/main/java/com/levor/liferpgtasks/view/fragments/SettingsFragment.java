@@ -11,16 +11,26 @@ import com.levor.liferpgtasks.R;
 
 public class SettingsFragment extends DefaultFragment {
     private Button showStatisticsButton;
+    private Button showAchievementsButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
         showStatisticsButton = (Button) v.findViewById(R.id.show_statistics_button);
+        showAchievementsButton = (Button) v.findViewById(R.id.show_achievements_button);
+
         showStatisticsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getCurrentActivity().showChildFragment(new StatisticsFragment(), null);
+            }
+        });
+
+        showAchievementsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().showChildFragment(new AchievementsFragment(), null);
             }
         });
 

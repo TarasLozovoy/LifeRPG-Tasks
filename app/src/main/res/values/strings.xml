@@ -128,12 +128,23 @@
 
     <!-- Statistics-->
     <string name="statistics">Statistics</string>
-    <string name="show_statistics">Show statistics</string>
     <string name="performed_tasks_number">Total tasks performed: </string>
     <string name="added_tasks_number">Total tasks created: </string>
     <string name="total_hero_xp">Total hero XP: </string>
     <string name="total_skills_xp">Sum XP for all skills: </string>
     <string name="xp_multiplier">XP multiplier: </string>
+    <!-- -->
+
+    <!-- Achievements-->
+    <string name="achievements">Achievements</string>
+    <string name="available_achievements">Available achievements</string>
+    <string name="obtained_achievements">Last obtained achievement</string>
+    <string name="show_achievements">Achievements</string>
+    <string name="xp_multiplier_reward">XP Multiplier + x0.0%1d</string>
+    <string name="hero_level_achievement">Hero level - %1d</string>
+    <string name="total_hero_xp_achievement">Total hero XP - %1d</string>
+    <string name="total_skills_xp_achievement">Sum XP for all skills - %1d</string>
+    <string name="performed_tasks_achievement">%1d performed tasks</string>
     <!-- -->
 
     <!-- Other-->
@@ -143,6 +154,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="empty_widget">All tasks are done!</string>
+
     <!-- -->
 
 </resources>

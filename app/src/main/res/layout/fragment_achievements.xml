@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/save_zone_margin"
+    android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/available_achievements_text_view"
+            style="@style/LifeRPGTextTitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/available_achievements" />
+
+        <View style="@style/HorizontalDivider" />
+
+        <ListView
+            android:id="@+id/available_achievements_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"/>
+
+</LinearLayout>
