@@ -1,8 +1,7 @@
 package com.levor.liferpgtasks.view.activities;
 
 import android.app.Service;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -29,7 +28,6 @@ import com.levor.liferpgtasks.view.fragments.MainFragment;
 import com.levor.liferpgtasks.view.fragments.SettingsFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.TasksFragment;
-import com.levor.liferpgtasks.widget.LifeRPGWidgetProvider;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,10 +38,8 @@ public class MainActivity extends AppCompatActivity{
     public final static int MAIN_FRAGMENT_ID = 0;
     public final static int TASKS_FRAGMENT_ID = 1;
     public final static int SETTINGS_FRAGMENT_ID = 2;
-    private static final String SHARED_PREFS_TAG = "shared_prefs_tag";
-    private static final String HERO_ICON_NAME_TAG = "shared_prefs_tag";
-    private static final String SELECTED_FRAGMENT_TAG = "shared_prefs_tag";
-    protected final String TAG = "com.levor.liferpg";
+    private static final String HERO_ICON_NAME_TAG = "hero_icon_name_tag";
+    private static final String SELECTED_FRAGMENT_TAG = "selected_fragment_tag";
 
     protected LifeController lifeController;
 
@@ -69,7 +65,7 @@ public class MainActivity extends AppCompatActivity{
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
-        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
         heroDefaultIconName = prefs.getString(HERO_ICON_NAME_TAG, "elegant5.png");
 
         navigationTabLayout = (TabLayout) findViewById(R.id.navigation_tab_layout);
@@ -125,6 +121,11 @@ public class MainActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         if (getCurrentFragmentsStack().isEmpty() ||
                 getCurrentFragmentsStack().peek().onOptionsItemSelected(item)) return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                showPreviousFragment();
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -139,16 +140,8 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onPause() {
         super.onPause();
-        SharedPreferences prefs = getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-        prefs.edit().putString(SHARED_PREFS_TAG, heroDefaultIconName).apply();
-//        updateHomeScreenWidgets();
-        lifeController.setActivityPaused(true);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        lifeController.setActivityPaused(false);
+        SharedPreferences prefs = getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+        prefs.edit().putString(LifeController.SHARED_PREFS_TAG, heroDefaultIconName).apply();
     }
 
     @Override

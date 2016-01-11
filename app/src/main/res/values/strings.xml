@@ -90,18 +90,8 @@
 
     <!-- Main fragment child fragments names-->
     <string name="hero_fragment_name">Hero</string>
-    <string name="characteristics_fragment_name">Characeristics</string>
+    <string name="characteristics_fragment_name">Characteristics</string>
     <string name="skills_fragment_name">Skills</string>
-    <!-- -->
-
-    <!-- Other-->
-    <string name="settings">Settings</string>
-    <string name="ok">OK</string>
-    <string name="cancel">CANCEL</string>
-    <string name="remove">Delete</string>
-    <string name="closing_app_toast">Press back again to exit</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
     <!-- -->
 
     <!-- Sharing-->
@@ -130,7 +120,29 @@
     <string name="GA_twitter_sharing">Twitter sharing performed</string>
     <string name="GA_g_plus_sharing">G+ sharing performed</string>
     <string name="GA_VK_sharing">VK sharing performed</string>
-    <string name="empty_widget">All tasks are done!</string>
     <!-- /Google Analytics-->
+
+    <!-- Settings-->
+    <string name="settings">Settings</string>
+    <!-- -->
+
+    <!-- Statistics-->
+    <string name="statistics">Statistics</string>
+    <string name="show_statistics">Show statistics</string>
+    <string name="performed_tasks_number">Total tasks performed: </string>
+    <string name="added_tasks_number">Total tasks created: </string>
+    <string name="total_hero_xp">Total hero XP: </string>
+    <string name="total_skills_xp">Sum XP for all skills: </string>
+    <string name="xp_multiplier">XP multiplier: </string>
+    <!-- -->
+
+    <!-- Other-->
+    <string name="ok">OK</string>
+    <string name="remove">Delete</string>
+    <string name="closing_app_toast">Press back again to exit</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="empty_widget">All tasks are done!</string>
+    <!-- -->
 
 </resources>

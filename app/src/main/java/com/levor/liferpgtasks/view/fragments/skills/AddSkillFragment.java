@@ -122,9 +122,6 @@ public class AddSkillFragment extends DefaultFragment {
                     finish(titleEditText.getText().toString(), "Skill added");
                 }
                 return true;
-            case android.R.id.home:
-                getCurrentActivity().showPreviousFragment();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

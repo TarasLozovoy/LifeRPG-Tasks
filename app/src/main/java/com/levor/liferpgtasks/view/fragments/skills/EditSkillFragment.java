@@ -78,9 +78,6 @@ public class EditSkillFragment extends AddSkillFragment {
             case R.id.remove:
                 removeSkill();
                 return true;
-            case android.R.id.home:
-                getCurrentActivity().showPreviousFragment();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

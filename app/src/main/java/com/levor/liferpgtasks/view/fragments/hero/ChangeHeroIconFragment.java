@@ -45,19 +45,6 @@ public class ChangeHeroIconFragment extends DefaultFragment{
         return v;
     }
 
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                getCurrentActivity().showPreviousFragment();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();

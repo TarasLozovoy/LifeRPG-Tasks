@@ -91,9 +91,6 @@ public class EditTaskFragment extends AddTaskFragment {
             case R.id.remove_task:
                 removeTask();
                 return true;
-            case android.R.id.home:
-                getCurrentActivity().showPreviousFragment();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

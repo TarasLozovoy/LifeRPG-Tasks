@@ -125,9 +125,6 @@ public class DetailedTaskFragment extends DefaultFragment {
                 undoTask();
                 getActivity().invalidateOptionsMenu();
                 return true;
-            case android.R.id.home:
-                getCurrentActivity().showPreviousFragment();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

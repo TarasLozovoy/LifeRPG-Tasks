@@ -7,6 +7,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -30,11 +31,15 @@ import java.util.UUID;
 
 public class LifeController {
     public static final String TASK_TITLE_NOTIFICATION_TAG = "task_id_notification_ tag";
+    public static final String SHARED_PREFS_TAG = "shared_prefs_tag";
+    public static final String PERFORMED_TASKS_TAG= "performed_task_tag";
+    public static final String TOTAL_TASKS_NUMBER_TAG= "total_tasks_number_tag";
+    public static final String TOTAL_HERO_XP_TAG= "total_hero_xp_tag";
+    public static final String TOTAL_SKILLS_XP_TAG= "total_skills_xp_tag";
+    public static final String XP_MULTIPLIER_TAG= "xp_multiplier_tag";
     private LifeEntity lifeEntity;
     private Context context;
     private Tracker tracker;
-
-    private boolean activityPaused;
 
     private static LifeController LifeController;
     public static LifeController getInstance(Context context){
@@ -62,14 +67,6 @@ public class LifeController {
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
-    public boolean isActivityPaused() {
-        return activityPaused;
-    }
-
-    public void setActivityPaused(boolean activityPaused) {
-        this.activityPaused = activityPaused;
-    }
-
     public List<Task> getAllTasks(){
         return lifeEntity.getTasks();
     }
@@ -90,6 +87,7 @@ public class LifeController {
                               Date date, boolean notify, List<String> relatedSkills) {
         lifeEntity.addTask(title, repeatability, difficulty, reproducibility, date, notify, relatedSkills);
         updateHomeScreenWidgets();
+        updateStatistics(TOTAL_TASKS_NUMBER_TAG, 1);
     }
 
     public void updateTask(Task task) {
@@ -176,9 +174,11 @@ public class LifeController {
                 lifeEntity.updateCharacteristic(sk.getKeyCharacteristic());
             }
             updateSkill(sk);
+            updateStatistics(TOTAL_SKILLS_XP_TAG, (float) finalXP);
         }
         boolean isLevelIncreased = hero.increaseXP(finalXP);
         lifeEntity.updateHero(hero);
+        updateStatistics(TOTAL_HERO_XP_TAG, (float) finalXP);
 
         if (isLevelIncreased){
             getGATracker().send(new HitBuilders.EventBuilder()
@@ -187,6 +187,7 @@ public class LifeController {
                     .build());
         }
 
+        updateStatistics(PERFORMED_TASKS_TAG, 1);
         return isLevelIncreased;
     }
 
@@ -204,10 +205,13 @@ public class LifeController {
                 lifeEntity.updateCharacteristic(sk.getKeyCharacteristic());
             }
             updateSkill(sk);
+            updateStatistics(TOTAL_SKILLS_XP_TAG, (float) -finalXP);
         }
         boolean isLevelChanged = hero.decreaseXP(finalXP);
         lifeEntity.updateHero(hero);
+        updateStatistics(TOTAL_HERO_XP_TAG, (float) -finalXP);
 
+        updateStatistics(PERFORMED_TASKS_TAG, -1);
         return isLevelChanged;
     }
 
@@ -217,6 +221,7 @@ public class LifeController {
         double finalXP = hero.getBaseXP() * multiplier;
         boolean isLevelIncreased = hero.increaseXP(finalXP);
         lifeEntity.updateHero(hero);
+        updateStatistics(TOTAL_HERO_XP_TAG, (float) finalXP);
 
         if (isLevelIncreased){
             getGATracker().send(new HitBuilders.EventBuilder()
@@ -311,5 +316,45 @@ public class LifeController {
                 getAppWidgetIds(new ComponentName(context, LifeRPGWidgetProvider.class));
         for (int id : ids)
             AppWidgetManager.getInstance(context).notifyAppWidgetViewDataChanged(id, R.id.widget_list_view);
+    }
+
+    private void updateStatistics(String field, float value){
+        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+        switch (field) {
+            case PERFORMED_TASKS_TAG :
+                float tasksPerformed = prefs.getFloat(PERFORMED_TASKS_TAG, 0);
+                tasksPerformed += value;
+                prefs.edit().putFloat(PERFORMED_TASKS_TAG, tasksPerformed).apply();
+                break;
+            case TOTAL_TASKS_NUMBER_TAG :
+                float totalTasks = prefs.getFloat(TOTAL_TASKS_NUMBER_TAG, 0);
+                totalTasks += value;
+                prefs.edit().putFloat(TOTAL_TASKS_NUMBER_TAG, totalTasks).apply();
+                break;
+            case TOTAL_HERO_XP_TAG :
+                float totalHeroXP = prefs.getFloat(TOTAL_HERO_XP_TAG, 0);
+                totalHeroXP += value;
+                prefs.edit().putFloat(TOTAL_HERO_XP_TAG, totalHeroXP).apply();
+                break;
+            case TOTAL_SKILLS_XP_TAG :
+                float totalSkillsXP = prefs.getFloat(TOTAL_SKILLS_XP_TAG, 0);
+                totalSkillsXP += value;
+                prefs.edit().putFloat(TOTAL_SKILLS_XP_TAG, totalSkillsXP).apply();
+                break;
+            case XP_MULTIPLIER_TAG :
+                Hero hero = getHero();
+                hero.setBaseXP(hero.getBaseXP() + value);
+                lifeEntity.updateHero(hero);
+        }
+    }
+
+    public float getStatisticsValue(String field){
+        switch (field) {
+            case XP_MULTIPLIER_TAG:
+                return (float)getHero().getBaseXP();
+            default:
+                SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+                return prefs.getFloat(field, 0);
+        }
     }
 }

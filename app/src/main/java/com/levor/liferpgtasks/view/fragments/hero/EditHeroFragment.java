@@ -55,9 +55,6 @@ public class EditHeroFragment extends DefaultFragment{
                 getController().updateHeroName(editHeroName.getText().toString());
                 getCurrentActivity().showPreviousFragment();
                 return true;
-            case android.R.id.home:
-                getCurrentActivity().showPreviousFragment();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

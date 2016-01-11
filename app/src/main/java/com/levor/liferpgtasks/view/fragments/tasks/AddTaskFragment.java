@@ -151,9 +151,6 @@ public class AddTaskFragment extends DefaultFragment {
                     finishTask(title, "Task added: " + title);
                 }
                 return true;
-            case android.R.id.home:
-                getCurrentActivity().showPreviousFragment();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

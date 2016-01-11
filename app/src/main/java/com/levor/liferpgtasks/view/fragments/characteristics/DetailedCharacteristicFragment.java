@@ -61,16 +61,6 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                getCurrentActivity().showPreviousFragment();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Detailed Characteristic Fragment");

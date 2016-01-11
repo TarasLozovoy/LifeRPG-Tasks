@@ -83,9 +83,6 @@ public class DetailedSkillFragment extends DefaultFragment {
                 DefaultFragment f = new EditSkillFragment();
                 getCurrentActivity().showChildFragment(f, b);
                 return true;
-            case android.R.id.home:
-                getCurrentActivity().showPreviousFragment();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -4,12 +4,11 @@
                 android:layout_height="match_parent"
                 tools:context="com.levor.liferpgtasks.view.fragments.SettingsFragment">
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Not yet implemented"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="18sp"/>
+        android:id="@+id/show_statistics_button"
+        android:text="@string/show_statistics"
+        android:gravity="center"/>
 
 </RelativeLayout>
