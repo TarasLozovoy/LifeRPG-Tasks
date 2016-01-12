@@ -120,6 +120,7 @@
     <string name="GA_twitter_sharing">Twitter sharing performed</string>
     <string name="GA_g_plus_sharing">G+ sharing performed</string>
     <string name="GA_VK_sharing">VK sharing performed</string>
+    <string name="GA_achievement_unlocked">Unlocked achievement</string>
     <!-- /Google Analytics-->
 
     <!-- Settings-->
@@ -130,6 +131,7 @@
     <string name="statistics">Statistics</string>
     <string name="performed_tasks_number">Total tasks performed: </string>
     <string name="added_tasks_number">Total tasks created: </string>
+    <string name="finished_tasks_number">Tasks finished: </string>
     <string name="total_hero_xp">Total hero XP: </string>
     <string name="total_skills_xp">Sum XP for all skills: </string>
     <string name="xp_multiplier">XP multiplier: </string>
@@ -153,7 +155,8 @@
     <string name="n_skills_level_25_achievement">%1d skills with level 25</string>
     <string name="n_skills_level_50_achievement">%1d skills with level 50</string>
     <string name="n_skills_level_100_achievement">%1d skills with level 100</string>
-    <string name="achievement_unlocked">Achievement "%1s" unlocked!</string>
+    <string name="achievement_unlocked">Achievement \"%1s\" unlocked!</string>
+    <string name="achievements_unlocked">Achievements unlocked: </string>
     <!-- -->
 
     <!-- Other-->

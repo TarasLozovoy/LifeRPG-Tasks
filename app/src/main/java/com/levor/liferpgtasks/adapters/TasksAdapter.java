@@ -66,6 +66,18 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
         doBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                PerformTaskAlertBuilder alert = new PerformTaskAlertBuilder(activity,
+                        lifeController.getTaskByTitle(items.get(position)),
+                        finalView);
+                AlertDialog alertDialog = alert.create();
+                alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        notifyDataSetChanged();
+                    }
+                });
+                alertDialog.show();
+
                 boolean isHeroLevelIncreased = lifeController.performTask(task);
                 if (task.getRepeatability() == -1 || task.getRepeatability() > 0){
                     task.increaseDateByNDays(1);
@@ -83,18 +95,6 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                             .show();
                 }
                 notifyDataSetChanged();
-
-                PerformTaskAlertBuilder alert = new PerformTaskAlertBuilder(activity,
-                        lifeController.getTaskByTitle(items.get(position)),
-                        finalView);
-                AlertDialog alertDialog = alert.create();
-                alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        notifyDataSetChanged();
-                    }
-                });
-                alertDialog.show();
 
                 lifeController.getGATracker().send(new HitBuilders.EventBuilder()
                         .setCategory(activity.getString(R.string.GA_action))

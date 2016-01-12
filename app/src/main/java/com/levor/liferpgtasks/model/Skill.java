@@ -58,10 +58,10 @@ public class Skill {
      */
     public boolean increaseSublevel(double value){
         sublevel += value;
-        if (sublevel >= level){
+        if (sublevel >= ((double)level)){
+            sublevel = sublevel - ((double) level);
             level++;
             keyCharacteristic.increaseLevelByN(1 + level/10);
-            sublevel = 0.0d;
             return true;
         }
         return false;
@@ -72,10 +72,10 @@ public class Skill {
      */
     public boolean decreaseSublevel(double value){
         sublevel -= value;
-        if (sublevel < 0) {
+        if (sublevel < 0.0d) {
             keyCharacteristic.increaseLevelByN(-(1 + level/10));
+            sublevel = ((double) level) + sublevel;
             level --;
-            sublevel = level + sublevel;
             return true;
         }
         return false;
@@ -103,6 +103,9 @@ public class Skill {
         }
     }
 
+    /**
+     * Compares skills by level. Skill with highest level will be first.
+     */
     private static class SkillByLevelComparator implements Comparator<Skill>{
 
         @Override

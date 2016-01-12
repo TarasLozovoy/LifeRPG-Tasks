@@ -24,6 +24,8 @@ import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
 import com.levor.liferpgtasks.view.activities.MainActivity;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.skills.DetailedSkillFragment;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -162,11 +164,12 @@ public class DetailedTaskFragment extends DefaultFragment {
     private void setupListView(){
         ArrayList<String> skills = new ArrayList<>();
         for (Skill sk : currentTask.getRelatedSkills()) {
+            DecimalFormat df = new DecimalFormat("#.##");
             StringBuilder sb = new StringBuilder(sk.getTitle());
             sb.append(" - ")
                     .append(sk.getLevel())
                     .append("(")
-                    .append(sk.getSublevel())
+                    .append(df.format(sk.getSublevel()))
                     .append(")");
             skills.add(sb.toString());
         }
@@ -174,6 +177,18 @@ public class DetailedTaskFragment extends DefaultFragment {
     }
 
     private void performTask(){
+        PerformTaskAlertBuilder alert = new PerformTaskAlertBuilder(getCurrentActivity(),
+                currentTask,
+                getView());
+        AlertDialog alertDialog = alert.create();
+        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                setupListView();
+            }
+        });
+        alertDialog.show();
+
         boolean isHeroLevelIncreased = getController().performTask(currentTask);
         if (currentTask.getRepeatability() == -1 || currentTask.getRepeatability() > 0){
             currentTask.increaseDateByNDays(1);
@@ -193,17 +208,6 @@ public class DetailedTaskFragment extends DefaultFragment {
                     })
                     .show();
         }
-        PerformTaskAlertBuilder alert = new PerformTaskAlertBuilder(getCurrentActivity(),
-                currentTask,
-                getView());
-        AlertDialog alertDialog = alert.create();
-        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                setupListView();
-            }
-        });
-        alertDialog.show();
 
         getController().getGATracker().send(new HitBuilders.EventBuilder()
                 .setCategory(getString(R.string.GA_action))

@@ -81,7 +81,7 @@ public class LifeEntity {
             c.add(Calendar.DATE, 1);
             Date tomorrow = c.getTime();
 
-            addTask("Learn Android", -1, Task.EASY, Task.EASY, today, true, getSkillByTitle("Android"));
+            addTask("Learn Android", -1, Task.INSANE, Task.INSANE, today, true, getSkillByTitle("Android"));
             addTask("Learn Java", 0, Task.MEDIUM, Task.MEDIUM, tomorrow, true, getSkillByTitle("Java"));
             addTask("Fix bug on Android", 1, Task.HARD, Task.HARD, today, false, getSkillByTitle("Android"));
             addTask("Fix bug on Java", 25, Task.INSANE, Task.INSANE, tomorrow, false, getSkillByTitle("Java"));
@@ -276,7 +276,7 @@ public class LifeEntity {
 
     public List<Skill> getSkills(){
         if (skills != null){
-            Collections.sort(skills, Skill.LEVEL_COMPARATOR);
+            Collections.sort(skills, Skill.LEVEL_COMPARATOR); //change achievements if changing comparator
             return skills;
         }
         List<Skill> skillsList = new ArrayList<>();
@@ -385,7 +385,7 @@ public class LifeEntity {
 
     public List<Characteristic> getCharacteristics(){
         if (characteristics != null) {
-            Collections.sort(characteristics, Characteristic.LEVEL_COMPARATOR);
+            Collections.sort(characteristics, Characteristic.LEVEL_COMPARATOR); //change achievements if changing comparator
             return characteristics;
         }
         List<Characteristic> chars = new ArrayList<>();

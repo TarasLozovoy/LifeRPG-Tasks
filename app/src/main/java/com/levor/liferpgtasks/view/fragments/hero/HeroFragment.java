@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
+import java.text.DecimalFormat;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -70,7 +72,8 @@ public class HeroFragment extends DefaultFragment {
     protected void updateUI() {
         xpProgress.setMax((int) getController().getHeroXpToNextLevel());
         xpProgress.setProgress((int) getController().getHeroXp());
-        String xpString = "XP : " + getController().getHeroXp() +
+        DecimalFormat df = new DecimalFormat("#.##");
+        String xpString = "XP : " + df.format(getController().getHeroXp()) +
                 "/" + getController().getHeroXpToNextLevel();
         xpProgressTV.setText(xpString);
         heroNameTV.setText(getController().getHeroName());

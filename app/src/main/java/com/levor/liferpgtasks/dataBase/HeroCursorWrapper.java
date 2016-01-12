@@ -18,8 +18,8 @@ public class HeroCursorWrapper extends CursorWrapper {
     public Hero getHero() {
         String name = getString(getColumnIndex(HeroTable.Cols.NAME));
         int level = getInt(getColumnIndex(HeroTable.Cols.LEVEL));
-        double xp = getInt(getColumnIndex(HeroTable.Cols.XP));
-        double baseXP = getInt(getColumnIndex(HeroTable.Cols.BASEXP));
+        double xp = getDouble(getColumnIndex(HeroTable.Cols.XP));
+        double baseXP = getDouble(getColumnIndex(HeroTable.Cols.BASEXP));
         return new Hero(level, xp, baseXP, name);
     }
 }

@@ -15,6 +15,7 @@ import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -76,13 +77,14 @@ public class SkillsFragment extends DefaultFragment {
     protected void updateUI() {
         List<Skill> skills = getController().getAllSkills();
         List<String> rows = new ArrayList<>(skills.size());
+        DecimalFormat df = new DecimalFormat("#.##");
         for (Skill sk : skills) {
             StringBuilder sb = new StringBuilder();
             sb.append(sk.getTitle())
                     .append(" - ")
                     .append(sk.getLevel())
                     .append("(")
-                    .append(sk.getSublevel())
+                    .append(df.format(sk.getSublevel()))
                     .append(")");
             rows.add(sb.toString());
         }

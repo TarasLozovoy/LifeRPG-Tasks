@@ -37,16 +37,18 @@ import static com.levor.liferpgtasks.AchievsList.*;
 public class LifeController {
     public static final String TASK_TITLE_NOTIFICATION_TAG = "task_id_notification_ tag";
     public static final String SHARED_PREFS_TAG = "shared_prefs_tag";
-    public static final String PERFORMED_TASKS_TAG= "performed_task_tag";
-    public static final String TOTAL_TASKS_NUMBER_TAG= "total_tasks_number_tag";
-    public static final String TOTAL_HERO_XP_TAG= "total_hero_xp_tag";
-    public static final String TOTAL_SKILLS_XP_TAG= "total_skills_xp_tag";
-    public static final String XP_MULTIPLIER_TAG= "xp_multiplier_tag";
-    public static final String ACHIEVEMENTS_TAG= "achievements_tag";
+    public static final String PERFORMED_TASKS_TAG = "performed_task_tag";
+    public static final String TOTAL_TASKS_NUMBER_TAG = "total_tasks_number_tag";
+    public static final String FINISHED_TASKS_NUMBER_TAG = "finished_tasks_number_tag";
+    public static final String TOTAL_HERO_XP_TAG = "total_hero_xp_tag";
+    public static final String TOTAL_SKILLS_XP_TAG = "total_skills_xp_tag";
+    public static final String XP_MULTIPLIER_TAG = "xp_multiplier_tag";
+    public static final String ACHIEVEMENTS_TAG = "achievements_tag";
+    public static final String ACHIEVEMENTS_COUNT_TAG = "achievements_count_tag";
     private LifeEntity lifeEntity;
     private Context context;
     private Tracker tracker;
-    private List<Integer> achievmentsLevels = new ArrayList<>();
+    private List<Integer> achievementsLevels = new ArrayList<>();
 
     private static LifeController LifeController;
     public static LifeController getInstance(Context context){
@@ -96,6 +98,7 @@ public class LifeController {
         lifeEntity.addTask(title, repeatability, difficulty, reproducibility, date, notify, relatedSkills);
         updateHomeScreenWidgets();
         updateStatistics(TOTAL_TASKS_NUMBER_TAG, 1);
+        checkAchievements();
     }
 
     public void updateTask(Task task) {
@@ -119,7 +122,6 @@ public class LifeController {
         lifeEntity.removeTask(task);
         updateHomeScreenWidgets();
     }
-
     public String[] getCharacteristicsTitleAndLevelAsArray(){
         List<Characteristic> characteristics = lifeEntity.getCharacteristics();
         ArrayList<String> strings = new ArrayList<>();
@@ -173,6 +175,9 @@ public class LifeController {
         task.setUndonable(true);
         if (task.getRepeatability() > 0){
             task.setRepeatability(task.getRepeatability() - 1);
+            if (task.getRepeatability() == 0){
+                updateStatistics(FINISHED_TASKS_NUMBER_TAG, 1);
+            }
         }
         updateTask(task);
         double multiplier = task.getMultiplier();
@@ -188,20 +193,14 @@ public class LifeController {
         lifeEntity.updateHero(hero);
         updateStatistics(TOTAL_HERO_XP_TAG, (float) finalXP);
 
-        //check for hero xp achievement
-        if (hero.getTotalXP() >= TOTAL_HERO_XP.getThresholdForLevel(achievmentsLevels.get(TOTAL_HERO_XP.ordinal()))){
-            unlockAchievement(TOTAL_HERO_XP);
-            hero.setBaseXP(hero.getBaseXP() + (TOTAL_HERO_XP.getReward() * 0.01));
-        }
-
         if (isLevelIncreased){
             getGATracker().send(new HitBuilders.EventBuilder()
                     .setCategory(context.getString(R.string.GA_action))
                     .setAction(context.getString(R.string.GA_hero_level_increased) + " " + hero.getLevel())
                     .build());
         }
-
         updateStatistics(PERFORMED_TASKS_TAG, 1);
+        checkAchievements();
         return isLevelIncreased;
     }
 
@@ -224,8 +223,8 @@ public class LifeController {
         boolean isLevelChanged = hero.decreaseXP(finalXP);
         lifeEntity.updateHero(hero);
         updateStatistics(TOTAL_HERO_XP_TAG, (float) -finalXP);
-
         updateStatistics(PERFORMED_TASKS_TAG, -1);
+        checkAchievements();
         return isLevelChanged;
     }
 
@@ -243,6 +242,7 @@ public class LifeController {
                     .setAction(context.getString(R.string.GA_hero_level_increased) + " " + hero.getLevel())
                     .build());
         }
+        checkAchievements();
         return  isLevelIncreased;
     }
 
@@ -345,6 +345,11 @@ public class LifeController {
                 totalTasks += value;
                 prefs.edit().putFloat(TOTAL_TASKS_NUMBER_TAG, totalTasks).apply();
                 break;
+            case FINISHED_TASKS_NUMBER_TAG :
+                float finishedTasks = prefs.getFloat(FINISHED_TASKS_NUMBER_TAG, 0);
+                finishedTasks += value;
+                prefs.edit().putFloat(FINISHED_TASKS_NUMBER_TAG, finishedTasks).apply();
+                break;
             case TOTAL_HERO_XP_TAG :
                 float totalHeroXP = prefs.getFloat(TOTAL_HERO_XP_TAG, 0);
                 totalHeroXP += value;
@@ -354,6 +359,11 @@ public class LifeController {
                 float totalSkillsXP = prefs.getFloat(TOTAL_SKILLS_XP_TAG, 0);
                 totalSkillsXP += value;
                 prefs.edit().putFloat(TOTAL_SKILLS_XP_TAG, totalSkillsXP).apply();
+                break;
+            case ACHIEVEMENTS_COUNT_TAG :
+                float totalAchievesCount = prefs.getFloat(ACHIEVEMENTS_COUNT_TAG, 0);
+                totalAchievesCount += value;
+                prefs.edit().putFloat(ACHIEVEMENTS_COUNT_TAG, totalAchievesCount).apply();
                 break;
             case XP_MULTIPLIER_TAG :
                 Hero hero = getHero();
@@ -387,41 +397,124 @@ public class LifeController {
         NUMBER_OF_SKILLS_WITH_LEVEL_100.setDescription(context.getString(R.string.n_skills_level_100_achievement));
 
         SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-        LinkedHashSet<String> defaultSet = (LinkedHashSet<String>) prefs.getStringSet(ACHIEVEMENTS_TAG, null);
-        achievmentsLevels.clear();
-        if (defaultSet == null) {
+        String defaultString =  prefs.getString(ACHIEVEMENTS_TAG, null);
+        achievementsLevels.clear();
+        if (defaultString == null) {
             for (int i = 0; i < AchievsList.values().length; i++) {
-                achievmentsLevels.add(0);
+                achievementsLevels.add(0);
             }
         } else {
-            for (String s : defaultSet) {
-                achievmentsLevels.add(Integer.parseInt(s));
+            String[] array = defaultString.split(",");
+            for (String s : array) {
+                achievementsLevels.add(Integer.parseInt(s));
             }
         }
     }
 
     private void updateAchievements(){
         SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-        LinkedHashSet<String> set = new LinkedHashSet<>();
-        for (Integer i : achievmentsLevels){
-            set.add(String.valueOf(i));
+        StringBuilder sb = new StringBuilder();
+        for (Integer i : achievementsLevels){
+            sb.append(i).append(",");
         }
-        prefs.edit().putStringSet(ACHIEVEMENTS_TAG, set).apply();
+        sb.deleteCharAt(sb.length() - 1);
+        prefs.edit().putString(ACHIEVEMENTS_TAG, sb.toString()).apply();
     }
 
     private void unlockAchievement(AchievsList achievement){
         int position = achievement.ordinal();
-        achievmentsLevels.set(position, achievmentsLevels.get(position) + 1);
-        updateAchievements();
         String achievementString = String.format(achievement.getDescription(),
-                achievement.getThresholdForLevel(achievmentsLevels.get(position)));
+                achievement.getThresholdForLevel(achievementsLevels.get(position)));
         Toast.makeText(context,
                 context.getString(R.string.achievement_unlocked, achievementString) + "\n" +
                         context.getString(R.string.xp_multiplier_reward, achievement.getReward()),
                 Toast.LENGTH_LONG).show();
+
+        achievementsLevels.set(position, achievementsLevels.get(position) + 1);
+        updateAchievements();
+        Hero hero = getHero();
+        hero.setBaseXP(hero.getBaseXP() + (achievement.getReward() * 0.01));
+        lifeEntity.updateHero(hero);
+
+        updateStatistics(ACHIEVEMENTS_COUNT_TAG, 1);
+        getGATracker().send(new HitBuilders.EventBuilder()
+                .setCategory(context.getString(R.string.GA_action))
+                .setAction(context.getString(R.string.GA_achievement_unlocked) + " " + achievement.name())
+                .setValue(1)
+                .build());
     }
 
     public List<Integer> getAchievementsLevels(){
-        return  achievmentsLevels;
+        return achievementsLevels;
+    }
+
+    private void checkAchievements(){
+        int skillsXPAchievePosition = achievementsLevels.get(TOTAL_HERO_XP.ordinal());
+        if (getHero().getTotalXP() >= TOTAL_HERO_XP.getThresholdForLevel(skillsXPAchievePosition)){
+            unlockAchievement(TOTAL_HERO_XP);
+        }
+
+        skillsXPAchievePosition = achievementsLevels.get(TOTAL_SKILLS_XP.ordinal());
+        if (getStatisticsValue(TOTAL_SKILLS_XP_TAG) >= TOTAL_SKILLS_XP.getThresholdForLevel(skillsXPAchievePosition)){
+            unlockAchievement(TOTAL_SKILLS_XP);
+        }
+
+        skillsXPAchievePosition = achievementsLevels.get(PERFORMED_TASKS.ordinal());
+        if (getStatisticsValue(PERFORMED_TASKS_TAG) >= PERFORMED_TASKS.getThresholdForLevel(skillsXPAchievePosition)){
+            unlockAchievement(PERFORMED_TASKS);
+        }
+
+        skillsXPAchievePosition = achievementsLevels.get(FINISHED_TASKS.ordinal());
+        if (getStatisticsValue(FINISHED_TASKS_NUMBER_TAG) >= FINISHED_TASKS.getThresholdForLevel(skillsXPAchievePosition)){
+            unlockAchievement(FINISHED_TASKS);
+        }
+
+        skillsXPAchievePosition = achievementsLevels.get(ADDED_TASKS.ordinal());
+        if (getStatisticsValue(TOTAL_TASKS_NUMBER_TAG) >= ADDED_TASKS.getThresholdForLevel(skillsXPAchievePosition)){
+            unlockAchievement(ADDED_TASKS);
+        }
+
+        skillsXPAchievePosition = achievementsLevels.get(TOP_LEVEL_SKILL.ordinal());
+        if (getAllSkills().get(0).getLevel() >= TOP_LEVEL_SKILL.getThresholdForLevel(skillsXPAchievePosition)){
+            unlockAchievement(TOP_LEVEL_SKILL);
+        }
+
+        skillsXPAchievePosition = achievementsLevels.get(TOP_LEVEL_CHARACTERISTIC.ordinal());
+        if (lifeEntity.getCharacteristics().get(0).getLevel() >= TOP_LEVEL_CHARACTERISTIC.getThresholdForLevel(skillsXPAchievePosition)){
+            unlockAchievement(TOP_LEVEL_CHARACTERISTIC);
+        }
+
+        skillsXPAchievePosition = achievementsLevels.get(HERO_LEVEL.ordinal());
+        if (getHero().getLevel() >= HERO_LEVEL.getThresholdForLevel(skillsXPAchievePosition)){
+            unlockAchievement(HERO_LEVEL);
+        }
+
+        skillsXPAchievePosition = achievementsLevels.get(NUMBER_OF_SKILLS_WITH_LEVEL_10.ordinal());
+        int threshold = (int) NUMBER_OF_SKILLS_WITH_LEVEL_10.getThresholdForLevel(skillsXPAchievePosition);
+        if (getAllSkills().size() >= threshold &&
+                getAllSkills().get(threshold - 1).getLevel() >= 10){
+            unlockAchievement(NUMBER_OF_SKILLS_WITH_LEVEL_10);
+        }
+
+        skillsXPAchievePosition = achievementsLevels.get(NUMBER_OF_SKILLS_WITH_LEVEL_25.ordinal());
+        threshold = (int) NUMBER_OF_SKILLS_WITH_LEVEL_25.getThresholdForLevel(skillsXPAchievePosition);
+        if (getAllSkills().size() >= threshold &&
+                getAllSkills().get(threshold - 1).getLevel() >= 25){
+            unlockAchievement(NUMBER_OF_SKILLS_WITH_LEVEL_25);
+        }
+
+        skillsXPAchievePosition = achievementsLevels.get(NUMBER_OF_SKILLS_WITH_LEVEL_50.ordinal());
+        threshold = (int) NUMBER_OF_SKILLS_WITH_LEVEL_50.getThresholdForLevel(skillsXPAchievePosition);
+        if (getAllSkills().size() >= threshold &&
+                getAllSkills().get(threshold - 1).getLevel() >= 50){
+            unlockAchievement(NUMBER_OF_SKILLS_WITH_LEVEL_50);
+        }
+
+        skillsXPAchievePosition = achievementsLevels.get(NUMBER_OF_SKILLS_WITH_LEVEL_100.ordinal());
+        threshold = (int) NUMBER_OF_SKILLS_WITH_LEVEL_100.getThresholdForLevel(skillsXPAchievePosition);
+        if (getAllSkills().size() >= threshold &&
+                getAllSkills().get(threshold - 1).getLevel() >= 100){
+            unlockAchievement(NUMBER_OF_SKILLS_WITH_LEVEL_100);
+        }
     }
 }
