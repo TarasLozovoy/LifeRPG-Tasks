@@ -30,4 +30,28 @@
         android:layout_height="match_parent"
         android:layout_above="@id/navigation_tab_layout"
         android:layout_below="@id/toolbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/hero_coachmarks">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            android:alpha="0.5"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="coachmarks"
+            android:id="@+id/coachmarks"
+            android:textColor="@color/white"
+            android:shadowColor="@color/black"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"/>
+
+    </RelativeLayout>
 </RelativeLayout>

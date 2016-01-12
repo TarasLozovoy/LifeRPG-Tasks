@@ -203,6 +203,10 @@ public class Task {
 
         @Override
         public int compare(Task lhs, Task rhs) {
+            if (lhs.repeatability != rhs.repeatability) {
+                if (lhs.repeatability == 0) return 1;
+                if (rhs.repeatability == 0) return -1;
+            }
             return lhs.getTitle().compareTo(rhs.getTitle());
         }
     }
@@ -211,6 +215,10 @@ public class Task {
 
         @Override
         public int compare(Task lhs, Task rhs) {
+            if (lhs.repeatability != rhs.repeatability) {
+                if (lhs.repeatability == 0) return 1;
+                if (rhs.repeatability == 0) return -1;
+            }
             return rhs.getTitle().compareTo(lhs.getTitle());
         }
     }
@@ -219,6 +227,10 @@ public class Task {
 
         @Override
         public int compare(Task lhs, Task rhs) {
+            if (lhs.repeatability != rhs.repeatability) {
+                if (lhs.repeatability == 0) return 1;
+                if (rhs.repeatability == 0) return -1;
+            }
             if (lhs.getImportance() != rhs.getImportance()){
                 return lhs.getImportance() - rhs.getImportance();
             }
@@ -230,6 +242,10 @@ public class Task {
 
         @Override
         public int compare(Task lhs, Task rhs) {
+            if (lhs.repeatability != rhs.repeatability) {
+                if (lhs.repeatability == 0) return 1;
+                if (rhs.repeatability == 0) return -1;
+            }
             if (lhs.getImportance() != rhs.getImportance()){
                 return rhs.getImportance() - lhs.getImportance();
             }
@@ -241,6 +257,10 @@ public class Task {
 
         @Override
         public int compare(Task lhs, Task rhs) {
+            if (lhs.repeatability != rhs.repeatability) {
+                if (lhs.repeatability == 0) return 1;
+                if (rhs.repeatability == 0) return -1;
+            }
             if (lhs.getDifficulty() != rhs.getDifficulty()){
                 return lhs.getDifficulty() - rhs.getDifficulty();
             }
@@ -252,6 +272,10 @@ public class Task {
 
         @Override
         public int compare(Task lhs, Task rhs) {
+            if (lhs.repeatability != rhs.repeatability) {
+                if (lhs.repeatability == 0) return 1;
+                if (rhs.repeatability == 0) return -1;
+            }
             if (lhs.getDifficulty() != rhs.getDifficulty()){
                 return rhs.getDifficulty() - lhs.getDifficulty();
             }
@@ -264,6 +288,8 @@ public class Task {
         @Override
         public int compare(Task lhs, Task rhs) {
             if (lhs.getDate() != rhs.getDate()){
+                if (lhs.repeatability == 0) return 1;
+                if (rhs.repeatability == 0) return -1;
                 return lhs.getDate().compareTo(rhs.getDate());
             }
             return rhs.getTitle().compareTo(lhs.getTitle());
@@ -275,6 +301,8 @@ public class Task {
         @Override
         public int compare(Task lhs, Task rhs) {
             if (lhs.getDate() != rhs.getDate()){
+                if (lhs.repeatability == 0) return 1;
+                if (rhs.repeatability == 0) return -1;
                 return rhs.getDate().compareTo(lhs.getDate());
             }
             return rhs.getTitle().compareTo(lhs.getTitle());

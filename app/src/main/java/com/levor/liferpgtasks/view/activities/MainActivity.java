@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.levor.liferpgtasks.LifeRPGApplication;
@@ -26,6 +27,7 @@ import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.MainFragment;
 import com.levor.liferpgtasks.view.fragments.SettingsFragment;
+import com.levor.liferpgtasks.view.fragments.hero.HeroFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.TasksFragment;
 
@@ -317,11 +319,16 @@ public class MainActivity extends AppCompatActivity{
         navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.tasks));
         navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.settings));
     }
-//
-//    private void updateHomeScreenWidgets(){
-//        int ids[] = AppWidgetManager.getInstance(this).
-//                getAppWidgetIds(new ComponentName(this, LifeRPGWidgetProvider.class));
-//        for (int id : ids)
-//            AppWidgetManager.getInstance(this).notifyAppWidgetViewDataChanged(id, R.id.widget_list_view);
-//    }
+
+    public void showCoachmarksForCurrentFragment(){
+        TextView coachmarks = (TextView) findViewById(R.id.coachmarks);
+        int navigationTabsLeft = navigationTabLayout.getLeft();
+        int navigationTabsRight = navigationTabLayout.getRight();
+        int navigationTabsTop = navigationTabLayout.getTop();
+        int coachmarksSize = coachmarks.getBottom() - coachmarks.getTop();
+        coachmarks.setBottom(navigationTabsTop);
+        coachmarks.setTop(navigationTabsTop - coachmarksSize);
+        coachmarks.setLeft(navigationTabsLeft);
+        findViewById(R.id.hero_coachmarks).postInvalidate();
+    }
 }
