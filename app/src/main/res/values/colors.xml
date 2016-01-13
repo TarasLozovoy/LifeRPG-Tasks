@@ -2,6 +2,7 @@
 <resources>
     <item name="white" type="color">#ffffff</item>
     <item name="light_gray" type="color">#c4c1c1</item>
+    <item name="medium_gray" type="color">#868181</item>
     <item name="gray" type="color">#6c6a6a</item>
     <item name="blue" type="color">#3b67b9</item>
     <item name="black" type="color">#000000</item>

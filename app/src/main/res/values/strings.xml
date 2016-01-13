@@ -159,6 +159,15 @@
     <string name="achievements_unlocked">Achievements unlocked: </string>
     <!-- -->
 
+    <!--Coachmarks-->
+    <string name="coachmarks_hero_bottom_navigation">Switch over your hero, tasks and settings with this tabs.</string>
+    <string name="coachmarks_hero_description">This is your hero. \nYou can increase hero level by
+        performing your tasks (which gives XP to your hero).</string>
+    <string name="coachmarks_XP_description">Each task also increases related skill(s) XP.
+        When skill level increases - related characteristic level also increases.
+        Higher skill level - faster characteristic growth.</string>
+    <!-- -->
+
     <!-- Other-->
     <string name="ok">OK</string>
     <string name="remove">Delete</string>

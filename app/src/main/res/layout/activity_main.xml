@@ -21,8 +21,8 @@
         android:background="@drawable/navigation_tab_color_selector"
         android:minHeight="?attr/actionBarSize"
         app:tabBackground="@drawable/navigation_tab_color_selector"
-        app:tabTextAppearance="@style/CustomTabText"
-        app:tabMode="fixed"/>
+        app:tabMode="fixed"
+        app:tabTextAppearance="@style/CustomTabText" />
 
     <FrameLayout
         android:id="@+id/content_frame"
@@ -32,26 +32,94 @@
         android:layout_below="@id/toolbar" />
 
     <RelativeLayout
+        android:id="@+id/coachmarks_dim"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/hero_coachmarks">
+        android:layout_height="match_parent">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/black"
-            android:alpha="0.5"/>
+            android:alpha="0.75"
+            android:background="@color/black" />
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/hero_coachmarks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="coachmarks"
-            android:id="@+id/coachmarks"
-            android:textColor="@color/white"
-            android:shadowColor="@color/black"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="50dp"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/hero_coachmarks_text"
+                style="@style/CoachmarksText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_marginBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="@string/coachmarks_hero_description" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:src="@drawable/arrow3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/xp_coachmarks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:src="@drawable/arrow_double" />
+
+            <TextView
+                android:id="@+id/xp_coachmarks_text"
+                style="@style/CoachmarksText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_marginBottom="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="@string/coachmarks_XP_description" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_coachmarks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/arrow2_top_bottom" />
+
+            <TextView
+                android:id="@+id/coachmarks"
+                style="@style/CoachmarksText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:paddingLeft="5dp"
+                android:text="@string/coachmarks_hero_bottom_navigation" />
+        </LinearLayout>
+
 
     </RelativeLayout>
 </RelativeLayout>

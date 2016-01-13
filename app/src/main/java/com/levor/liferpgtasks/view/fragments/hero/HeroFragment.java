@@ -74,7 +74,7 @@ public class HeroFragment extends DefaultFragment {
         xpProgress.setProgress((int) getController().getHeroXp());
         DecimalFormat df = new DecimalFormat("#.##");
         String xpString = "XP : " + df.format(getController().getHeroXp()) +
-                "/" + getController().getHeroXpToNextLevel();
+                "/" + df.format(getController().getHeroXpToNextLevel());
         xpProgressTV.setText(xpString);
         heroNameTV.setText(getController().getHeroName());
         heroLevelTV.setText("Level " + getController().getHeroLevel());

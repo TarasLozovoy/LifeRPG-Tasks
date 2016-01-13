@@ -29,6 +29,11 @@
         <item name="android:textSize">10sp</item>
     </style>
 
+    <style name="CoachmarksText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
     <style name="HorizontalDivider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>

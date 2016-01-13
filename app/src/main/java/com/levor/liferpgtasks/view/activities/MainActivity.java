@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -321,14 +322,28 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void showCoachmarksForCurrentFragment(){
-        TextView coachmarks = (TextView) findViewById(R.id.coachmarks);
-        int navigationTabsLeft = navigationTabLayout.getLeft();
-        int navigationTabsRight = navigationTabLayout.getRight();
-        int navigationTabsTop = navigationTabLayout.getTop();
-        int coachmarksSize = coachmarks.getBottom() - coachmarks.getTop();
-        coachmarks.setBottom(navigationTabsTop);
-        coachmarks.setTop(navigationTabsTop - coachmarksSize);
-        coachmarks.setLeft(navigationTabsLeft);
-        findViewById(R.id.hero_coachmarks).postInvalidate();
+        final View bottomCoachmarks = findViewById(R.id.bottom_coachmarks);
+        final View xpCoachmarks = findViewById(R.id.xp_coachmarks);
+        final View coachmarksDim = findViewById(R.id.coachmarks_dim);
+        coachmarksDim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findViewById(R.id.hero_coachmarks).setVisibility(View.GONE);
+                xpCoachmarks.setVisibility(View.VISIBLE);
+                coachmarksDim.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        xpCoachmarks.setVisibility(View.GONE);
+                        bottomCoachmarks.setVisibility(View.VISIBLE);
+                        coachmarksDim.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                coachmarksDim.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 }
