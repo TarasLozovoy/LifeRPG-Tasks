@@ -133,7 +133,6 @@ public class MainActivity extends AppCompatActivity{
         super.onResume();
         if (lifeController.isFirstRun()){
             showCoachmarksForCurrentFragment();
-            lifeController.setFirstRun(false);
         }
     }
 
@@ -328,6 +327,7 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View v) {
                 findViewById(R.id.hero_coachmarks).setVisibility(View.GONE);
                 xpCoachmarks.setVisibility(View.VISIBLE);
+                lifeController.setFirstRun(false);
                 coachmarksDim.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
