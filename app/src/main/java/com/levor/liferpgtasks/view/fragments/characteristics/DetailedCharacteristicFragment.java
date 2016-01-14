@@ -36,15 +36,19 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_detailed_characteristic, container, false);
+        listView = (ListView) v;
+        View header = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.detailed_characteristic_header, null);
         currentCharacteristic = getController().getCharacteristicByTitle(getArguments().getString(CHARACTERISTIC_TITLE));
         getCurrentActivity().setActionBarTitle(currentCharacteristic.getTitle() + " details");
 
-        levelValue = (TextView) v.findViewById(R.id.level_value);
-        characteristicTitle = (TextView) v.findViewById(R.id.characteristic_title);
-        listView = (ListView) v.findViewById(R.id.list_view);
+        levelValue = (TextView) header.findViewById(R.id.level_value);
+        characteristicTitle = (TextView) header.findViewById(R.id.characteristic_title);
+
         characteristicTitle.setText(currentCharacteristic.getTitle());
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
         levelValue.setText("" + currentCharacteristic.getLevel());
+
+        listView.addHeaderView(header, null, false);
         createFooterView();
         createAdapter();
 
@@ -52,7 +56,8 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle b = new Bundle();
-                b.putSerializable(DetailedSkillFragment.SELECTED_SKILL_UUID_TAG, currentSkills.get(position).getId());
+                b.putSerializable(DetailedSkillFragment.SELECTED_SKILL_UUID_TAG,
+                        currentSkills.get(position - listView.getHeaderViewsCount()).getId());
                 DefaultFragment f = new DetailedSkillFragment();
                 getCurrentActivity().showChildFragment(f, b);
             }

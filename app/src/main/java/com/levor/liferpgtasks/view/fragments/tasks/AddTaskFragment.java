@@ -62,7 +62,7 @@ public class AddTaskFragment extends DefaultFragment {
     protected CheckBox notifyCheckbox;
     protected Spinner difficultySpinner;
     protected Spinner importanceSpinner;
-    private ListView relatedSkillListView;
+    private ListView listView;
     private Button dateButton;
     private Button timeButton;
     protected LinearLayout repeatDetailedLayout;
@@ -74,17 +74,17 @@ public class AddTaskFragment extends DefaultFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_add_task, container, false);
-
-        taskTitleEditText = (EditText) view.findViewById(R.id.task_title_edit_text);
-        relatedSkillListView = (ListView) view.findViewById(R.id.related_skills_to_add);
-        dateButton = (Button) view.findViewById(R.id.date_button);
-        timeButton = (Button) view.findViewById(R.id.time_button);
-        taskRepeatEditText = (EditText) view.findViewById(R.id.task_repeat_times_edit_text);
-        difficultySpinner = (Spinner) view.findViewById(R.id.difficulty_spinner);
-        importanceSpinner = (Spinner) view.findViewById(R.id.importance_spinner);
-        repeatCheckbox = (CheckBox) view.findViewById(R.id.repeat_checkbox);
-        notifyCheckbox = (CheckBox) view.findViewById(R.id.notify_checkbox);
-        repeatDetailedLayout = (LinearLayout) view.findViewById(R.id.task_repeat_detailed_linear_layout);
+        listView = (ListView) view;
+        View header = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.add_task_header, null);
+        taskTitleEditText = (EditText) header.findViewById(R.id.task_title_edit_text);
+        dateButton = (Button) header.findViewById(R.id.date_button);
+        timeButton = (Button) header.findViewById(R.id.time_button);
+        taskRepeatEditText = (EditText) header.findViewById(R.id.task_repeat_times_edit_text);
+        difficultySpinner = (Spinner) header.findViewById(R.id.difficulty_spinner);
+        importanceSpinner = (Spinner) header.findViewById(R.id.importance_spinner);
+        repeatCheckbox = (CheckBox) header.findViewById(R.id.repeat_checkbox);
+        notifyCheckbox = (CheckBox) header.findViewById(R.id.notify_checkbox);
+        repeatDetailedLayout = (LinearLayout) header.findViewById(R.id.task_repeat_detailed_linear_layout);
 
         setupSpinners();
         registerListeners(view);
@@ -102,6 +102,7 @@ public class AddTaskFragment extends DefaultFragment {
             notifyCheckbox.setChecked(true);
         }
         setupDateTimeButtons(date);
+        listView.addHeaderView(header);
         setupListView();
 
         String skillTitle;
@@ -170,7 +171,7 @@ public class AddTaskFragment extends DefaultFragment {
     }
 
     private void updateListView(){
-        relatedSkillListView.setAdapter(new TaskAddingAdapter(getActivity(), relatedSkills));
+        listView.setAdapter(new TaskAddingAdapter(getActivity(), relatedSkills));
     }
 
     protected void createIdenticalTaskRequestDialog(final String title){
@@ -208,25 +209,16 @@ public class AddTaskFragment extends DefaultFragment {
                 .build());
 
         createNotification(title);
-        closeKeyboard();
+        getCurrentActivity().showSoftKeyboard(false, getView());
         Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
     }
 
-    protected void closeKeyboard(){
-        View view = getCurrentActivity().getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getCurrentActivity()
-                    .getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
-
     private void setupListView(){
-        relatedSkillListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                relatedSkills.remove(position);
+                relatedSkills.remove(position - listView.getHeaderViewsCount());
                 updateListView();
             }
         });
@@ -260,31 +252,15 @@ public class AddTaskFragment extends DefaultFragment {
                 dialog.show();
             }
         });
-        relatedSkillListView.addFooterView(footerButton);
+        listView.addFooterView(footerButton);
         updateListView();
     }
 
     private void registerListeners(final View view) {
-        taskTitleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    getCurrentActivity().showSoftKeyboard(false, getView());
-                }
-            }
-        });
         repeatCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 repeatDetailedLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-            }
-        });
-        taskRepeatEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    getCurrentActivity().showSoftKeyboard(false, getView());
-                }
             }
         });
         taskRepeatEditText.addTextChangedListener(new TextWatcher() {

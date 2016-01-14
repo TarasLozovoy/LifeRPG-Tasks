@@ -1,0 +1,36 @@
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/characteristic_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/LifeRPGTextTitleStyle" />
+
+    <TextView
+        android:id="@+id/level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/characteristic_title"
+        android:text="@string/characteristic_level"
+        style="@style/LifeRPGTextStyle" />
+
+    <TextView
+        android:id="@+id/level_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/characteristic_title"
+        android:layout_toRightOf="@id/level"
+        style="@style/LifeRPGTextStyle" />
+
+    <TextView
+        android:id="@+id/related_skill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/level"
+        android:text="@string/characteristic_related_skills"
+        style="@style/LifeRPGTextStyle" />
+
+</RelativeLayout>

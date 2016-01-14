@@ -44,12 +44,17 @@ public class DetailedSkillFragment extends DefaultFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_deatiled_skill, container, false);
-        skillTitleTV = (TextView) v.findViewById(R.id.skill_title);
-        keyCharTV = (TextView) v.findViewById(R.id.key_char);
-        levelValue = (TextView) v.findViewById(R.id.level_value);
-        sublevelValue = (TextView) v.findViewById(R.id.sublevel_value);
-        toNextLevel = (TextView) v.findViewById(R.id.to_next_level_value);
-        listView = (ListView) v.findViewById(R.id.related_tasks);
+        listView = (ListView) v;
+        View header = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.detailed_skill_header, null);
+        skillTitleTV = (TextView) header.findViewById(R.id.skill_title);
+        keyCharTV = (TextView) header.findViewById(R.id.key_char);
+        levelValue = (TextView) header.findViewById(R.id.level_value);
+        sublevelValue = (TextView) header.findViewById(R.id.sublevel_value);
+        toNextLevel = (TextView) header.findViewById(R.id.to_next_level_value);
+
+        listView.addHeaderView(header, null, false);
+        createFooterView();
+
         UUID id = (UUID)getArguments().get(SELECTED_SKILL_UUID_TAG);
         currentSkill = getController().getSkillByID(id);
         setHasOptionsMenu(true);
@@ -98,7 +103,7 @@ public class DetailedSkillFragment extends DefaultFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedTaskTitle = currentTasks.get(position);
+                String selectedTaskTitle = currentTasks.get(position - listView.getHeaderViewsCount());
                 UUID taskID = getController().getTaskByTitle(selectedTaskTitle).getId();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, taskID);
@@ -115,7 +120,6 @@ public class DetailedSkillFragment extends DefaultFragment {
         currentTasks = titles;
         adapter = new TasksAdapter(titles, getCurrentActivity());
         listView.setAdapter(adapter);
-        createFooterView();
     }
 
     private void updateSkillDetails(){

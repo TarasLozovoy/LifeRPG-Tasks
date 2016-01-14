@@ -68,10 +68,10 @@
     <string name="new_skill">Add new skill</string>
     <string name="edit_skill">Edit</string>
     <string name="increases">Increases: </string>
-    <string name="tasks_enhancing_skill">Skill sublevel may be increased by performing next tasks:
+    <string name="tasks_enhancing_skill">Skill XP may be increased by performing next tasks:
     </string>
     <string name="level">Level:</string>
-    <string name="sublevel">Sublevel:</string>
+    <string name="skill_xp">Skill XP:</string>
     <string name="to_next_lvl">Points left to next level:</string>
     <string name="empty_skill_title_error">Skill title can\'t be empty</string>
     <string name="no_key_characteristic_error">Key characteristic should be set</string>
@@ -175,6 +175,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="empty_widget">All tasks are done!</string>
+    <string name="empty_list_view">There are no task in current category. To add new task press button +</string>
 
     <!-- -->
 

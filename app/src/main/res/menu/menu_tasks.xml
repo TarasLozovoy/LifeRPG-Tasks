@@ -13,5 +13,5 @@
         android:icon="@drawable/ic_sort_black_24dp"
         android:orderInCategory="1"
         android:title="@string/tasks_order_title"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

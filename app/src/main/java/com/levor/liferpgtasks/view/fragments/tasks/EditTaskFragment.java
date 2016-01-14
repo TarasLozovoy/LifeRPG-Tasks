@@ -179,7 +179,7 @@ public class EditTaskFragment extends AddTaskFragment {
         currentTask.setRelatedSkills(skills);
         getController().updateTask(currentTask);
         createNotification(title);
-        closeKeyboard();
+        getCurrentActivity().showSoftKeyboard(false, getView());
         Snackbar.make(repeatDetailedLayout, message, Snackbar.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
     }

@@ -43,14 +43,15 @@ public class DetailedTaskFragment extends DefaultFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_detailed_task, container, false);
+        listView = (ListView) v;
+        View header = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.detailed_task_header, null);
+        TextView taskTitleTV = (TextView) header.findViewById(R.id.task_title);
+        TextView taskDifficultyTV = (TextView) header.findViewById(R.id.task_difficulty_text_view);
+        TextView taskImportanceTV = (TextView) header.findViewById(R.id.task_importance_text_view);
+        taskRepeatTV = (TextView) header.findViewById(R.id.task_repeat_times_text_view);
+        taskDateTV = (TextView) header.findViewById(R.id.task_date_text_view);
+        TextView notificationTV = (TextView) header.findViewById(R.id.notification_text_view);
 
-        TextView taskTitleTV = (TextView) v.findViewById(R.id.task_title);
-        TextView taskDifficultyTV = (TextView) v.findViewById(R.id.task_difficulty_text_view);
-        TextView taskImportanceTV = (TextView) v.findViewById(R.id.task_importance_text_view);
-        taskRepeatTV = (TextView) v.findViewById(R.id.task_repeat_times_text_view);
-        taskDateTV = (TextView) v.findViewById(R.id.task_date_text_view);
-        TextView notificationTV = (TextView) v.findViewById(R.id.notification_text_view);
-        listView = (ListView) v.findViewById(R.id.list_view);
 
         UUID id = (UUID)getArguments().get(SELECTED_TASK_UUID_TAG);
         currentTask = getController().getTaskByID(id);
@@ -82,12 +83,14 @@ public class DetailedTaskFragment extends DefaultFragment {
         getCurrentActivity().setActionBarTitle("Task");
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
 
+        listView.addHeaderView(header, null, false);
         setupListView();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle b = new Bundle();
-                b.putSerializable(DetailedSkillFragment.SELECTED_SKILL_UUID_TAG, currentTask.getRelatedSkills().get(position).getId());
+                b.putSerializable(DetailedSkillFragment.SELECTED_SKILL_UUID_TAG,
+                        currentTask.getRelatedSkills().get(position - listView.getHeaderViewsCount()).getId());
                 DefaultFragment f = new DetailedSkillFragment();
                 getCurrentActivity().showChildFragment(f, b);
             }

@@ -1,0 +1,56 @@
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/task_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/LifeRPGTextTitleStyle" />
+
+    <TextView
+        android:id="@+id/task_date_text_view"
+        style="@style/LifeRPGTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/task_title" />
+
+    <TextView
+        android:id="@+id/task_repeat_times_text_view"
+        style="@style/LifeRPGTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/task_date_text_view" />
+
+    <TextView
+        android:id="@+id/notification_text_view"
+        style="@style/LifeRPGTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/task_repeat_times_text_view"
+        android:text="@string/show_notification"/>
+
+    <TextView
+        android:id="@+id/task_difficulty_text_view"
+        style="@style/LifeRPGTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/notification_text_view" />
+
+    <TextView
+        android:id="@+id/task_importance_text_view"
+        style="@style/LifeRPGTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/task_difficulty_text_view" />
+
+    <TextView
+        android:id="@+id/related_skills"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/task_importance_text_view"
+        android:text="@string/related_skills"
+        android:textSize="19sp" />
+
+</RelativeLayout>

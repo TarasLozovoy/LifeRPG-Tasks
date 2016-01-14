@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.levor.liferpgtasks.adapters.TasksAdapter;
 import com.levor.liferpgtasks.model.Task;
@@ -46,6 +48,8 @@ public class FilteredTasksFragment extends DefaultFragment{
     private ListView listView;
     private TasksAdapter adapter;
     private Spinner orderSpinner;
+    private TextView emptyList;
+
     private List<String> sortingOrdersList = new ArrayList<>();
     private List<String> sortedTasksTitles = new ArrayList<>();
     private int sorting;
@@ -56,12 +60,13 @@ public class FilteredTasksFragment extends DefaultFragment{
         View view = inflater.inflate(R.layout.fragment_filtered_tasks, container, false);
         filter = getArguments().getInt(FILTER_ARG);
         listView = (ListView) view.findViewById(R.id.listViewTasks);
+        emptyList = (TextView) view.findViewById(R.id.empty_list);
         SharedPreferences prefs = getActivity()
                 .getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
         sorting = prefs.getInt(SORTING_KEY, Task.SortingOrder.DATE_DESC);
         setupListView();
         setHasOptionsMenu(true);
-        getCurrentActivity().setActionBarTitle("Tasks");
+        getCurrentActivity().setActionBarTitle(R.string.tasks);
         getCurrentActivity().showActionBarHomeButtonAsBack(false);
         return view;
     }
@@ -84,7 +89,7 @@ public class FilteredTasksFragment extends DefaultFragment{
             sortingOrdersList.add(getString(R.string.difficulty_desc_task_order));
             sortingOrdersList.add(getString(R.string.date_asc_task_order));
             sortingOrdersList.add(getString(R.string.date_desc_task_order));
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, sortingOrdersList);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.simple_list_item_1, sortingOrdersList);
             orderSpinner.setAdapter(adapter);
             orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -234,19 +239,33 @@ public class FilteredTasksFragment extends DefaultFragment{
             }
         }
 
-        adapter = new TasksAdapter(sortedTasksTitles, getCurrentActivity());
-        listView.setAdapter(adapter);
-        registerForContextMenu(listView);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedTaskTitle = sortedTasksTitles.get(position);
-                UUID taskID = getController().getTaskByTitle(selectedTaskTitle).getId();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, taskID);
-                getCurrentActivity().showChildFragment(new DetailedTaskFragment(), bundle);
-            }
-        });
+        if (sortedTasksTitles.isEmpty()) {
+            emptyList.setVisibility(View.VISIBLE);
+            listView.setVisibility(View.GONE);
+        } else {
+            emptyList.setVisibility(View.GONE);
+            listView.setVisibility(View.VISIBLE);
+            adapter = new TasksAdapter(sortedTasksTitles, getCurrentActivity());
+            adapter.registerDataSetObserver(new DataSetObserver() {
+                @Override
+                public void onChanged() {
+                    updateUI();
+                    super.onChanged();
+                }
+            });
+            listView.setAdapter(adapter);
+            registerForContextMenu(listView);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String selectedTaskTitle = sortedTasksTitles.get(position);
+                    UUID taskID = getController().getTaskByTitle(selectedTaskTitle).getId();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, taskID);
+                    getCurrentActivity().showChildFragment(new DetailedTaskFragment(), bundle);
+                }
+            });
+        }
     }
 
     @Override
