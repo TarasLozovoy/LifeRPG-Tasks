@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="white" type="color">#ffffff</item>
+    <item name="accent" type="color">#80cbc4</item>
+    <item name="transparent" type="color">#00000000</item>
+    <item name="light_yellow" type="color">#ffe082</item>
+    <item name="light_blue" type="color">#c5cae9</item>
     <item name="light_gray" type="color">#c4c1c1</item>
+
     <item name="medium_gray" type="color">#868181</item>
+
+    <item name="white" type="color">#ffffff</item>
     <item name="gray" type="color">#6c6a6a</item>
-    <item name="blue" type="color">#3b67b9</item>
     <item name="black" type="color">#000000</item>
     <item name="red" type="color">#dd2c00</item>
+    <item name="dark_grey" type="color">#555857</item>
+
+    <item name="navigation_tab_not_selected" type="color">#fff3e0</item>
+    <item name="navigation_tab_selected" type="color">#f57f17</item>
+
+    <item name="material_teal_200" type="color">#80cbc4</item>
+    <item name="material_teal_accent_700" type="color">#00bfa5</item>
+
+    <item name="button_background" type="color">@color/progress_bar_empty</item>
+    <item name="button_background_pressed" type="color">@color/navigation_tab_selected</item>
+
+    <item name="progress_bar_empty" type="color">#fff3e0</item>
+    <item name="progress_bar_top" type="color">#c8ffa726</item>
+    <item name="progress_bar_center" type="color">#c8ff7043</item>
+    <item name="progress_bar_bottom" type="color">#c8d84315</item>
 </resources>

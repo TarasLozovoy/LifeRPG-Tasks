@@ -7,10 +7,10 @@
             <corners android:radius="5dip" />
             <gradient
                 android:angle="270"
-                android:centerColor="#9b9c9e"
+                android:centerColor="@color/progress_bar_empty"
                 android:centerY="0.75"
-                android:endColor="#9b9c9e"
-                android:startColor="#9b9c9e"
+                android:endColor="@color/progress_bar_empty"
+                android:startColor="@color/progress_bar_empty"
                 />
         </shape>
     </item>
@@ -22,10 +22,10 @@
                 <corners android:radius="5dip" />
                 <gradient
                     android:angle="270"
-                    android:centerColor="#01b328"
+                    android:centerColor="@color/progress_bar_center"
                     android:centerY="0.75"
-                    android:endColor="#01400e"
-                    android:startColor="#90e9a3"
+                    android:endColor="@color/progress_bar_bottom"
+                    android:startColor="@color/progress_bar_top"
                     />
             </shape>
         </clip>

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.levor.liferpgtasks.AchievsList;
@@ -22,7 +23,14 @@ public class AchievementsFragment extends DefaultFragment {
         View v = inflater.inflate(R.layout.fragment_achievements, container, false);
         availableListView = (ListView) v.findViewById(R.id.available_achievements_list_view);
         availableListView.setAdapter(new TwoStringsRowAdapter(getCurrentActivity(), getAvailableAchievementsList()));
-
+        availableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle b = new Bundle();
+                b.putInt(DetailedAchievementsFragment.ACHIEVEMNT_ORDINAL_TAG, position);
+                getCurrentActivity().showChildFragment(new DetailedAchievementsFragment(), b);
+            }
+        });
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(getResources().getString(R.string.achievements));
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
@@ -34,19 +42,6 @@ public class AchievementsFragment extends DefaultFragment {
         for (int i = 0; i < getController().getAchievementsLevels().size(); i++) {
             addAchievementToList(list, AchievsList.values()[i], getController().getAchievementsLevels().get(i));
         }
-//        addAchievementToList(list, TOTAL_HERO_XP, 1);
-//        addAchievementToList(list, TOTAL_SKILLS_XP, 2);
-//        addAchievementToList(list, PERFORMED_TASKS, 3);
-//        addAchievementToList(list, FINISHED_TASKS, 4);
-//        addAchievementToList(list, ADDED_TASKS, 5);
-//        addAchievementToList(list, TOP_LEVEL_SKILL, 6);
-//        addAchievementToList(list, TOP_LEVEL_CHARACTERISTIC, 7);
-//        addAchievementToList(list, HERO_LEVEL, 8);
-//        addAchievementToList(list, NUMBER_OF_SKILLS_WITH_LEVEL_10, 9);
-//        addAchievementToList(list, NUMBER_OF_SKILLS_WITH_LEVEL_25, 10);
-//        addAchievementToList(list, NUMBER_OF_SKILLS_WITH_LEVEL_50, 11);
-//        addAchievementToList(list, NUMBER_OF_SKILLS_WITH_LEVEL_100, 12);
-
         return list;
     }
 

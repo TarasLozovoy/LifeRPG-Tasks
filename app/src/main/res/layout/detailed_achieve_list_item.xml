@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/item_2"
+        android:textSize="15sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:gravity="center_vertical"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/achiev_unlocked_image"
+        android:layout_toLeftOf="@id/item_2"
+        android:src="@drawable/ic_done_black_24dp"
+        />
+
+    <TextView
+        android:id="@+id/item_1"
+        android:textSize="15sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/achiev_unlocked_image"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:gravity="left"/>
+
+</RelativeLayout>

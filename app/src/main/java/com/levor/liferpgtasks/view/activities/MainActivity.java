@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity{
         setupNavigationTabs();
 
         navigationTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        navigationTabLayout.setSelectedTabIndicatorHeight(6);
+        navigationTabLayout.setSelectedTabIndicatorHeight(0);
         navigationTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {

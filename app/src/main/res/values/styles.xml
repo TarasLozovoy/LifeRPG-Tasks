@@ -4,7 +4,8 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="colorAccent">@color/blue</item>
+        <item name="colorAccent">@color/accent</item>
+        <!--<item name="android:buttonStyle">@style/DefaultButton</item>-->
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -42,6 +43,8 @@
         <item name="android:background">@color/light_gray</item>
     </style>
 
-
+    <style name="DefaultButton" parent="android:style/Widget.Button">
+        <item name="android:background">@drawable/custom_button</item>
+    </style>
 
 </resources>
