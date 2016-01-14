@@ -14,12 +14,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.levor.liferpgtasks.LifeRPGApplication;
@@ -28,7 +25,6 @@ import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.MainFragment;
 import com.levor.liferpgtasks.view.fragments.SettingsFragment;
-import com.levor.liferpgtasks.view.fragments.hero.HeroFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.TasksFragment;
 
@@ -133,11 +129,12 @@ public class MainActivity extends AppCompatActivity{
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        return true;
+    protected void onResume() {
+        super.onResume();
+        if (lifeController.isFirstRun()){
+            showCoachmarksForCurrentFragment();
+            lifeController.setFirstRun(false);
+        }
     }
 
     @Override
@@ -325,6 +322,7 @@ public class MainActivity extends AppCompatActivity{
         final View bottomCoachmarks = findViewById(R.id.bottom_coachmarks);
         final View xpCoachmarks = findViewById(R.id.xp_coachmarks);
         final View coachmarksDim = findViewById(R.id.coachmarks_dim);
+        coachmarksDim.setVisibility(View.VISIBLE);
         coachmarksDim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

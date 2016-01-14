@@ -78,7 +78,5 @@ public class HeroFragment extends DefaultFragment {
         xpProgressTV.setText(xpString);
         heroNameTV.setText(getController().getHeroName());
         heroLevelTV.setText("Level " + getController().getHeroLevel());
-
-        getCurrentActivity().showCoachmarksForCurrentFragment();
     }
 }

@@ -35,6 +35,7 @@ import java.util.UUID;
 import static com.levor.liferpgtasks.AchievsList.*;
 
 public class LifeController {
+    public static final String FIRTS_RUN_TAG = "first_run_ tag";
     public static final String TASK_TITLE_NOTIFICATION_TAG = "task_id_notification_ tag";
     public static final String SHARED_PREFS_TAG = "shared_prefs_tag";
     public static final String PERFORMED_TASKS_TAG = "performed_task_tag";
@@ -516,5 +517,15 @@ public class LifeController {
                 getAllSkills().get(threshold - 1).getLevel() >= 100){
             unlockAchievement(NUMBER_OF_SKILLS_WITH_LEVEL_100);
         }
+    }
+
+    public boolean isFirstRun(){
+        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+        return prefs.getBoolean(FIRTS_RUN_TAG, true);
+    }
+
+    public void setFirstRun(boolean isFirst){
+        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+        prefs.edit().putBoolean(FIRTS_RUN_TAG, isFirst).apply();
     }
 }
