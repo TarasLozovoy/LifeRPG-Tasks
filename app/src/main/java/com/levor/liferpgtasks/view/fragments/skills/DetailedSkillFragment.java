@@ -22,6 +22,7 @@ import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.AddTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -123,11 +124,15 @@ public class DetailedSkillFragment extends DefaultFragment {
     }
 
     private void updateSkillDetails(){
+        DecimalFormat df = new DecimalFormat("#.##");
+        String sublevelString = df.format(currentSkill.getSublevel());
+        String toNextLevelString = df.format(currentSkill.getLevel() - currentSkill.getSublevel());
+
         skillTitleTV.setText(currentSkill.getTitle());
         keyCharTV.setText(currentSkill.getKeyCharacteristic().getTitle());
-        levelValue.setText(" " + currentSkill.getLevel());
-        sublevelValue.setText(" " + currentSkill.getSublevel());
-        toNextLevel.setText(" " + (currentSkill.getLevel() - currentSkill.getSublevel()));
+        levelValue.setText(Integer.toString(currentSkill.getLevel()));
+        sublevelValue.setText(sublevelString);
+        toNextLevel.setText(toNextLevelString);
     }
 
     private void createFooterView() {

@@ -23,6 +23,7 @@
 
     <Button
         android:id="@+id/change_hero_icon_button"
+        style="@style/LifeRPGDefaultButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/change_hero_icon" />

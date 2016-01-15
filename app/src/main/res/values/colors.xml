@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="accent" type="color">#80cbc4</item>
+    <item name="accent" type="color">#f57f17</item>
     <item name="transparent" type="color">#00000000</item>
     <item name="light_yellow" type="color">#ffe082</item>
     <item name="light_blue" type="color">#c5cae9</item>

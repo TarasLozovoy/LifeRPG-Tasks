@@ -7,6 +7,7 @@
         android:id="@+id/add_title_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:orientation="horizontal">
 
         <TextView
@@ -133,7 +134,8 @@
             <Button
                 android:id="@+id/date_button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                style="@style/LifeRPGDefaultButton"/>
 
         </LinearLayout>
 
@@ -153,7 +155,8 @@
             <Button
                 android:id="@+id/time_button"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                style="@style/LifeRPGDefaultButton"/>
 
         </LinearLayout>
     </LinearLayout>

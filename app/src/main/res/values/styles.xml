@@ -5,14 +5,8 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorAccent">@color/accent</item>
-        <!--<item name="android:buttonStyle">@style/DefaultButton</item>-->
+        <item name="android:buttonStyle">@style/LifeRPGDefaultButton</item>
     </style>
-
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-
-    </style>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!-- Default text style -->
     <style name="LifeRPGTextStyle">
@@ -43,8 +37,10 @@
         <item name="android:background">@color/light_gray</item>
     </style>
 
-    <style name="DefaultButton" parent="android:style/Widget.Button">
+    <style name="LifeRPGDefaultButton" parent="android:style/Widget.Button">
         <item name="android:background">@drawable/custom_button</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
 </resources>

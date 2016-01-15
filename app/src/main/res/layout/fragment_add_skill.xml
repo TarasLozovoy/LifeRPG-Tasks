@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.levor.liferpgtasks.view.fragments.skills.AddSkillFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.levor.liferpgtasks.view.fragments.skills.AddSkillFragment">
 
     <LinearLayout
         android:id="@+id/add_title_layout"
@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/new_skill_title"
-            android:textSize="22sp"/>
+            android:textSize="22sp" />
 
         <EditText
             android:id="@+id/new_skill_title_edit_text"
@@ -34,18 +34,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/key_characteristic"
-            android:textSize="22sp"/>
+            android:textSize="22sp" />
 
         <TextView
+            android:id="@+id/key_characteristic_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/key_characteristic_value"
-            android:textSize="20sp"
-            />
+            android:textSize="20sp" />
 
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="@string/set_key_characteristic"
-            android:id="@+id/set_key_characteristic_button"/>
+        <Button
+            android:id="@+id/set_key_characteristic_button"
+            style="@style/LifeRPGDefaultButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/set_key_characteristic" />
     </LinearLayout>
 
 </RelativeLayout>
