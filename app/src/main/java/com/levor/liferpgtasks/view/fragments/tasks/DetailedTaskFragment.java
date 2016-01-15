@@ -38,6 +38,7 @@ public class DetailedTaskFragment extends DefaultFragment {
     private Task currentTask;
     private TextView taskRepeatTV;
     private TextView taskDateTV;
+    private TextView noRelatedSkillsTV;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +51,7 @@ public class DetailedTaskFragment extends DefaultFragment {
         TextView taskImportanceTV = (TextView) header.findViewById(R.id.task_importance_text_view);
         taskRepeatTV = (TextView) header.findViewById(R.id.task_repeat_times_text_view);
         taskDateTV = (TextView) header.findViewById(R.id.task_date_text_view);
+        noRelatedSkillsTV = (TextView) header.findViewById(R.id.no_related_skills);
         TextView notificationTV = (TextView) header.findViewById(R.id.notification_text_view);
 
 
@@ -176,6 +178,7 @@ public class DetailedTaskFragment extends DefaultFragment {
                     .append(")");
             skills.add(sb.toString());
         }
+        noRelatedSkillsTV.setVisibility(skills.isEmpty() ? View.VISIBLE : View.GONE);
         listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, skills.toArray()));
     }
 

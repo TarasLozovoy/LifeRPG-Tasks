@@ -24,8 +24,6 @@ import java.util.ArrayList;
 public class DetailedCharacteristicFragment extends DefaultFragment {
     public final static String CHARACTERISTIC_TITLE = "characteristic_title";
 
-    private TextView levelValue;
-    private TextView characteristicTitle;
     private ListView listView;
 
     private Characteristic currentCharacteristic;
@@ -41,15 +39,24 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
         currentCharacteristic = getController().getCharacteristicByTitle(getArguments().getString(CHARACTERISTIC_TITLE));
         getCurrentActivity().setActionBarTitle(currentCharacteristic.getTitle() + " details");
 
-        levelValue = (TextView) header.findViewById(R.id.level_value);
-        characteristicTitle = (TextView) header.findViewById(R.id.characteristic_title);
+        TextView levelValue = (TextView) header.findViewById(R.id.level_value);
+        TextView characteristicTitle = (TextView) header.findViewById(R.id.characteristic_title);
+        Button addSkillButton = (Button) header.findViewById(R.id.add_skill_button);
 
         characteristicTitle.setText(currentCharacteristic.getTitle());
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
         levelValue.setText("" + currentCharacteristic.getLevel());
 
+        addSkillButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putSerializable(AddSkillFragment.RECEIVED_CHARACTERISTIC_TITLE_TAG, currentCharacteristic.getTitle());
+                getCurrentActivity().showChildFragment(new AddSkillFragment(), b);
+            }
+        });
+
         listView.addHeaderView(header, null, false);
-        createFooterView();
         createAdapter();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -69,21 +76,6 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Detailed Characteristic Fragment");
-    }
-
-    private void createFooterView() {
-        Button footerButton = new Button(getActivity());
-        footerButton.setText(R.string.create_new_skill);
-        footerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DefaultFragment f = new AddSkillFragment();
-                Bundle b = new Bundle();
-                b.putSerializable(AddSkillFragment.RECEIVED_CHARACTERISTIC_TITLE_TAG, currentCharacteristic.getTitle());
-                getCurrentActivity().showChildFragment(f, b);
-            }
-        });
-        listView.addFooterView(footerButton);
     }
 
     private void createAdapter(){

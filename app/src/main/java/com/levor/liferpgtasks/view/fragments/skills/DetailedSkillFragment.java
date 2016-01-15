@@ -52,9 +52,18 @@ public class DetailedSkillFragment extends DefaultFragment {
         levelValue = (TextView) header.findViewById(R.id.level_value);
         sublevelValue = (TextView) header.findViewById(R.id.sublevel_value);
         toNextLevel = (TextView) header.findViewById(R.id.to_next_level_value);
+        Button addRelatedTasks = (Button) header.findViewById(R.id.related_tasks_button);
 
+        addRelatedTasks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putSerializable(AddTaskFragment.RECEIVED_SKILL_TITLE_TAG, currentSkill.getTitle());
+                getCurrentActivity().showChildFragment(new AddTaskFragment(), b);
+            }
+        });
         listView.addHeaderView(header, null, false);
-        createFooterView();
+
 
         UUID id = (UUID)getArguments().get(SELECTED_SKILL_UUID_TAG);
         currentSkill = getController().getSkillByID(id);
@@ -133,20 +142,5 @@ public class DetailedSkillFragment extends DefaultFragment {
         levelValue.setText(Integer.toString(currentSkill.getLevel()));
         sublevelValue.setText(sublevelString);
         toNextLevel.setText(toNextLevelString);
-    }
-
-    private void createFooterView() {
-        Button footerButton = new Button(getActivity());
-        footerButton.setText(R.string.add_new_task);
-        footerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DefaultFragment f = new AddTaskFragment();
-                Bundle b = new Bundle();
-                b.putSerializable(AddTaskFragment.RECEIVED_SKILL_TITLE_TAG, currentSkill.getTitle());
-                getCurrentActivity().showChildFragment(f, b);
-            }
-        });
-        listView.addFooterView(footerButton);
     }
 }

@@ -174,9 +174,10 @@
     <string name="closing_app_toast">Press back again to exit</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+
     <string name="empty_widget">All tasks are done!</string>
     <string name="empty_list_view">There are no task in current category. To add new task press button +</string>
-
+    <string name="no_related_skills">This task doesn\'t have related skills yet. Press edit button to add new related skills.</string>
     <!-- -->
 
 </resources>

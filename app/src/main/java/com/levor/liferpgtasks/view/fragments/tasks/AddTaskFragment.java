@@ -65,6 +65,7 @@ public class AddTaskFragment extends DefaultFragment {
     private ListView listView;
     private Button dateButton;
     private Button timeButton;
+    private Button addSkillButton;
     protected LinearLayout repeatDetailedLayout;
 
     Date date;
@@ -79,6 +80,7 @@ public class AddTaskFragment extends DefaultFragment {
         taskTitleEditText = (EditText) header.findViewById(R.id.task_title_edit_text);
         dateButton = (Button) header.findViewById(R.id.date_button);
         timeButton = (Button) header.findViewById(R.id.time_button);
+        addSkillButton = (Button) header.findViewById(R.id.add_related_skill_button);
         taskRepeatEditText = (EditText) header.findViewById(R.id.task_repeat_times_edit_text);
         difficultySpinner = (Spinner) header.findViewById(R.id.difficulty_spinner);
         importanceSpinner = (Spinner) header.findViewById(R.id.importance_spinner);
@@ -222,14 +224,12 @@ public class AddTaskFragment extends DefaultFragment {
                 updateListView();
             }
         });
-        Button footerButton = new Button(getActivity());
-        footerButton.setText(R.string.add_skill_to_task);
-        footerButton.setOnClickListener(new View.OnClickListener() {
+        addSkillButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<String> skillsList = getController().getSkillsTitles();
                 skillsList.removeAll(relatedSkills);
-                if(skillsList.isEmpty()){
+                if (skillsList.isEmpty()) {
                     Toast.makeText(getContext(), getString(R.string.all_related_skills_added), Toast.LENGTH_LONG)
                             .show();
                     return;
@@ -252,7 +252,6 @@ public class AddTaskFragment extends DefaultFragment {
                 dialog.show();
             }
         });
-        listView.addFooterView(footerButton);
         updateListView();
     }
 

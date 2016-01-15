@@ -4,6 +4,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_below="@id/related_skills"
-    android:layout_marginLeft="@dimen/save_zone_margin"
+    android:layout_margin="@dimen/save_zone_margin"
     android:cacheColorHint="@android:color/transparent"
     android:listSelector="@android:color/transparent" />
