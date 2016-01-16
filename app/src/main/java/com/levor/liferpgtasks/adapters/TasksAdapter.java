@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.controller.LifeController;
@@ -84,14 +85,8 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                     lifeController.updateTaskNotification(task);
                 }
                 if (isHeroLevelIncreased) {
-                    Snackbar.make(finalView, "Congratulations!\n" + lifeController.getHeroName()
-                            + "'s level increased!", Snackbar.LENGTH_LONG)
-                            .setAction("Go to Hero page", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    activity.switchToRootFragment(MainActivity.MAIN_FRAGMENT_ID);
-                                }
-                            })
+                    Toast.makeText(activity, "Congratulations!\n" + lifeController.getHeroName()
+                            + "'s level increased!", Toast.LENGTH_SHORT)
                             .show();
                 }
                 notifyDataSetChanged();

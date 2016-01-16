@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.levor.liferpgtasks.adapters.HighlightStringAdapter;
 import com.levor.liferpgtasks.adapters.TasksAdapter;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
@@ -89,13 +90,15 @@ public class FilteredTasksFragment extends DefaultFragment{
             sortingOrdersList.add(getString(R.string.difficulty_desc_task_order));
             sortingOrdersList.add(getString(R.string.date_asc_task_order));
             sortingOrdersList.add(getString(R.string.date_desc_task_order));
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.simple_list_item_1, sortingOrdersList);
+            final HighlightStringAdapter adapter = new HighlightStringAdapter(getCurrentActivity(), R.layout.simple_list_item_1, sortingOrdersList);
             orderSpinner.setAdapter(adapter);
+            adapter.setSelection(sorting);
             orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (sorting != position) {
                         sorting = position;
+                        adapter.setSelection(sorting);
                         setupListView();
                         SharedPreferences prefs = getActivity()
                                 .getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);

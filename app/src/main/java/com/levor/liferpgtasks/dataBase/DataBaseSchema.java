@@ -9,6 +9,7 @@ public class DataBaseSchema {
             public static final String LEVEL = "hero_level";
             public static final String XP = "hero_xp";
             public static final String BASEXP = "hero_basexp";
+            public static final String MONEY = "hero_money";
         }
     }
 

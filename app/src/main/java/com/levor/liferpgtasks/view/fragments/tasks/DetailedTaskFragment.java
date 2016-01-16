@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.model.Skill;
@@ -204,14 +205,8 @@ public class DetailedTaskFragment extends DefaultFragment {
         setupRepeatability();
         setupTaskDate();
         if (isHeroLevelIncreased) {
-            Snackbar.make(getView(), "Congratulations!\n" + getController().getHeroName()
-                    + "'s level increased!", Snackbar.LENGTH_LONG)
-                    .setAction("Go to Hero page", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            getCurrentActivity().switchToRootFragment(MainActivity.MAIN_FRAGMENT_ID);
-                        }
-                    })
+            Toast.makeText(getCurrentActivity(), "Congratulations!\n" + getController().getHeroName()
+                    + "'s level increased!", Toast.LENGTH_SHORT)
                     .show();
         }
 

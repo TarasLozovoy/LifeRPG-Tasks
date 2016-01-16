@@ -21,6 +21,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 HeroTable.Cols.NAME + ", " +
                 HeroTable.Cols.LEVEL + ", " +
                 HeroTable.Cols.BASEXP + ", " +
+                HeroTable.Cols.MONEY + ", " +
                 HeroTable.Cols.XP +
                 ")");
 

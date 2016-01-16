@@ -77,6 +77,7 @@ public class LifeEntity {
             addSkill("Running", stamina);
 
             Calendar c = Calendar.getInstance();
+            c.add(Calendar.HOUR_OF_DAY, 1);
             Date today = c.getTime();
             c.add(Calendar.DATE, 1);
             Date tomorrow = c.getTime();
@@ -442,6 +443,7 @@ public class LifeEntity {
         values.put(HeroTable.Cols.LEVEL, hero.getLevel());
         values.put(HeroTable.Cols.XP, hero.getXp());
         values.put(HeroTable.Cols.BASEXP, hero.getBaseXP());
+        values.put(HeroTable.Cols.MONEY, 0.0d);
         return values;
     }
 
