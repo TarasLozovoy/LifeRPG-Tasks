@@ -43,6 +43,7 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
     compile 'com.google.android.gms:play-services-plus:8.3.0'
     compile 'com.google.android.gms:play-services-analytics:8.3.0'
+    compile 'com.google.android.gms:play-services-ads:8.3.0'
     compile('com.twitter.sdk.android:tweet-composer:1.0.2@aar') {
         transitive = true;
     }

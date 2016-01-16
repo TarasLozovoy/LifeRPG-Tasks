@@ -21,7 +21,7 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
     private Context context;
     private Task task;
 
-    public PerformTaskAlertBuilder(Context context, final Task t, View root) {
+    public PerformTaskAlertBuilder(final Context context, final Task t, View root) {
         super(context);
         this.context = context;
         this.task = t;
@@ -34,6 +34,7 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
                 .setNeutralButton(root.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        ((MainActivity)context).showAd();
                         dialog.dismiss();
                     }
                 })
@@ -79,9 +80,10 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
             shareDialog.setAdapter(new ShareDialogAdapter(context, taskTitle), null)
                     .setTitle(context.getString(R.string.share_additional_xp))
                     .setCancelable(false)
-                    .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+                    .setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            ((MainActivity)context).showAd();
                             dialog.dismiss();
                         }
                     }).show();

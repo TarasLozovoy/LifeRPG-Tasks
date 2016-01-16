@@ -19,6 +19,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.levor.liferpgtasks.LifeRPGApplication;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.R;
@@ -31,6 +34,7 @@ import com.levor.liferpgtasks.view.fragments.tasks.TasksFragment;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.EmptyStackException;
+import java.util.Random;
 import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity{
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity{
 
     protected LifeController lifeController;
 
+    InterstitialAd interstitialAd;
     private TabLayout navigationTabLayout;
     private static Stack<DefaultFragment> mainFragmentsStack = new Stack<>();
     private static Stack<DefaultFragment> tasksFragmentsStack = new Stack<>();
@@ -114,6 +119,8 @@ public class MainActivity extends AppCompatActivity{
                 showChildFragment(new DetailedTaskFragment(), b);
             }
         }
+
+        setupAds();
     }
 
     @Override
@@ -344,4 +351,32 @@ public class MainActivity extends AppCompatActivity{
             }
         });
     }
+
+    private void setupAds() {
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId(getString(R.string.banner_ad_unit_id));
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial();
+            }
+        });
+        requestNewInterstitial();
+    }
+
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("9DA2C80CC6BDB238BAD014DE697F3902")
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+
+        interstitialAd.loadAd(adRequest);
+    }
+
+    public void showAd(){
+        if (interstitialAd.isLoaded() && new Random().nextInt(100) < 25){
+            interstitialAd.show();
+        }
+    }
+
 }
