@@ -233,8 +233,7 @@
             android:layout_marginRight="2dp"
             android:layout_toLeftOf="@id/add_related_skill_button"
             android:text="@string/related_skills"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentLeft="true"/>
 
     </RelativeLayout>
 

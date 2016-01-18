@@ -16,7 +16,6 @@ import com.levor.liferpgtasks.R;
 
 public class DetailedAchievementsFragment extends DefaultFragment {
     public static final String ACHIEVEMNT_ORDINAL_TAG = "achievement_ordinal_tag";
-    private ListView listView;
     private AchievsList achievement;
     private int level;
 
@@ -24,7 +23,7 @@ public class DetailedAchievementsFragment extends DefaultFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_detailed_achievements, container, false);
-        listView = (ListView) v;
+        ListView listView = (ListView) v;
         achievement = AchievsList.values()[getArguments().getInt(ACHIEVEMNT_ORDINAL_TAG)];
         level = getController().getAchievementsLevels().get(achievement.ordinal());
         listView.setAdapter(new AchievesAdapter());

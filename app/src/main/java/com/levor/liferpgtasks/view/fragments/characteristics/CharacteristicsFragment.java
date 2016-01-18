@@ -2,7 +2,6 @@ package com.levor.liferpgtasks.view.fragments.characteristics;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,6 @@ import android.widget.ListView;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class CharacteristicsFragment extends DefaultFragment {
     private ListView listView;
 

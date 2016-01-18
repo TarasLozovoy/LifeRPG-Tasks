@@ -32,7 +32,6 @@ public class LifeEntity {
     private List<Skill> skills;
     private List<Characteristic> characteristics;
     private Hero hero;
-    private Context context;
 
     public static LifeEntity getInstance(Context context){
         if (lifeEntity == null){
@@ -42,7 +41,6 @@ public class LifeEntity {
     }
 
     private LifeEntity(Context context) {
-        this.context = context;
         database = new DataBaseHelper(context.getApplicationContext()).getWritableDatabase();
 
         String count = "SELECT count(*) FROM " + HeroTable.NAME;
@@ -52,14 +50,14 @@ public class LifeEntity {
             characteristics = new ArrayList<>();
             skills = new ArrayList<>();
             tasks = new ArrayList<>();
-            Characteristic intelligence = new Characteristic("Intelligence", 1);
-            Characteristic wisdom = new Characteristic("Wisdom", 1);
-            Characteristic strength = new Characteristic("Strength", 1);
-            Characteristic stamina = new Characteristic("Stamina", 1);
-            Characteristic dexterity = new Characteristic("Dexterity", 1);
-            Characteristic perception = new Characteristic("Perception", 1);
-            Characteristic memory = new Characteristic("Memory", 1);
-            Characteristic charisma = new Characteristic("Charisma", 1);
+            Characteristic intelligence = new Characteristic(context.getString(R.string.intelligence), 1);
+            Characteristic wisdom = new Characteristic(context.getString(R.string.wisdom), 1);
+            Characteristic strength = new Characteristic(context.getString(R.string.strength), 1);
+            Characteristic stamina = new Characteristic(context.getString(R.string.stamina), 1);
+            Characteristic dexterity = new Characteristic(context.getString(R.string.dexterity), 1);
+            Characteristic perception = new Characteristic(context.getString(R.string.perception), 1);
+            Characteristic memory = new Characteristic(context.getString(R.string.memory), 1);
+            Characteristic charisma = new Characteristic(context.getString(R.string.charisma), 1);
 
             addCharacteristic(intelligence);
             addCharacteristic(wisdom);
@@ -70,13 +68,10 @@ public class LifeEntity {
             addCharacteristic(memory);
             addCharacteristic(charisma);
 
-            addSkill("Android", intelligence);
-            addSkill("Java", intelligence);
-            addSkill("Erudition", wisdom);
-            addSkill("English", intelligence);
-            addSkill("Powerlifting", strength);
-            addSkill("Roller skating", stamina);
-            addSkill("Running", stamina);
+            addSkill(context.getString(R.string.erudition), wisdom);
+            addSkill(context.getString(R.string.spanish), intelligence);
+            addSkill(context.getString(R.string.powerlifting), strength);
+            addSkill(context.getString(R.string.running), stamina);
 
             Calendar c = Calendar.getInstance();
             c.add(Calendar.HOUR_OF_DAY, 1);
@@ -84,10 +79,14 @@ public class LifeEntity {
             c.add(Calendar.DATE, 1);
             Date tomorrow = c.getTime();
 
-            addTask("Learn Android", -1, Task.INSANE, Task.INSANE, today, true, getSkillByTitle("Android"));
-            addTask("Learn Java", 0, Task.MEDIUM, Task.MEDIUM, tomorrow, true, getSkillByTitle("Java"));
-            addTask("Fix bug on Android", 1, Task.HARD, Task.HARD, today, false, getSkillByTitle("Android"));
-            addTask("Fix bug on Java", 25, Task.INSANE, Task.INSANE, tomorrow, false, getSkillByTitle("Java"));
+            addTask(context.getString(R.string.read_book), -1, Task.EASY, Task.EASY, today, true,
+                    getSkillByTitle(context.getString(R.string.erudition)));
+            addTask(context.getString(R.string.learn_spanish), -1, Task.MEDIUM, Task.MEDIUM, tomorrow, true,
+                    getSkillByTitle(context.getString(R.string.spanish)));
+            addTask(context.getString(R.string.perform_workout), 1, Task.HARD, Task.HARD, today, true,
+                    getSkillByTitle(context.getString(R.string.powerlifting)));
+            addTask(context.getString(R.string.morning_running), 25, Task.INSANE, Task.INSANE, tomorrow, true,
+                    getSkillByTitle(context.getString(R.string.running)));
 
             addHero(new Hero(0, 0, 1, context.getString(R.string.default_hero_name)));
         } else {

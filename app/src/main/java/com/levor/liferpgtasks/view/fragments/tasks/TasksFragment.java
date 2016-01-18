@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,7 +34,10 @@ public class TasksFragment extends DefaultFragment {
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.accent));
 
         viewPager = (ViewPager) view.findViewById(R.id.pager);
-        getCurrentActivity().getSupportActionBar().setElevation(0);
+        ActionBar actionBar = getCurrentActivity().getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setElevation(0);
+        }
         getCurrentActivity().showActionBarHomeButtonAsBack(false);
         setHasOptionsMenu(true);
         return view;

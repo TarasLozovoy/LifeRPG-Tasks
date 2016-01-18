@@ -4,7 +4,7 @@
     <string name="new_task_title_edit_text">введите название задачи</string>
     <string name="add_skill_to_task">Добавить навык</string>
     <string name="add_new_task">Новая задача</string>
-    <string name="related_skills">Связанные навыки:</string>
+    <string name="related_skills">Связанные\nнавыки:</string>
     <string name="characteristic_level">Уровень:</string>
     <string name="characteristic_related_skills">Увеличиться при росте следующих навыков</string>
     <string name="edit_task">Редактировать</string>
@@ -48,7 +48,6 @@
     <string name="empty_list_view">В текущей категории нет задач. Нажмите на кнопку + чтобы добавить новую задачу.</string>
     <string name="no_related_skills">В этой задаче пока нету связанных навыков. Нажмите кнопку редактировать чтобы добавить связанные навыки.</string>
     <string name="task">Задача</string>
-    <string name="removing_task">Удаление</string>
     <string name="removing_task_description">Вы действительно хотите удалить текущую задачу?</string>
     <string name="edit_task_title">Редактирование</string>
     <string name="empty_title_task_error">Название задачи не может быть пустым</string>
@@ -57,6 +56,7 @@
     <string name="task_duplicate_negative_answer">Нет</string>
     <string name="new_task_added">Добавдена задача: </string>
     <string name="skill_choosing">Выберите навык</string>
+
     <!-- -->
 
     <!-- Skills-->
@@ -76,6 +76,11 @@
     <string name="to_next_lvl">Опыта до след. уровня:</string>
     <string name="empty_skill_title_error">Название навыка не может быть пустым</string>
     <string name="no_key_characteristic_error">Нужно указать ключевую характеристику</string>
+    <string name="skill_duplicate_error">Навык с таким же названием уже существует. Перезапсать?</string>
+    <string name="skill_added_message">Навык добавлен</string>
+    <string name="skill_updated_message">Навык изменен</string>
+    <string name="removing_skill_message">Вы действительно хотите удалить этот навык?</string>
+    <string name="skill">Навык</string>
     <!-- -->
 
     <!-- Hero-->
@@ -85,7 +90,7 @@
     <string name="change_hero_icon">Изменить аватарку</string>
     <string name="hero_level">Уровень</string>
     <string name="edit_hero_fragment_title">Редактирование героя</string>
-    <string name="hero_level_increased">Поздравляем!\nУровень %1s's увеличился!</string>
+    <string name="hero_level_increased">Поздравляем!\nУровень %1s увеличился!</string>
     <!-- -->
 
     <!-- Characteristics-->
@@ -151,11 +156,27 @@
     <string name="coachmarks_hero_description">Это ваш герой. \nВыполнение задач приносит герою опыт и повышает его уровень.</string>
     <string name="coachmarks_XP_description">Также выполенение задач улучшает навыки.
         Когда уровень навыка увеличивается - также увеличивается уровень связанной с ним характеристики.
-        Чем выше уровень навыка - тем быстрее растет характеристикаты.</string>
+        Чем выше уровень навыка - тем быстрее растет характеристика.</string>
     <!-- -->
 
     <!-- Default values-->
     <string name="default_hero_name">Джонни</string>
+    <string name="intelligence">Интеллект</string>
+    <string name="wisdom">Мудрость</string>
+    <string name="strength">Сила</string>
+    <string name="stamina">Выносливость</string>
+    <string name="dexterity">Ловкость</string>
+    <string name="perception">Восприятие</string>
+    <string name="memory">Память</string>
+    <string name="charisma">Харизма</string>
+    <string name="erudition">Эрудиция</string>
+    <string name="spanish">Испанский</string>
+    <string name="powerlifting">Пауэрлифтинг</string>
+    <string name="running">Бег</string>
+    <string name="read_book">Прочитать книгу</string>
+    <string name="learn_spanish">Позаниматься испанским языком</string>
+    <string name="perform_workout">Тренировка в спортзале</string>
+    <string name="morning_running">Утренняя пробежка</string>
     <!-- -->
 
     <!-- Other-->
@@ -169,6 +190,7 @@
     <string name="XP">Опыт</string>
     <string name="oops">Ой!</string>
     <string name="notification_text">Пора выполнять задание!</string>
+    <string name="removing">Удаление</string>
     <!-- -->
 
 </resources>

@@ -88,6 +88,7 @@ public class SkillsFragment extends DefaultFragment {
                     .append(")");
             rows.add(sb.toString());
         }
-        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, rows.toArray(new String[rows.size()])));
+        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1,
+                rows.toArray(new String[rows.size()])));
     }
 }

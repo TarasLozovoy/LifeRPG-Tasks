@@ -50,21 +50,21 @@ public class EditSkillFragment extends AddSkillFragment {
         switch (item.getItemId()){
             case R.id.ok_menu_item:
                 if (titleEditText.getText().toString().equals("")){
-                    Toast.makeText(getActivity(), "Skill title can't be empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.empty_skill_title_error), Toast.LENGTH_SHORT).show();
                 } else if (keyCharacteristic == null){
-                    Toast.makeText(getActivity(), "Key characteristic should be set", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.no_key_characteristic_error), Toast.LENGTH_SHORT).show();
                 } else if (getController().getSkillByTitle(titleEditText.getText().toString()) != null
                         && !getController().getSkillByTitle(titleEditText.getText().toString()).equals(currentSkill)){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("Oops!")
-                            .setMessage("Another skill with same title is already exists. Overwrite?")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    builder.setTitle(getString(R.string.oops))
+                            .setMessage(getString(R.string.skill_duplicate_error))
+                            .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    finish(titleEditText.getText().toString(), "Skill updated");
+                                    finish(titleEditText.getText().toString(), getString(R.string.skill_updated_message));
                                 }
                             })
-                            .setNegativeButton("No, change new skill title", new DialogInterface.OnClickListener() {
+                            .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -72,7 +72,7 @@ public class EditSkillFragment extends AddSkillFragment {
                             })
                             .show();
                 } else {
-                    finish(titleEditText.getText().toString(), "Skill updated");
+                    finish(titleEditText.getText().toString(), getString(R.string.skill_updated_message));
                 }
                 return true;
             case R.id.remove:
@@ -91,16 +91,16 @@ public class EditSkillFragment extends AddSkillFragment {
 
     private void removeSkill(){
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-        alert.setTitle("Removing " + currentSkill.getTitle())
-                .setMessage("Are you really want to remove this skill?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        alert.setTitle(getString(R.string.skill_updated_message) + " " + currentSkill.getTitle())
+                .setMessage(getString(R.string.removing_skill_message))
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         getController().removeSkill(currentSkill);
                         getCurrentActivity().showNthPreviousFragment(2);
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

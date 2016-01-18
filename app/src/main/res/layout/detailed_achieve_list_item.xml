@@ -5,31 +5,31 @@
 
     <TextView
         android:id="@+id/item_2"
-        android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:gravity="center_vertical"/>
+        android:textSize="15sp" />
 
     <ImageView
+        android:id="@+id/achiev_unlocked_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/achiev_unlocked_image"
         android:layout_toLeftOf="@id/item_2"
-        android:src="@drawable/ic_done_black_24dp"
-        />
+        android:src="@drawable/ic_done_black_24dp" />
 
     <TextView
         android:id="@+id/item_1"
-        android:textSize="15sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/achiev_unlocked_image"
+        android:gravity="left"
         android:paddingBottom="5dp"
+        android:layout_marginRight="10dp"
         android:paddingTop="5dp"
-        android:gravity="left"/>
+        android:textSize="15sp" />
 
 </RelativeLayout>

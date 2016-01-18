@@ -3,7 +3,6 @@ package com.levor.liferpgtasks.view.fragments.tasks;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,7 +21,6 @@ import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
-import com.levor.liferpgtasks.view.activities.MainActivity;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.skills.DetailedSkillFragment;
 
@@ -65,16 +63,14 @@ public class DetailedTaskFragment extends DefaultFragment {
 
         //setup difficulty TextView
         int difficulty = currentTask.getDifficulty();
-        String difficultyString = Arrays.asList(getResources()
-                .getStringArray(R.array.difficulties_array)).get(difficulty);
-        taskDifficultyTV.setText(getString(R.string.difficulty) +
-                " " + difficultyString);
+        String difficultyString = getString(R.string.difficulty) + " " +
+                Arrays.asList(getResources().getStringArray(R.array.difficulties_array)).get(difficulty);
+        taskDifficultyTV.setText(difficultyString);
 
         //setup importance TextView
-        String importanceString = Arrays.asList(getResources()
-                .getStringArray(R.array.importance_array)).get(currentTask.getImportance());
-        taskImportanceTV.setText(getString(R.string.importance) +
-                " " + importanceString);
+        String importanceString = getString(R.string.importance) + " " +
+                Arrays.asList(getResources().getStringArray(R.array.importance_array)).get(currentTask.getImportance());
+        taskImportanceTV.setText(importanceString);
 
         //setup repeatability TextView
         setupRepeatability();
@@ -83,7 +79,7 @@ public class DetailedTaskFragment extends DefaultFragment {
         notificationTV.setVisibility(currentTask.isNotify() ? View.VISIBLE : View.GONE);
 
         setHasOptionsMenu(true);
-        getCurrentActivity().setActionBarTitle("Task");
+        getCurrentActivity().setActionBarTitle(getString(R.string.task));
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
 
         listView.addHeaderView(header, null, false);
@@ -162,9 +158,9 @@ public class DetailedTaskFragment extends DefaultFragment {
         } else if (repeat < 0) {
             taskRepeatTV.setText(getString(R.string.infinite_number_of));
         } else {
-            taskRepeatTV.setText(getString(R.string.repeat) + " " +
-                    repeat + " " +
-                    getString(R.string.times));
+            String repeatString = getString(R.string.repeat) + " " + repeat + " " +
+                    getString(R.string.times);
+            taskRepeatTV.setText(repeatString);
         }
     }
 
@@ -172,13 +168,7 @@ public class DetailedTaskFragment extends DefaultFragment {
         ArrayList<String> skills = new ArrayList<>();
         for (Skill sk : currentTask.getRelatedSkills()) {
             DecimalFormat df = new DecimalFormat("#.##");
-            StringBuilder sb = new StringBuilder(sk.getTitle());
-            sb.append(" - ")
-                    .append(sk.getLevel())
-                    .append("(")
-                    .append(df.format(sk.getSublevel()))
-                    .append(")");
-            skills.add(sb.toString());
+            skills.add(sk.getTitle() + " - " + sk.getLevel() + "(" + df.format(sk.getSublevel()) + ")");
         }
         noRelatedSkillsTV.setVisibility(skills.isEmpty() ? View.VISIBLE : View.GONE);
         listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, skills.toArray()));
@@ -206,9 +196,8 @@ public class DetailedTaskFragment extends DefaultFragment {
         setupRepeatability();
         setupTaskDate();
         if (isHeroLevelIncreased) {
-            Toast.makeText(getCurrentActivity(), "Congratulations!\n" + getController().getHeroName()
-                    + "'s level increased!", Toast.LENGTH_SHORT)
-                    .show();
+            Toast.makeText(getCurrentActivity(), getString(R.string.hero_level_increased,
+                    getController().getHeroName()), Toast.LENGTH_SHORT).show();
         }
 
         getController().getGATracker().send(new HitBuilders.EventBuilder()

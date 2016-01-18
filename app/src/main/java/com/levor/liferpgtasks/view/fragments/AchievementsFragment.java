@@ -15,13 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AchievementsFragment extends DefaultFragment {
-    private ListView availableListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_achievements, container, false);
-        availableListView = (ListView) v.findViewById(R.id.available_achievements_list_view);
+        ListView availableListView = (ListView) v.findViewById(R.id.available_achievements_list_view);
         availableListView.setAdapter(new TwoStringsRowAdapter(getCurrentActivity(), getAvailableAchievementsList()));
         availableListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

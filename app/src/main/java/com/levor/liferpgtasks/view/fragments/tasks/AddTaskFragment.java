@@ -129,7 +129,9 @@ public class AddTaskFragment extends DefaultFragment {
     public void onPause() {
         super.onPause();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getView().getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+        if (getView() != null) {
+            imm.hideSoftInputFromWindow(getView().getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+        }
     }
 
     @Override
@@ -213,7 +215,7 @@ public class AddTaskFragment extends DefaultFragment {
 
         createNotification(title);
         getCurrentActivity().showSoftKeyboard(false, getView());
-        Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
+        Toast.makeText(getCurrentActivity(), message, Toast.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
     }
 

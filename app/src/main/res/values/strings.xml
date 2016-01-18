@@ -12,13 +12,13 @@
     <string name="new_task_title_edit_text">Type task title</string>
     <string name="add_skill_to_task">Add related skill</string>
     <string name="add_new_task">New task</string>
-    <string name="related_skills">Related skills:</string>
+    <string name="related_skills">Related \nskills:</string>
     <string name="characteristic_level">Level:</string>
     <string name="characteristic_related_skills">Can be improved by enhancing next skills:</string>
     <string name="edit_task">Edit</string>
     <string name="do_task">DO</string>
     <string name="repeat">Repeat</string>
-    <string name="repeat_times_edit_text_hint">leave blank for infinite</string>
+    <string name="repeat_times_edit_text_hint">infinite</string>
     <string name="times">times</string>
     <string name="infinite_number_of">Repeat task infinitely</string>
     <string name="task_finished">Task finished.</string>
@@ -56,7 +56,6 @@
     <string name="empty_list_view">There are no task in current category. To add new task press button +</string>
     <string name="no_related_skills">This task doesn\'t have related skills yet. Press edit button to add new related skills.</string>
     <string name="task">Task</string>
-    <string name="removing_task">Removing</string>
     <string name="removing_task_description">Are you really want to remove this task?</string>
     <string name="edit_task_title">Edit task</string>
     <string name="empty_title_task_error">Task title can\'t be empty</string>
@@ -84,6 +83,11 @@
     <string name="to_next_lvl">Points left to next level:</string>
     <string name="empty_skill_title_error">Skill title can\'t be empty</string>
     <string name="no_key_characteristic_error">Key characteristic should be set</string>
+    <string name="skill_duplicate_error">Skill with same title is already exists. Overwrite?</string>
+    <string name="skill_added_message">Skill added</string>
+    <string name="skill_updated_message">Skill updated</string>
+    <string name="removing_skill_message">Are you really want to remove this skill?</string>
+    <string name="skill">Skill</string>
     <!-- -->
 
     <!-- Hero-->
@@ -93,7 +97,7 @@
     <string name="hero_name_hint_edit_hero_fragment">Your hero name.</string>
     <string name="change_hero_icon">Change picture</string>
     <string name="edit_hero_fragment_title">Edit hero</string>
-    <string name="hero_level_increased">Congratulations!\n %1s's level increased!</string>
+    <string name="hero_level_increased">Congratulations!\n %1s\'s level increased!</string>
     <!-- -->
 
     <!-- Characteristics-->
@@ -181,6 +185,22 @@
 
     <!-- Default values-->
     <string name="default_hero_name">Johnny</string>
+    <string name="intelligence">Intelligence</string>
+    <string name="wisdom">Wisdom</string>
+    <string name="strength">Strength</string>
+    <string name="stamina">Stamina</string>
+    <string name="dexterity">Dexterity</string>
+    <string name="perception">Perception</string>
+    <string name="memory">Memory</string>
+    <string name="charisma">Charisma</string>
+    <string name="erudition">Erudition</string>
+    <string name="spanish">Spanish</string>
+    <string name="powerlifting">Powerlifting</string>
+    <string name="running">Running</string>
+    <string name="read_book">Read a book</string>
+    <string name="learn_spanish">Learn Spanish</string>
+    <string name="perform_workout">Perform workout in gym</string>
+    <string name="morning_running">Morning running</string>
     <!-- -->
 
     <!-- Other-->
@@ -190,10 +210,12 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="banner_ad_unit_id">ca-app-pub-3618933742218575/7397853043</string>
+    <string name="app_email">liferpgtasks@gmail.com</string>
     <string name="contact">Contact</string>
     <string name="empty_widget">All tasks are done!</string>
     <string name="XP">XP</string>
     <string name="notification_text">Task need to be performed</string>
+    <string name="removing">Removing</string>
     <!-- -->
 
 </resources>

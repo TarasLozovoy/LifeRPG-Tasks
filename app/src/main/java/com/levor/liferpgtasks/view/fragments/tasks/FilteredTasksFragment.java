@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -47,8 +46,6 @@ public class FilteredTasksFragment extends DefaultFragment{
 
     private int filter;
     private ListView listView;
-    private TasksAdapter adapter;
-    private Spinner orderSpinner;
     private TextView emptyList;
 
     private List<String> sortingOrdersList = new ArrayList<>();
@@ -77,7 +74,7 @@ public class FilteredTasksFragment extends DefaultFragment{
         super.onPrepareOptionsMenu(menu);
 
         SortingSpinner sortingSpinner = new SortingSpinner(getActivity());
-        orderSpinner = sortingSpinner.getSortingSpinner();
+        Spinner orderSpinner = sortingSpinner.getSortingSpinner();
         MenuItem item = menu.findItem(R.id.sorting);
         item.setActionView(sortingSpinner);
         if (orderSpinner.getAdapter() == null || orderSpinner.getAdapter().isEmpty()) {
@@ -90,7 +87,8 @@ public class FilteredTasksFragment extends DefaultFragment{
             sortingOrdersList.add(getString(R.string.difficulty_desc_task_order));
             sortingOrdersList.add(getString(R.string.date_asc_task_order));
             sortingOrdersList.add(getString(R.string.date_desc_task_order));
-            final HighlightStringAdapter adapter = new HighlightStringAdapter(getCurrentActivity(), R.layout.simple_list_item_1, sortingOrdersList);
+            final HighlightStringAdapter adapter = new HighlightStringAdapter(getCurrentActivity(),
+                    R.layout.simple_list_item_1, sortingOrdersList);
             orderSpinner.setAdapter(adapter);
             adapter.setSelection(sorting);
             orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -154,9 +152,9 @@ public class FilteredTasksFragment extends DefaultFragment{
                 return true;
             case DELETE_CONTEXT_MENU_ITEM:
                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle("Removing " + currentTask.getTitle())
-                        .setMessage("Are you really want to remove this task?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                alert.setTitle(getString(R.string.removing) + currentTask.getTitle())
+                        .setMessage(getString(R.string.removing_task_description))
+                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 getController().removeTask(currentTask);
@@ -164,7 +162,7 @@ public class FilteredTasksFragment extends DefaultFragment{
                                 setupListView();
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -248,7 +246,7 @@ public class FilteredTasksFragment extends DefaultFragment{
         } else {
             emptyList.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
-            adapter = new TasksAdapter(sortedTasksTitles, getCurrentActivity());
+            TasksAdapter adapter = new TasksAdapter(sortedTasksTitles, getCurrentActivity());
             adapter.registerDataSetObserver(new DataSetObserver() {
                 @Override
                 public void onChanged() {

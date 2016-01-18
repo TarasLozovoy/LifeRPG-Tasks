@@ -5,8 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,9 +23,6 @@ import com.levor.liferpgtasks.model.Characteristic;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class AddSkillFragment extends DefaultFragment {
     public static final String RECEIVED_CHARACTERISTIC_TITLE_TAG = "received_characteristic_title_tag";
 
@@ -84,7 +79,9 @@ public class AddSkillFragment extends DefaultFragment {
     public void onPause() {
         super.onPause();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getView().getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+        if (getView() != null) {
+            imm.hideSoftInputFromWindow(getView().getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+        }
     }
 
     @Override
@@ -103,15 +100,15 @@ public class AddSkillFragment extends DefaultFragment {
                     Toast.makeText(getContext(), getString(R.string.no_key_characteristic_error), Toast.LENGTH_SHORT).show();
                 } else if (getController().getSkillByTitle(titleEditText.getText().toString()) != null){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("Oops!")
-                            .setMessage("Skill with same title is already exists. Overwrite?")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    builder.setTitle(getString(R.string.oops))
+                            .setMessage(getString(R.string.skill_duplicate_error))
+                            .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    finish(titleEditText.getText().toString(), "Skill added");
+                                    finish(titleEditText.getText().toString(), getString(R.string.skill_added_message));
                                 }
                             })
-                            .setNegativeButton("No, change new skill title", new DialogInterface.OnClickListener() {
+                            .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.dismiss();
@@ -119,7 +116,7 @@ public class AddSkillFragment extends DefaultFragment {
                             })
                             .show();
                 } else {
-                    finish(titleEditText.getText().toString(), "Skill added");
+                    finish(titleEditText.getText().toString(), getString(R.string.skill_added_message));
                 }
                 return true;
             default:
@@ -139,7 +136,7 @@ public class AddSkillFragment extends DefaultFragment {
     private class ChangeCharacteristicOnClickListener implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_item
+            final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_item
                     , getController().getCharacteristicsTitlesArray());
             AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
             dialog.setTitle(getString(R.string.select_characteristic));
@@ -157,7 +154,7 @@ public class AddSkillFragment extends DefaultFragment {
 
     protected void finish(String title, String message) {
         getController().addSkill(title, keyCharacteristic);
-        Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
+        Toast.makeText(getCurrentActivity(), message, Toast.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
 
         getController().getGATracker().send(new HitBuilders.EventBuilder()

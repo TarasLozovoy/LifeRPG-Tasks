@@ -15,17 +15,14 @@ import com.levor.liferpgtasks.R;
 import java.util.List;
 
 public class SettingsFragment extends DefaultFragment {
-    private Button showStatisticsButton;
-    private Button showAchievementsButton;
-    private Button contactButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
-        showStatisticsButton = (Button) v.findViewById(R.id.show_statistics_button);
-        showAchievementsButton = (Button) v.findViewById(R.id.show_achievements_button);
-        contactButton = (Button) v.findViewById(R.id.contact_button);
+        Button showStatisticsButton = (Button) v.findViewById(R.id.show_statistics_button);
+        Button showAchievementsButton = (Button) v.findViewById(R.id.show_achievements_button);
+        Button contactButton = (Button) v.findViewById(R.id.contact_button);
 
         showStatisticsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,12 +42,12 @@ public class SettingsFragment extends DefaultFragment {
             @Override
             public void onClick(View v) {
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"liferpgtasks@gmail.com"});
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.app_email)});
                 emailIntent.setType("text/plain");
                 final PackageManager pm = getCurrentActivity().getPackageManager();
                 final List<ResolveInfo> matches = pm.queryIntentActivities(emailIntent, 0);
                 ResolveInfo best = null;
-                for(final ResolveInfo info : matches)
+                for (final ResolveInfo info : matches)
                     if (info.activityInfo.packageName.endsWith(".gm") || info.activityInfo.name.toLowerCase().contains("gmail"))
                         best = info;
                 if (best != null)

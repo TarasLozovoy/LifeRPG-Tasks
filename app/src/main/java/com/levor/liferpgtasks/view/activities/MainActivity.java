@@ -104,7 +104,10 @@ public class MainActivity extends AppCompatActivity{
                     .commit();
         } else {
             currentFragmentID = savedInstanceState.getInt(SELECTED_FRAGMENT_TAG);
-            navigationTabLayout.getTabAt(currentFragmentID).select();
+            TabLayout.Tab tab = navigationTabLayout.getTabAt(currentFragmentID);
+            if (tab != null) {
+                tab.select();
+            }
         }
 
         Bundle extras = getIntent().getExtras();
@@ -247,7 +250,10 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void switchToRootFragment(int id){
-        navigationTabLayout.getTabAt(id).select();
+        TabLayout.Tab tab = navigationTabLayout.getTabAt(id);
+        if (tab != null) {
+            tab.select();
+        }
     }
 
     @Override
@@ -275,13 +281,15 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void showActionBarHomeButtonAsBack(boolean isBack) {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar == null) return;
         if (isBack) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(0);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setHomeAsUpIndicator(0);
         } else {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            getSupportActionBar().setHomeButtonEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(false);
+            actionBar.setHomeButtonEnabled(false);
         }
     }
 

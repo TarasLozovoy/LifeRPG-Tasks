@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,10 @@ public class MainFragment extends DefaultFragment{
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager) v.findViewById(R.id.pager);
-        getCurrentActivity().getSupportActionBar().setElevation(0);
+        ActionBar actionBar = getCurrentActivity().getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setElevation(0);
+        }
         getCurrentActivity().setActionBarTitle(R.string.app_name);
         getCurrentActivity().showActionBarHomeButtonAsBack(false);
         return v;

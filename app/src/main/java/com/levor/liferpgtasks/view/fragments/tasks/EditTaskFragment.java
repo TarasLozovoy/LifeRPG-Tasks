@@ -146,7 +146,7 @@ public class EditTaskFragment extends AddTaskFragment {
     }
     private void removeTask(){
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-        alert.setTitle(getString(R.string.removing_task) + " " + currentTask.getTitle())
+        alert.setTitle(getString(R.string.removing) + " " + currentTask.getTitle())
                 .setMessage(getString(R.string.removing_task_description))
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override

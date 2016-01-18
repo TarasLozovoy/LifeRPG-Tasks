@@ -68,7 +68,7 @@ public class DetailedSkillFragment extends DefaultFragment {
         UUID id = (UUID)getArguments().get(SELECTED_SKILL_UUID_TAG);
         currentSkill = getController().getSkillByID(id);
         setHasOptionsMenu(true);
-        getCurrentActivity().setActionBarTitle("Skill");
+        getCurrentActivity().setActionBarTitle(getString(R.string.skill));
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
 
         setupListView();

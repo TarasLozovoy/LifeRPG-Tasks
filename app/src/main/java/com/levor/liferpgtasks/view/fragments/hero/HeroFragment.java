@@ -2,7 +2,6 @@ package com.levor.liferpgtasks.view.fragments.hero;
 
 
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,9 +17,6 @@ import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 import java.text.DecimalFormat;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class HeroFragment extends DefaultFragment {
     TextView heroNameTV, heroLevelTV, xpProgressTV;
     ImageView heroImageIV;

@@ -3,7 +3,6 @@ package com.levor.liferpgtasks.view.fragments.characteristics;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -32,12 +31,11 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_detailed_characteristic, container, false);
         listView = (ListView) v;
         View header = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.detailed_characteristic_header, null);
         currentCharacteristic = getController().getCharacteristicByTitle(getArguments().getString(CHARACTERISTIC_TITLE));
-        getCurrentActivity().setActionBarTitle(currentCharacteristic.getTitle() + " details");
+        getCurrentActivity().setActionBarTitle(currentCharacteristic.getTitle());
 
         TextView levelValue = (TextView) header.findViewById(R.id.level_value);
         TextView characteristicTitle = (TextView) header.findViewById(R.id.characteristic_title);
@@ -45,7 +43,7 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
 
         characteristicTitle.setText(currentCharacteristic.getTitle());
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
-        levelValue.setText("" + currentCharacteristic.getLevel());
+        levelValue.setText(Integer.toString(currentCharacteristic.getLevel()));
 
         addSkillButton.setOnClickListener(new View.OnClickListener() {
             @Override
