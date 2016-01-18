@@ -10,7 +10,6 @@
     <!-- Tasks-->
     <string name="new_task_title">Title:</string>
     <string name="new_task_title_edit_text">Type task title</string>
-    <string name="add_skills_to_task">Related skills: </string>
     <string name="add_skill_to_task">Add related skill</string>
     <string name="add_new_task">New task</string>
     <string name="related_skills">Related skills:</string>
@@ -54,6 +53,18 @@
     <string name="overdue">- overdue!</string>
     <string name="task_already_done">This task has been already done. Are you sure you want to make this task active?</string>
     <string name="all_related_skills_added">All available skills already added</string>
+    <string name="empty_list_view">There are no task in current category. To add new task press button +</string>
+    <string name="no_related_skills">This task doesn\'t have related skills yet. Press edit button to add new related skills.</string>
+    <string name="task">Task</string>
+    <string name="removing_task">Removing</string>
+    <string name="removing_task_description">Are you really want to remove this task?</string>
+    <string name="edit_task_title">Edit task</string>
+    <string name="empty_title_task_error">Task title can\'t be empty</string>
+    <string name="finish_edit_task_message">Task edit finished</string>
+    <string name="task_duplicate_error">Another task with same title is already exists. Rewrite?</string>
+    <string name="task_duplicate_negative_answer">No, change current task title</string>
+    <string name="new_task_added">Task added: </string>
+    <string name="skill_choosing">Choose skill to add</string>
     <!-- -->
 
     <!-- Skills-->
@@ -63,7 +74,6 @@
     <string name="set_key_characteristic">Set characteristic</string>
     <string name="create_new_skill">Add new skill</string>
     <string name="add_new_skill">New skill</string>
-    <string name="edit_skill_button">Edit</string>
     <string name="new_skill">Add new skill</string>
     <string name="edit_skill">Edit</string>
     <string name="increases">Increases: </string>
@@ -79,12 +89,16 @@
     <!-- Hero-->
     <string name="edit_hero">Edit</string>
     <string name="hero_name">Name:</string>
+    <string name="hero_level">Level</string>
     <string name="hero_name_hint_edit_hero_fragment">Your hero name.</string>
     <string name="change_hero_icon">Change picture</string>
+    <string name="edit_hero_fragment_title">Edit hero</string>
+    <string name="hero_level_increased">Congratulations!\n %1s's level increased!</string>
     <!-- -->
 
     <!-- Characteristics-->
     <string name="change_characteristic">Change characteristic</string>
+    <string name="select_characteristic">Select key characteristic</string>
     <!-- -->
 
     <!-- Main fragment child fragments names-->
@@ -139,8 +153,6 @@
     <!-- Achievements-->
     <string name="achievements">Achievements</string>
     <string name="available_achievements">Available achievements</string>
-    <string name="obtained_achievements">Last obtained achievement</string>
-    <string name="show_achievements">Achievements</string>
     <string name="xp_multiplier_reward">XP Multiplier + x0.0%1d</string>
     <string name="hero_level_achievement">Hero level - %1d</string>
     <string name="total_hero_xp_achievement">Total hero XP - %1d</string>
@@ -167,6 +179,10 @@
         Higher skill level - faster characteristic growth.</string>
     <!-- -->
 
+    <!-- Default values-->
+    <string name="default_hero_name">Johnny</string>
+    <!-- -->
+
     <!-- Other-->
     <string name="ok">OK</string>
     <string name="remove">Delete</string>
@@ -174,11 +190,10 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="banner_ad_unit_id">ca-app-pub-3618933742218575/7397853043</string>
-
-    <string name="empty_widget">All tasks are done!</string>
-    <string name="empty_list_view">There are no task in current category. To add new task press button +</string>
-    <string name="no_related_skills">This task doesn\'t have related skills yet. Press edit button to add new related skills.</string>
     <string name="contact">Contact</string>
+    <string name="empty_widget">All tasks are done!</string>
+    <string name="XP">XP</string>
+    <string name="notification_text">Task need to be performed</string>
     <!-- -->
 
 </resources>

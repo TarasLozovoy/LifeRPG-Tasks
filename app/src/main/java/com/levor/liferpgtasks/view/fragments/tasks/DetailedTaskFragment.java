@@ -110,7 +110,8 @@ public class DetailedTaskFragment extends DefaultFragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.perform_task).setEnabled(!currentTask.isTaskDone());
+        menu.findItem(R.id.perform_task).setVisible(!currentTask.isTaskDone())
+                .setEnabled(!currentTask.isTaskDone());
         menu.findItem(R.id.undo_task).setVisible(currentTask.isUndonable())
                 .setEnabled(currentTask.isUndonable());
     }

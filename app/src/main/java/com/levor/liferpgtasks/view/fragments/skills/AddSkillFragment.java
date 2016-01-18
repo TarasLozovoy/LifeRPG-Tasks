@@ -142,7 +142,7 @@ public class AddSkillFragment extends DefaultFragment {
             final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_item
                     , getController().getCharacteristicsTitlesArray());
             AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-            dialog.setTitle("Select key characteristic");
+            dialog.setTitle(getString(R.string.select_characteristic));
             dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

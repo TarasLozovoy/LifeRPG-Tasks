@@ -115,9 +115,8 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
     private void gainAdditionalXP(String taskTitle){
         boolean heroLevelIncreased = lifeController.shareTask(lifeController.getTaskByTitle(taskTitle));
         if (heroLevelIncreased){
-            Toast.makeText(context, "Congratulations!\n" + lifeController.getHeroName()
-                    + "'s level increased!", Toast.LENGTH_LONG)
-                    .show();
+            Toast.makeText(context, context.getString(R.string.hero_level_increased, lifeController.getHeroName()),
+                    Toast.LENGTH_LONG).show();
         }
     }
 
@@ -129,9 +128,8 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
             ShareDialog shareDialog = new ShareDialog((Activity)context);
             if (ShareDialog.canShow(ShareLinkContent.class)) {
                 ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                        .setContentTitle(taskTitle + " " + context.getResources().getString(R.string.done))
-                        .setContentDescription(
-                                "I have just finished task " + taskTitle + "!")
+                        .setContentTitle(context.getString(R.string.task) + " \"" + taskTitle + "\" " +
+                                context.getString(R.string.done) + "!")
                         .setContentUrl(Uri.parse(context.getString(R.string.facebook_app_link)))
                         .build();
 
@@ -163,8 +161,8 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
             if (!checkInternetConnection()) return;
             try {
                 new TweetComposer.Builder(context)
-                        .text(taskTitle + " " + context.getString(R.string.done) +
-                                "\n" + "I have just finished task " + taskTitle + "!")
+                        .text(context.getString(R.string.task) + " \"" + taskTitle + "\" " +
+                                context.getString(R.string.done) + "!")
                         .url(new URL(context.getString(R.string.facebook_app_link)))
                         .show();
             } catch (MalformedURLException e) {
@@ -196,8 +194,8 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
             if (!checkInternetConnection()) return;
             Intent shareIntent = new PlusShare.Builder(context)
                     .setType("text/plain")
-                    .setText(taskTitle + " " + context.getString(R.string.done) +
-                            "\n" + "I have just finished task " + taskTitle + "!")
+                    .setText(context.getString(R.string.task) + " \"" + taskTitle + "\" " +
+                            context.getString(R.string.done) + "!")
                     .setContentUrl(Uri.parse(context.getString(R.string.facebook_app_link)))
                     .getIntent();
 
@@ -233,8 +231,8 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
                 return;
             }
             VKShareDialogBuilder vkShareDialog = new VKShareDialogBuilder();
-            vkShareDialog.setText(taskTitle + " " + context.getString(R.string.done) +
-                    "\n" + "I have just finished task " + taskTitle + "!")
+            vkShareDialog.setText(context.getString(R.string.task) + " \"" + taskTitle + "\" " +
+                    context.getString(R.string.done) + "!")
                     .setAttachmentLink(context.getString(R.string.app_name),
                             context.getString(R.string.facebook_app_link))
                     .setShareDialogListener(new VKShareDialogBuilder.VKShareDialogListener() {

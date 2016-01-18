@@ -1,0 +1,174 @@
+<resources>
+    <!-- Tasks-->
+    <string name="new_task_title">Название:</string>
+    <string name="new_task_title_edit_text">введите название задачи</string>
+    <string name="add_skill_to_task">Добавить навык</string>
+    <string name="add_new_task">Новая задача</string>
+    <string name="related_skills">Связанные навыки:</string>
+    <string name="characteristic_level">Уровень:</string>
+    <string name="characteristic_related_skills">Увеличиться при росте следующих навыков</string>
+    <string name="edit_task">Редактировать</string>
+    <string name="do_task">Сделано</string>
+    <string name="repeat">Повторять</string>
+    <string name="repeat_times_edit_text_hint">бесконечно</string>
+    <string name="times">раз</string>
+    <string name="infinite_number_of">Повторять задачу бесконечно</string>
+    <string name="task_finished">Задача завершена.</string>
+    <string name="max_task_repeat">Максимально число 999.</string>
+    <string name="all_tasks">Все</string>
+    <string name="every_day_tasks">Привычки</string>
+    <string name="simple_tasks">Задачи</string>
+    <string name="finished_tasks">Сделано</string>
+    <string name="tasks">Задачи</string>
+    <string name="difficulty">Сложность:</string>
+    <string name="importance">Важность:</string>
+    <string name="date">Дата:</string>
+    <string name="time">Время:</string>
+    <string name="tasks_order_title">Порядок задач</string>
+    <string name="completion_task_order">Завершенность</string>
+    <string name="title_asc_task_order">Название А > Я</string>
+    <string name="title_desc_task_order">Название Я > А</string>
+    <string name="importance_ask_task_order">Важность А > Я</string>
+    <string name="importance_desc_task_order">Важность Я > А</string>
+    <string name="difficulty_asc_task_order">Сложность А > Я</string>
+    <string name="difficulty_desc_task_order">Сложность Я > А</string>
+    <string name="date_asc_task_order">Дата А > Я</string>
+    <string name="date_desc_task_order">Дата Я > А</string>
+    <string name="sort_image">Сортировка</string>
+    <string name="task_performed">Задача выполнена\n</string>
+    <string name="close">Закрыть</string>
+    <string name="done">выполнена!</string>
+    <string name="undo">Отменить</string>
+    <string name="repeat_question">Повторять?</string>
+    <string name="notify_question">Уведомлять?</string>
+    <string name="show_notification">Будет показано уведомления о задаче.</string>
+    <string name="overdue">- просрочено!</string>
+    <string name="task_already_done">Задача завершена. Снова сделать эту задачу активной?</string>
+    <string name="all_related_skills_added">Все доступные навыки уже добавлены.</string>
+    <string name="empty_list_view">В текущей категории нет задач. Нажмите на кнопку + чтобы добавить новую задачу.</string>
+    <string name="no_related_skills">В этой задаче пока нету связанных навыков. Нажмите кнопку редактировать чтобы добавить связанные навыки.</string>
+    <string name="task">Задача</string>
+    <string name="removing_task">Удаление</string>
+    <string name="removing_task_description">Вы действительно хотите удалить текущую задачу?</string>
+    <string name="edit_task_title">Редактирование</string>
+    <string name="empty_title_task_error">Название задачи не может быть пустым</string>
+    <string name="finish_edit_task_message">Редатирование завершено</string>
+    <string name="task_duplicate_error">Задача с таким названием уже существует. Перезаписать ее?</string>
+    <string name="task_duplicate_negative_answer">Нет</string>
+    <string name="new_task_added">Добавдена задача: </string>
+    <string name="skill_choosing">Выберите навык</string>
+    <!-- -->
+
+    <!-- Skills-->
+    <string name="new_skill_title">Название:</string>
+    <string name="new_skill_title_edit_text">введите название навыка</string>
+    <string name="key_characteristic">Ключевая характеристика:</string>
+    <string name="set_key_characteristic">Установить харктеристику</string>
+    <string name="create_new_skill">Добавить навык</string>
+    <string name="add_new_skill">Новый навык</string>
+    <string name="new_skill">Новый навык</string>
+    <string name="edit_skill">Редактировать</string>
+    <string name="increases">Увеличивает: </string>
+    <string name="tasks_enhancing_skill">Навык развивается после выполнения следующих задач:
+    </string>
+    <string name="level">Уровень:</string>
+    <string name="skill_xp">Опыт навыка:</string>
+    <string name="to_next_lvl">Опыта до след. уровня:</string>
+    <string name="empty_skill_title_error">Название навыка не может быть пустым</string>
+    <string name="no_key_characteristic_error">Нужно указать ключевую характеристику</string>
+    <!-- -->
+
+    <!-- Hero-->
+    <string name="edit_hero">Редактировать</string>
+    <string name="hero_name">Имя:</string>
+    <string name="hero_name_hint_edit_hero_fragment">введите имя</string>
+    <string name="change_hero_icon">Изменить аватарку</string>
+    <string name="hero_level">Уровень</string>
+    <string name="edit_hero_fragment_title">Редактирование героя</string>
+    <string name="hero_level_increased">Поздравляем!\nУровень %1s's увеличился!</string>
+    <!-- -->
+
+    <!-- Characteristics-->
+    <string name="change_characteristic">Изменить характеристику</string>
+    <string name="select_characteristic">Выберите ключевую характеристику</string>
+    <!-- -->
+
+    <!-- Main fragment child fragments names-->
+    <string name="hero_fragment_name">Герой</string>
+    <string name="characteristics_fragment_name">Характеристики</string>
+    <string name="skills_fragment_name">Навыки</string>
+    <!-- -->
+
+    <!-- Sharing-->
+    <string name="share">Поделиться(+опыт)</string>
+    <string name="share_with_xp">Поделиться(+%.2f)</string>
+    <string name="no_internet">Соединение с интернетом отсутствует. Подключите интернет соединение.</string>
+    <string name="please_login">Вы не залогинены. Пожалуйста залогиньтесь.</string>
+    <string name="facebook">Facebook</string>
+    <string name="twitter">Twitter</string>
+    <string name="g_plus">Google+</string>
+    <string name="vk">Вконтакте</string>
+    <string name="share_additional_xp">Поделитесь и получите опыт</string>
+    <string name="XP_gained">+ %.2f опыта!</string>
+    <!-- /Sharing-->
+
+    <!-- Settings-->
+    <string name="settings">Настройки</string>
+    <!-- -->
+
+    <!-- Statistics-->
+    <string name="statistics">Статистика</string>
+    <string name="performed_tasks_number">Выполнено задач: </string>
+    <string name="added_tasks_number">Создано задач: </string>
+    <string name="finished_tasks_number">Завершено задач: </string>
+    <string name="total_hero_xp">Общий опыт героя: </string>
+    <string name="total_skills_xp">Общий опыт навыков: </string>
+    <string name="xp_multiplier">Коэффициент опыта: </string>
+    <!-- -->
+
+    <!-- Achievements-->
+    <string name="achievements">Достижения</string>
+    <string name="available_achievements">Доступные достижения</string>
+    <string name="xp_multiplier_reward">Коэф. опыта + x0.0%1d</string>
+    <string name="hero_level_achievement">Уровень героя - %1d</string>
+    <string name="total_hero_xp_achievement">Общий опыт героя - %1d</string>
+    <string name="total_skills_xp_achievement">Общий опыт навыков - %1d</string>
+    <string name="performed_tasks_achievement">Заданий выполнено - %1d</string>
+    <string name="finished_tasks_achievement">Заданий завершено - %1d</string>
+    <string name="added_tasks_achievement">Заданий добавлено - %1d</string>
+    <string name="top_level_skill_achievement">Макс. уровень навыка - %1d</string>
+    <string name="top_level_characteristic_achievement">Макс. уровень характеристики - %1d</string>
+    <string name="n_skills_level_10_achievement">Навыков уровня 10 - %1d</string>
+    <string name="n_skills_level_25_achievement">Навыков уровня 25 - %1d</string>
+    <string name="n_skills_level_50_achievement">Навыков уровня 50 - %1d</string>
+    <string name="n_skills_level_100_achievement">Навыков уровня 100 - %1d</string>
+    <string name="achievement_unlocked"> Новое достижение - \"%1s\"! </string>
+    <string name="achievements_unlocked">Получено достижений: </string>
+    <!-- -->
+
+    <!--Coachmarks-->
+    <string name="coachmarks_hero_bottom_navigation"> Переключайтесь между вашим героем, задачами и настройками с помощью этих вкладок.</string>
+    <string name="coachmarks_hero_description">Это ваш герой. \nВыполнение задач приносит герою опыт и повышает его уровень.</string>
+    <string name="coachmarks_XP_description">Также выполенение задач улучшает навыки.
+        Когда уровень навыка увеличивается - также увеличивается уровень связанной с ним характеристики.
+        Чем выше уровень навыка - тем быстрее растет характеристикаты.</string>
+    <!-- -->
+
+    <!-- Default values-->
+    <string name="default_hero_name">Джонни</string>
+    <!-- -->
+
+    <!-- Other-->
+    <string name="ok">OK</string>
+    <string name="remove">Удалить</string>
+    <string name="closing_app_toast">Нажмите еще раз для выхода</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="contact">Написать разработчику</string>
+    <string name="empty_widget">Все задачи выполнены</string>
+    <string name="XP">Опыт</string>
+    <string name="oops">Ой!</string>
+    <string name="notification_text">Пора выполнять задание!</string>
+    <!-- -->
+
+</resources>

@@ -37,7 +37,7 @@ public class EditHeroFragment extends DefaultFragment{
         changeIconButton.setOnClickListener(new ChangeIconClickListener());
 
         setHasOptionsMenu(true);
-        getCurrentActivity().setActionBarTitle("Edit hero");
+        getCurrentActivity().setActionBarTitle(getString(R.string.edit_hero_fragment_title));
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return view;
     }

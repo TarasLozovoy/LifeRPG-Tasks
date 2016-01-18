@@ -23,7 +23,7 @@ public class TaskNotification extends BroadcastReceiver {
         PendingIntent pIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), notificationIntent, 0);
         Notification n  = new Notification.Builder(context)
                 .setContentTitle(taskTitle)
-                .setContentText("Task need to be performed")
+                .setContentText(context.getString(R.string.notification_text))
                 .setSmallIcon(R.drawable.app_icon)
                 .setContentIntent(pIntent)
                 .setAutoCancel(true).build();

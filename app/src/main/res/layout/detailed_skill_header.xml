@@ -103,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="@string/create_new_skill" />
+            android:text="@string/add_new_task" />
 
         <TextView
             style="@style/LifeRPGTextStyle"

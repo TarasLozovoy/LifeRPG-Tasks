@@ -113,7 +113,7 @@ public class AddTaskFragment extends DefaultFragment {
             updateListView();
         }
         setHasOptionsMenu(true);
-        getCurrentActivity().setActionBarTitle("Create new task");
+        getCurrentActivity().setActionBarTitle(getString(R.string.add_new_task));
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
 
         return view;
@@ -144,14 +144,15 @@ public class AddTaskFragment extends DefaultFragment {
             case R.id.finish_creating_task:
                 String title = taskTitleEditText.getText().toString();
                 if (title.isEmpty()) {
-                    Snackbar.make(getView(), "Task title can't be empty", Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(getCurrentActivity(),
+                            getString(R.string.empty_title_task_error), Toast.LENGTH_LONG).show();
                     return true;
                 }
                 if (getController().getTaskByTitle(title) != null) {
                     createIdenticalTaskRequestDialog(title);
                     return true;
                 } else {
-                    finishTask(title, "Task added: " + title);
+                    finishTask(title, getString(R.string.new_task_added) + " " + title);
                 }
                 return true;
             default:
@@ -178,20 +179,20 @@ public class AddTaskFragment extends DefaultFragment {
 
     protected void createIdenticalTaskRequestDialog(final String title){
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
-        b.setTitle("Task with such title is already created!")
-                .setMessage("Are you sure you want to rewrite old task with new one?")
+        b.setTitle(getString(R.string.oops))
+                .setMessage(getString(R.string.task_duplicate_error))
                 .setCancelable(true)
-                .setNegativeButton("No, change new task title", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.task_duplicate_negative_answer), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 })
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        finishTask(title, "Task added: " + title);
+                        finishTask(title, getString(R.string.new_task_added) + " " + title);
                     }
                 })
                 .show();
@@ -238,7 +239,7 @@ public class AddTaskFragment extends DefaultFragment {
                         android.R.layout.select_dialog_item, skillsList);
 
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                dialog.setTitle("Choose skill to add");
+                dialog.setTitle(getString(R.string.skill_choosing));
                 dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

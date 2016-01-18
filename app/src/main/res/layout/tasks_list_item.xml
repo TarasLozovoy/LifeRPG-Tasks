@@ -34,7 +34,7 @@
     </LinearLayout>
 
 
-    <Button
+    <ImageButton
         android:id="@+id/check_button"
         style="@style/LifeRPGDefaultButton"
         android:layout_width="wrap_content"
@@ -44,6 +44,8 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="2dp"
         android:layout_marginTop="2dp"
-        android:text="@string/do_task" />
+        android:src="@drawable/ic_done_black_24dp"
+        />
+        <!--android:text="@string/do_task" />-->
 
 </RelativeLayout>

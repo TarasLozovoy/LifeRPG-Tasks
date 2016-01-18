@@ -39,6 +39,7 @@ public class ChangeHeroIconFragment extends DefaultFragment{
         recyclerView.setAdapter(new ImageAdapter(imageNames));
 
         setHasOptionsMenu(true);
+        getCurrentActivity().setActionBarTitle(getString(R.string.edit_hero_fragment_title));
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return v;
     }

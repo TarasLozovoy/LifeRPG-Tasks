@@ -35,7 +35,6 @@
             android:id="@+id/task_repeat_and_notify_simple_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/add_task_fragment_default_margin"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
@@ -225,7 +224,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="@string/create_new_skill" />
+            android:text="@string/add_skill_to_task" />
 
         <TextView
             style="@style/LifeRPGTextStyle"
@@ -233,7 +232,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="2dp"
             android:layout_toLeftOf="@id/add_related_skill_button"
-            android:text="@string/add_skills_to_task"
+            android:text="@string/related_skills"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"/>
 

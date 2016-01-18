@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -62,7 +63,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
         if (task == null) {
             return null;
         }
-        Button doBtn = (Button) view.findViewById(R.id.check_button);
+        ImageButton doBtn = (ImageButton) view.findViewById(R.id.check_button);
         final View finalView = view;
         doBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,9 +86,8 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                     lifeController.updateTaskNotification(task);
                 }
                 if (isHeroLevelIncreased) {
-                    Toast.makeText(activity, "Congratulations!\n" + lifeController.getHeroName()
-                            + "'s level increased!", Toast.LENGTH_SHORT)
-                            .show();
+                    Toast.makeText(activity, activity.getString(R.string.hero_level_increased, lifeController.getHeroName()),
+                            Toast.LENGTH_LONG).show();
                 }
                 notifyDataSetChanged();
 
@@ -126,7 +126,7 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
             repeatabilityTV.setText(Integer.toString(repeat));
             doBtn.setEnabled(true);
         } else {
-            repeatabilityLL.setBackground(view.getResources().getDrawable(R.drawable.ic_done_black_24dp));
+            repeatabilityLL.setBackground(null);
             repeatabilityTV.setText("");
             doBtn.setEnabled(false);
         }

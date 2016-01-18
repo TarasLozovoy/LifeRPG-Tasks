@@ -80,7 +80,7 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
             shareDialog.setAdapter(new ShareDialogAdapter(context, taskTitle), null)
                     .setTitle(context.getString(R.string.share_additional_xp))
                     .setCancelable(false)
-                    .setNeutralButton(R.string.close, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ((MainActivity)context).showAd();

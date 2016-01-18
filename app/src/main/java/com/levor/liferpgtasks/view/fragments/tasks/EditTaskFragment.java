@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
@@ -58,7 +59,7 @@ public class EditTaskFragment extends AddTaskFragment {
             notifyCheckbox.setChecked(currentTask.isNotify());
         }
         setHasOptionsMenu(true);
-        getCurrentActivity().setActionBarTitle("Edit task");
+        getCurrentActivity().setActionBarTitle(getString(R.string.edit_task_title));
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
         if (currentTask.isTaskDone()){
             showTaskAlreadyDoneDialog();
@@ -78,14 +79,15 @@ public class EditTaskFragment extends AddTaskFragment {
             case R.id.save_task:
                 String title = taskTitleEditText.getText().toString();
                 if (title.isEmpty()) {
-                    Snackbar.make(getCurrentActivity().getCurrentFocus(), "Task title can't be empty", Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(getCurrentActivity(),
+                            getString(R.string.empty_title_task_error), Toast.LENGTH_LONG).show();
                     return true;
                 }
                 if (getController().getTaskByTitle(title) != null && !title.equals(currentTask.getTitle())){
                     createIdenticalTaskRequestDialog(title);
                     return true;
                 }
-                finishTask(title, "Task edit finished");
+                finishTask(title, getString(R.string.finish_edit_task_message));
                 return true;
 
             case R.id.remove_task:
@@ -105,20 +107,20 @@ public class EditTaskFragment extends AddTaskFragment {
     @Override
     protected void createIdenticalTaskRequestDialog(final String title) {
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
-        b.setTitle("Oops!")
-                .setMessage("Another task with same title is already exists. Rewrite?")
+        b.setTitle(getString(R.string.oops))
+                .setMessage(getString(R.string.task_duplicate_error))
                 .setCancelable(true)
-                .setNegativeButton("No, change current task title", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.task_duplicate_negative_answer), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 })
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        finishTask(title, "Task edit finished");
+                        finishTask(title, getString(R.string.finish_edit_task_message));
                     }
                 })
                 .show();
@@ -144,16 +146,16 @@ public class EditTaskFragment extends AddTaskFragment {
     }
     private void removeTask(){
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-        alert.setTitle("Removing " + currentTask.getTitle())
-                .setMessage("Are you really want to remove this task?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        alert.setTitle(getString(R.string.removing_task) + " " + currentTask.getTitle())
+                .setMessage(getString(R.string.removing_task_description))
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         getController().removeTask(currentTask);
                         getCurrentActivity().showNthPreviousFragment(2);
                     }
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

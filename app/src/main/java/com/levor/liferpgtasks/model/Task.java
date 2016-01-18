@@ -288,6 +288,9 @@ public class Task {
         @Override
         public int compare(Task lhs, Task rhs) {
             if (lhs.getDate() != rhs.getDate()){
+                if (lhs.repeatability == 0 && rhs.repeatability == 0){
+                    return lhs.getDate().compareTo(rhs.getDate());
+                }
                 if (lhs.repeatability == 0) return 1;
                 if (rhs.repeatability == 0) return -1;
                 return lhs.getDate().compareTo(rhs.getDate());
@@ -301,6 +304,9 @@ public class Task {
         @Override
         public int compare(Task lhs, Task rhs) {
             if (lhs.getDate() != rhs.getDate()){
+                if (lhs.repeatability == 0 && rhs.repeatability == 0){
+                    return rhs.getDate().compareTo(lhs.getDate());
+                }
                 if (lhs.repeatability == 0) return 1;
                 if (rhs.repeatability == 0) return -1;
                 return rhs.getDate().compareTo(lhs.getDate());

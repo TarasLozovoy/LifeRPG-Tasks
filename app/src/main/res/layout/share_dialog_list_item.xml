@@ -28,6 +28,7 @@
         android:layout_gravity="right"
         android:layout_weight="0"
         android:id="@+id/social_network_button"
-        android:text="@string/share"/>
+        android:text="@string/share"
+        android:layout_marginRight="2dp"/>
 
 </LinearLayout>

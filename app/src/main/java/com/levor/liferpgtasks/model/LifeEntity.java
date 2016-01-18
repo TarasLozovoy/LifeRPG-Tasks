@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
+import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.dataBase.CharacteristicsCursorWrapper;
 import com.levor.liferpgtasks.dataBase.DataBaseHelper;
 import com.levor.liferpgtasks.dataBase.DataBaseSchema.*;
@@ -31,6 +32,7 @@ public class LifeEntity {
     private List<Skill> skills;
     private List<Characteristic> characteristics;
     private Hero hero;
+    private Context context;
 
     public static LifeEntity getInstance(Context context){
         if (lifeEntity == null){
@@ -40,13 +42,13 @@ public class LifeEntity {
     }
 
     private LifeEntity(Context context) {
+        this.context = context;
         database = new DataBaseHelper(context.getApplicationContext()).getWritableDatabase();
 
         String count = "SELECT count(*) FROM " + HeroTable.NAME;
         Cursor cursor = database.rawQuery(count, null);
         cursor.moveToFirst();
         if(cursor.getInt(0) < 1) {
-            hero = new Hero();
             characteristics = new ArrayList<>();
             skills = new ArrayList<>();
             tasks = new ArrayList<>();
@@ -87,7 +89,7 @@ public class LifeEntity {
             addTask("Fix bug on Android", 1, Task.HARD, Task.HARD, today, false, getSkillByTitle("Android"));
             addTask("Fix bug on Java", 25, Task.INSANE, Task.INSANE, tomorrow, false, getSkillByTitle("Java"));
 
-            addHero(new Hero());
+            addHero(new Hero(0, 0, 1, context.getString(R.string.default_hero_name)));
         } else {
             hero = getHero();
             characteristics = getCharacteristics();

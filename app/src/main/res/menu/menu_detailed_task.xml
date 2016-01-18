@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/perform_task"
-          android:title="@string/do_task"
-          android:orderInCategory="3"
-          app:showAsAction="always"
-        />
-
-
-    <item android:id="@+id/edit_task"
-          android:title="@string/edit_task"
-          android:icon="@drawable/ic_mode_edit_black_24dp"
-          android:orderInCategory="2"
-          app:showAsAction="ifRoom"/>
-
-    <item android:id="@+id/undo_task"
-        android:title="@string/undo"
+    <item
+        android:id="@+id/perform_task"
+        android:icon="@drawable/ic_done_black_24dp"
         android:orderInCategory="3"
-        app:showAsAction="always"
-        />
+        android:title="@string/do_task"
+        app:showAsAction="always" />
+
+
+    <item
+        android:id="@+id/edit_task"
+        android:icon="@drawable/ic_mode_edit_black_24dp"
+        android:orderInCategory="2"
+        android:title="@string/edit_task"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/undo_task"
+        android:orderInCategory="4"
+        android:icon="@drawable/ic_undo_black_24dp"
+        android:title="@string/undo"
+        app:showAsAction="always" />
 
 </menu>

@@ -19,7 +19,7 @@
         android:layout_below="@id/show_statistics_button"
         android:layout_marginBottom="2dp"
         android:gravity="center"
-        android:text="@string/show_achievements"
+        android:text="@string/achievements"
         style="@style/LifeRPGDefaultButton"/>
 
     <Button
