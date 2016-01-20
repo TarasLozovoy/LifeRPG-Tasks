@@ -1,5 +1,6 @@
 package com.levor.liferpgtasks.view.fragments.tasks;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -368,6 +369,7 @@ public class AddTaskFragment extends DefaultFragment {
         return Integer.parseInt(repeatTimesString);
     }
 
+    @SuppressLint("ValidFragment")
     public class SelectDateFragmentTrans extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
         @NonNull
@@ -389,6 +391,7 @@ public class AddTaskFragment extends DefaultFragment {
         }
     }
 
+    @SuppressLint("ValidFragment")
     public class SelectTimeFragmentTrans extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
         @NonNull

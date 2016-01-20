@@ -12,9 +12,16 @@ apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        release {
+            keyAlias 'liferpgtaskskey'
+            keyPassword 'kjkszpj007'
+            storeFile file('/home/dtv/Desktop/Dropbox/Java/Android/Signing!!!!/LifeRPGKeyStore.jks')
+            storePassword 'kjkszpj007'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
-
     defaultConfig {
         applicationId "com.levor.liferpgtasks"
         minSdkVersion 16
@@ -26,7 +33,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
+    }
+    lintOptions {
+        disable 'MissingTranslation'
     }
 }
 

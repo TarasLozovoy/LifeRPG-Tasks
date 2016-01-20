@@ -214,6 +214,7 @@
     <string name="contact">Contact</string>
     <string name="empty_widget">All tasks are done!</string>
     <string name="XP">XP</string>
+    <string name="oops">Oops!</string>
     <string name="notification_text">Task need to be performed</string>
     <string name="removing">Removing</string>
     <!-- -->
