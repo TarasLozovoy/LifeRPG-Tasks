@@ -147,13 +147,6 @@ public class MainActivity extends AppCompatActivity{
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        SharedPreferences prefs = getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-        prefs.edit().putString(LifeController.SHARED_PREFS_TAG, heroDefaultIconName).apply();
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(SELECTED_FRAGMENT_TAG, currentFragmentID);
         super.onSaveInstanceState(outState);
@@ -306,6 +299,8 @@ public class MainActivity extends AppCompatActivity{
         if (name != null) {
             heroDefaultIconName = name;
             setupNavigationTabs();
+            SharedPreferences prefs = getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+            prefs.edit().putString(HERO_ICON_NAME_TAG, heroDefaultIconName).apply();
         }
     }
 

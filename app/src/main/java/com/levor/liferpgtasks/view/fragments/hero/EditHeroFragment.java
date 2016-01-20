@@ -69,6 +69,7 @@ public class EditHeroFragment extends DefaultFragment{
 
         @Override
         public void onClick(View v) {
+            getController().updateHeroName(editHeroName.getText().toString());
             getCurrentActivity().showChildFragment(new ChangeHeroIconFragment(), null);
         }
     }

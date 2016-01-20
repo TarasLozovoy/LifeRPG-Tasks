@@ -4,6 +4,7 @@ package com.levor.liferpgtasks.view.fragments;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ public class SettingsFragment extends DefaultFragment {
         Button showStatisticsButton = (Button) v.findViewById(R.id.show_statistics_button);
         Button showAchievementsButton = (Button) v.findViewById(R.id.show_achievements_button);
         Button contactButton = (Button) v.findViewById(R.id.contact_button);
+        Button playMarketButton = (Button) v.findViewById(R.id.play_market_button);
 
         showStatisticsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +55,15 @@ public class SettingsFragment extends DefaultFragment {
                 if (best != null)
                     emailIntent.setClassName(best.activityInfo.packageName, best.activityInfo.name);
                 getCurrentActivity().startActivity(emailIntent);
+            }
+        });
+
+        playMarketButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(getString(R.string.app_address_on_market)));
+                startActivity(browserIntent);
             }
         });
 
