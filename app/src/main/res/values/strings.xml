@@ -221,6 +221,7 @@
     <string name="oops">Oops!</string>
     <string name="notification_text">Task need to be performed</string>
     <string name="removing">Removing</string>
+    <string name="error_on_loading_image">Error occurred at attempt to load selected image. Try to select another image.</string>
     <!-- -->
 
 </resources>

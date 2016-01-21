@@ -193,6 +193,7 @@
     <string name="oops">Ой!</string>
     <string name="notification_text">Пора выполнять задание!</string>
     <string name="removing">Удаление</string>
+    <string name="error_on_loading_image">>Возникла ошибка при загрузке иконке. Выберите, пожалуйста, другую иконку.</string>
     <!-- -->
 
 </resources>

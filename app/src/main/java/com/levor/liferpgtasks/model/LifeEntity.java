@@ -12,6 +12,7 @@ import com.levor.liferpgtasks.dataBase.CharacteristicsCursorWrapper;
 import com.levor.liferpgtasks.dataBase.DataBaseHelper;
 import com.levor.liferpgtasks.dataBase.DataBaseSchema.*;
 import com.levor.liferpgtasks.dataBase.HeroCursorWrapper;
+import com.levor.liferpgtasks.dataBase.MiscCursorWrapper;
 import com.levor.liferpgtasks.dataBase.SkillsCursorWrapper;
 import com.levor.liferpgtasks.dataBase.TasksCursorWrapper;
 
@@ -96,6 +97,7 @@ public class LifeEntity {
             characteristics = getCharacteristics();
             skills = getSkills();
             tasks = getTasks();
+            getMiscFromDB();
 
             //adding new characteristic for new version (1.0.2)
             Characteristic health = new Characteristic(context.getString(R.string.health), 1);
@@ -494,5 +496,50 @@ public class LifeEntity {
         } finally {
             cursor.close();
         }
+    }
+
+    private MiscCursorWrapper queryMisc(String whereClause, String[] whereArgs) {
+        Cursor cursor = database.query(
+                MiscTable.NAME,
+                null, // Columns - null selects all columns
+                whereClause,
+                whereArgs,
+                null, // groupBy
+                null, // having
+                null // orderBy
+        );
+        return new MiscCursorWrapper(cursor);
+    }
+
+    private static ContentValues getContentValuesForMisc() {
+        ContentValues values = new ContentValues();
+        values.put(MiscTable.Cols.ACHIEVES_LEVELS, Misc.ACHIEVEMENTS_LEVELS);
+        return values;
+    }
+
+    private void getMiscFromDB(){
+        MiscCursorWrapper cursor = queryMisc(null, null);
+        try{
+            cursor.moveToFirst();
+            cursor.updateMiscFromDB();
+        } finally {
+            cursor.close();
+        }
+    }
+
+    private void updateMiscToDB(){
+        final ContentValues values = getContentValuesForMisc();
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                database.update(MiscTable.NAME, values, null, null);
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void updateAchievementsLevels(String levels){
+        Misc.ACHIEVEMENTS_LEVELS = levels;
+        updateMiscToDB();
     }
 }

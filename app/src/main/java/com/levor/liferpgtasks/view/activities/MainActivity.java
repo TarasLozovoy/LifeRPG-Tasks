@@ -319,7 +319,10 @@ public class MainActivity extends AppCompatActivity{
             InputStream is = getAssets().open(heroDefaultIconName);
             d = Drawable.createFromStream(is, null);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            heroDefaultIconName = "elegant5.png";
+            Toast.makeText(this, R.string.error_on_loading_image, Toast.LENGTH_LONG).show();
+            setupNavigationTabs();
+            return;
         }
         navigationTabLayout.removeAllTabs();
         navigationTabLayout.addTab(navigationTabLayout.newTab().setIcon(d));

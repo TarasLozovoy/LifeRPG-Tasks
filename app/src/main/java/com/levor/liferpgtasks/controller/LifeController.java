@@ -19,6 +19,7 @@ import com.levor.liferpgtasks.broadcastReceivers.TaskNotification;
 import com.levor.liferpgtasks.model.Characteristic;
 import com.levor.liferpgtasks.model.Hero;
 import com.levor.liferpgtasks.model.LifeEntity;
+import com.levor.liferpgtasks.model.Misc;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.widget.LifeRPGWidgetProvider;
@@ -422,13 +423,14 @@ public class LifeController {
         NUMBER_OF_SKILLS_WITH_LEVEL_50.setDescription(context.getString(R.string.n_skills_level_50_achievement));
         NUMBER_OF_SKILLS_WITH_LEVEL_100.setDescription(context.getString(R.string.n_skills_level_100_achievement));
 
-        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-        String defaultString =  prefs.getString(ACHIEVEMENTS_TAG, null);
+
+        String defaultString = Misc.ACHIEVEMENTS_LEVELS;
         achievementsLevels.clear();
         if (defaultString == null) {
             for (int i = 0; i < AchievsList.values().length; i++) {
                 achievementsLevels.add(0);
             }
+            updateAchievements();
         } else {
             String[] array = defaultString.split(",");
             for (String s : array) {
@@ -438,13 +440,12 @@ public class LifeController {
     }
 
     private void updateAchievements(){
-        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
         StringBuilder sb = new StringBuilder();
         for (Integer i : achievementsLevels){
             sb.append(i).append(",");
         }
         sb.deleteCharAt(sb.length() - 1);
-        prefs.edit().putString(ACHIEVEMENTS_TAG, sb.toString()).apply();
+        lifeEntity.updateAchievementsLevels(sb.toString());
     }
 
     private void unlockAchievement(AchievsList achievement){

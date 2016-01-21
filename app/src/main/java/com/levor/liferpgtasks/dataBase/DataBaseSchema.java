@@ -47,4 +47,13 @@ public class DataBaseSchema {
             public static final String NOTIFY = "task_notify";
         }
     }
+
+    public static final class MiscTable {
+        public static final String NAME = "real_life_misc";
+
+        public static final class Cols {
+            public static final String ACHIEVES_LEVELS = "achievements_levels";
+            public static final String IMAGE_AVATAR = "hero_image_avatar";
+        }
+    }
 }

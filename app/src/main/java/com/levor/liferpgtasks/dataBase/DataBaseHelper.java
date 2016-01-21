@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import static com.levor.liferpgtasks.dataBase.DataBaseSchema.*;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     private static final String DATABASE_NAME = "RealLifeBase.db";
 
     public DataBaseHelper(Context context) {
@@ -51,6 +51,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 TasksTable.Cols.NOTIFY + ", " +
                 TasksTable.Cols.RELATED_SKILLS +
                 ")");
+
+        //v2+
+        db.execSQL("create table " + MiscTable.NAME + " (" +
+                " _id integer primary key autoincrement, " +
+                MiscTable.Cols.IMAGE_AVATAR +
+                ")");
     }
 
     @Override
@@ -60,5 +66,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < 2){
+            db.execSQL("create table " + MiscTable.NAME + " (" +
+                    " _id integer primary key autoincrement, " +
+                    MiscTable.Cols.IMAGE_AVATAR +
+                    ")");
+        }
     }
 }
