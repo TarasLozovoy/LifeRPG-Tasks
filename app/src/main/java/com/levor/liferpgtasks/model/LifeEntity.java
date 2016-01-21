@@ -54,6 +54,7 @@ public class LifeEntity {
             Characteristic wisdom = new Characteristic(context.getString(R.string.wisdom), 1);
             Characteristic strength = new Characteristic(context.getString(R.string.strength), 1);
             Characteristic stamina = new Characteristic(context.getString(R.string.stamina), 1);
+            Characteristic health = new Characteristic(context.getString(R.string.health), 1);
             Characteristic dexterity = new Characteristic(context.getString(R.string.dexterity), 1);
             Characteristic perception = new Characteristic(context.getString(R.string.perception), 1);
             Characteristic memory = new Characteristic(context.getString(R.string.memory), 1);
@@ -63,6 +64,7 @@ public class LifeEntity {
             addCharacteristic(wisdom);
             addCharacteristic(strength);
             addCharacteristic(stamina);
+            addCharacteristic(health);
             addCharacteristic(dexterity);
             addCharacteristic(perception);
             addCharacteristic(memory);
@@ -94,6 +96,12 @@ public class LifeEntity {
             characteristics = getCharacteristics();
             skills = getSkills();
             tasks = getTasks();
+
+            //adding new characteristic for new version (1.0.2)
+            Characteristic health = new Characteristic(context.getString(R.string.health), 1);
+            if (!characteristics.contains(health)){
+                addCharacteristic(health);
+            }
         }
         cursor.close();
     }

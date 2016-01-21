@@ -195,13 +195,37 @@ public class LifeController {
         lifeEntity.updateHero(hero);
         updateStatistics(TOTAL_HERO_XP_TAG, (float) finalXP);
 
+        //GA
         if (isLevelIncreased){
             getGATracker().send(new HitBuilders.EventBuilder()
                     .setCategory(context.getString(R.string.GA_action))
                     .setAction(context.getString(R.string.GA_hero_level_increased) + " " + hero.getLevel())
                     .build());
         }
-        updateStatistics(PERFORMED_TASKS_TAG, 1);
+
+        if (isInternetConnectionActive()){
+            getGATracker().send(new HitBuilders.EventBuilder()
+                    .setCategory(context.getString(R.string.GA_action))
+                    .setAction(context.getString(R.string.GA_task_performed_internet))
+                    .setValue(1)
+                    .build());
+            updateStatistics(PERFORMED_TASKS_TAG, 1);
+        } else {
+            getGATracker().send(new HitBuilders.EventBuilder()
+                    .setCategory(context.getString(R.string.GA_action))
+                    .setAction(context.getString(R.string.GA_task_performed))
+                    .setValue(1)
+                    .build());
+            updateStatistics(PERFORMED_TASKS_TAG, 1);
+        }
+        if (task.getRepeatability() == 0){
+            getGATracker().send(new HitBuilders.EventBuilder()
+                    .setCategory(context.getString(R.string.GA_action))
+                    .setAction(context.getString(R.string.GA_task_finished))
+                    .build());
+        }
+        ///GA
+
         checkAchievements();
         return isLevelIncreased;
     }

@@ -129,6 +129,7 @@
     <string name="GA_add_new_task">Add new task</string>
     <string name="GA_add_new_skill">Add new skill</string>
     <string name="GA_task_performed">Task performed</string>
+    <string name="GA_task_performed_internet">Task performed with internet</string>
     <string name="GA_task_finished">Task finished</string>
     <string name="GA_hero_level_increased">Hero level increased to </string>
     <string name="GA_share_button">Share button pressed</string>
@@ -190,6 +191,7 @@
     <string name="wisdom">Wisdom</string>
     <string name="strength">Strength</string>
     <string name="stamina">Stamina</string>
+    <string name="health">Health</string>
     <string name="dexterity">Dexterity</string>
     <string name="perception">Perception</string>
     <string name="memory">Memory</string>

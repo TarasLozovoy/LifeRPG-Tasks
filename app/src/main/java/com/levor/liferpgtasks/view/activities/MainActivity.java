@@ -377,7 +377,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void showAd(){
-        if (interstitialAd.isLoaded() && new Random().nextInt(100) < 25){
+        if (interstitialAd.isLoaded() && new Random().nextInt(100) < 33){
             interstitialAd.show();
         } else if ((interstitialAd.isLoading() || !interstitialAd.isLoaded())
                 && lifeController.isInternetConnectionActive()){

@@ -199,19 +199,6 @@ public class DetailedTaskFragment extends DefaultFragment {
             Toast.makeText(getCurrentActivity(), getString(R.string.hero_level_increased,
                     getController().getHeroName()), Toast.LENGTH_SHORT).show();
         }
-
-        getController().getGATracker().send(new HitBuilders.EventBuilder()
-                .setCategory(getString(R.string.GA_action))
-                .setAction(getString(R.string.GA_task_performed))
-                .setValue(1)
-                .build());
-
-        if (currentTask.getRepeatability() == 0){
-            getController().getGATracker().send(new HitBuilders.EventBuilder()
-                    .setCategory(getString(R.string.GA_action))
-                    .setAction(getString(R.string.GA_task_finished))
-                    .build());
-        }
     }
 
     private void undoTask(){

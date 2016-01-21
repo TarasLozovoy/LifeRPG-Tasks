@@ -166,6 +166,7 @@
     <string name="wisdom">Мудрость</string>
     <string name="strength">Сила</string>
     <string name="stamina">Выносливость</string>
+    <string name="health">Здоровье</string>
     <string name="dexterity">Ловкость</string>
     <string name="perception">Восприятие</string>
     <string name="memory">Память</string>

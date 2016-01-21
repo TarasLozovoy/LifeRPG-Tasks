@@ -91,19 +91,6 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                 }
                 notifyDataSetChanged();
 
-                lifeController.getGATracker().send(new HitBuilders.EventBuilder()
-                        .setCategory(activity.getString(R.string.GA_action))
-                        .setAction(activity.getString(R.string.GA_task_performed))
-                        .setValue(1)
-                        .build());
-
-                if (task.getRepeatability() == 0){
-                    lifeController.getGATracker().send(new HitBuilders.EventBuilder()
-                            .setCategory(activity.getString(R.string.GA_action))
-                            .setAction(activity.getString(R.string.GA_task_finished))
-                            .build());
-                }
-
             }
         });
 
