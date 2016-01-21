@@ -430,7 +430,6 @@ public class LifeController {
             for (int i = 0; i < AchievsList.values().length; i++) {
                 achievementsLevels.add(0);
             }
-            updateAchievements();
         } else {
             String[] array = defaultString.split(",");
             for (String s : array) {
@@ -458,7 +457,6 @@ public class LifeController {
                 Toast.LENGTH_LONG).show();
 
         achievementsLevels.set(position, achievementsLevels.get(position) + 1);
-        updateAchievements();
         Hero hero = getHero();
         hero.setBaseXP(hero.getBaseXP() + (achievement.getReward() * 0.01));
         lifeEntity.updateHero(hero);
@@ -553,5 +551,9 @@ public class LifeController {
     public void setFirstRun(boolean isFirst){
         SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
         prefs.edit().putBoolean(FIRTS_RUN_TAG, isFirst).apply();
+    }
+
+    public void onActivityPause(){
+        updateAchievements();
     }
 }

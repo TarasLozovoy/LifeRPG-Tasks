@@ -55,7 +55,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         //v2+
         db.execSQL("create table " + MiscTable.NAME + " (" +
                 " _id integer primary key autoincrement, " +
-                MiscTable.Cols.IMAGE_AVATAR +
+                MiscTable.Cols.IMAGE_AVATAR + ", " +
+                MiscTable.Cols.ACHIEVES_LEVELS +
                 ")");
     }
 
@@ -66,11 +67,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 2){
-            db.execSQL("create table " + MiscTable.NAME + " (" +
-                    " _id integer primary key autoincrement, " +
-                    MiscTable.Cols.IMAGE_AVATAR +
-                    ")");
+        switch (oldVersion) {
+            case 1:
+                db.execSQL("create table " + MiscTable.NAME + " (" +
+                        " _id integer primary key autoincrement, " +
+                        MiscTable.Cols.IMAGE_AVATAR + ", " +
+                        MiscTable.Cols.ACHIEVES_LEVELS +
+                        ")");
+                break;
         }
     }
 }

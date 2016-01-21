@@ -147,6 +147,12 @@ public class MainActivity extends AppCompatActivity{
     }
 
     @Override
+    protected void onPause() {
+        lifeController.onActivityPause();
+        super.onPause();
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(SELECTED_FRAGMENT_TAG, currentFragmentID);
         super.onSaveInstanceState(outState);

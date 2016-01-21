@@ -519,10 +519,8 @@ public class LifeEntity {
 
     private void getMiscFromDB(){
         MiscCursorWrapper cursor = queryMisc(null, null);
-        try{
-            cursor.moveToFirst();
+        if (cursor != null && cursor.moveToFirst()) {
             cursor.updateMiscFromDB();
-        } finally {
             cursor.close();
         }
     }

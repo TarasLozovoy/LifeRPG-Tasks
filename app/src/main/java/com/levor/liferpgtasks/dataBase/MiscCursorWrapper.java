@@ -18,8 +18,11 @@ public class MiscCursorWrapper extends CursorWrapper {
     }
 
     public void updateMiscFromDB(){
-        String achievs = getString(getColumnIndex(MiscTable.Cols.ACHIEVES_LEVELS));
-        Misc.ACHIEVEMENTS_LEVELS = achievs.isEmpty() ? null : achievs;
-
+        int achievsIndex = getColumnIndex(MiscTable.Cols.ACHIEVES_LEVELS);
+        if (achievsIndex >= 0){
+            Misc.ACHIEVEMENTS_LEVELS = getString(achievsIndex);
+        } else {
+            Misc.ACHIEVEMENTS_LEVELS = null;
+        }
     }
 }
