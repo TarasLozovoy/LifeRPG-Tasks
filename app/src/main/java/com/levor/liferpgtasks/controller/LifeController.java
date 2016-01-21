@@ -122,6 +122,7 @@ public class LifeController {
     public void removeTask(Task task) {
         lifeEntity.removeTask(task);
         updateHomeScreenWidgets();
+        removeTaskNotification(task);
     }
     public String[] getCharacteristicsTitleAndLevelAsArray(){
         List<Characteristic> characteristics = lifeEntity.getCharacteristics();

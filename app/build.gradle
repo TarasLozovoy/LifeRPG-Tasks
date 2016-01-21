@@ -14,10 +14,15 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         release {
-            keyAlias 'liferpgtaskskey'
-            keyPassword 'kjkszpj007'
-            storeFile file('/home/dtv/Desktop/Dropbox/Java/Android/Signing!!!!/LifeRPGKeyStore.jks')
-            storePassword 'kjkszpj007'
+            File confFile = project.rootProject.file('signconfig.properties')
+            if (confFile.exists()) {
+                Properties properties = new Properties()
+                properties.load(confFile.newDataInputStream())
+                storeFile project.rootProject.file(properties.getProperty('RELEASE_STORE_FILE'))
+                storePassword properties.getProperty('RELEASE_STORE_PASSWORD')
+                keyAlias properties.getProperty('RELEASE_KEY_ALIAS')
+                keyPassword properties.getProperty('RELEASE_KEY_PASSWORD')
+            }
         }
     }
     compileSdkVersion 23

@@ -152,7 +152,7 @@ public class FilteredTasksFragment extends DefaultFragment{
                 return true;
             case DELETE_CONTEXT_MENU_ITEM:
                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle(getString(R.string.removing) + currentTask.getTitle())
+                alert.setTitle(getString(R.string.removing) + " " + currentTask.getTitle())
                         .setMessage(getString(R.string.removing_task_description))
                         .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                             @Override
