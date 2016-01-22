@@ -8,7 +8,7 @@ import static com.levor.liferpgtasks.dataBase.DataBaseSchema.*;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     private static final int VERSION = 2;
-    private static final String DATABASE_NAME = "RealLifeBase.db";
+    public static final String DATABASE_NAME = "RealLifeBase.db";
 
     public DataBaseHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);

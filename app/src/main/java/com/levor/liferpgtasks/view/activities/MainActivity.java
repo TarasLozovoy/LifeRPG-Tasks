@@ -2,6 +2,7 @@ package com.levor.liferpgtasks.view.activities;
 
 import android.app.Service;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity{
 
     InterstitialAd interstitialAd;
     private TabLayout navigationTabLayout;
+    private TabLayout.Tab heroNavigationTab;
     private static Stack<DefaultFragment> mainFragmentsStack = new Stack<>();
     private static Stack<DefaultFragment> tasksFragmentsStack = new Stack<>();
     private static Stack<DefaultFragment> settingsFragmentsStack = new Stack<>();
@@ -137,13 +139,13 @@ public class MainActivity extends AppCompatActivity{
     protected void onResume() {
         super.onResume();
         if (lifeController.isFirstRun()){
-            showCoachmarksForCurrentFragment();
+            showCoachmarks();
         }
     }
 
     @Override
     protected void onPause() {
-        lifeController.onActivityPause();
+        lifeController.updateMiscToDB();
         super.onPause();
     }
 
@@ -312,7 +314,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    private void setupNavigationTabs(){
+    protected void setupNavigationTabs(){
         Drawable d;
         try {
             InputStream is = getAssets().open(Misc.HERO_IMAGE_PATH);
@@ -324,12 +326,36 @@ public class MainActivity extends AppCompatActivity{
             return;
         }
         navigationTabLayout.removeAllTabs();
-        navigationTabLayout.addTab(navigationTabLayout.newTab().setIcon(d));
+        heroNavigationTab = navigationTabLayout.newTab().setIcon(d);
+        navigationTabLayout.addTab(heroNavigationTab);
         navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.tasks));
         navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.settings));
     }
 
-    public void showCoachmarksForCurrentFragment(){
+    private void updateHeroNavigationTab(){
+        try {
+            InputStream is = getAssets().open(Misc.HERO_IMAGE_PATH);
+            Drawable d = Drawable.createFromStream(is, null);
+            heroNavigationTab.setIcon(d);
+        } catch (IOException e) {}
+    }
+
+    public void onDBImported(){
+        getController().onNewDBImported();
+//        updateHeroNavigationTab();
+//        while (mainFragmentsStack.size() > 0 && mainFragmentsStack.peek().getClass() == MainFragment.class) {mainFragmentsStack.pop();}
+//        while (tasksFragmentsStack.size() > 0 && tasksFragmentsStack.peek().getClass() == TasksFragment.class) {tasksFragmentsStack.pop();}
+//        switchToRootFragment(SETTINGS_FRAGMENT_ID);
+
+        Intent intent = new Intent(this, MainActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        // TODO: 1/22/16  !!!!!!
+        finish();
+    }
+
+    public void showCoachmarks(){
         final View bottomCoachmarks = findViewById(R.id.bottom_coachmarks);
         final View xpCoachmarks = findViewById(R.id.xp_coachmarks);
         final View coachmarksDim = findViewById(R.id.coachmarks_dim);

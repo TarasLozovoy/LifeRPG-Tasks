@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.view.fragments.tasks.ExportImportDBFragment;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class SettingsFragment extends DefaultFragment {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
         Button showStatisticsButton = (Button) v.findViewById(R.id.show_statistics_button);
         Button showAchievementsButton = (Button) v.findViewById(R.id.show_achievements_button);
+        Button export_importDBButton = (Button) v.findViewById(R.id.export_db_button);
         Button contactButton = (Button) v.findViewById(R.id.contact_button);
         Button playMarketButton = (Button) v.findViewById(R.id.play_market_button);
 
@@ -37,6 +39,13 @@ public class SettingsFragment extends DefaultFragment {
             @Override
             public void onClick(View v) {
                 getCurrentActivity().showChildFragment(new AchievementsFragment(), null);
+            }
+        });
+
+        export_importDBButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().showChildFragment(new ExportImportDBFragment(), null);
             }
         });
 

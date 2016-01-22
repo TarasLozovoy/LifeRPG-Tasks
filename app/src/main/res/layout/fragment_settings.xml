@@ -1,45 +1,60 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.levor.liferpgtasks.view.fragments.SettingsFragment">
 
-    <Button
-        android:id="@+id/show_statistics_button"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/statistics"
-        style="@style/LifeRPGDefaultButton" />
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/show_achievements_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/show_statistics_button"
-        android:layout_marginBottom="2dp"
-        android:gravity="center"
-        android:text="@string/achievements"
-        style="@style/LifeRPGDefaultButton"/>
+        <Button
+            android:id="@+id/show_statistics_button"
+            style="@style/LifeRPGDefaultButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/statistics" />
 
-    <Button
-    android:id="@+id/contact_button"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/show_achievements_button"
-    android:layout_marginBottom="2dp"
-    android:gravity="center"
-    android:text="@string/contact"
-    style="@style/LifeRPGDefaultButton"/>
+        <Button
+            android:id="@+id/show_achievements_button"
+            style="@style/LifeRPGDefaultButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/show_statistics_button"
+            android:layout_marginBottom="2dp"
+            android:gravity="center"
+            android:text="@string/achievements" />
 
-    <Button
-        android:id="@+id/play_market_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/contact_button"
-        android:layout_marginBottom="2dp"
-        android:gravity="center"
-        android:text="@string/app_on_google_play"
-        style="@style/LifeRPGDefaultButton"/>
+        <Button
+            android:id="@+id/export_db_button"
+            style="@style/LifeRPGDefaultButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/show_achievements_button"
+            android:layout_marginBottom="2dp"
+            android:gravity="center"
+            android:text="@string/export_import_db" />
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/contact_button"
+            style="@style/LifeRPGDefaultButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/export_db_button"
+            android:layout_marginBottom="2dp"
+            android:gravity="center"
+            android:text="@string/contact" />
+
+        <Button
+            android:id="@+id/play_market_button"
+            style="@style/LifeRPGDefaultButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contact_button"
+            android:layout_marginBottom="2dp"
+            android:gravity="center"
+            android:text="@string/app_on_google_play" />
+
+    </RelativeLayout>
+</ScrollView>

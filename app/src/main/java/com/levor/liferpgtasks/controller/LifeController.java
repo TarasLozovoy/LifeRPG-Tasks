@@ -29,7 +29,6 @@ import com.vk.sdk.VKSdk;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -575,9 +574,23 @@ public class LifeController {
         prefs.edit().putBoolean(FIRTS_RUN_TAG, isFirst).apply();
     }
 
-    public void onActivityPause(){
+    public void updateMiscToDB(){
         updateAchievementsToMisc();
         updateStatisticsToMisc();
         lifeEntity.updateMiscToDB();
+    }
+
+    public void closeDBConnection(){
+        lifeEntity.closeDBConnection();
+    }
+
+    public void openDBConnection(){
+        lifeEntity.openDBConnection();
+    }
+
+    public void onNewDBImported(){
+        lifeEntity.onNewDBImported();
+        initAchievements();
+        initStatistics();
     }
 }

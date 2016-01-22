@@ -1,0 +1,29 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.levor.liferpgtasks.view.fragments.SettingsFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/export_db_to_filesystem"
+            style="@style/LifeRPGDefaultButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/export_db_to_filesystem" />
+
+        <Button
+            android:id="@+id/import_db_from_filesystem"
+            style="@style/LifeRPGDefaultButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/export_db_to_filesystem"
+            android:gravity="center"
+            android:text="@string/import_db_from_filesystem" />
+
+    </RelativeLayout>
+</ScrollView>

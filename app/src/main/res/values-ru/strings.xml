@@ -194,6 +194,13 @@
     <string name="notification_text">Пора выполнять задание!</string>
     <string name="removing">Удаление</string>
     <string name="error_on_loading_image">>Возникла ошибка при загрузке иконке. Выберите, пожалуйста, другую иконку.</string>
+    <string name="export_import_db">Испорт/Экспорт быза данных</string>
+    <string name="export_db_to_filesystem">Экспортировать в файловую систему</string>
+    <string name="db_exported_to_filesystem">База данных экспортирована в sdcard/LifeRGPTasks/LifeRPGTasksDB.db</string>
+    <string name="db_export_error">Ошибка при экспорте базы данных. Пожалуйста повторите операцию.</string>
+    <string name="import_db_from_filesystem">Импортировать базу данных из файловой системы</string>
+    <string name="db_imported">База данных импортирована</string>
+    <string name="db_import_error">Ошибка при импорте базы данных. Пожалуйста повторите операцию.</string>
     <!-- -->
 
 </resources>

@@ -206,6 +206,17 @@
     <string name="morning_running">Morning running</string>
     <!-- -->
 
+    <!-- DB-->
+
+    <string name="export_import_db">Import/Export data base</string>
+    <string name="export_db_to_filesystem">Export data base to filesystem</string>
+    <string name="db_exported_to_filesystem">Data base exported to sdcard/LifeRGPTasks/LifeRPGTasksDB.db</string>
+    <string name="db_export_error">Error while exporting data base. Please repeat operation.</string>
+    <string name="import_db_from_filesystem">Import data base from filesystem</string>
+    <string name="db_imported">Data base imported</string>
+    <string name="db_import_error">Error while importing data base. Please repeat operation.</string>
+    <!-- -->
+
     <!-- Other-->
     <string name="ok">OK</string>
     <string name="remove">Delete</string>

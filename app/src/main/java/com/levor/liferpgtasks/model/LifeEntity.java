@@ -33,6 +33,7 @@ public class LifeEntity {
     private List<Skill> skills;
     private List<Characteristic> characteristics;
     private Hero hero;
+    private Context context;
 
     public static LifeEntity getInstance(Context context){
         if (lifeEntity == null){
@@ -42,7 +43,8 @@ public class LifeEntity {
     }
 
     private LifeEntity(Context context) {
-        database = new DataBaseHelper(context.getApplicationContext()).getWritableDatabase();
+        this.context = context;
+        openDBConnection();
 
         String count = "SELECT count(*) FROM " + HeroTable.NAME;
         Cursor cursor = database.rawQuery(count, null);
@@ -551,5 +553,30 @@ public class LifeEntity {
                 return null;
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void closeDBConnection(){
+        if (database.isOpen()) {
+            database.close();
+        }
+    }
+
+    public void openDBConnection(){
+        if (database != null && !database.isOpen()){
+            database.close();
+        }
+        database = new DataBaseHelper(context.getApplicationContext()).getWritableDatabase();
+    }
+
+    public void onNewDBImported(){
+        hero = null;
+        hero = getHero();
+        characteristics = null;
+        characteristics = getCharacteristics();
+        skills = null;
+        skills = getSkills();
+        tasks = null;
+        tasks = getTasks();
+        getMiscFromDB();
     }
 }
