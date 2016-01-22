@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity{
     public final static int MAIN_FRAGMENT_ID = 0;
     public final static int TASKS_FRAGMENT_ID = 1;
     public final static int SETTINGS_FRAGMENT_ID = 2;
-    private static final String HERO_ICON_NAME_TAG = "hero_icon_name_tag";
     private static final String SELECTED_FRAGMENT_TAG = "selected_fragment_tag";
 
     protected LifeController lifeController;

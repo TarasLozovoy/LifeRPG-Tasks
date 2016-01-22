@@ -48,6 +48,7 @@ public class LifeController {
     public static final String XP_MULTIPLIER_TAG = "xp_multiplier_tag";
     public static final String ACHIEVEMENTS_COUNT_TAG = "achievements_count_tag";
     public static final String ACHIEVEMENTS_TAG = "achievements_tag";
+    private static final String HERO_ICON_NAME_TAG = "hero_icon_name_tag";
     private LifeEntity lifeEntity;
     private Context context;
     private Tracker tracker;
@@ -441,10 +442,15 @@ public class LifeController {
         String defaultString = Misc.ACHIEVEMENTS_LEVELS;
         achievementsLevels.clear();
 
-        //moving from preferences to DB
+        //moving from preferences to DB (from ver.2)
         if (defaultString == null) {
             SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
             defaultString = prefs.getString(ACHIEVEMENTS_TAG, null);
+            String imagePath = prefs.getString(HERO_ICON_NAME_TAG, null);
+            if (imagePath != null){
+                Misc.HERO_IMAGE_PATH = imagePath;
+                prefs.edit().putString(HERO_ICON_NAME_TAG, null).apply();
+            }
         }
 
         if (defaultString == null) {
