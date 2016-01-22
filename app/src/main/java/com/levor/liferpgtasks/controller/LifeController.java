@@ -48,6 +48,7 @@ public class LifeController {
     public static final String TOTAL_SKILLS_XP_TAG = "total_skills_xp_tag";
     public static final String XP_MULTIPLIER_TAG = "xp_multiplier_tag";
     public static final String ACHIEVEMENTS_COUNT_TAG = "achievements_count_tag";
+    public static final String ACHIEVEMENTS_TAG = "achievements_tag";
     private LifeEntity lifeEntity;
     private Context context;
     private Tracker tracker;
@@ -378,12 +379,13 @@ public class LifeController {
             statisticsNumbers.put(TOTAL_SKILLS_XP_TAG, numbers.get(4));
             statisticsNumbers.put(ACHIEVEMENTS_COUNT_TAG, numbers.get(5));
         } else {
-            statisticsNumbers.put(PERFORMED_TASKS_TAG, 0f);
-            statisticsNumbers.put(TOTAL_TASKS_NUMBER_TAG, 0f);
-            statisticsNumbers.put(FINISHED_TASKS_NUMBER_TAG, 0f);
-            statisticsNumbers.put(TOTAL_HERO_XP_TAG, 0f);
-            statisticsNumbers.put(TOTAL_SKILLS_XP_TAG, 0f);
-            statisticsNumbers.put(ACHIEVEMENTS_COUNT_TAG, 0f);
+            SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+            statisticsNumbers.put(PERFORMED_TASKS_TAG, prefs.getFloat(PERFORMED_TASKS_TAG, 0f));
+            statisticsNumbers.put(TOTAL_TASKS_NUMBER_TAG, prefs.getFloat(TOTAL_TASKS_NUMBER_TAG, 0f));
+            statisticsNumbers.put(FINISHED_TASKS_NUMBER_TAG, prefs.getFloat(FINISHED_TASKS_NUMBER_TAG, 0f));
+            statisticsNumbers.put(TOTAL_HERO_XP_TAG,prefs.getFloat(TOTAL_HERO_XP_TAG, 0f));
+            statisticsNumbers.put(TOTAL_SKILLS_XP_TAG, prefs.getFloat(TOTAL_SKILLS_XP_TAG, 0f));
+            statisticsNumbers.put(ACHIEVEMENTS_COUNT_TAG, prefs.getFloat(ACHIEVEMENTS_COUNT_TAG, 0f));
         }
         statisticsNumbers.put(XP_MULTIPLIER_TAG, (float)getHero().getBaseXP());
 
@@ -439,6 +441,13 @@ public class LifeController {
 
         String defaultString = Misc.ACHIEVEMENTS_LEVELS;
         achievementsLevels.clear();
+
+        //moving from preferences to DB
+        if (defaultString == null) {
+            SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+            defaultString = prefs.getString(ACHIEVEMENTS_TAG, null);
+        }
+
         if (defaultString == null) {
             for (int i = 0; i < AchievsList.values().length; i++) {
                 achievementsLevels.add(0);
