@@ -29,8 +29,10 @@ import com.vk.sdk.VKSdk;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedHashSet;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.levor.liferpgtasks.AchievsList.*;
@@ -45,12 +47,14 @@ public class LifeController {
     public static final String TOTAL_HERO_XP_TAG = "total_hero_xp_tag";
     public static final String TOTAL_SKILLS_XP_TAG = "total_skills_xp_tag";
     public static final String XP_MULTIPLIER_TAG = "xp_multiplier_tag";
-    public static final String ACHIEVEMENTS_TAG = "achievements_tag";
     public static final String ACHIEVEMENTS_COUNT_TAG = "achievements_count_tag";
     private LifeEntity lifeEntity;
     private Context context;
     private Tracker tracker;
     private List<Integer> achievementsLevels = new ArrayList<>();
+    private Map<String, Float> statisticsNumbers = new LinkedHashMap<>();
+
+    private static final String STAT_DIVIDER = " - ";
 
     private static LifeController LifeController;
     public static LifeController getInstance(Context context){
@@ -64,6 +68,7 @@ public class LifeController {
         lifeEntity = LifeEntity.getInstance(context);
         this.context = context;
         initAchievements();
+        initStatistics();
     }
 
     public void setGATracker(Tracker tracker){
@@ -359,43 +364,43 @@ public class LifeController {
             AppWidgetManager.getInstance(context).notifyAppWidgetViewDataChanged(id, R.id.widget_list_view);
     }
 
+    private void initStatistics(){
+        if (Misc.STATISTICS_NUMBERS != null) {
+            String[] numbersArray = Misc.STATISTICS_NUMBERS.split(STAT_DIVIDER);
+            List<Float> numbers = new ArrayList<>();
+            for (String aNumbersArray : numbersArray) {
+                numbers.add(Float.parseFloat(aNumbersArray));
+            }
+            statisticsNumbers.put(PERFORMED_TASKS_TAG, numbers.get(0));
+            statisticsNumbers.put(TOTAL_TASKS_NUMBER_TAG, numbers.get(1));
+            statisticsNumbers.put(FINISHED_TASKS_NUMBER_TAG, numbers.get(2));
+            statisticsNumbers.put(TOTAL_HERO_XP_TAG, numbers.get(3));
+            statisticsNumbers.put(TOTAL_SKILLS_XP_TAG, numbers.get(4));
+            statisticsNumbers.put(ACHIEVEMENTS_COUNT_TAG, numbers.get(5));
+        } else {
+            statisticsNumbers.put(PERFORMED_TASKS_TAG, 0f);
+            statisticsNumbers.put(TOTAL_TASKS_NUMBER_TAG, 0f);
+            statisticsNumbers.put(FINISHED_TASKS_NUMBER_TAG, 0f);
+            statisticsNumbers.put(TOTAL_HERO_XP_TAG, 0f);
+            statisticsNumbers.put(TOTAL_SKILLS_XP_TAG, 0f);
+            statisticsNumbers.put(ACHIEVEMENTS_COUNT_TAG, 0f);
+        }
+        statisticsNumbers.put(XP_MULTIPLIER_TAG, (float)getHero().getBaseXP());
+
+    }
+
     private void updateStatistics(String field, float value){
-        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
         switch (field) {
-            case PERFORMED_TASKS_TAG :
-                float tasksPerformed = prefs.getFloat(PERFORMED_TASKS_TAG, 0);
-                tasksPerformed += value;
-                prefs.edit().putFloat(PERFORMED_TASKS_TAG, tasksPerformed).apply();
-                break;
-            case TOTAL_TASKS_NUMBER_TAG :
-                float totalTasks = prefs.getFloat(TOTAL_TASKS_NUMBER_TAG, 0);
-                totalTasks += value;
-                prefs.edit().putFloat(TOTAL_TASKS_NUMBER_TAG, totalTasks).apply();
-                break;
-            case FINISHED_TASKS_NUMBER_TAG :
-                float finishedTasks = prefs.getFloat(FINISHED_TASKS_NUMBER_TAG, 0);
-                finishedTasks += value;
-                prefs.edit().putFloat(FINISHED_TASKS_NUMBER_TAG, finishedTasks).apply();
-                break;
-            case TOTAL_HERO_XP_TAG :
-                float totalHeroXP = prefs.getFloat(TOTAL_HERO_XP_TAG, 0);
-                totalHeroXP += value;
-                prefs.edit().putFloat(TOTAL_HERO_XP_TAG, totalHeroXP).apply();
-                break;
-            case TOTAL_SKILLS_XP_TAG :
-                float totalSkillsXP = prefs.getFloat(TOTAL_SKILLS_XP_TAG, 0);
-                totalSkillsXP += value;
-                prefs.edit().putFloat(TOTAL_SKILLS_XP_TAG, totalSkillsXP).apply();
-                break;
-            case ACHIEVEMENTS_COUNT_TAG :
-                float totalAchievesCount = prefs.getFloat(ACHIEVEMENTS_COUNT_TAG, 0);
-                totalAchievesCount += value;
-                prefs.edit().putFloat(ACHIEVEMENTS_COUNT_TAG, totalAchievesCount).apply();
-                break;
             case XP_MULTIPLIER_TAG :
                 Hero hero = getHero();
                 hero.setBaseXP(hero.getBaseXP() + value);
                 lifeEntity.updateHero(hero);
+                break;
+            default:
+                float prevValue = statisticsNumbers.get(field);
+                prevValue += value;
+                statisticsNumbers.put(field, prevValue);
+                break;
         }
     }
 
@@ -404,9 +409,17 @@ public class LifeController {
             case XP_MULTIPLIER_TAG:
                 return (float)getHero().getBaseXP();
             default:
-                SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-                return prefs.getFloat(field, 0);
+                return statisticsNumbers.get(field);
         }
+    }
+
+    private void updateStatisticsToMisc(){
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, Float> e : statisticsNumbers.entrySet()){
+            sb.append(e.getValue()).append(STAT_DIVIDER);
+        }
+        sb.delete(sb.length() - 3, sb.length() - 1);
+        Misc.STATISTICS_NUMBERS = sb.toString();
     }
 
     private void initAchievements(){
@@ -438,13 +451,13 @@ public class LifeController {
         }
     }
 
-    private void updateAchievements(){
+    private void updateAchievementsToMisc(){
         StringBuilder sb = new StringBuilder();
         for (Integer i : achievementsLevels){
             sb.append(i).append(",");
         }
         sb.deleteCharAt(sb.length() - 1);
-        lifeEntity.updateAchievementsLevels(sb.toString());
+        Misc.ACHIEVEMENTS_LEVELS = sb.toString();
     }
 
     private void unlockAchievement(AchievsList achievement){
@@ -554,6 +567,8 @@ public class LifeController {
     }
 
     public void onActivityPause(){
-        updateAchievements();
+        updateAchievementsToMisc();
+        updateStatisticsToMisc();
+        lifeEntity.updateMiscToDB();
     }
 }

@@ -2,8 +2,6 @@ package com.levor.liferpgtasks.view.activities;
 
 import android.app.Service;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +23,7 @@ import com.google.android.gms.ads.InterstitialAd;
 import com.levor.liferpgtasks.LifeRPGApplication;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.model.Misc;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.MainFragment;
 import com.levor.liferpgtasks.view.fragments.SettingsFragment;
@@ -53,7 +52,6 @@ public class MainActivity extends AppCompatActivity{
     private static Stack<DefaultFragment> settingsFragmentsStack = new Stack<>();
     private int currentFragmentID;
 
-    private String heroDefaultIconName;
     private long appClosingTime;
 
     @Override
@@ -68,9 +66,6 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-
-        SharedPreferences prefs = getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-        heroDefaultIconName = prefs.getString(HERO_ICON_NAME_TAG, "elegant5.png");
 
         navigationTabLayout = (TabLayout) findViewById(R.id.navigation_tab_layout);
         setupNavigationTabs();
@@ -303,16 +298,14 @@ public class MainActivity extends AppCompatActivity{
 
     public void setHeroImageName(String name){
         if (name != null) {
-            heroDefaultIconName = name;
+            Misc.HERO_IMAGE_PATH = name;
             setupNavigationTabs();
-            SharedPreferences prefs = getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-            prefs.edit().putString(HERO_ICON_NAME_TAG, heroDefaultIconName).apply();
         }
     }
 
     public Bitmap getHeroIconBitmap(){
         try {
-            InputStream is = getAssets().open(heroDefaultIconName);
+            InputStream is = getAssets().open(Misc.HERO_IMAGE_PATH);
             return BitmapFactory.decodeStream(is);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -322,10 +315,10 @@ public class MainActivity extends AppCompatActivity{
     private void setupNavigationTabs(){
         Drawable d;
         try {
-            InputStream is = getAssets().open(heroDefaultIconName);
+            InputStream is = getAssets().open(Misc.HERO_IMAGE_PATH);
             d = Drawable.createFromStream(is, null);
         } catch (IOException e) {
-            heroDefaultIconName = "elegant5.png";
+            Misc.HERO_IMAGE_PATH = "elegant5.png";
             Toast.makeText(this, R.string.error_on_loading_image, Toast.LENGTH_LONG).show();
             setupNavigationTabs();
             return;

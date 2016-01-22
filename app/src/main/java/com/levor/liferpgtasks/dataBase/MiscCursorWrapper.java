@@ -17,12 +17,9 @@ public class MiscCursorWrapper extends CursorWrapper {
         super(cursor);
     }
 
-    public void updateMiscFromDB(){
-        int achievsIndex = getColumnIndex(MiscTable.Cols.ACHIEVES_LEVELS);
-        if (achievsIndex >= 0){
-            Misc.ACHIEVEMENTS_LEVELS = getString(achievsIndex);
-        } else {
-            Misc.ACHIEVEMENTS_LEVELS = null;
-        }
+    public void updateMiscFromDB() {
+        Misc.ACHIEVEMENTS_LEVELS = getString(getColumnIndex(MiscTable.Cols.ACHIEVES_LEVELS));
+        Misc.STATISTICS_NUMBERS = getString(getColumnIndex(MiscTable.Cols.STATISTICS_NUMBERS));
+        Misc.HERO_IMAGE_PATH = getString(getColumnIndex(MiscTable.Cols.IMAGE_AVATAR));
     }
 }

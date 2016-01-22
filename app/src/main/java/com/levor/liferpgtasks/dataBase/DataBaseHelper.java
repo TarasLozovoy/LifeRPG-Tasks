@@ -56,6 +56,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL("create table " + MiscTable.NAME + " (" +
                 " _id integer primary key autoincrement, " +
                 MiscTable.Cols.IMAGE_AVATAR + ", " +
+                MiscTable.Cols.STATISTICS_NUMBERS + ", " +
                 MiscTable.Cols.ACHIEVES_LEVELS +
                 ")");
     }
@@ -72,6 +73,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 db.execSQL("create table " + MiscTable.NAME + " (" +
                         " _id integer primary key autoincrement, " +
                         MiscTable.Cols.IMAGE_AVATAR + ", " +
+                        MiscTable.Cols.STATISTICS_NUMBERS + ", " +
                         MiscTable.Cols.ACHIEVES_LEVELS +
                         ")");
                 break;

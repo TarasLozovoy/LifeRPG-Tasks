@@ -53,6 +53,7 @@ public class DataBaseSchema {
 
         public static final class Cols {
             public static final String ACHIEVES_LEVELS = "achievements_levels";
+            public static final String STATISTICS_NUMBERS = "statistics_numbers";
             public static final String IMAGE_AVATAR = "hero_image_avatar";
         }
     }

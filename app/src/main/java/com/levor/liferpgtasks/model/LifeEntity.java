@@ -92,12 +92,14 @@ public class LifeEntity {
                     getSkillByTitle(context.getString(R.string.running)));
 
             addHero(new Hero(0, 0, 1, context.getString(R.string.default_hero_name)));
+
+            addMiscToDB(); //added for version 1.0.2
         } else {
             hero = getHero();
             characteristics = getCharacteristics();
             skills = getSkills();
             tasks = getTasks();
-            getMiscFromDB();
+            getMiscFromDB();    //added for version 1.0.2
 
             //adding new characteristic for new version (1.0.2)
             Characteristic health = new Characteristic(context.getString(R.string.health), 1);
@@ -514,18 +516,33 @@ public class LifeEntity {
     private static ContentValues getContentValuesForMisc() {
         ContentValues values = new ContentValues();
         values.put(MiscTable.Cols.ACHIEVES_LEVELS, Misc.ACHIEVEMENTS_LEVELS);
+        values.put(MiscTable.Cols.STATISTICS_NUMBERS, Misc.STATISTICS_NUMBERS);
+        values.put(MiscTable.Cols.IMAGE_AVATAR, Misc.HERO_IMAGE_PATH);
         return values;
     }
 
-    private void getMiscFromDB(){
+    private void getMiscFromDB() {
         MiscCursorWrapper cursor = queryMisc(null, null);
         if (cursor != null && cursor.moveToFirst()) {
             cursor.updateMiscFromDB();
             cursor.close();
+        } else {
+            addMiscToDB();
         }
     }
 
-    private void updateMiscToDB(){
+    private void addMiscToDB(){
+        final ContentValues values = getContentValuesForMisc();
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                database.insert(MiscTable.NAME, null, values);
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void updateMiscToDB(){
         final ContentValues values = getContentValuesForMisc();
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -534,10 +551,5 @@ public class LifeEntity {
                 return null;
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-    public void updateAchievementsLevels(String levels){
-        Misc.ACHIEVEMENTS_LEVELS = levels;
-        updateMiscToDB();
     }
 }
