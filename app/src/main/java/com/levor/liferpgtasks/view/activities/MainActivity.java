@@ -150,6 +150,12 @@ public class MainActivity extends AppCompatActivity{
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        getCurrentFragmentsStack().peek().onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(SELECTED_FRAGMENT_TAG, currentFragmentID);
         super.onSaveInstanceState(outState);
@@ -342,17 +348,11 @@ public class MainActivity extends AppCompatActivity{
 
     public void onDBImported(){
         getController().onNewDBImported();
-//        updateHeroNavigationTab();
-//        while (mainFragmentsStack.size() > 0 && mainFragmentsStack.peek().getClass() == MainFragment.class) {mainFragmentsStack.pop();}
-//        while (tasksFragmentsStack.size() > 0 && tasksFragmentsStack.peek().getClass() == TasksFragment.class) {tasksFragmentsStack.pop();}
-//        switchToRootFragment(SETTINGS_FRAGMENT_ID);
-
-        Intent intent = new Intent(this, MainActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        // TODO: 1/22/16  !!!!!!
-        finish();
+        updateHeroNavigationTab();
+        mainFragmentsStack = new Stack<>();
+        tasksFragmentsStack = new Stack<>();
+        mainFragmentsStack.add(new MainFragment());
+        tasksFragmentsStack.add(new TasksFragment());
     }
 
     public void showCoachmarks(){

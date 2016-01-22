@@ -1,5 +1,9 @@
 package com.levor.liferpgtasks.view.fragments.tasks;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.LayoutInflater;
@@ -17,8 +21,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class ExportImportDBFragment extends DefaultFragment {
+    private static final int SELECT_FILE_IN_FILESYSTEM = 100;
+
     public static final String DB_EXPORT_PATH = Environment.getExternalStorageDirectory().getPath()
             +"/LifeRGPTasks/";
     public static final String DB_EXPORT_FILE_NAME = DB_EXPORT_PATH + "LifeRPGTasksDB.db";
@@ -46,7 +53,10 @@ public class ExportImportDBFragment extends DefaultFragment {
                         Toast.makeText(getContext(), getString(R.string.db_exported_to_filesystem), Toast.LENGTH_LONG)
                                 .show();
                     } catch (IOException e){
-                        Toast.makeText(getContext(), getString(R.string.db_export_error), Toast.LENGTH_LONG)
+                        String message = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ?
+                                getString(R.string.db_export_error_android6) :
+                                getString(R.string.db_export_error);
+                        Toast.makeText(getContext(), message, Toast.LENGTH_LONG)
                                 .show();
                     } finally {
                         getController().openDBConnection();
@@ -58,8 +68,45 @@ public class ExportImportDBFragment extends DefaultFragment {
         importFromFileSystem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showFileChooserDialog();
+            }
+        });
+
+        setHasOptionsMenu(true);
+        getCurrentActivity().setActionBarTitle(getResources().getString(R.string.db_export_import_title));
+        getCurrentActivity().showActionBarHomeButtonAsBack(true);
+        return v;
+    }
+
+    @Override
+    public void onResume() {
+        getController().updateMiscToDB();
+        super.onResume();
+    }
+
+    private void showFileChooserDialog(){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        try {
+            startActivityForResult(
+                    Intent.createChooser(intent, "Select a File to Upload"),
+                    SELECT_FILE_IN_FILESYSTEM);
+        } catch (android.content.ActivityNotFoundException ex) {
+            // TODO: 22.01.2016 custom filechooser
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK){
+            if (requestCode == SELECT_FILE_IN_FILESYSTEM){
+                Uri uri = data.getData();
+                String path = FileUtils.getPathFromUri(getCurrentActivity(), uri);
+
                 getController().closeDBConnection();
-                File newDB = new File(DB_EXPORT_FILE_NAME);
+                File newDB = new File(path);
                 File oldDB = getCurrentActivity().getDatabasePath(DataBaseHelper.DATABASE_NAME);
                 if (newDB.exists()){
                     try {
@@ -76,17 +123,6 @@ public class ExportImportDBFragment extends DefaultFragment {
                     }
                 }
             }
-        });
-
-        setHasOptionsMenu(true);
-        getCurrentActivity().setActionBarTitle(getResources().getString(R.string.settings));
-        getCurrentActivity().showActionBarHomeButtonAsBack(true);
-        return v;
-    }
-
-    @Override
-    public void onResume() {
-        getController().updateMiscToDB();
-        super.onResume();
+        }
     }
 }

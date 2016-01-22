@@ -14,11 +14,11 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         release {
-            File confFile = project.rootProject.file('signconfig.properties')
+            File confFile = project.file('signconfig.properties')
             if (confFile.exists()) {
                 Properties properties = new Properties()
                 properties.load(confFile.newDataInputStream())
-                storeFile project.rootProject.file(properties.getProperty('RELEASE_STORE_FILE'))
+                storeFile project.file(properties.getProperty('RELEASE_STORE_FILE'))
                 storePassword properties.getProperty('RELEASE_STORE_PASSWORD')
                 keyAlias properties.getProperty('RELEASE_KEY_ALIAS')
                 keyPassword properties.getProperty('RELEASE_KEY_PASSWORD')
@@ -31,13 +31,11 @@ android {
         applicationId "com.levor.liferpgtasks"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.0.2"
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
     }
@@ -54,12 +52,6 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.0'
-    compile 'com.android.support:design:23.1.0'
-    compile 'com.facebook.android:facebook-android-sdk:4.7.0'
-    compile 'com.google.android.gms:play-services-plus:8.3.0'
-    compile 'com.google.android.gms:play-services-analytics:8.3.0'
-    compile 'com.google.android.gms:play-services-ads:8.3.0'
     compile('com.twitter.sdk.android:tweet-composer:1.0.2@aar') {
         transitive = true;
     }
@@ -67,4 +59,10 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
+    compile 'com.facebook.android:facebook-android-sdk:4.7.0'
+    compile 'com.google.android.gms:play-services-plus:8.3.0'
+    compile 'com.google.android.gms:play-services-analytics:8.3.0'
+    compile 'com.google.android.gms:play-services-ads:8.3.0'
 }
