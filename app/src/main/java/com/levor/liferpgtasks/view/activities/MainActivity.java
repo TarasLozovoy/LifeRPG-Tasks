@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -37,13 +36,11 @@ import java.util.EmptyStackException;
 import java.util.Random;
 import java.util.Stack;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends BackUpActivity{
     public final static int MAIN_FRAGMENT_ID = 0;
     public final static int TASKS_FRAGMENT_ID = 1;
     public final static int SETTINGS_FRAGMENT_ID = 2;
     private static final String SELECTED_FRAGMENT_TAG = "selected_fragment_tag";
-
-    protected LifeController lifeController;
 
     InterstitialAd interstitialAd;
     private TabLayout navigationTabLayout;
@@ -58,11 +55,10 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        lifeController = LifeController.getInstance(getApplicationContext());
+        lifeController.setCurrentActivity(this);
 
         //setting up Google Analytics
-        LifeRPGApplication application = (LifeRPGApplication) getApplication();
-        lifeController.setGATracker(application.getDefaultTracker());
+        lifeController.setGATracker(getCurrentApplication().getDefaultTracker());
 
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -345,6 +341,7 @@ public class MainActivity extends AppCompatActivity{
         } catch (IOException e) {}
     }
 
+    @Override
     public void onDBImported(){
         getController().onNewDBImported();
         updateHeroNavigationTab();

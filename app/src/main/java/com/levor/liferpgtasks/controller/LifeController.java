@@ -22,6 +22,7 @@ import com.levor.liferpgtasks.model.LifeEntity;
 import com.levor.liferpgtasks.model.Misc;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
+import com.levor.liferpgtasks.view.activities.MainActivity;
 import com.levor.liferpgtasks.widget.LifeRPGWidgetProvider;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
@@ -48,10 +49,13 @@ public class LifeController {
     public static final String XP_MULTIPLIER_TAG = "xp_multiplier_tag";
     public static final String ACHIEVEMENTS_COUNT_TAG = "achievements_count_tag";
     public static final String ACHIEVEMENTS_TAG = "achievements_tag";
+    public static final String DROPBOX_AUTO_BACKUP_ENABLED = "dropbox_auto_backup_enabled";
+    public final static String DROPBOX_ACCESS_TOKEN_TAG = "db_access_token_tag";
     private static final String HERO_ICON_NAME_TAG = "hero_icon_name_tag";
     private LifeEntity lifeEntity;
     private Context context;
     private Tracker tracker;
+    private MainActivity currentActivity;
     private List<Integer> achievementsLevels = new ArrayList<>();
     private Map<String, Float> statisticsNumbers = new LinkedHashMap<>();
 
@@ -78,6 +82,10 @@ public class LifeController {
 
     public Tracker getGATracker() {
         return tracker;
+    }
+
+    public void setCurrentActivity(MainActivity activity){
+        this.currentActivity = activity;
     }
 
     public void sendScreenNameToAnalytics(String name){
@@ -107,15 +115,18 @@ public class LifeController {
         updateHomeScreenWidgets();
         updateStatistics(TOTAL_TASKS_NUMBER_TAG, 1);
         checkAchievements();
+        performBackUpToDropBox();
     }
 
     public void updateTask(Task task) {
         lifeEntity.updateTask(task);
         updateHomeScreenWidgets();
+        performBackUpToDropBox();
     }
 
     public void addSkill(String title, Characteristic keyChar){
         lifeEntity.addSkill(title, keyChar);
+        performBackUpToDropBox();
     }
 
     public Skill getSkillByTitle(String title) {
@@ -130,6 +141,7 @@ public class LifeController {
         lifeEntity.removeTask(task);
         updateHomeScreenWidgets();
         removeTaskNotification(task);
+        performBackUpToDropBox();
     }
     public String[] getCharacteristicsTitleAndLevelAsArray(){
         List<Characteristic> characteristics = lifeEntity.getCharacteristics();
@@ -177,6 +189,7 @@ public class LifeController {
             t.setRelatedSkills(newSkills);
         }
         lifeEntity.removeSkill(skill);
+        performBackUpToDropBox();
     }
 
     public boolean performTask(Task task){
@@ -233,6 +246,7 @@ public class LifeController {
         }
         ///GA
 
+        performBackUpToDropBox();
         checkAchievements();
         return isLevelIncreased;
     }
@@ -258,6 +272,7 @@ public class LifeController {
         updateStatistics(TOTAL_HERO_XP_TAG, (float) -finalXP);
         updateStatistics(PERFORMED_TASKS_TAG, -1);
         checkAchievements();
+        performBackUpToDropBox();
         return isLevelChanged;
     }
 
@@ -276,11 +291,13 @@ public class LifeController {
                     .build());
         }
         checkAchievements();
+        performBackUpToDropBox();
         return  isLevelIncreased;
     }
 
     public void updateSkill(Skill skill) {
         lifeEntity.updateSkill(skill);
+        performBackUpToDropBox();
     }
 
     public Hero getHero(){
@@ -307,6 +324,7 @@ public class LifeController {
         Hero hero = lifeEntity.getHero();
         hero.setName(name);
         lifeEntity.updateHero(hero);
+        performBackUpToDropBox();
     }
 
     public void setupTasksNotifications(){
@@ -404,6 +422,7 @@ public class LifeController {
                 statisticsNumbers.put(field, prevValue);
                 break;
         }
+        performBackUpToDropBox();
     }
 
     public float getStatisticsValue(String field){
@@ -494,6 +513,8 @@ public class LifeController {
                 .setAction(context.getString(R.string.GA_achievement_unlocked) + " " + achievement.name())
                 .setValue(1)
                 .build());
+
+        performBackUpToDropBox();
     }
 
     public List<Integer> getAchievementsLevels(){
@@ -598,5 +619,16 @@ public class LifeController {
         lifeEntity.onNewDBImported();
         initAchievements();
         initStatistics();
+    }
+
+    public boolean isDropBoxAutoBackupEnabled(){
+        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+        return prefs.getBoolean(DROPBOX_AUTO_BACKUP_ENABLED, false);
+    }
+
+    private void performBackUpToDropBox(){
+        if (isDropBoxAutoBackupEnabled()){
+            currentActivity.checkAndBackupToDropBox();
+        }
     }
 }

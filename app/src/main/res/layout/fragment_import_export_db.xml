@@ -8,11 +8,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <RelativeLayout
+            android:id="@+id/export_db_to_dropbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/save_zone_margin">
+
+            <TextView
+                style="@style/LifeRPGTextTitleStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/auto_backup_to_dropbox"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/auto_backup_to_dropbox_text_view"/>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/export_dropbox_checkbox"
+                android:layout_marginLeft="3dp"
+                android:layout_toRightOf="@id/auto_backup_to_dropbox_text_view"/>
+
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/import_db_from_dropbox"
+            style="@style/LifeRPGDefaultButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/export_db_to_dropbox"
+            android:gravity="center"
+            android:text="@string/import_db_from_dropbox" />
+
         <Button
             android:id="@+id/export_db_to_filesystem"
             style="@style/LifeRPGDefaultButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/import_db_from_dropbox"
             android:gravity="center"
             android:text="@string/export_db_to_filesystem" />
 

@@ -221,6 +221,26 @@
     <string name="db_export_import_title">Import/Export DB</string>
     <!-- -->
 
+    <!-- Dropbox-->
+    <string name="dropbox_app_key">wszp50bxwdv3yeh</string>
+    <string name="dropbox_app_secret">wr9p9g63xworvgu</string>
+    <string name="dropbox_backup_error">Error while exporting data base to dropbox</string>
+    <string name="backup_db_to_dropbox_alert_title">Backup to Dropbox</string>
+    <string name="backup_db_to_dropbox_already_contains">Dropbox already contains LifeRPG Tasks data
+        base file. Download and import it?</string>
+    <string name="backup_db_to_dropbox_no_rewrite">No, export local</string>
+    <string name="importing_dp_from_dropbox">Import DB from Dropbox?</string>
+    <string name="db_import">DB import</string>
+    <string name="backup_db_to_dropbox_conflict">DB version in Dropbox was backed up from another device and may be different.
+        Select main version.</string>
+    <string name="import_dropbox">Import from Dropbox</string>
+    <string name="export_local">Export local</string>
+    <string name="export_db_to_dropbox">Export data base to Dropbox</string>
+    <string name="import_db_from_dropbox">Import data base from Dropbox</string>
+    <string name="auto_backup_to_dropbox">Auto backup to Dropbox</string>
+    <string name="authorization_required">Authorization required</string>
+    <!-- -->
+
     <!-- Other-->
     <string name="ok">OK</string>
     <string name="remove">Delete</string>

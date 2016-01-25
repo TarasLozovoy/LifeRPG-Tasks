@@ -167,6 +167,7 @@ public class DetailedTaskFragment extends DefaultFragment {
     private void setupListView(){
         ArrayList<String> skills = new ArrayList<>();
         for (Skill sk : currentTask.getRelatedSkills()) {
+            if (sk == null) continue;
             DecimalFormat df = new DecimalFormat("#.##");
             skills.add(sk.getTitle() + " - " + sk.getLevel() + "(" + df.format(sk.getSublevel()) + ")");
         }

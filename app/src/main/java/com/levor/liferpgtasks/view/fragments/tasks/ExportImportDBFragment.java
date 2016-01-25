@@ -1,7 +1,9 @@
 package com.levor.liferpgtasks.view.fragments.tasks;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,10 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.Utils.FileUtils;
+import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.dataBase.DataBaseHelper;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
@@ -21,7 +26,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 public class ExportImportDBFragment extends DefaultFragment {
     private static final int SELECT_FILE_IN_FILESYSTEM = 100;
@@ -34,8 +38,30 @@ public class ExportImportDBFragment extends DefaultFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_import_export_db, container, false);
+        CheckBox exportToDropbox = (CheckBox) v.findViewById(R.id.export_dropbox_checkbox);
+        Button importFromDropbox = (Button) v.findViewById(R.id.import_db_from_dropbox);
         Button exportToFileSystem = (Button) v.findViewById(R.id.export_db_to_filesystem);
         Button importFromFileSystem = (Button) v.findViewById(R.id.import_db_from_filesystem);
+
+        SharedPreferences prefs = getCurrentActivity().getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+        exportToDropbox.setChecked(prefs.getBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, false));
+        exportToDropbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences prefs = getCurrentActivity().getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+                prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, isChecked).apply();
+                if (isChecked) {
+                    getCurrentActivity().checkAndBackupToDropBox();
+                }
+            }
+        });
+
+        importFromDropbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().checkAndImportFromDropBox();
+            }
+        });
 
         exportToFileSystem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,8 +118,7 @@ public class ExportImportDBFragment extends DefaultFragment {
             startActivityForResult(
                     Intent.createChooser(intent, "Select a File to Upload"),
                     SELECT_FILE_IN_FILESYSTEM);
-        } catch (android.content.ActivityNotFoundException ex) {
-            // TODO: 22.01.2016 custom filechooser
+        } catch (android.content.ActivityNotFoundException ignored) {
         }
     }
 

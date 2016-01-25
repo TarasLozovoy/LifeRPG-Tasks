@@ -193,8 +193,25 @@
     <string name="db_import_error">Ошибка при импорте базы данных. Пожалуйста повторите операцию.</string>
     <string name="db_import_error_android6">Ошибка при импорте базы данных.
         Убедитесь, что у приложение есть разрешение на работу с файловой системой.</string>
-
     <string name="db_export_import_title">Импорт/Экспорт БД</string>
+    <!-- -->
+
+    <!-- Dropbox-->
+    <string name="Dropbox_backup_error">Ошибка при выгрузке базы данных в Dropbox.</string>
+    <string name="backup_db_to_Dropbox_alert_title">Экспорт в Dropbox</string>
+    <string name="backup_db_to_Dropbox_already_contains">Dropbox уже содержит базу данных приложения.
+        Скачать ее и импортировать?</string>
+    <string name="backup_db_to_Dropbox_no_rewrite">Нет, экспорт локальной ДБ</string>
+    <string name="importing_dp_from_Dropbox">Импортировать БД из Dropbox?</string>
+    <string name="db_import">Импорт базы данных</string>
+    <string name="backup_db_to_Dropbox_conflict">База данных в Dropbox отличается от локальной.
+        Выберите основую версию.</string>
+    <string name="import_Dropbox">Ипортировать из Dropbox</string>
+    <string name="export_local">Экспортировать локальную</string>
+    <string name="export_db_to_Dropbox">Экспортировать в Dropbox</string>
+    <string name="import_db_from_Dropbox">Импортировать из Dropbox</string>
+    <string name="auto_backup_to_Dropbox">Автоэкспорт в Dropbox</string>
+    <string name="authorization_required">Необходима авторизация</string>
     <!-- -->
 
     <!-- Other-->
