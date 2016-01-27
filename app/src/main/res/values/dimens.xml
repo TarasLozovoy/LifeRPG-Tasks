@@ -6,6 +6,7 @@
 
     <dimen name="default_title_text_size">22sp</dimen>
     <dimen name="default_text_size">17sp</dimen>
+    <dimen name="default_text_in_list_size">20sp</dimen>
     <dimen name="add_task_fragment_default_margin">15dp</dimen>
     <dimen name="save_zone_margin">11dp</dimen>
 

@@ -1,18 +1,9 @@
 package com.levor.liferpgtasks.view.fragments.tasks;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,9 +19,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -38,12 +29,15 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.adapters.TaskAddingAdapter;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.model.Task.RepeatMode;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static com.levor.liferpgtasks.model.Task.DateMode;
 
 public class AddTaskFragment extends DefaultFragment {
     public static final String RECEIVED_SKILL_TITLE_TAG = "received_skill_tag";
@@ -58,18 +52,33 @@ public class AddTaskFragment extends DefaultFragment {
     private final String REPEAT_CHECKBOX_TAG = "repeat_checkbox_tag";
 
     protected EditText taskTitleEditText;
-    protected EditText taskRepeatEditText;
-    protected CheckBox repeatCheckbox;
+    protected TextView dateTextView;
+    protected View dateView;
+    protected TextView notifyTextView;
+    protected View notifyView;
+    protected TextView repeatTextView;
+    protected View repeatView;
+    protected TextView difficultyTextView;
+    protected View difficultyView;
+    protected TextView importanceTextView;
+    protected View importanceView;
+    protected TextView relatedSkillsTextView;
+    protected View relatedSkillsView;
+
     protected CheckBox notifyCheckbox;
     protected Spinner difficultySpinner;
     protected Spinner importanceSpinner;
-    private ListView listView;
-    private Button dateButton;
-    private Button timeButton;
-    private Button addSkillButton;
-    protected LinearLayout repeatDetailedLayout;
 
-    Date date;
+    private ListView listView;
+
+    private Button addSkillButton;
+
+    protected Date date;
+    protected int dateMode = DateMode.TERMLESS;
+    protected int repeatability;
+    protected int repeatMode;
+    protected int[] repeatDaysOfWeek;
+    protected int repeatIndex = 1;
     protected ArrayList<String> relatedSkills = new ArrayList<>();
 
     @Override
@@ -79,32 +88,47 @@ public class AddTaskFragment extends DefaultFragment {
         listView = (ListView) view;
         View header = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.add_task_header, null);
         taskTitleEditText = (EditText) header.findViewById(R.id.task_title_edit_text);
-        dateButton = (Button) header.findViewById(R.id.date_button);
-        timeButton = (Button) header.findViewById(R.id.time_button);
+        dateTextView = (TextView) header.findViewById(R.id.date_time_text_view);
+        dateView = header.findViewById(R.id.date_time_layout);
+        repeatTextView = (TextView) header.findViewById(R.id.repeat_text_view);
+        repeatView = header.findViewById(R.id.repeat_layout);
+        notifyTextView = (TextView) header.findViewById(R.id.notification_text_view);
+        notifyView = header.findViewById(R.id.notification_layout);
+        difficultyTextView = (TextView) header.findViewById(R.id.difficulty_text_view);
+        difficultyView = header.findViewById(R.id.difficulty_layout);
+        importanceTextView = (TextView) header.findViewById(R.id.importance_text_view);
+        importanceView = header.findViewById(R.id.importance_layout);
+        relatedSkillsTextView = (TextView) header.findViewById(R.id.related_skills_text_view);
+        relatedSkillsView = header.findViewById(R.id.related_skills_layout);
+
         addSkillButton = (Button) header.findViewById(R.id.add_related_skill_button);
-        taskRepeatEditText = (EditText) header.findViewById(R.id.task_repeat_times_edit_text);
         difficultySpinner = (Spinner) header.findViewById(R.id.difficulty_spinner);
         importanceSpinner = (Spinner) header.findViewById(R.id.importance_spinner);
-        repeatCheckbox = (CheckBox) header.findViewById(R.id.repeat_checkbox);
         notifyCheckbox = (CheckBox) header.findViewById(R.id.notify_checkbox);
-        repeatDetailedLayout = (LinearLayout) header.findViewById(R.id.task_repeat_detailed_linear_layout);
+
+        dateTextView.setText(getString(R.string.task_date_termless));
+        repeatTextView.setText(getString(R.string.task_repeat_do_not_repeat));
+        notifyTextView.setText(getString(R.string.task_add_notification));
+        String difficultyString = getString(R.string.difficulty) + " " + getResources().getStringArray(R.array.difficulties_array)[0];
+        difficultyTextView.setText(difficultyString);
+        String importanceString = getString(R.string.importance) + " " + getResources().getStringArray(R.array.importance_array)[0];
+        importanceTextView.setText(importanceString);
+        relatedSkillsTextView.setText(R.string.add_skill_to_task);
 
         setupSpinners();
-        registerListeners(view);
+        registerListeners();
         if (savedInstanceState != null) {
             taskTitleEditText.setText(savedInstanceState.getString(TASK_TITLE_TAG));
             relatedSkills = savedInstanceState.getStringArrayList(RELATED_SKILLS_TAG);
-            taskRepeatEditText.setText(savedInstanceState.getString(REPEAT_TAG));
             difficultySpinner.setSelection(savedInstanceState.getInt(DIFFICULTY_TAG));
             importanceSpinner.setSelection(savedInstanceState.getInt(IMPORTANCE_TAG));
             date = new Date (savedInstanceState.getLong(DATE_TAG));
             notifyCheckbox.setChecked(savedInstanceState.getBoolean(NOTIFY_TAG, true));
-            repeatCheckbox.setChecked(savedInstanceState.getBoolean(REPEAT_CHECKBOX_TAG, true));
         } else {
             date = new Date();
             notifyCheckbox.setChecked(true);
         }
-        setupDateTimeButtons(date);
+        updateDateView();
         listView.addHeaderView(header);
         setupListView();
 
@@ -167,12 +191,10 @@ public class AddTaskFragment extends DefaultFragment {
     public void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(TASK_TITLE_TAG, taskTitleEditText.getText().toString());
         outState.putSerializable(RELATED_SKILLS_TAG, relatedSkills);
-        outState.putSerializable(REPEAT_TAG, taskRepeatEditText.getText().toString());
         outState.putSerializable(DIFFICULTY_TAG, difficultySpinner.getSelectedItemPosition());
         outState.putSerializable(IMPORTANCE_TAG, importanceSpinner.getSelectedItemPosition());
         outState.putSerializable(DATE_TAG, date);
         outState.putSerializable(NOTIFY_TAG, notifyCheckbox.isChecked());
-        outState.putSerializable(REPEAT_CHECKBOX_TAG, repeatCheckbox.isChecked());
         super.onSaveInstanceState(outState);
     }
 
@@ -259,51 +281,149 @@ public class AddTaskFragment extends DefaultFragment {
         updateListView();
     }
 
-    private void registerListeners(final View view) {
-        repeatCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                repeatDetailedLayout.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-            }
-        });
-        taskRepeatEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().equals("")) s = "-1";
-                int repeat = Integer.parseInt(s.toString());
-                if (repeat > 999) {
-                    taskRepeatEditText.setText(Integer.toString(999));
-                    taskRepeatEditText.setSelection(taskRepeatEditText.getText().length());
-                    Snackbar.make(view, view.getResources().getString(R.string.max_task_repeat), Snackbar.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        dateButton.setOnClickListener(new View.OnClickListener() {
+    private void registerListeners() {
+        dateView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new SelectDateFragmentTrans();
-                newFragment.show(getFragmentManager(), "DatePicker");
+                String[] dateVariants = getResources().getStringArray(R.array.date_pick_array);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                        android.R.layout.select_dialog_item, dateVariants);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                dateMode = DateMode.TERMLESS;
+                                break;
+                            case 1:
+                                Calendar cal = Calendar.getInstance();
+                                cal.set(Calendar.HOUR_OF_DAY, 23);
+                                cal.set(Calendar.MINUTE, 59);
+                                cal.set(Calendar.SECOND, 59);
+                                date = cal.getTime();
+                                dateMode = DateMode.WHOLE_DAY;
+                                break;
+                            case 2:
+                                Calendar c = Calendar.getInstance();
+                                c.add(Calendar.DAY_OF_MONTH, 1);
+                                c.set(Calendar.HOUR_OF_DAY, 23);
+                                c.set(Calendar.MINUTE, 59);
+                                c.set(Calendar.SECOND, 59);
+                                date = c.getTime();
+                                dateMode = DateMode.WHOLE_DAY;
+                                break;
+                            case 3:
+                                showDatePickerDialog();
+                                break;
+                        }
+                        updateDateView();
+                    }
+                }).show();
             }
         });
 
-        timeButton.setOnClickListener(new View.OnClickListener() {
+        repeatView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new SelectTimeFragmentTrans();
-                newFragment.show(getFragmentManager(), "TimePickerPicker");
+                String[] repeatVariants = getResources().getStringArray(R.array.repeat_pick_array);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                        android.R.layout.select_dialog_item, repeatVariants);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                repeatability = 1;
+                                repeatMode = RepeatMode.DO_NOT_REPEAT;
+                                break;
+                            case 1:
+                                repeatability = -1;
+                                repeatMode = RepeatMode.EVERY_NTH_DAY;
+                                repeatIndex = 1;
+                                break;
+                            case 2:
+                                repeatability = -1;
+                                repeatMode = RepeatMode.DAYS_OF_NTH_WEEK;
+                                repeatIndex = 1;
+                                Calendar cal = Calendar.getInstance();
+                                if (date != null) cal.setTime(date);
+                                int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK) - 1; // - 1 for sunday - 0, monday - 1...
+                                repeatDaysOfWeek = new int[7];
+                                repeatDaysOfWeek[dayOfWeek] = 1;
+                                break;
+                            case 3:
+                                repeatability = -1;
+                                repeatMode = RepeatMode.EVERY_NTH_MONTH;
+                                repeatIndex = 1;
+                                break;
+                            case 4:
+                                repeatability = -1;
+                                repeatMode = RepeatMode.EVERY_NTH_YEAR;
+                                repeatIndex = 1;
+                                break;
+                            case 5:
+                                showCustomRepeatDialog();
+                                break;
+                        }
+                        updateRepeatView();
+                    }
+                }).show();
             }
         });
+
+        notifyView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "notifyView", Toast.LENGTH_SHORT).show();
+                //todo add new dialog
+            }
+        });
+
+        difficultyView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "difficultyView", Toast.LENGTH_SHORT).show();
+                //todo add new dialog
+            }
+        });
+
+        importanceView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "importanceView", Toast.LENGTH_SHORT).show();
+                //todo add new dialog
+            }
+        });
+
+        relatedSkillsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "relatedSkillsView", Toast.LENGTH_SHORT).show();
+                //todo add new dialog
+            }
+        });
+    }
+
+    private void updateDateView(){
+        StringBuilder sb = new StringBuilder();
+        if (dateMode == DateMode.TERMLESS){
+            sb.append(getString(R.string.task_date_termless));
+        } else {
+            sb.append(DateFormat.format(Task.getDateFormatting(), date));
+            if (dateMode == DateMode.SPECIFIC_TIME){
+                sb.append(" ");
+                sb.append(DateFormat.format(Task.getTimeFormatting(), date));
+            }
+        }
+        dateTextView.setText(sb.toString());
+    }
+
+    private void updateRepeatView(){
+        StringBuilder sb = new StringBuilder();
+        // TODO: 1/27/16  finish updating
+        repeatTextView.setText(sb.toString());
     }
 
     private void setupSpinners(){
@@ -320,38 +440,6 @@ public class AddTaskFragment extends DefaultFragment {
         importanceSpinner.setAdapter(importanceAdapter);
     }
 
-    protected void setupDateTimeButtons(Date d){
-        setupDateButton(d);
-        setupTimeButton(d);
-    }
-
-    private void setupDateButton(Date d){
-        Calendar newCal = Calendar.getInstance();
-        newCal.setTime(d);
-        Calendar oldCal = Calendar.getInstance();
-        oldCal.setTime(date);
-        newCal.set(Calendar.HOUR_OF_DAY, oldCal.get(Calendar.HOUR_OF_DAY));
-        newCal.set(Calendar.MINUTE, oldCal.get(Calendar.MINUTE));
-        newCal.set(Calendar.SECOND, 0);
-        newCal.set(Calendar.MILLISECOND, 0);
-        date = newCal.getTime();
-        dateButton.setText(DateFormat.format(Task.getDateFormatting(), date));
-    }
-
-    private void setupTimeButton(Date d){
-        Calendar newCal = Calendar.getInstance();
-        newCal.setTime(d);
-        Calendar oldCal = Calendar.getInstance();
-        oldCal.setTime(date);
-        newCal.set(Calendar.YEAR, oldCal.get(Calendar.YEAR));
-        newCal.set(Calendar.MONTH, oldCal.get(Calendar.MONTH));
-        newCal.set(Calendar.DAY_OF_MONTH, oldCal.get(Calendar.DAY_OF_MONTH));
-        newCal.set(Calendar.SECOND, 0);
-        newCal.set(Calendar.MILLISECOND, 0);
-        date = newCal.getTime();
-        timeButton.setText(DateFormat.format(Task.getTimeFormatting(), date));
-    }
-
     protected void createNotification(String taskTitle){
         Task task = getController().getTaskByTitle(taskTitle);
         getController().removeTaskNotification(task);
@@ -359,57 +447,65 @@ public class AddTaskFragment extends DefaultFragment {
     }
 
     protected int getRepeatability(){
-        String repeatTimesString;
-        if (!repeatCheckbox.isChecked()) {
-            repeatTimesString = "1";
-        } else {
-            repeatTimesString = taskRepeatEditText.getText().toString();
-            if (repeatTimesString.isEmpty()) repeatTimesString = "-1";
-        }
-        return Integer.parseInt(repeatTimesString);
+        // TODO: 1/27/16 add method
+        return 1;
     }
 
-    @SuppressLint("ValidFragment")
-    public class SelectDateFragmentTrans extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            int yy = calendar.get(Calendar.YEAR);
-            int mm = calendar.get(Calendar.MONTH);
-            int dd = calendar.get(Calendar.DAY_OF_MONTH);
-            return new DatePickerDialog(getActivity(), this, yy, mm, dd);
-        }
-
-        public void onDateSet(DatePicker view, int yy, int mm, int dd) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            cal.set(yy, mm, dd);
-            setupDateButton(cal.getTime());
-        }
+    private void showDatePickerDialog(){
+        final View dialogView = View.inflate(getContext(), R.layout.date_picker_dialog, null);
+        final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        final DatePicker datePicker = (DatePicker) dialogView.findViewById(R.id.date_picker);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                cal.set(Calendar.YEAR, datePicker.getYear());
+                cal.set(Calendar.MONTH, datePicker.getMonth());
+                cal.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+                date = cal.getTime();
+                showTimePickerDialog();
+            }
+        });
+        alertDialog.setView(dialogView);
+        alertDialog.show();
     }
 
-    @SuppressLint("ValidFragment")
-    public class SelectTimeFragmentTrans extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+    private void showTimePickerDialog(){
+        final View dialogView = View.inflate(getContext(), R.layout.time_picker_dialog, null);
+        final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        final TimePicker timePicker = (TimePicker) dialogView.findViewById(R.id.time_picker);
+        final CheckBox checkBox = (CheckBox) dialogView.findViewById(R.id.whole_day_checkbox);
+        timePicker.setIs24HourView(true);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                timePicker.setEnabled(!isChecked);
+                timePicker.setAlpha(isChecked ? 0.3f : 1f);
+            }
+        });
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (checkBox.isChecked()) {
+                    dateMode = DateMode.WHOLE_DAY;
+                } else {
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(date);
+                    cal.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+                    cal.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+                    date = cal.getTime();
+                    dateMode = DateMode.SPECIFIC_TIME;
+                }
+                updateDateView();
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.setView(dialogView);
+        alertDialog.show();
+    }
 
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            int hh = calendar.get(Calendar.HOUR_OF_DAY);
-            int mm = calendar.get(Calendar.MINUTE);
-            return new TimePickerDialog(getActivity(), this, hh, mm, true);
-        }
-
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            cal.set(Calendar.MINUTE, minute);
-            setupTimeButton(cal.getTime());
-        }
+    private void showCustomRepeatDialog(){
+        // TODO: 1/27/16 add dialog
     }
 }

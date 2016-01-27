@@ -234,7 +234,7 @@ public class ShareDialogAdapter extends BaseAdapter implements ListAdapter{
             vkShareDialog.setText(context.getString(R.string.task) + " \"" + taskTitle + "\" " +
                     context.getString(R.string.done) + "!")
                     .setAttachmentLink(context.getString(R.string.app_name),
-                            context.getString(R.string.facebook_app_link))
+                            context.getString(R.string.vk_short_link))
                     .setShareDialogListener(new VKShareDialogBuilder.VKShareDialogListener() {
                         @Override
                         public void onVkShareComplete(int postId) {

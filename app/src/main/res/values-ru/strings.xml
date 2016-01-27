@@ -56,7 +56,18 @@
     <string name="task_duplicate_negative_answer">Нет</string>
     <string name="new_task_added">Добавдена задача: </string>
     <string name="skill_choosing">Выберите навык</string>
-
+    <string name="task_date_termless">Бессрочная задача</string>
+    <string name="task_date_today">Сегодня</string>
+    <string name="task_date_tomorrow">Завтра</string>
+    <string name="task_date_specify_date">Указать дату…</string>
+    <string name="task_repeat_do_not_repeat">Не повторять</string>
+    <string name="task_add_notification">Добавить уведомление</string>
+    <string name="is_whole_day_task">Целый день</string>
+    <string name="task_repeat_every_day">Каждый день</string>
+    <string name="task_repeat_every_week">Каждую неделю</string>
+    <string name="task_repeat_every_month">Каждый месяц</string>
+    <string name="task_repeat_every_year">Каждый год</string>
+    <string name="task_repeat_custom">Настроить…</string>
     <!-- -->
 
     <!-- Skills-->
@@ -197,20 +208,20 @@
     <!-- -->
 
     <!-- Dropbox-->
-    <string name="Dropbox_backup_error">Ошибка при выгрузке базы данных в Dropbox.</string>
-    <string name="backup_db_to_Dropbox_alert_title">Экспорт в Dropbox</string>
-    <string name="backup_db_to_Dropbox_already_contains">Dropbox уже содержит базу данных приложения.
+    <string name="dropbox_backup_error">Ошибка при выгрузке базы данных в Dropbox.</string>
+    <string name="backup_db_to_dropbox_alert_title">Экспорт в Dropbox</string>
+    <string name="backup_db_to_dropbox_already_contains">Dropbox уже содержит базу данных приложения.
         Скачать ее и импортировать?</string>
-    <string name="backup_db_to_Dropbox_no_rewrite">Нет, экспорт локальной ДБ</string>
-    <string name="importing_dp_from_Dropbox">Импортировать БД из Dropbox?</string>
+    <string name="backup_db_to_dropbox_no_rewrite">Нет, экспорт локальной ДБ</string>
+    <string name="importing_dp_from_dropbox">Импортировать БД из Dropbox?</string>
     <string name="db_import">Импорт базы данных</string>
-    <string name="backup_db_to_Dropbox_conflict">База данных в Dropbox отличается от локальной.
+    <string name="backup_db_to_dropbox_conflict">База данных в Dropbox отличается от локальной.
         Выберите основую версию.</string>
-    <string name="import_Dropbox">Ипортировать из Dropbox</string>
-    <string name="export_local">Экспортировать локальную</string>
-    <string name="export_db_to_Dropbox">Экспортировать в Dropbox</string>
-    <string name="import_db_from_Dropbox">Импортировать из Dropbox</string>
-    <string name="auto_backup_to_Dropbox">Автоэкспорт в Dropbox</string>
+    <string name="import_dropbox">Dropbox</string>
+    <string name="export_local">Локальная</string>
+    <string name="export_db_to_dropbox">Экспортировать в Dropbox</string>
+    <string name="import_db_from_dropbox">Импортировать из Dropbox</string>
+    <string name="auto_backup_to_dropbox">Автоэкспорт в Dropbox</string>
     <string name="authorization_required">Необходима авторизация</string>
     <!-- -->
 

@@ -40,22 +40,22 @@ public class EditTaskFragment extends AddTaskFragment {
             }
             int repeat = currentTask.getRepeatability();
             if (repeat > 1) {
-                repeatCheckbox.setChecked(true);
-                taskRepeatEditText.setText(Integer.toString(repeat));
-                repeatDetailedLayout.setVisibility(View.VISIBLE);
+//                repeatCheckbox.setChecked(true);
+//                taskRepeatEditText.setText(Integer.toString(repeat));
+//                repeatDetailedLayout.setVisibility(View.VISIBLE);
             } else if (repeat == -1){
-                repeatCheckbox.setChecked(true);
-                taskRepeatEditText.setText("");
-                repeatDetailedLayout.setVisibility(View.VISIBLE);
+//                repeatCheckbox.setChecked(true);
+//                taskRepeatEditText.setText("");
+//                repeatDetailedLayout.setVisibility(View.VISIBLE);
             }
             if (repeat == 1) {
-                repeatCheckbox.setChecked(false);
-                taskRepeatEditText.setText("");
-                repeatDetailedLayout.setVisibility(View.GONE);
+//                repeatCheckbox.setChecked(false);
+//                taskRepeatEditText.setText("");
+//                repeatDetailedLayout.setVisibility(View.GONE);
             }
             difficultySpinner.setSelection(currentTask.getDifficulty());
             importanceSpinner.setSelection(currentTask.getImportance());
-            setupDateTimeButtons(currentTask.getDate());
+//            setupDateTimeButtons(currentTask.getDate());
             notifyCheckbox.setChecked(currentTask.isNotify());
         }
         setHasOptionsMenu(true);
@@ -182,7 +182,7 @@ public class EditTaskFragment extends AddTaskFragment {
         getController().updateTask(currentTask);
         createNotification(title);
         getCurrentActivity().showSoftKeyboard(false, getView());
-        Snackbar.make(repeatDetailedLayout, message, Snackbar.LENGTH_LONG).show();
+//        Snackbar.make(repeatDetailedLayout, message, Snackbar.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
     }
 }

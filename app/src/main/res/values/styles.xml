@@ -13,9 +13,16 @@
         <item name="android:textSize">@dimen/default_text_size</item>
     </style>
 
-    <!-- Default text style -->
+    <!-- Default text title style -->
     <style name="LifeRPGTextTitleStyle">
         <item name="android:textSize">@dimen/default_title_text_size</item>
+    </style>
+
+    <!-- Default text for list elements style -->
+    <style name="LifeRPGTextInListStyle">
+        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
     </style>
 
 

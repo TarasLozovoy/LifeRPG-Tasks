@@ -4,6 +4,7 @@
     <!-- Social networks data-->
     <string name="facebook_app_id">471263939742325</string>
     <string name="facebook_app_link">https://fb.me/473226542879398</string>
+    <string name="vk_short_link">http://vk.cc/4HqXq3</string>
     <integer name="com_vk_sdk_AppId">5202032</integer>
     <!-- -->
 
@@ -64,6 +65,18 @@
     <string name="task_duplicate_negative_answer">No, change current task title</string>
     <string name="new_task_added">Task added: </string>
     <string name="skill_choosing">Choose skill to add</string>
+    <string name="task_date_termless">Termless</string>
+    <string name="task_date_today">Today</string>
+    <string name="task_date_tomorrow">Tomorrow</string>
+    <string name="task_date_specify_date">Specify date…</string>
+    <string name="task_repeat_do_not_repeat">Do not repeat</string>
+    <string name="task_add_notification">Add notification</string>
+    <string name="is_whole_day_task">Whole day</string>
+    <string name="task_repeat_every_day">Every day</string>
+    <string name="task_repeat_every_week">Every week</string>
+    <string name="task_repeat_every_month">Every month</string>
+    <string name="task_repeat_every_year">Every year</string>
+    <string name="task_repeat_custom">Custom…</string>
     <!-- -->
 
     <!-- Skills-->
@@ -233,8 +246,8 @@
     <string name="db_import">DB import</string>
     <string name="backup_db_to_dropbox_conflict">DB version in Dropbox was backed up from another device and may be different.
         Select main version.</string>
-    <string name="import_dropbox">Import from Dropbox</string>
-    <string name="export_local">Export local</string>
+    <string name="import_dropbox">Dropbox</string>
+    <string name="export_local">Local</string>
     <string name="export_db_to_dropbox">Export data base to Dropbox</string>
     <string name="import_db_from_dropbox">Import data base from Dropbox</string>
     <string name="auto_backup_to_dropbox">Auto backup to Dropbox</string>

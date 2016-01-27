@@ -2,7 +2,7 @@
 <resources>
     <string-array
         name="difficulties_array">
-        <item>Легкая</item>
+        <item>Низкая</item>
         <item>Средняя</item>
         <item>Высокая</item>
         <item>Безумная</item>
@@ -10,7 +10,7 @@
 
     <string-array
         name="importance_array">
-        <item>Легкая</item>
+        <item>Низкая</item>
         <item>Средняя</item>
         <item>Высокая</item>
         <item>Безумная</item>

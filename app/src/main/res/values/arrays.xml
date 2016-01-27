@@ -2,17 +2,35 @@
 <resources>
     <string-array
         name="difficulties_array">
-        <item>Easy</item>
+        <item>Low</item>
         <item>Medium</item>
-        <item>Hard</item>
+        <item>High</item>
         <item>Insane</item>
     </string-array>
 
     <string-array
         name="importance_array">
-        <item>Easy</item>
+        <item>Low</item>
         <item>Medium</item>
-        <item>Hard</item>
+        <item>High</item>
         <item>Insane</item>
+    </string-array>
+
+    <string-array
+        name="date_pick_array">
+        <item>@string/task_date_termless</item>
+        <item>@string/task_date_today</item>
+        <item>@string/task_date_tomorrow</item>
+        <item>@string/task_date_specify_date</item>
+    </string-array>
+
+    <string-array
+        name="repeat_pick_array">
+        <item>@string/task_repeat_do_not_repeat</item>
+        <item>@string/task_repeat_every_day</item>
+        <item>@string/task_repeat_every_week</item>
+        <item>@string/task_repeat_every_month</item>
+        <item>@string/task_repeat_every_year</item>
+        <item>@string/task_repeat_custom</item>
     </string-array>
 </resources>

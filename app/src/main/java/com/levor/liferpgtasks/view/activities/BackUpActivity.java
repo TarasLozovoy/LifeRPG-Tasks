@@ -176,12 +176,14 @@ public class BackUpActivity extends AppCompatActivity {
                         backUpDBToDropBox();
                     } else {
                         //dropbox was updated from another device
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                showRewritingDBDialog();
-                            }
-                        });
+                        if (lifeController.isInternetConnectionActive()) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showRewritingDBDialog();
+                                }
+                            });
+                        }
                     }
                 } else {
                     if (dropboxFileRev == null) {
@@ -189,12 +191,14 @@ public class BackUpActivity extends AppCompatActivity {
                         backUpDBToDropBox();
                     } else {
                         //first load to dropbox from current device, dropbox already have DB version
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                showDropBoxAlreadyContainsDialog();
-                            }
-                        });
+                        if (lifeController.isInternetConnectionActive()) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showDropBoxAlreadyContainsDialog();
+                                }
+                            });
+                        }
                     }
                 }
                 return null;

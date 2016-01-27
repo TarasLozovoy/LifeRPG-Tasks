@@ -156,7 +156,7 @@ public class Task {
     }
 
     public static String getDateFormatting() {
-        return "MMM dd, yyyy";
+        return "EE, dd MMM, yyyy";
     }
 
     public static String getTimeFormatting() {
@@ -173,6 +173,20 @@ public class Task {
         public static final int DIFFICULTY_DESC = 6;
         public static final int DATE_ASC = 7;
         public static final int DATE_DESC = 8;
+    }
+
+    public static class DateMode {
+        public static final int TERMLESS = 0;
+        public static final int WHOLE_DAY = 1;
+        public static final int SPECIFIC_TIME = 2;
+    }
+
+    public static class RepeatMode {
+        public static final int EVERY_NTH_DAY = 0;
+        public static final int EVERY_NTH_MONTH = 1;
+        public static final int EVERY_NTH_YEAR = 2;
+        public static final int DAYS_OF_NTH_WEEK = 3;
+        public static final int DO_NOT_REPEAT = 4;
     }
 
     private static class CompletionTasksComparator implements Comparator<Task> {
