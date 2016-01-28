@@ -230,7 +230,7 @@ public class MainActivity extends BackUpActivity{
     }
 
     public boolean showNthPreviousFragment(int n) {
-        if (n <= 1 || getCurrentFragmentsStack().size() == 1) {
+        if (n < 2 || getCurrentFragmentsStack().size() == 2) {
             return showPreviousFragment();
         }
         getCurrentFragmentsStack().pop();

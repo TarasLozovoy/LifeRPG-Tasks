@@ -187,6 +187,7 @@ public class Task {
         public static final int EVERY_NTH_YEAR = 2;
         public static final int DAYS_OF_NTH_WEEK = 3;
         public static final int DO_NOT_REPEAT = 4;
+        public static final int SIMPLE_REPEAT = 5;
     }
 
     private static class CompletionTasksComparator implements Comparator<Task> {

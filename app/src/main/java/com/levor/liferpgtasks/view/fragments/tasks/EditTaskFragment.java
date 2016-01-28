@@ -53,10 +53,10 @@ public class EditTaskFragment extends AddTaskFragment {
 //                taskRepeatEditText.setText("");
 //                repeatDetailedLayout.setVisibility(View.GONE);
             }
-            difficultySpinner.setSelection(currentTask.getDifficulty());
-            importanceSpinner.setSelection(currentTask.getImportance());
+//            difficultySpinner.setSelection(currentTask.getDifficulty());
+//            importanceSpinner.setSelection(currentTask.getImportance());
 //            setupDateTimeButtons(currentTask.getDate());
-            notifyCheckbox.setChecked(currentTask.isNotify());
+//            notifyCheckbox.setChecked(currentTask.isNotify());
         }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(getString(R.string.edit_task_title));
@@ -169,9 +169,9 @@ public class EditTaskFragment extends AddTaskFragment {
         getCurrentActivity().showSoftKeyboard(false, getView());
         int repeat = getRepeatability();
         currentTask.setRepeatability(repeat);
-        currentTask.setNotify(notifyCheckbox.isChecked());
-        currentTask.setDifficulty(difficultySpinner.getSelectedItemPosition());
-        currentTask.setImportance(importanceSpinner.getSelectedItemPosition());
+//        currentTask.setNotify(notifyCheckbox.isChecked());
+//        currentTask.setDifficulty(difficultySpinner.getSelectedItemPosition());
+//        currentTask.setImportance(importanceSpinner.getSelectedItemPosition());
         currentTask.setTitle(title);
         currentTask.setDate(date);
         List<Skill> skills = new ArrayList<>();

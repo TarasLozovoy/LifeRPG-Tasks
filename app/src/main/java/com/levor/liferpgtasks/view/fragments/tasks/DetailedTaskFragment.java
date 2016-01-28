@@ -143,8 +143,8 @@ public class DetailedTaskFragment extends DefaultFragment {
 
     private void setupTaskDate() {
         String dateString = getString(R.string.date) + " " +
-                DateFormat.format(Task.getTimeFormatting(), currentTask.getDate()) + " - " +
-                DateFormat.format(Task.getDateFormatting(), currentTask.getDate()) + " ";
+                DateFormat.format(Task.getDateFormatting(), currentTask.getDate()) + " - " +
+                DateFormat.format(Task.getTimeFormatting(), currentTask.getDate()) + " ";
         if (!currentTask.isTaskDone() && currentTask.getDate().before(new Date(System.currentTimeMillis()))){
             dateString = dateString + getString(R.string.overdue);
         }

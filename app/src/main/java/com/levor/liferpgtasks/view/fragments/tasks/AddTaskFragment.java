@@ -21,11 +21,13 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
+import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 import com.levor.liferpgtasks.adapters.TaskAddingAdapter;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
@@ -33,6 +35,7 @@ import com.levor.liferpgtasks.model.Task.RepeatMode;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -65,10 +68,6 @@ public class AddTaskFragment extends DefaultFragment {
     protected TextView relatedSkillsTextView;
     protected View relatedSkillsView;
 
-    protected CheckBox notifyCheckbox;
-    protected Spinner difficultySpinner;
-    protected Spinner importanceSpinner;
-
     private ListView listView;
 
     private Button addSkillButton;
@@ -77,8 +76,9 @@ public class AddTaskFragment extends DefaultFragment {
     protected int dateMode = DateMode.TERMLESS;
     protected int repeatability;
     protected int repeatMode;
-    protected int[] repeatDaysOfWeek;
-    protected int repeatIndex = 1;
+    protected Boolean[] repeatDaysOfWeek;
+    protected int repeatIndex = 1;      //repeat every N days, repeatIndex == N
+    protected long notifyDelta = -1;         // <0 - do not notify, >0 notify at (date - delta) time
     protected ArrayList<String> relatedSkills = new ArrayList<>();
 
     @Override
@@ -102,9 +102,6 @@ public class AddTaskFragment extends DefaultFragment {
         relatedSkillsView = header.findViewById(R.id.related_skills_layout);
 
         addSkillButton = (Button) header.findViewById(R.id.add_related_skill_button);
-        difficultySpinner = (Spinner) header.findViewById(R.id.difficulty_spinner);
-        importanceSpinner = (Spinner) header.findViewById(R.id.importance_spinner);
-        notifyCheckbox = (CheckBox) header.findViewById(R.id.notify_checkbox);
 
         dateTextView.setText(getString(R.string.task_date_termless));
         repeatTextView.setText(getString(R.string.task_repeat_do_not_repeat));
@@ -114,19 +111,13 @@ public class AddTaskFragment extends DefaultFragment {
         String importanceString = getString(R.string.importance) + " " + getResources().getStringArray(R.array.importance_array)[0];
         importanceTextView.setText(importanceString);
         relatedSkillsTextView.setText(R.string.add_skill_to_task);
-
-        setupSpinners();
         registerListeners();
         if (savedInstanceState != null) {
             taskTitleEditText.setText(savedInstanceState.getString(TASK_TITLE_TAG));
             relatedSkills = savedInstanceState.getStringArrayList(RELATED_SKILLS_TAG);
-            difficultySpinner.setSelection(savedInstanceState.getInt(DIFFICULTY_TAG));
-            importanceSpinner.setSelection(savedInstanceState.getInt(IMPORTANCE_TAG));
             date = new Date (savedInstanceState.getLong(DATE_TAG));
-            notifyCheckbox.setChecked(savedInstanceState.getBoolean(NOTIFY_TAG, true));
         } else {
             date = new Date();
-            notifyCheckbox.setChecked(true);
         }
         updateDateView();
         listView.addHeaderView(header);
@@ -191,10 +182,7 @@ public class AddTaskFragment extends DefaultFragment {
     public void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(TASK_TITLE_TAG, taskTitleEditText.getText().toString());
         outState.putSerializable(RELATED_SKILLS_TAG, relatedSkills);
-        outState.putSerializable(DIFFICULTY_TAG, difficultySpinner.getSelectedItemPosition());
-        outState.putSerializable(IMPORTANCE_TAG, importanceSpinner.getSelectedItemPosition());
         outState.putSerializable(DATE_TAG, date);
-        outState.putSerializable(NOTIFY_TAG, notifyCheckbox.isChecked());
         super.onSaveInstanceState(outState);
     }
 
@@ -225,11 +213,11 @@ public class AddTaskFragment extends DefaultFragment {
     }
 
     protected void finishTask(String title, String message){
-        int difficulty = difficultySpinner.getSelectedItemPosition();
-        int importance = importanceSpinner.getSelectedItemPosition();
+//        int difficulty = difficultySpinner.getSelectedItemPosition();
+//        int importance = importanceSpinner.getSelectedItemPosition();
         int repeat = getRepeatability();
-        boolean notify = notifyCheckbox.isChecked();
-        getController().createNewTask(title, repeat, difficulty, importance, date, notify, relatedSkills);
+//        boolean notify = notifyCheckbox.isChecked();
+//        getController().createNewTask(title, repeat, difficulty, importance, date, notify, relatedSkills);
 
         getController().getGATracker().send(new HitBuilders.EventBuilder()
                 .setCategory(getString(R.string.GA_action))
@@ -349,9 +337,12 @@ public class AddTaskFragment extends DefaultFragment {
                                 repeatIndex = 1;
                                 Calendar cal = Calendar.getInstance();
                                 if (date != null) cal.setTime(date);
-                                int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK) - 1; // - 1 for sunday - 0, monday - 1...
-                                repeatDaysOfWeek = new int[7];
-                                repeatDaysOfWeek[dayOfWeek] = 1;
+                                int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK) - 1; // for sunday - 0, monday - 1...
+                                repeatDaysOfWeek = new Boolean[7];
+                                for (int i = 0; i < repeatDaysOfWeek.length; i++) {
+                                    repeatDaysOfWeek[i] = false;
+                                }
+                                repeatDaysOfWeek[dayOfWeek] = true;
                                 break;
                             case 3:
                                 repeatability = -1;
@@ -376,8 +367,33 @@ public class AddTaskFragment extends DefaultFragment {
         notifyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "notifyView", Toast.LENGTH_SHORT).show();
-                //todo add new dialog
+                String[] notifyVariants = getResources().getStringArray(R.array.notify_dialog_items);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                        android.R.layout.select_dialog_item, notifyVariants);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0 : //do not notify
+                                notifyDelta = -1;
+                                break;
+                            case 1 : //1 minute before
+                                notifyDelta = TimeUnitUtils.MINUTE;
+                                break;
+                            case 2 : //10 minute before
+                                notifyDelta = 10 * TimeUnitUtils.MINUTE;
+                                break;
+                            case 3 : //60 minute before
+                                notifyDelta = 60 * TimeUnitUtils.MINUTE;
+                                break;
+                            case 4 : //custom
+                                showCustomNotifyDialog();
+                                break;
+                        }
+                        updateNotifyView();
+                    }
+                }).show();
             }
         });
 
@@ -422,22 +438,119 @@ public class AddTaskFragment extends DefaultFragment {
 
     private void updateRepeatView(){
         StringBuilder sb = new StringBuilder();
-        // TODO: 1/27/16  finish updating
+        switch (repeatMode) {
+            case RepeatMode.EVERY_NTH_DAY :
+                if (repeatIndex == 1){
+                    sb.append(getString(R.string.task_repeat_every_day));
+                } else {
+                    sb.append(getString(R.string.task_repeat_every_Nth_day, repeatIndex));
+                }
+                if (repeatability > 0){
+                    sb.append("; ")
+                            .append(getString(R.string.repeats))
+                            .append(": ")
+                            .append(repeatability);
+                }
+                break;
+            case RepeatMode.EVERY_NTH_MONTH :
+                if (repeatIndex == 1){
+                    sb.append(getString(R.string.task_repeat_every_month));
+                } else {
+                    sb.append(getString(R.string.task_repeat_every_Nth_month, repeatIndex));
+                }
+                if (repeatability > 0){
+                    sb.append("; ")
+                            .append(getString(R.string.repeats))
+                            .append(": ")
+                            .append(repeatability);
+                }
+                break;
+            case RepeatMode.EVERY_NTH_YEAR :
+                if (repeatIndex == 1){
+                    sb.append(getString(R.string.task_repeat_every_year));
+                } else {
+                    sb.append(getString(R.string.task_repeat_every_Nth_year, repeatIndex));
+                }
+                if (repeatability > 0){
+                    sb.append("; ")
+                            .append(getString(R.string.repeats))
+                            .append(": ")
+                            .append(repeatability);
+                }
+                break;
+            case RepeatMode.DAYS_OF_NTH_WEEK :
+                String[] days = getResources().getStringArray(R.array.days_of_week_short);
+                for (int i = 0; i < days.length; i++) {
+                    if (repeatDaysOfWeek[i]) {
+                        sb.append(days[i])
+                                .append(",");
+                    }
+                }
+                if (Arrays.asList(repeatDaysOfWeek).contains(true)) {
+                    sb.deleteCharAt(sb.length() - 1)
+                            .append("; ");
+                }
+
+                if (repeatIndex == 1){
+                    sb.append(getString(R.string.task_repeat_every_week));
+                } else {
+                    sb.append(getString(R.string.task_repeat_every_Nth_week, repeatIndex));
+                }
+                if (repeatability > 0){
+                    sb.append("; ")
+                            .append(getString(R.string.repeats))
+                            .append(": ")
+                            .append(repeatability);
+                }
+                break;
+            case RepeatMode.DO_NOT_REPEAT :
+                sb.append(getString(R.string.task_repeat_do_not_repeat));
+                break;
+            case RepeatMode.SIMPLE_REPEAT :
+                sb.append(getString(R.string.repeats))
+                        .append(": ");
+                if (repeatability > 0) {
+                    sb.append(repeatability);
+                } else if (repeatability == -1) {
+                    sb.append(getString(R.string.infinite));
+                }
+                break;
+        }
         repeatTextView.setText(sb.toString());
     }
 
-    private void setupSpinners(){
-        ArrayAdapter<CharSequence> difficultyAdapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.difficulties_array,
-                R.layout.default_spinner_item);
-        difficultyAdapter.setDropDownViewResource(R.layout.default_spinner_drop_down_view);
-        difficultySpinner.setAdapter(difficultyAdapter);
-
-        ArrayAdapter<CharSequence> importanceAdapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.importance_array,
-                R.layout.default_spinner_item);
-        importanceAdapter.setDropDownViewResource(R.layout.default_spinner_drop_down_view);
-        importanceSpinner.setAdapter(importanceAdapter);
+    private void updateNotifyView(){
+        StringBuilder sb = new StringBuilder();
+        if (notifyDelta < 0) {
+            sb.append(getString(R.string.task_add_notification));
+        } else {
+            if (notifyDelta % TimeUnitUtils.WEEK == 0){
+                if (notifyDelta == TimeUnitUtils.WEEK){
+                    sb.append(getString(R.string.notify_1_week_before));
+                } else {
+                    sb.append(getString(R.string.notify_N_weeks_before, notifyDelta/TimeUnitUtils.WEEK));
+                }
+            } else if (notifyDelta % TimeUnitUtils.DAY == 0){
+                if (notifyDelta == TimeUnitUtils.DAY){
+                    sb.append(getString(R.string.notify_1_day_before));
+                } else {
+                    sb.append(getString(R.string.notify_N_weeks_before, notifyDelta/TimeUnitUtils.DAY));
+                }
+            } else if (notifyDelta % TimeUnitUtils.HOUR == 0){
+                if (notifyDelta == TimeUnitUtils.HOUR){
+                    sb.append(getString(R.string.notify_1_hour_before));
+                } else {
+                    sb.append(getString(R.string.notify_N_hours_before, notifyDelta/TimeUnitUtils.HOUR));
+                }
+            } else {
+                if (notifyDelta == TimeUnitUtils.MINUTE){
+                    sb.append(getString(R.string.notify_1_minute_before));
+                } else {
+                    sb.append(getString(R.string.notify_N_minutes_before, notifyDelta/TimeUnitUtils.MINUTE));
+                }
+            }
+        }
+        notifyTextView.setText(sb.toString());
     }
 
     protected void createNotification(String taskTitle){
@@ -506,6 +619,159 @@ public class AddTaskFragment extends DefaultFragment {
     }
 
     private void showCustomRepeatDialog(){
-        // TODO: 1/27/16 add dialog
+        final View dialogView = View.inflate(getContext(), R.layout.specific_repeat_dialog, null);
+        final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).setCancelable(false).create();
+        final Switch onOffButton = (Switch) dialogView.findViewById(R.id.turn_off_repeat_button);
+        final Spinner modeSpinner = (Spinner) dialogView.findViewById(R.id.repeat_mode_spinner);
+        final Spinner repeatabilitySpinner = (Spinner) dialogView.findViewById(R.id.repeatability_spinner);
+        final View repeatGroup = dialogView.findViewById(R.id.specific_repeat_group);
+        final View daysOfWeek = dialogView.findViewById(R.id.days_of_week);
+        final TextView timeUnit = (TextView) dialogView.findViewById(R.id.time_unit);
+        final EditText repeatTimesEditText = (EditText) dialogView.findViewById(R.id.repeat_times);
+        final EditText repeatIndexEditText = (EditText) dialogView.findViewById(R.id.repeat_index_edit_text);
+
+        onOffButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                repeatGroup.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+                modeSpinner.setEnabled(isChecked);
+            }
+        });
+
+        //setting up repeatability spinner
+        String[] repeatabilityList = getResources().getStringArray(R.array.repeatability_spinner_array);
+        ArrayAdapter<String> repeatAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, repeatabilityList);
+        repeatabilitySpinner.setAdapter(repeatAdapter);
+        repeatabilitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0: //always
+                        repeatTimesEditText.setVisibility(View.GONE);
+                        break;
+                    case 1: //times
+                        repeatTimesEditText.setVisibility(View.VISIBLE);
+                        repeatTimesEditText.setText("1");
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        //setting up mode spinner
+        String[] modeList = new String[5];
+        String[] repeatTimesArray = getResources().getStringArray(R.array.repeat_pick_array);
+        modeList[0] = getString(R.string.just_repeat);
+        for (int i = 1; i < modeList.length; i++) {
+            modeList[i] = repeatTimesArray[i];
+        }
+        ArrayAdapter<String> modeAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, modeList);
+        modeSpinner.setAdapter(modeAdapter);
+        modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                repeatIndexEditText.setText("1");
+                repeatabilitySpinner.setSelection(0);
+                switch (position) {
+                    case 0: //no date, just repeat
+                        dialogView.findViewById(R.id.repeat_every_layout).setVisibility(View.GONE);
+                        daysOfWeek.setVisibility(View.GONE);
+                        break;
+                    case 1: //everyday
+                        dialogView.findViewById(R.id.repeat_every_layout).setVisibility(View.VISIBLE);
+                        timeUnit.setText(R.string.day);
+                        daysOfWeek.setVisibility(View.GONE);
+                        break;
+                    case 2: //every week
+                        dialogView.findViewById(R.id.repeat_every_layout).setVisibility(View.VISIBLE);
+                        timeUnit.setText(R.string.week);
+                        daysOfWeek.setVisibility(View.VISIBLE);
+                        break;
+                    case 3: //every month
+                        dialogView.findViewById(R.id.repeat_every_layout).setVisibility(View.VISIBLE);
+                        timeUnit.setText(R.string.month);
+                        daysOfWeek.setVisibility(View.GONE);
+                        break;
+                    case 4: //every year
+                        dialogView.findViewById(R.id.repeat_every_layout).setVisibility(View.VISIBLE);
+                        timeUnit.setText(R.string.year);
+                        daysOfWeek.setVisibility(View.GONE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+        modeSpinner.setSelection(2);
+
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (!onOffButton.isChecked()) {
+                    repeatTextView.setText(R.string.task_repeat_do_not_repeat);
+                    repeatMode = RepeatMode.DO_NOT_REPEAT;
+                } else {
+                    int selectedTimeMode = modeSpinner.getSelectedItemPosition();
+                    switch (selectedTimeMode) {
+                        case 0: //simple repeat
+                            repeatMode = RepeatMode.SIMPLE_REPEAT;
+                            break;
+                        case 1: //everyday
+                            repeatMode = RepeatMode.EVERY_NTH_DAY;
+                            repeatIndex = Integer.parseInt(repeatIndexEditText.getText().toString());
+                            break;
+                        case 2: //every week
+                            repeatMode = RepeatMode.DAYS_OF_NTH_WEEK;
+                            repeatIndex = Integer.parseInt(repeatIndexEditText.getText().toString());
+                            repeatDaysOfWeek = new Boolean[7];
+                            for (int i = 0; i < repeatDaysOfWeek.length; i++) {
+                                repeatDaysOfWeek[i] = false;
+                            }
+                            if (((CheckBox) alertDialog.findViewById(R.id.sunday_checkbox)).isChecked())
+                                repeatDaysOfWeek[0] = true;
+                            if (((CheckBox) alertDialog.findViewById(R.id.monday_checkbox)).isChecked())
+                                repeatDaysOfWeek[1] = true;
+                            if (((CheckBox) alertDialog.findViewById(R.id.tuesday_checkbox)).isChecked())
+                                repeatDaysOfWeek[2] = true;
+                            if (((CheckBox) alertDialog.findViewById(R.id.wednesday_checkbox)).isChecked())
+                                repeatDaysOfWeek[3] = true;
+                            if (((CheckBox) alertDialog.findViewById(R.id.thursday_checkbox)).isChecked())
+                                repeatDaysOfWeek[4] = true;
+                            if (((CheckBox) alertDialog.findViewById(R.id.friday_checkbox)).isChecked())
+                                repeatDaysOfWeek[5] = true;
+                            if (((CheckBox) alertDialog.findViewById(R.id.saturday_checkbox)).isChecked())
+                                repeatDaysOfWeek[6] = true;
+                            break;
+                        case 3: //every month
+                            repeatMode = RepeatMode.EVERY_NTH_MONTH;
+                            repeatIndex = Integer.parseInt(repeatIndexEditText.getText().toString());
+                            break;
+                        case 4: //every year
+                            repeatMode = RepeatMode.EVERY_NTH_YEAR;
+                            repeatIndex = Integer.parseInt(repeatIndexEditText.getText().toString());
+                            break;
+                    }
+                    repeatability = repeatabilitySpinner.getSelectedItemPosition() == 0 ?
+                            -1 : Integer.parseInt(repeatTimesEditText.getText().toString());
+                    if (repeatability == 0) repeatability = -1;
+                    if (repeatIndex == 0) repeatIndex = 1;
+                    if (repeatDaysOfWeek != null && !(Arrays.asList(repeatDaysOfWeek)).contains(true)) {
+                        repeatMode = RepeatMode.DO_NOT_REPEAT;
+                    }
+                    updateRepeatView();
+                }
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.setView(dialogView);
+        alertDialog.show();
+    }
+
+    private void showCustomNotifyDialog(){
+        // TODO: 1/28/16 add dialog
     }
 }

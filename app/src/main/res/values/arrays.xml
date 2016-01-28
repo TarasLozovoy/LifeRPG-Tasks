@@ -33,4 +33,38 @@
         <item>@string/task_repeat_every_year</item>
         <item>@string/task_repeat_custom</item>
     </string-array>
+
+    <string-array
+        name="repeat_time_units_array">
+        <item>@string/day</item>
+        <item>@string/week</item>
+        <item>@string/month</item>
+        <item>@string/year</item>
+    </string-array>
+
+    <string-array
+        name="repeatability_spinner_array">
+        <item>@string/always</item>
+        <item>@string/number_of_times</item>
+    </string-array>
+
+    <string-array
+        name="days_of_week_short">
+        <item>@string/sunday_short</item>
+        <item>@string/monday_short</item>
+        <item>@string/tuesday_short</item>
+        <item>@string/wednesday_short</item>
+        <item>@string/Thursday_short</item>
+        <item>@string/friday_short</item>
+        <item>@string/saturday_short</item>
+    </string-array>
+
+    <string-array
+        name="notify_dialog_items">
+        <item>@string/do_not_notify</item>
+        <item>@string/notify_1_minute_before</item>
+        <item>@string/notify_10_minute_before</item>
+        <item>@string/notify_60_minute_before</item>
+        <item>@string/notify_custom</item>
+    </string-array>
 </resources>
