@@ -108,6 +108,15 @@
     <string name="notify_1_week_before">За 1 неделю до</string>
     <string name="notify_N_weeks_before">За %1d недели до</string>
     <string name="notify_custom">Настроить…</string>
+    <string name="notify_custom_dialog_title">Другое уведомление</string>
+    <string name="notify_minutes">мин.</string>
+    <string name="notify_minutes_checked">мин. до</string>
+    <string name="notify_hours">ч.</string>
+    <string name="notify_hours_checked">ч. до</string>
+    <string name="notify_days">дн.</string>
+    <string name="notify_days_checked">дн. до</string>
+    <string name="notify_weeks">нед.</string>
+    <string name="notify_weeks_checked">нед. до</string>
     <!-- -->
 
     <!-- Skills-->

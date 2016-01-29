@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +22,8 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -39,6 +43,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.levor.liferpgtasks.model.Task.DateMode;
 
@@ -80,6 +85,8 @@ public class AddTaskFragment extends DefaultFragment {
     protected int repeatIndex = 1;      //repeat every N days, repeatIndex == N
     protected long notifyDelta = -1;         // <0 - do not notify, >0 notify at (date - delta) time
     protected ArrayList<String> relatedSkills = new ArrayList<>();
+
+    private int notifyEditTextMaxValue = 600;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -422,63 +429,96 @@ public class AddTaskFragment extends DefaultFragment {
         });
     }
 
-    private void updateDateView(){
+    private void updateDateView() {
         StringBuilder sb = new StringBuilder();
-        if (dateMode == DateMode.TERMLESS){
+        int startRepeatMode = repeatMode;
+        if (dateMode == DateMode.TERMLESS) {
             sb.append(getString(R.string.task_date_termless));
+            if (repeatMode == RepeatMode.EVERY_NTH_DAY || repeatMode == RepeatMode.EVERY_NTH_MONTH ||
+                    repeatMode == RepeatMode.EVERY_NTH_YEAR || repeatMode == RepeatMode.DAYS_OF_NTH_WEEK){
+                repeatMode = repeatability > 0 ? RepeatMode.SIMPLE_REPEAT : RepeatMode.DO_NOT_REPEAT;
+            }
+            if (notifyView.isEnabled()){
+                notifyDelta = -1;
+                notifyView.setEnabled(false);
+                notifyTextView.setEnabled(false);
+                updateNotifyView();
+            }
         } else {
             sb.append(DateFormat.format(Task.getDateFormatting(), date));
-            if (dateMode == DateMode.SPECIFIC_TIME){
+            if (dateMode == DateMode.SPECIFIC_TIME) {
                 sb.append(" ");
                 sb.append(DateFormat.format(Task.getTimeFormatting(), date));
             }
+            if (repeatMode == RepeatMode.SIMPLE_REPEAT) {
+                repeatMode = RepeatMode.EVERY_NTH_DAY;
+                repeatIndex = 1;
+            } else if (repeatMode == RepeatMode.DAYS_OF_NTH_WEEK) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                int currentDay = cal.get(Calendar.DAY_OF_WEEK) - 1;
+                if (!repeatDaysOfWeek[currentDay]) {
+                    repeatDaysOfWeek = new Boolean[7];
+                    for (int i = 0; i < repeatDaysOfWeek.length; i++) {
+                        repeatDaysOfWeek[i] = false;
+                    }
+                    repeatDaysOfWeek[currentDay] = true;
+                    updateRepeatView();
+                }
+            }
+            if (!notifyView.isEnabled()) {
+                notifyView.setEnabled(true);
+                notifyTextView.setEnabled(true);
+            }
         }
         dateTextView.setText(sb.toString());
+        if (startRepeatMode != repeatMode) updateRepeatView();
     }
 
     private void updateRepeatView(){
+        int startDateMode = dateMode;
         StringBuilder sb = new StringBuilder();
         switch (repeatMode) {
-            case RepeatMode.EVERY_NTH_DAY :
-                if (repeatIndex == 1){
+            case RepeatMode.EVERY_NTH_DAY:
+                if (repeatIndex == 1) {
                     sb.append(getString(R.string.task_repeat_every_day));
                 } else {
                     sb.append(getString(R.string.task_repeat_every_Nth_day, repeatIndex));
                 }
-                if (repeatability > 0){
+                if (repeatability > 0) {
                     sb.append("; ")
                             .append(getString(R.string.repeats))
                             .append(": ")
                             .append(repeatability);
                 }
                 break;
-            case RepeatMode.EVERY_NTH_MONTH :
-                if (repeatIndex == 1){
+            case RepeatMode.EVERY_NTH_MONTH:
+                if (repeatIndex == 1) {
                     sb.append(getString(R.string.task_repeat_every_month));
                 } else {
                     sb.append(getString(R.string.task_repeat_every_Nth_month, repeatIndex));
                 }
-                if (repeatability > 0){
+                if (repeatability > 0) {
                     sb.append("; ")
                             .append(getString(R.string.repeats))
                             .append(": ")
                             .append(repeatability);
                 }
                 break;
-            case RepeatMode.EVERY_NTH_YEAR :
-                if (repeatIndex == 1){
+            case RepeatMode.EVERY_NTH_YEAR:
+                if (repeatIndex == 1) {
                     sb.append(getString(R.string.task_repeat_every_year));
                 } else {
                     sb.append(getString(R.string.task_repeat_every_Nth_year, repeatIndex));
                 }
-                if (repeatability > 0){
+                if (repeatability > 0) {
                     sb.append("; ")
                             .append(getString(R.string.repeats))
                             .append(": ")
                             .append(repeatability);
                 }
                 break;
-            case RepeatMode.DAYS_OF_NTH_WEEK :
+            case RepeatMode.DAYS_OF_NTH_WEEK:
                 String[] days = getResources().getStringArray(R.array.days_of_week_short);
                 for (int i = 0; i < days.length; i++) {
                     if (repeatDaysOfWeek[i]) {
@@ -491,22 +531,36 @@ public class AddTaskFragment extends DefaultFragment {
                             .append("; ");
                 }
 
-                if (repeatIndex == 1){
+                if (repeatIndex == 1) {
                     sb.append(getString(R.string.task_repeat_every_week));
                 } else {
                     sb.append(getString(R.string.task_repeat_every_Nth_week, repeatIndex));
                 }
-                if (repeatability > 0){
+                if (repeatability > 0) {
                     sb.append("; ")
                             .append(getString(R.string.repeats))
                             .append(": ")
                             .append(repeatability);
                 }
+
+                Calendar cal = Calendar.getInstance();
+                if (dateMode == DateMode.TERMLESS) {
+                    dateMode = DateMode.WHOLE_DAY;
+                } else {
+                    startDateMode = DateMode.TERMLESS;
+                    cal.setTime(date);
+                }
+                while (true) {
+                    if (repeatDaysOfWeek[cal.get(Calendar.DAY_OF_WEEK) - 1]) break;
+                    cal.add(Calendar.DAY_OF_YEAR, 1);
+                }
+                date = cal.getTime();
+
                 break;
-            case RepeatMode.DO_NOT_REPEAT :
+            case RepeatMode.DO_NOT_REPEAT:
                 sb.append(getString(R.string.task_repeat_do_not_repeat));
                 break;
-            case RepeatMode.SIMPLE_REPEAT :
+            case RepeatMode.SIMPLE_REPEAT:
                 sb.append(getString(R.string.repeats))
                         .append(": ");
                 if (repeatability > 0) {
@@ -514,9 +568,17 @@ public class AddTaskFragment extends DefaultFragment {
                 } else if (repeatability == -1) {
                     sb.append(getString(R.string.infinite));
                 }
+                if (dateMode != DateMode.TERMLESS){
+                    dateMode = DateMode.TERMLESS;
+                }
                 break;
         }
+        if (repeatMode <= 2 && dateMode == DateMode.TERMLESS) {
+            dateMode = DateMode.WHOLE_DAY;
+            date = new Date();
+        }
         repeatTextView.setText(sb.toString());
+        if (startDateMode != dateMode) updateDateView();
     }
 
     private void updateNotifyView(){
@@ -534,7 +596,7 @@ public class AddTaskFragment extends DefaultFragment {
                 if (notifyDelta == TimeUnitUtils.DAY){
                     sb.append(getString(R.string.notify_1_day_before));
                 } else {
-                    sb.append(getString(R.string.notify_N_weeks_before, notifyDelta/TimeUnitUtils.DAY));
+                    sb.append(getString(R.string.notify_N_days_before, notifyDelta/TimeUnitUtils.DAY));
                 }
             } else if (notifyDelta % TimeUnitUtils.HOUR == 0){
                 if (notifyDelta == TimeUnitUtils.HOUR){
@@ -772,6 +834,106 @@ public class AddTaskFragment extends DefaultFragment {
     }
 
     private void showCustomNotifyDialog(){
-        // TODO: 1/28/16 add dialog
+        final View dialogView = View.inflate(getContext(), R.layout.specific_notify_dialog, null);
+        final AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                .setCancelable(false)
+                .setTitle(R.string.notify_custom_dialog_title)
+                .create();
+        final EditText notifyEditText = (EditText) dialogView.findViewById(R.id.notify_time_edit_text);
+        final RadioGroup notifyRadioGroup = (RadioGroup) dialogView.findViewById(R.id.notify_radio_group);
+
+        notifyEditText.setText("1");
+        notifyEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int typedValue;
+                if (s.toString().isEmpty()) {
+                    typedValue = 1;
+                } else {
+                    typedValue = Integer.parseInt(s.toString());
+                }
+                if (typedValue == 0) typedValue = 1;
+                if (typedValue > notifyEditTextMaxValue)
+                    notifyEditText.setText(String.valueOf(notifyEditTextMaxValue));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        notifyRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton checkedRadioButton = (RadioButton) group.findViewById(checkedId);
+                ((RadioButton)group.getChildAt(0)).setText(R.string.notify_minutes);
+                ((RadioButton)group.getChildAt(1)).setText(R.string.notify_hours);
+                ((RadioButton)group.getChildAt(2)).setText(R.string.notify_days);
+                ((RadioButton)group.getChildAt(3)).setText(R.string.notify_weeks);
+                int idx = group.indexOfChild(checkedRadioButton);
+                switch (idx) {
+                    case 0: //min
+                        checkedRadioButton.setText(R.string.notify_minutes_checked);
+                        notifyEditTextMaxValue = 600;
+                        break;
+                    case 1: //hour
+                        checkedRadioButton.setText(R.string.notify_hours_checked);
+                        notifyEditTextMaxValue = 120;
+                        break;
+                    case 2: //day
+                        checkedRadioButton.setText(R.string.notify_days_checked);
+                        notifyEditTextMaxValue = 28;
+                        break;
+                    case 3: //week
+                        checkedRadioButton.setText(R.string.notify_weeks_checked);
+                        notifyEditTextMaxValue = 4;
+                        break;
+                }
+                if (notifyEditText.getText().toString().isEmpty()) {
+                    notifyEditText.setText("1");
+                }
+                int typedValue = Integer.parseInt(notifyEditText.getText().toString());
+                if (typedValue > notifyEditTextMaxValue) {
+                    notifyEditText.setText(String.valueOf(notifyEditTextMaxValue));
+                }
+                if (typedValue == 0) {
+                    notifyEditText.setText("1");
+                }
+            }
+        });
+
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                int typedValue = Integer.parseInt(notifyEditText.getText().toString());
+                int checkedRadioButton = notifyRadioGroup.getCheckedRadioButtonId();
+                int selectedRadioButton = notifyRadioGroup.indexOfChild(notifyRadioGroup.findViewById(checkedRadioButton));
+                long timeUnit = 0;
+                switch (selectedRadioButton) {
+                    case 0: //min
+                        timeUnit = TimeUnitUtils.MINUTE;
+                        break;
+                    case 1: //hour
+                        timeUnit = TimeUnitUtils.HOUR;
+                        break;
+                    case 2: //day
+                        timeUnit = TimeUnitUtils.DAY;
+                        break;
+                    case 3: //week
+                        timeUnit = TimeUnitUtils.WEEK;
+                        break;
+                }
+                notifyDelta = typedValue * timeUnit;
+                updateNotifyView();
+                alertDialog.dismiss();
+            }
+        });
+        ((RadioButton)notifyRadioGroup.getChildAt(0)).setChecked(true);
+        alertDialog.setView(dialogView);
+        alertDialog.show();
     }
 }
