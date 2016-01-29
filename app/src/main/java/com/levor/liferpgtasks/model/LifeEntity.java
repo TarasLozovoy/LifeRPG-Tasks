@@ -84,11 +84,11 @@ public class LifeEntity {
             c.add(Calendar.DATE, 1);
             Date tomorrow = c.getTime();
 
-            addTask(context.getString(R.string.read_book), -1, Task.EASY, Task.EASY, today, true,
+            addTask(context.getString(R.string.read_book), -1, Task.LOW, Task.LOW, today, true,
                     getSkillByTitle(context.getString(R.string.erudition)));
             addTask(context.getString(R.string.learn_spanish), -1, Task.MEDIUM, Task.MEDIUM, tomorrow, true,
                     getSkillByTitle(context.getString(R.string.spanish)));
-            addTask(context.getString(R.string.perform_workout), 1, Task.HARD, Task.HARD, today, true,
+            addTask(context.getString(R.string.perform_workout), 1, Task.HIGH, Task.HIGH, today, true,
                     getSkillByTitle(context.getString(R.string.powerlifting)));
             addTask(context.getString(R.string.morning_running), 25, Task.INSANE, Task.INSANE, tomorrow, true,
                     getSkillByTitle(context.getString(R.string.running)));

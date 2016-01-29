@@ -167,8 +167,7 @@ public class EditTaskFragment extends AddTaskFragment {
     @Override
     protected void finishTask(String title, String message) {
         getCurrentActivity().showSoftKeyboard(false, getView());
-        int repeat = getRepeatability();
-        currentTask.setRepeatability(repeat);
+        currentTask.setRepeatability(repeatability);
 //        currentTask.setNotify(notifyCheckbox.isChecked());
 //        currentTask.setDifficulty(difficultySpinner.getSelectedItemPosition());
 //        currentTask.setImportance(importanceSpinner.getSelectedItemPosition());

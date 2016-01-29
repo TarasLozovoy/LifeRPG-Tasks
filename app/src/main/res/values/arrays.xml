@@ -2,18 +2,18 @@
 <resources>
     <string-array
         name="difficulties_array">
-        <item>Low</item>
-        <item>Medium</item>
-        <item>High</item>
-        <item>Insane</item>
+        <item>@string/low</item>
+        <item>@string/medium</item>
+        <item>@string/high</item>
+        <item>@string/insane</item>
     </string-array>
 
     <string-array
         name="importance_array">
-        <item>Low</item>
-        <item>Medium</item>
-        <item>High</item>
-        <item>Insane</item>
+        <item>@string/low</item>
+        <item>@string/medium</item>
+        <item>@string/high</item>
+        <item>@string/insane</item>
     </string-array>
 
     <string-array

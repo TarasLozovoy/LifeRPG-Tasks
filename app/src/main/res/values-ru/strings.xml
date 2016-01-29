@@ -5,6 +5,7 @@
     <string name="add_skill_to_task">Добавить навык</string>
     <string name="add_new_task">Новая задача</string>
     <string name="related_skills">Связанные\nнавыки:</string>
+    <string name="related_skills_list">Связанные навыки:</string>
     <string name="characteristic_level">Уровень:</string>
     <string name="characteristic_related_skills">Увеличиться при росте следующих навыков</string>
     <string name="edit_task">Редактировать</string>
@@ -117,6 +118,10 @@
     <string name="notify_days_checked">дн. до</string>
     <string name="notify_weeks">нед.</string>
     <string name="notify_weeks_checked">нед. до</string>
+    <string name="low">Низкая</string>
+    <string name="medium">Средняя</string>
+    <string name="high">Высокая</string>
+    <string name="insane">Безумная</string>
     <!-- -->
 
     <!-- Skills-->

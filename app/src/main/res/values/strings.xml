@@ -14,6 +14,7 @@
     <string name="add_skill_to_task">Add related skill</string>
     <string name="add_new_task">New task</string>
     <string name="related_skills">Related \nskills:</string>
+    <string name="related_skills_list">Related skills:</string>
     <string name="characteristic_level">Level:</string>
     <string name="characteristic_related_skills">Can be improved by enhancing next skills:</string>
     <string name="edit_task">Edit</string>
@@ -126,6 +127,10 @@
     <string name="notify_days_checked">d. before</string>
     <string name="notify_weeks">w.</string>
     <string name="notify_weeks_checked">w. before</string>
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="high">High</string>
+    <string name="insane">Insane</string>
     <!-- -->
 
     <!-- Skills-->

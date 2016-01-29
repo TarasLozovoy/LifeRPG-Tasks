@@ -10,16 +10,16 @@ import java.util.List;
 import java.util.UUID;
 
 public class Task {
-    public final static int EASY = 0;
+    public final static int LOW = 0;
     public final static int MEDIUM = 1;
-    public final static int HARD = 2;
+    public final static int HIGH = 2;
     public final static int INSANE = 3;
     private String title;
     private List<Skill> relatedSkills = new ArrayList<>();
     private UUID id;
     private int repeatability = -1;
-    private int difficulty = EASY;
-    private int importance = EASY;
+    private int difficulty = LOW;
+    private int importance = LOW;
     private Date date;
     private boolean undonable = false;
     private boolean notify = true;

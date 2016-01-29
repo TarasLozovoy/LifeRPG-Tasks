@@ -1,9 +1,13 @@
 package com.levor.liferpgtasks.view.fragments.tasks;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -21,6 +25,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -32,7 +37,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.Utils.TimeUnitUtils;
-import com.levor.liferpgtasks.adapters.TaskAddingAdapter;
+import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.model.Task.RepeatMode;
@@ -41,9 +46,9 @@ import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static com.levor.liferpgtasks.model.Task.DateMode;
 
@@ -52,30 +57,28 @@ public class AddTaskFragment extends DefaultFragment {
 
     public static final String TASK_TITLE_TAG = "task_title_tag";
     private final String RELATED_SKILLS_TAG = "related_skills_tag";
-    private final String REPEAT_TAG = "repeat_tag";
-    private final String DIFFICULTY_TAG = "difficulty_tag";
-    private final String IMPORTANCE_TAG = "importance_tag";
+//    private final String REPEAT_TAG = "repeat_tag";
+//    private final String DIFFICULTY_TAG = "difficulty_tag";
+//    private final String IMPORTANCE_TAG = "importance_tag";
     private final String DATE_TAG = "date_tag";
-    private final String NOTIFY_TAG = "notify_tag";
-    private final String REPEAT_CHECKBOX_TAG = "repeat_checkbox_tag";
+//    private final String NOTIFY_TAG = "notify_tag";
+//    private final String REPEAT_CHECKBOX_TAG = "repeat_checkbox_tag";
 
     protected EditText taskTitleEditText;
     protected TextView dateTextView;
     protected View dateView;
     protected TextView notifyTextView;
     protected View notifyView;
+    protected ImageView notifyImageView;
     protected TextView repeatTextView;
     protected View repeatView;
+    protected ImageView repeatImageView;
     protected TextView difficultyTextView;
     protected View difficultyView;
     protected TextView importanceTextView;
     protected View importanceView;
     protected TextView relatedSkillsTextView;
     protected View relatedSkillsView;
-
-    private ListView listView;
-
-    private Button addSkillButton;
 
     protected Date date;
     protected int dateMode = DateMode.TERMLESS;
@@ -84,6 +87,8 @@ public class AddTaskFragment extends DefaultFragment {
     protected Boolean[] repeatDaysOfWeek;
     protected int repeatIndex = 1;      //repeat every N days, repeatIndex == N
     protected long notifyDelta = -1;         // <0 - do not notify, >0 notify at (date - delta) time
+    protected int difficulty = Task.LOW;
+    protected int importance = Task.LOW;
     protected ArrayList<String> relatedSkills = new ArrayList<>();
 
     private int notifyEditTextMaxValue = 600;
@@ -91,24 +96,22 @@ public class AddTaskFragment extends DefaultFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_add_task, container, false);
-        listView = (ListView) view;
-        View header = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.add_task_header, null);
-        taskTitleEditText = (EditText) header.findViewById(R.id.task_title_edit_text);
-        dateTextView = (TextView) header.findViewById(R.id.date_time_text_view);
-        dateView = header.findViewById(R.id.date_time_layout);
-        repeatTextView = (TextView) header.findViewById(R.id.repeat_text_view);
-        repeatView = header.findViewById(R.id.repeat_layout);
-        notifyTextView = (TextView) header.findViewById(R.id.notification_text_view);
-        notifyView = header.findViewById(R.id.notification_layout);
-        difficultyTextView = (TextView) header.findViewById(R.id.difficulty_text_view);
-        difficultyView = header.findViewById(R.id.difficulty_layout);
-        importanceTextView = (TextView) header.findViewById(R.id.importance_text_view);
-        importanceView = header.findViewById(R.id.importance_layout);
-        relatedSkillsTextView = (TextView) header.findViewById(R.id.related_skills_text_view);
-        relatedSkillsView = header.findViewById(R.id.related_skills_layout);
-
-        addSkillButton = (Button) header.findViewById(R.id.add_related_skill_button);
+        final View v = inflater.inflate(R.layout.fragment_add_task, container, false);
+        taskTitleEditText = (EditText) v.findViewById(R.id.task_title_edit_text);
+        dateTextView = (TextView) v.findViewById(R.id.date_time_text_view);
+        dateView = v.findViewById(R.id.date_time_layout);
+        repeatTextView = (TextView) v.findViewById(R.id.repeat_text_view);
+        repeatView = v.findViewById(R.id.repeat_layout);
+        repeatImageView = (ImageView) v.findViewById(R.id.repeat_image_view);
+        notifyTextView = (TextView) v.findViewById(R.id.notification_text_view);
+        notifyView = v.findViewById(R.id.notification_layout);
+        notifyImageView = (ImageView) v.findViewById(R.id.notify_image_view);
+        difficultyTextView = (TextView) v.findViewById(R.id.difficulty_text_view);
+        difficultyView = v.findViewById(R.id.difficulty_layout);
+        importanceTextView = (TextView) v.findViewById(R.id.importance_text_view);
+        importanceView = v.findViewById(R.id.importance_layout);
+        relatedSkillsTextView = (TextView) v.findViewById(R.id.related_skills_text_view);
+        relatedSkillsView = v.findViewById(R.id.related_skills_layout);
 
         dateTextView.setText(getString(R.string.task_date_termless));
         repeatTextView.setText(getString(R.string.task_repeat_do_not_repeat));
@@ -127,19 +130,18 @@ public class AddTaskFragment extends DefaultFragment {
             date = new Date();
         }
         updateDateView();
-        listView.addHeaderView(header);
-        setupListView();
+        updateRelatedSkillsView();
 
         String skillTitle;
         if (getArguments() != null && (skillTitle = getArguments().getString(RECEIVED_SKILL_TITLE_TAG)) != null) {
             relatedSkills.add(skillTitle);
-            updateListView();
+            updateRelatedSkillsView();
         }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(getString(R.string.add_new_task));
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
 
-        return view;
+        return v;
     }
 
     @Override
@@ -193,10 +195,6 @@ public class AddTaskFragment extends DefaultFragment {
         super.onSaveInstanceState(outState);
     }
 
-    private void updateListView(){
-        listView.setAdapter(new TaskAddingAdapter(getActivity(), relatedSkills));
-    }
-
     protected void createIdenticalTaskRequestDialog(final String title){
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
         b.setTitle(getString(R.string.oops))
@@ -222,7 +220,6 @@ public class AddTaskFragment extends DefaultFragment {
     protected void finishTask(String title, String message){
 //        int difficulty = difficultySpinner.getSelectedItemPosition();
 //        int importance = importanceSpinner.getSelectedItemPosition();
-        int repeat = getRepeatability();
 //        boolean notify = notifyCheckbox.isChecked();
 //        getController().createNewTask(title, repeat, difficulty, importance, date, notify, relatedSkills);
 
@@ -235,45 +232,6 @@ public class AddTaskFragment extends DefaultFragment {
         getCurrentActivity().showSoftKeyboard(false, getView());
         Toast.makeText(getCurrentActivity(), message, Toast.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
-    }
-
-    private void setupListView(){
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                relatedSkills.remove(position - listView.getHeaderViewsCount());
-                updateListView();
-            }
-        });
-        addSkillButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<String> skillsList = getController().getSkillsTitles();
-                skillsList.removeAll(relatedSkills);
-                if (skillsList.isEmpty()) {
-                    Toast.makeText(getContext(), getString(R.string.all_related_skills_added), Toast.LENGTH_LONG)
-                            .show();
-                    return;
-                }
-                final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                        android.R.layout.select_dialog_item, skillsList);
-
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-                dialog.setTitle(getString(R.string.skill_choosing));
-                dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (!relatedSkills.contains(adapter.getItem(which))) {
-                            relatedSkills.add(adapter.getItem(which));
-                            updateListView();
-                        }
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
-            }
-        });
-        updateListView();
     }
 
     private void registerListeners() {
@@ -381,20 +339,20 @@ public class AddTaskFragment extends DefaultFragment {
                 dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
-                            case 0 : //do not notify
+                        switch (which) {
+                            case 0: //do not notify
                                 notifyDelta = -1;
                                 break;
-                            case 1 : //1 minute before
+                            case 1: //1 minute before
                                 notifyDelta = TimeUnitUtils.MINUTE;
                                 break;
-                            case 2 : //10 minute before
+                            case 2: //10 minute before
                                 notifyDelta = 10 * TimeUnitUtils.MINUTE;
                                 break;
-                            case 3 : //60 minute before
+                            case 3: //60 minute before
                                 notifyDelta = 60 * TimeUnitUtils.MINUTE;
                                 break;
-                            case 4 : //custom
+                            case 4: //custom
                                 showCustomNotifyDialog();
                                 break;
                         }
@@ -407,24 +365,48 @@ public class AddTaskFragment extends DefaultFragment {
         difficultyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "difficultyView", Toast.LENGTH_SHORT).show();
-                //todo add new dialog
+                String[] notifyVariants = getResources().getStringArray(R.array.difficulties_array);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                        android.R.layout.select_dialog_item, notifyVariants);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        difficulty = which;
+                        String difficultyString = getString(R.string.difficulty) + " "
+                                + getResources().getStringArray(R.array.difficulties_array)[which];
+                        difficultyTextView.setText(difficultyString);
+                        dialog.dismiss();
+                    }
+                }).show();
             }
         });
 
         importanceView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "importanceView", Toast.LENGTH_SHORT).show();
-                //todo add new dialog
+                String[] notifyVariants = getResources().getStringArray(R.array.importance_array);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                        android.R.layout.select_dialog_item, notifyVariants);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        importance = which;
+                        String importanceString = getString(R.string.importance) + " " +
+                                getResources().getStringArray(R.array.importance_array)[which];
+                        importanceTextView.setText(importanceString);
+                        dialog.dismiss();
+                    }
+                }).show();
             }
         });
 
         relatedSkillsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "relatedSkillsView", Toast.LENGTH_SHORT).show();
-                //todo add new dialog
+                RelatedSkillSelectionDialog dialog = new RelatedSkillSelectionDialog();
+                dialog.show(getCurrentActivity().getSupportFragmentManager(), "SkillSelection");
             }
         });
     }
@@ -442,6 +424,7 @@ public class AddTaskFragment extends DefaultFragment {
                 notifyDelta = -1;
                 notifyView.setEnabled(false);
                 notifyTextView.setEnabled(false);
+                notifyImageView.setEnabled(false);
                 updateNotifyView();
             }
         } else {
@@ -469,6 +452,7 @@ public class AddTaskFragment extends DefaultFragment {
             if (!notifyView.isEnabled()) {
                 notifyView.setEnabled(true);
                 notifyTextView.setEnabled(true);
+                notifyImageView.setEnabled(true);
             }
         }
         dateTextView.setText(sb.toString());
@@ -577,6 +561,19 @@ public class AddTaskFragment extends DefaultFragment {
             dateMode = DateMode.WHOLE_DAY;
             date = new Date();
         }
+
+        //setting repeat image view
+        if (repeatMode == RepeatMode.SIMPLE_REPEAT){
+            repeatImageView.setImageResource(R.drawable.ic_replay_black_24dp);
+            repeatImageView.setAlpha(1f);
+        } else if (repeatMode == RepeatMode.DO_NOT_REPEAT){
+            repeatImageView.setAlpha(0f);
+        } else {
+            repeatImageView.setImageResource(R.drawable.infinity);
+            repeatImageView.setAlpha(1f);
+        }
+        //
+
         repeatTextView.setText(sb.toString());
         if (startDateMode != dateMode) updateDateView();
     }
@@ -615,15 +612,25 @@ public class AddTaskFragment extends DefaultFragment {
         notifyTextView.setText(sb.toString());
     }
 
+    protected void updateRelatedSkillsView(){
+        StringBuilder sb = new StringBuilder();
+        if (relatedSkills.isEmpty()){
+            sb.append(getString(R.string.add_skill_to_task));
+        } else {
+            sb.append(getString(R.string.related_skills_list));
+            sb.append("\n");
+            for (int i = 0; i < relatedSkills.size(); i++) {
+                sb.append(relatedSkills.get(i));
+                if (i < relatedSkills.size() - 1) sb.append(", ");
+            }
+        }
+        relatedSkillsTextView.setText(sb.toString());
+    }
+
     protected void createNotification(String taskTitle){
         Task task = getController().getTaskByTitle(taskTitle);
         getController().removeTaskNotification(task);
         getController().addTaskNotification(task);
-    }
-
-    protected int getRepeatability(){
-        // TODO: 1/27/16 add method
-        return 1;
     }
 
     private void showDatePickerDialog(){
@@ -935,5 +942,47 @@ public class AddTaskFragment extends DefaultFragment {
         ((RadioButton)notifyRadioGroup.getChildAt(0)).setChecked(true);
         alertDialog.setView(dialogView);
         alertDialog.show();
+    }
+
+    @SuppressLint("ValidFragment")
+    public class RelatedSkillSelectionDialog extends DialogFragment {
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            List<Skill> allSkills = getController().getAllSkills();
+            Collections.sort(allSkills, Skill.TITLE_COMPARATOR);
+            String[] skillNames = new String[allSkills.size()];
+            boolean[] skillStates = new boolean[allSkills.size()];
+
+            for (int i = 0; i < allSkills.size(); i++) {
+                skillNames[i] = allSkills.get(i).getTitle();
+                skillStates[i] = relatedSkills.contains(allSkills.get(i).getTitle());
+            }
+
+            final String[] items = skillNames;
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.skill_choosing)
+                    .setMultiChoiceItems(items, skillStates,
+                            new DialogInterface.OnMultiChoiceClickListener() {
+                                public void onClick(DialogInterface dialog, int item, boolean isChecked) {
+                                    if (isChecked){
+                                        relatedSkills.add(items[item]);
+                                    } else {
+                                        relatedSkills.remove(items[item]);
+                                    }
+                                }
+                            })
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            updateRelatedSkillsView();
+                            dialog.dismiss();
+                        }
+                    })
+                    .setCancelable(false);
+
+            return builder.create();
+        }
     }
 }
