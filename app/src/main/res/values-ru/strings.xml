@@ -98,6 +98,7 @@
     <string name="repeats">Повторов</string>
     <string name="infinite">неограничено</string>
     <string name="do_not_notify">Не оповещать</string>
+    <string name="notify">Уведомлять:</string>
     <string name="notify_1_minute_before">За 1 минуту до</string>
     <string name="notify_10_minute_before">За 10 минут до</string>
     <string name="notify_60_minute_before">За 60 минут до</string>

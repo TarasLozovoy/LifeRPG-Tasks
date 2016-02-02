@@ -4,10 +4,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.levor.liferpgtasks.model.Task;
+
 import static com.levor.liferpgtasks.dataBase.DataBaseSchema.*;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-    private static final int VERSION = 2;
+    private static final int VERSION = 3;
     public static final String DATABASE_NAME = "RealLifeBase.db";
 
     public DataBaseHelper(Context context) {
@@ -49,7 +51,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 TasksTable.Cols.IMPORTANCE + ", " +
                 TasksTable.Cols.DATE + ", " +
                 TasksTable.Cols.NOTIFY + ", " +
-                TasksTable.Cols.RELATED_SKILLS +
+                TasksTable.Cols.RELATED_SKILLS + ", " +
+                TasksTable.Cols.REPEAT_INDEX + ", " +
+                TasksTable.Cols.REPEAT_DAYS_OF_WEEK + ", " +
+                TasksTable.Cols.REPEAT_MODE + ", " +
+                TasksTable.Cols.DATE_MODE +
                 ")");
 
         //v2+
@@ -76,7 +82,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         MiscTable.Cols.STATISTICS_NUMBERS + ", " +
                         MiscTable.Cols.ACHIEVES_LEVELS +
                         ")");
-                break;
+            case 2:
+                db.execSQL("alter table " + TasksTable.NAME + " add column " +
+                        TasksTable.Cols.REPEAT_INDEX);
+                db.execSQL("alter table " + TasksTable.NAME + " add column " +
+                        TasksTable.Cols.REPEAT_DAYS_OF_WEEK);
+                db.execSQL("alter table " + TasksTable.NAME + " add column " +
+                        TasksTable.Cols.REPEAT_MODE);
+                db.execSQL("alter table " + TasksTable.NAME + " add column " +
+                        TasksTable.Cols.DATE_MODE);
         }
     }
 }

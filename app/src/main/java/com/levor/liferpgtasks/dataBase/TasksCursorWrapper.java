@@ -3,6 +3,7 @@ package com.levor.liferpgtasks.dataBase;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
+import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 import com.levor.liferpgtasks.dataBase.DataBaseSchema.TasksTable;
 import com.levor.liferpgtasks.model.LifeEntity;
 import com.levor.liferpgtasks.model.Skill;
@@ -29,8 +30,11 @@ public class TasksCursorWrapper extends CursorWrapper {
         int difficulty = getInt(getColumnIndex(TasksTable.Cols.DIFFICULTY));
         int importance = getInt(getColumnIndex(TasksTable.Cols.IMPORTANCE));
         long dateLong = getLong(getColumnIndex(TasksTable.Cols.DATE));
-        int notifyInt = getInt(getColumnIndex(TasksTable.Cols.NOTIFY));
-        boolean notify = notifyInt == 1;
+        long notifyLong = getLong(getColumnIndex(TasksTable.Cols.NOTIFY));
+        int dateMode = getInt(getColumnIndex(TasksTable.Cols.DATE_MODE));
+        int repeatMode = getInt(getColumnIndex(TasksTable.Cols.REPEAT_MODE));
+        int repeatIndex = getInt(getColumnIndex(TasksTable.Cols.REPEAT_INDEX));
+        String repeatDaysOfWeekString = getString(getColumnIndex(TasksTable.Cols.REPEAT_DAYS_OF_WEEK));
         List<Skill> skills = new ArrayList<>();
         String[] skillsArray = relatedSkills.split("::");
         for (String s : skillsArray) {
@@ -39,7 +43,20 @@ public class TasksCursorWrapper extends CursorWrapper {
         }
 
         Date date  = new Date(dateLong);
-        return new Task(title, UUID.fromString(uuid), repeatability, difficulty, importance, date, notify, skills);
+
+        Task task = new Task(title, UUID.fromString(uuid));
+        task.setDate(date);
+        task.setDateMode(dateMode);
+        task.setRepeatability(repeatability);
+        task.setRepeatMode(repeatMode);
+        task.setRepeatDaysOfWeekFromString(repeatDaysOfWeekString);
+        task.setRepeatIndex(repeatIndex);
+        task.setDifficulty(difficulty);
+        task.setImportance(importance);
+        task.setNotifyDelta(notifyLong);
+        task.setRelatedSkills(skills);
+        
+        return task;
     }
 
 }

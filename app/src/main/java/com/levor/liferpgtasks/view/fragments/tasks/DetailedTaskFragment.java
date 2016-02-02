@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
+import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
@@ -27,6 +28,7 @@ import com.levor.liferpgtasks.view.fragments.skills.DetailedSkillFragment;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -37,6 +39,7 @@ public class DetailedTaskFragment extends DefaultFragment {
     private Task currentTask;
     private TextView taskRepeatTV;
     private TextView taskDateTV;
+    private TextView notificationTV;
     private TextView noRelatedSkillsTV;
 
     @Override
@@ -51,7 +54,7 @@ public class DetailedTaskFragment extends DefaultFragment {
         taskRepeatTV = (TextView) header.findViewById(R.id.task_repeat_times_text_view);
         taskDateTV = (TextView) header.findViewById(R.id.task_date_text_view);
         noRelatedSkillsTV = (TextView) header.findViewById(R.id.no_related_skills);
-        TextView notificationTV = (TextView) header.findViewById(R.id.notification_text_view);
+        notificationTV = (TextView) header.findViewById(R.id.notification_text_view);
 
 
         UUID id = (UUID)getArguments().get(SELECTED_TASK_UUID_TAG);
@@ -76,7 +79,7 @@ public class DetailedTaskFragment extends DefaultFragment {
         setupRepeatability();
 
         //setup notification TextView
-        notificationTV.setVisibility(currentTask.isNotify() ? View.VISIBLE : View.GONE);
+        setupNotificationString();
 
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(getString(R.string.task));
@@ -142,25 +145,147 @@ public class DetailedTaskFragment extends DefaultFragment {
     }
 
     private void setupTaskDate() {
-        String dateString = getString(R.string.date) + " " +
-                DateFormat.format(Task.getDateFormatting(), currentTask.getDate()) + " - " +
-                DateFormat.format(Task.getTimeFormatting(), currentTask.getDate()) + " ";
-        if (!currentTask.isTaskDone() && currentTask.getDate().before(new Date(System.currentTimeMillis()))){
-            dateString = dateString + getString(R.string.overdue);
+        StringBuilder sb = new StringBuilder();
+        sb.append(getString(R.string.date))
+                .append(" ");
+        if (currentTask.getDateMode() == Task.DateMode.TERMLESS){
+            sb.append(getString(R.string.task_date_termless));
+        } else {
+            sb.append(DateFormat.format(Task.getDateFormatting(), currentTask.getDate()));
+            if (currentTask.getDateMode() == Task.DateMode.SPECIFIC_TIME) {
+                sb.append(" - ")
+                        .append(DateFormat.format(Task.getTimeFormatting(), currentTask.getDate()))
+                        .append(" ");
+            }
+            if (!currentTask.isTaskDone() && currentTask.getDate().before(new Date(System.currentTimeMillis()))) {
+                sb.append(getString(R.string.overdue));
+            }
         }
-        taskDateTV.setText(dateString);
+        taskDateTV.setText(sb.toString());
     }
 
     private void setupRepeatability() {
         int repeat = currentTask.getRepeatability();
+        int repeatMode = currentTask.getRepeatMode();
+        int repeatIndex = currentTask.getRepeatIndex();
+        StringBuilder sb = new StringBuilder();
         if (repeat == 0) {
-            taskRepeatTV.setText(getString(R.string.task_finished));
-        } else if (repeat < 0) {
-            taskRepeatTV.setText(getString(R.string.infinite_number_of));
+            sb.append(getString(R.string.task_finished));
         } else {
-            String repeatString = getString(R.string.repeat) + " " + repeat + " " +
-                    getString(R.string.times);
-            taskRepeatTV.setText(repeatString);
+            sb.append(getString(R.string.repeat))
+                    .append(": ");
+            if (repeatMode == Task.RepeatMode.EVERY_NTH_DAY) {
+                if (repeatIndex == 1) {
+                    sb.append(getString(R.string.task_repeat_every_day));
+                } else {
+                    sb.append(getString(R.string.task_repeat_every_Nth_day, repeatIndex));
+                }
+                if (repeat > 0) {
+                    sb.append("; ")
+                            .append(getString(R.string.repeats))
+                            .append(": ")
+                            .append(repeat);
+                }
+            } else if (repeatMode == Task.RepeatMode.EVERY_NTH_MONTH) {
+                if (repeatIndex == 1) {
+                    sb.append(getString(R.string.task_repeat_every_month));
+                } else {
+                    sb.append(getString(R.string.task_repeat_every_Nth_month, repeatIndex));
+                }
+                if (repeat > 0) {
+                    sb.append("; ")
+                            .append(getString(R.string.repeats))
+                            .append(": ")
+                            .append(repeat);
+                }
+            } else if (repeatMode == Task.RepeatMode.EVERY_NTH_YEAR) {
+                if (repeatIndex == 1) {
+                    sb.append(getString(R.string.task_repeat_every_year));
+                } else {
+                    sb.append(getString(R.string.task_repeat_every_Nth_year, repeatIndex));
+                }
+                if (repeat > 0) {
+                    sb.append("; ")
+                            .append(getString(R.string.repeats))
+                            .append(": ")
+                            .append(repeat);
+                }
+            } else if (repeatMode == Task.RepeatMode.DO_NOT_REPEAT) {
+                sb.append(getString(R.string.task_repeat_do_not_repeat));
+            } else if (repeatMode == Task.RepeatMode.SIMPLE_REPEAT) {
+                if (repeat > 0) {
+                    sb.append(repeat);
+                } else if (repeat == -1) {
+                    sb.append(getString(R.string.infinite));
+                }
+            } else {    //weeks
+                String[] days = getResources().getStringArray(R.array.days_of_week_short);
+                for (int i = 0; i < days.length; i++) {
+                    if (currentTask.getRepeatDaysOfWeek()[i]) {
+                        sb.append(days[i])
+                                .append(",");
+                    }
+                }
+                if (Arrays.asList(currentTask.getRepeatDaysOfWeek()).contains(true)) {
+                    sb.deleteCharAt(sb.length() - 1)
+                            .append("; ");
+                }
+
+                if (repeatIndex == 1) {
+                    sb.append(getString(R.string.task_repeat_every_week));
+                } else {
+                    sb.append(getString(R.string.task_repeat_every_Nth_week, repeatIndex));
+                }
+                if (repeat > 0) {
+                    sb.append("; ")
+                            .append(getString(R.string.repeats))
+                            .append(": ")
+                            .append(repeat);
+                }
+            }
+        }
+        taskRepeatTV.setText(sb.toString());
+    }
+
+    private void setupNotificationString(){
+        if (currentTask.getNotifyDelta() >= 0) {
+            notificationTV.setVisibility(View.VISIBLE);
+            int dateMode = currentTask.getDateMode();
+            long notifyDelta = currentTask.getNotifyDelta();
+            StringBuilder sb = new StringBuilder(getString(R.string.notify));
+            sb.append(" ");
+            if (notifyDelta < 0 || dateMode == Task.DateMode.TERMLESS) {
+                sb.append(getString(R.string.task_add_notification));
+            } else {
+                if (notifyDelta % TimeUnitUtils.WEEK == 0 && notifyDelta != 0) {
+                    if (notifyDelta == TimeUnitUtils.WEEK) {
+                        sb.append(getString(R.string.notify_1_week_before));
+                    } else {
+                        sb.append(getString(R.string.notify_N_weeks_before, notifyDelta / TimeUnitUtils.WEEK));
+                    }
+                } else if (notifyDelta % TimeUnitUtils.DAY == 0 && notifyDelta != 0) {
+                    if (notifyDelta == TimeUnitUtils.DAY) {
+                        sb.append(getString(R.string.notify_1_day_before));
+                    } else {
+                        sb.append(getString(R.string.notify_N_days_before, notifyDelta / TimeUnitUtils.DAY));
+                    }
+                } else if (notifyDelta % TimeUnitUtils.HOUR == 0 && notifyDelta != 0) {
+                    if (notifyDelta == TimeUnitUtils.HOUR) {
+                        sb.append(getString(R.string.notify_1_hour_before));
+                    } else {
+                        sb.append(getString(R.string.notify_N_hours_before, notifyDelta / TimeUnitUtils.HOUR));
+                    }
+                } else {
+                    if (notifyDelta == TimeUnitUtils.MINUTE) {
+                        sb.append(getString(R.string.notify_1_minute_before));
+                    } else {
+                        sb.append(getString(R.string.notify_N_minutes_before, notifyDelta / TimeUnitUtils.MINUTE));
+                    }
+                }
+            }
+            notificationTV.setText(sb.toString());
+        } else {
+            notificationTV.setVisibility(View.GONE);
         }
     }
 

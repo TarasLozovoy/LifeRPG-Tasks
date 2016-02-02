@@ -20,13 +20,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -82,8 +80,8 @@ public class AddTaskFragment extends DefaultFragment {
 
     protected Date date;
     protected int dateMode = DateMode.TERMLESS;
-    protected int repeatability;
-    protected int repeatMode;
+    protected int repeatability = 1;
+    protected int repeatMode = RepeatMode.SIMPLE_REPEAT;
     protected Boolean[] repeatDaysOfWeek;
     protected int repeatIndex = 1;      //repeat every N days, repeatIndex == N
     protected long notifyDelta = -1;         // <0 - do not notify, >0 notify at (date - delta) time
@@ -129,8 +127,7 @@ public class AddTaskFragment extends DefaultFragment {
         } else {
             date = new Date();
         }
-        updateDateView();
-        updateRelatedSkillsView();
+        updateUI();
 
         String skillTitle;
         if (getArguments() != null && (skillTitle = getArguments().getString(RECEIVED_SKILL_TITLE_TAG)) != null) {
@@ -195,6 +192,15 @@ public class AddTaskFragment extends DefaultFragment {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    protected void updateUI() {
+        super.updateUI();
+        updateDateView();
+        updateNotifyView();
+        updateRepeatView();
+        updateRelatedSkillsView();
+    }
+
     protected void createIdenticalTaskRequestDialog(final String title){
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
         b.setTitle(getString(R.string.oops))
@@ -218,17 +224,29 @@ public class AddTaskFragment extends DefaultFragment {
     }
 
     protected void finishTask(String title, String message){
-//        int difficulty = difficultySpinner.getSelectedItemPosition();
-//        int importance = importanceSpinner.getSelectedItemPosition();
-//        boolean notify = notifyCheckbox.isChecked();
-//        getController().createNewTask(title, repeat, difficulty, importance, date, notify, relatedSkills);
+        Task task = new Task(title);
+        task.setDate(date);
+        task.setDateMode(dateMode);
+        task.setRepeatability(repeatability);
+        task.setRepeatMode(repeatMode);
+        task.setRepeatDaysOfWeek(repeatDaysOfWeek);
+        task.setRepeatIndex(repeatIndex);
+        task.setDifficulty(difficulty);
+        task.setImportance(importance);
+        task.setNotifyDelta(notifyDelta);
+        List<Skill> skillsList = new ArrayList<>();
+        for (int i = 0; i < relatedSkills.size(); i++) {
+            skillsList.add(getController().getSkillByTitle(relatedSkills.get(i)));
+        }
+        task.setRelatedSkills(skillsList);
+        getController().createNewTask(task);
 
         getController().getGATracker().send(new HitBuilders.EventBuilder()
                 .setCategory(getString(R.string.GA_action))
                 .setAction(getString(R.string.GA_add_new_task))
                 .build());
 
-        createNotification(title);
+        createNotification(task);
         getCurrentActivity().showSoftKeyboard(false, getView());
         Toast.makeText(getCurrentActivity(), message, Toast.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
@@ -424,7 +442,7 @@ public class AddTaskFragment extends DefaultFragment {
                 notifyDelta = -1;
                 notifyView.setEnabled(false);
                 notifyTextView.setEnabled(false);
-                notifyImageView.setEnabled(false);
+                notifyImageView.setAlpha(0.4f);
                 updateNotifyView();
             }
         } else {
@@ -452,7 +470,7 @@ public class AddTaskFragment extends DefaultFragment {
             if (!notifyView.isEnabled()) {
                 notifyView.setEnabled(true);
                 notifyTextView.setEnabled(true);
-                notifyImageView.setEnabled(true);
+                notifyImageView.setAlpha(1f);
             }
         }
         dateTextView.setText(sb.toString());
@@ -567,7 +585,8 @@ public class AddTaskFragment extends DefaultFragment {
             repeatImageView.setImageResource(R.drawable.ic_replay_black_24dp);
             repeatImageView.setAlpha(1f);
         } else if (repeatMode == RepeatMode.DO_NOT_REPEAT){
-            repeatImageView.setAlpha(0f);
+            repeatImageView.setImageResource(R.drawable.ic_replay_black_24dp);
+            repeatImageView.setAlpha(0.4f);
         } else {
             repeatImageView.setImageResource(R.drawable.infinity);
             repeatImageView.setAlpha(1f);
@@ -580,22 +599,22 @@ public class AddTaskFragment extends DefaultFragment {
 
     private void updateNotifyView(){
         StringBuilder sb = new StringBuilder();
-        if (notifyDelta < 0) {
+        if (notifyDelta < 0 || dateMode == DateMode.TERMLESS) {
             sb.append(getString(R.string.task_add_notification));
         } else {
-            if (notifyDelta % TimeUnitUtils.WEEK == 0){
+            if (notifyDelta % TimeUnitUtils.WEEK == 0 && notifyDelta != 0){
                 if (notifyDelta == TimeUnitUtils.WEEK){
                     sb.append(getString(R.string.notify_1_week_before));
                 } else {
                     sb.append(getString(R.string.notify_N_weeks_before, notifyDelta/TimeUnitUtils.WEEK));
                 }
-            } else if (notifyDelta % TimeUnitUtils.DAY == 0){
+            } else if (notifyDelta % TimeUnitUtils.DAY == 0 && notifyDelta != 0){
                 if (notifyDelta == TimeUnitUtils.DAY){
                     sb.append(getString(R.string.notify_1_day_before));
                 } else {
                     sb.append(getString(R.string.notify_N_days_before, notifyDelta/TimeUnitUtils.DAY));
                 }
-            } else if (notifyDelta % TimeUnitUtils.HOUR == 0){
+            } else if (notifyDelta % TimeUnitUtils.HOUR == 0 && notifyDelta != 0){
                 if (notifyDelta == TimeUnitUtils.HOUR){
                     sb.append(getString(R.string.notify_1_hour_before));
                 } else {
@@ -627,8 +646,7 @@ public class AddTaskFragment extends DefaultFragment {
         relatedSkillsTextView.setText(sb.toString());
     }
 
-    protected void createNotification(String taskTitle){
-        Task task = getController().getTaskByTitle(taskTitle);
+    protected void createNotification(Task task){
         getController().removeTaskNotification(task);
         getController().addTaskNotification(task);
     }

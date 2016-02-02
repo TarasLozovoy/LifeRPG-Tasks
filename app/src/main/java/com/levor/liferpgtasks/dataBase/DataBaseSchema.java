@@ -45,6 +45,10 @@ public class DataBaseSchema {
             public static final String IMPORTANCE = "task_importance";
             public static final String DATE = "task_date";
             public static final String NOTIFY = "task_notify";
+            public static final String DATE_MODE = "date_mode";
+            public static final String REPEAT_MODE = "repeat_mode";
+            public static final String REPEAT_DAYS_OF_WEEK = "repeat_days_of_week";
+            public static final String REPEAT_INDEX = "repeat_index";
         }
     }
 

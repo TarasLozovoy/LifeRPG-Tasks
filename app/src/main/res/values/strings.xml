@@ -107,6 +107,7 @@
     <string name="repeats">Repeats</string>
     <string name="infinite">Infinite</string>
     <string name="do_not_notify">Do not notify</string>
+    <string name="notify">Notify:</string>
     <string name="notify_1_minute_before">1 minute before</string>
     <string name="notify_10_minute_before">10 minutes before</string>
     <string name="notify_60_minute_before">60 minutes before</string>

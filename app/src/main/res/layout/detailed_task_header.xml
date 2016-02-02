@@ -7,13 +7,15 @@
         android:id="@+id/task_title"
         style="@style/LifeRPGTextTitleStyle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"/>
 
     <TextView
         android:id="@+id/task_date_text_view"
         style="@style/LifeRPGTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
         android:layout_below="@id/task_title" />
 
     <TextView
@@ -21,6 +23,7 @@
         style="@style/LifeRPGTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
         android:layout_below="@id/task_date_text_view" />
 
     <TextView
@@ -29,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/task_repeat_times_text_view"
+        android:layout_marginBottom="3dp"
         android:text="@string/show_notification" />
 
     <TextView
@@ -36,6 +40,7 @@
         style="@style/LifeRPGTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
         android:layout_below="@id/notification_text_view" />
 
     <TextView
@@ -43,6 +48,7 @@
         style="@style/LifeRPGTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
         android:layout_below="@id/task_difficulty_text_view" />
 
     <TextView
@@ -51,6 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/task_importance_text_view"
+        android:layout_marginBottom="3dp"
         android:text="@string/related_skills" />
 
     <TextView

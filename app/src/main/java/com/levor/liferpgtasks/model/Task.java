@@ -1,11 +1,14 @@
 package com.levor.liferpgtasks.model;
 
+import com.levor.liferpgtasks.Utils.TimeUnitUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,15 +17,20 @@ public class Task {
     public final static int MEDIUM = 1;
     public final static int HIGH = 2;
     public final static int INSANE = 3;
+
     private String title;
     private List<Skill> relatedSkills = new ArrayList<>();
     private UUID id;
     private int repeatability = -1;
+    private int repeatMode = RepeatMode.DO_NOT_REPEAT;
+    private Boolean[] repeatDaysOfWeek = new Boolean[7];
+    private int repeatIndex = 1;
     private int difficulty = LOW;
     private int importance = LOW;
     private Date date;
+    private int dateMode = DateMode.TERMLESS;
     private boolean undonable = false;
-    private boolean notify = true;
+    private long notifyDelta = 24 * TimeUnitUtils.HOUR;
 
     public static final Comparator<Task> COMPLETION_TASKS_COMPARATOR = new CompletionTasksComparator();
     public static final Comparator<Task> TITLE_ASC_TASKS_COMPARATOR = new TitleAscTasksComparator();
@@ -34,21 +42,20 @@ public class Task {
     public static final Comparator<Task> DATE_ASC_TASKS_COMPARATOR = new DateAscTasksComparator();
     public static final Comparator<Task> DATE_DESC_TASKS_COMPARATOR = new DateDescTasksComparator();
 
-    public Task(String title, UUID id, int repeatability, int difficulty, int importance,
-                Date date, boolean notify, Skill ... skills) {
-        this(title, id, repeatability, difficulty, importance, date, notify, Arrays.asList(skills));
+    public Task (String title){
+        this.title = title;
+        this.id = UUID.randomUUID();
+        for (int i = 0; i < repeatDaysOfWeek.length; i++) {
+            repeatDaysOfWeek[i] = false;
+        }
     }
 
-    public Task(String title, UUID id, int repeatability, int difficulty, int importance,
-                Date date, boolean notify, List<Skill> skills) {
+    public Task (String title, UUID id){
         this.title = title;
-        this.repeatability = repeatability;
-        this.relatedSkills = skills;
-        this.difficulty = difficulty;
-        this.importance = importance;
         this.id = id;
-        this.date = date;
-        this.notify = notify;
+        for (int i = 0; i < repeatDaysOfWeek.length; i++) {
+            repeatDaysOfWeek[i] = false;
+        }
     }
 
     public String getTitle() {
@@ -71,6 +78,10 @@ public class Task {
     }
     public void setRelatedSkills(List<Skill> relatedSkills) {
         this.relatedSkills = relatedSkills;
+    }
+
+    public void addRelatedSkill(Skill skill) {
+        relatedSkills.add(skill);
     }
 
     public void setTitle(String title) {
@@ -110,6 +121,10 @@ public class Task {
         this.importance = importance;
     }
 
+    public Date getNotificationDate() {
+        return new Date(date.getTime() - notifyDelta);
+    }
+
     public Date getDate() {
         return date;
     }
@@ -126,12 +141,65 @@ public class Task {
         this.undonable = undonable;
     }
 
-    public boolean isNotify() {
-        return notify;
+    public int getRepeatMode() {
+        return repeatMode;
     }
 
-    public void setNotify(boolean notify) {
-        this.notify = notify;
+    public void setRepeatMode(int repeatMode) {
+        this.repeatMode = repeatMode;
+    }
+
+    public Boolean[] getRepeatDaysOfWeek() {
+        return repeatDaysOfWeek;
+    }
+
+    public String getRepeatDaysOfWeekString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < repeatDaysOfWeek.length; i++) {
+            sb.append(repeatDaysOfWeek[i] ? 1 : 0);
+        }
+        return sb.toString();
+    }
+
+    public void setRepeatDaysOfWeekFromString(String days) {
+        if (days != null)
+            for (int i = 0; i < repeatDaysOfWeek.length; i++) {
+                repeatDaysOfWeek[i] = Integer.parseInt(("" + days.charAt(i))) == 1;
+            }
+    }
+
+    public void setRepeatDaysOfWeek(Boolean[] repeatDaysOfWeek) {
+        if (repeatDaysOfWeek == null) {
+            for (int i = 0; i < this.repeatDaysOfWeek.length; i++) {
+                this.repeatDaysOfWeek[i] = false;
+            }
+        } else {
+            this.repeatDaysOfWeek = repeatDaysOfWeek;
+        }
+    }
+
+    public int getRepeatIndex() {
+        return repeatIndex;
+    }
+
+    public void setRepeatIndex(int repeatIndex) {
+        this.repeatIndex = repeatIndex;
+    }
+
+    public int getDateMode() {
+        return dateMode;
+    }
+
+    public void setDateMode(int dateMode) {
+        this.dateMode = dateMode;
+    }
+
+    public long getNotifyDelta() {
+        return notifyDelta;
+    }
+
+    public void setNotifyDelta(long notifyDelta) {
+        this.notifyDelta = notifyDelta;
     }
 
     public void increaseDateByNDays(int N){

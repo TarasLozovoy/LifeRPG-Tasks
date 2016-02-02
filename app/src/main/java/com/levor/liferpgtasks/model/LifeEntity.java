@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 import com.levor.liferpgtasks.dataBase.CharacteristicsCursorWrapper;
 import com.levor.liferpgtasks.dataBase.DataBaseHelper;
 import com.levor.liferpgtasks.dataBase.DataBaseSchema.*;
@@ -84,14 +85,54 @@ public class LifeEntity {
             c.add(Calendar.DATE, 1);
             Date tomorrow = c.getTime();
 
-            addTask(context.getString(R.string.read_book), -1, Task.LOW, Task.LOW, today, true,
-                    getSkillByTitle(context.getString(R.string.erudition)));
-            addTask(context.getString(R.string.learn_spanish), -1, Task.MEDIUM, Task.MEDIUM, tomorrow, true,
-                    getSkillByTitle(context.getString(R.string.spanish)));
-            addTask(context.getString(R.string.perform_workout), 1, Task.HIGH, Task.HIGH, today, true,
-                    getSkillByTitle(context.getString(R.string.powerlifting)));
-            addTask(context.getString(R.string.morning_running), 25, Task.INSANE, Task.INSANE, tomorrow, true,
-                    getSkillByTitle(context.getString(R.string.running)));
+            Task task1 = new Task(context.getString(R.string.read_book));
+            task1.setDate(today);
+            task1.setDateMode(Task.DateMode.WHOLE_DAY);
+            task1.setRepeatability(-1);
+            task1.setRepeatMode(Task.RepeatMode.EVERY_NTH_DAY);
+            task1.setRepeatIndex(1);
+            task1.setDifficulty(Task.LOW);
+            task1.setImportance(Task.LOW);
+            task1.setNotifyDelta(4 * TimeUnitUtils.HOUR);
+            task1.addRelatedSkill(getSkillByTitle(context.getString(R.string.erudition)));
+
+            Task task2 = new Task(context.getString(R.string.learn_spanish));
+            task2.setDate(tomorrow);
+            task2.setDateMode(Task.DateMode.WHOLE_DAY);
+            task2.setRepeatability(1);
+            task2.setRepeatMode(Task.RepeatMode.SIMPLE_REPEAT);
+            task2.setRepeatIndex(1);
+            task2.setDifficulty(Task.MEDIUM);
+            task2.setImportance(Task.MEDIUM);
+            task2.setNotifyDelta(5 * TimeUnitUtils.HOUR);
+            task2.addRelatedSkill(getSkillByTitle(context.getString(R.string.spanish)));
+
+            Task task3 = new Task(context.getString(R.string.perform_workout));
+            task3.setDate(tomorrow);
+            task3.setDateMode(Task.DateMode.WHOLE_DAY);
+            task3.setRepeatability(1);
+            task3.setRepeatMode(Task.RepeatMode.SIMPLE_REPEAT);
+            task3.setRepeatIndex(1);
+            task3.setDifficulty(Task.HIGH);
+            task3.setImportance(Task.HIGH);
+            task3.setNotifyDelta(5 * TimeUnitUtils.HOUR);
+            task3.addRelatedSkill(getSkillByTitle(context.getString(R.string.powerlifting)));
+
+            Task task4 = new Task(context.getString(R.string.morning_running));
+            task4.setDate(tomorrow);
+            task4.setDateMode(Task.DateMode.WHOLE_DAY);
+            task4.setRepeatability(-1);
+            task4.setRepeatMode(Task.RepeatMode.EVERY_NTH_DAY);
+            task4.setRepeatIndex(1);
+            task4.setDifficulty(Task.INSANE);
+            task4.setImportance(Task.INSANE);
+            task4.setNotifyDelta(5 * TimeUnitUtils.HOUR);
+            task4.addRelatedSkill(getSkillByTitle(context.getString(R.string.running)));
+
+            addTask(task1);
+            addTask(task2);
+            addTask(task3);
+            addTask(task4);
 
             addHero(new Hero(0, 0, 1, context.getString(R.string.default_hero_name)));
 
@@ -112,20 +153,22 @@ public class LifeEntity {
         cursor.close();
     }
 
-    public void addTask(String title,int repeatability, int difficulty, int importance,
-                        Date date, boolean notify, Skill ... relatedSkills){
-        Task oldTask = getTaskByTitle(title);
+    public void addTask(Task task){
+        Task oldTask = getTaskByTitle(task.getTitle());
         if (oldTask != null) {
-            oldTask.setRelatedSkills(Arrays.asList(relatedSkills));
-            oldTask.setRepeatability(repeatability);
-            oldTask.setDifficulty(difficulty);
-            oldTask.setNotify((notify));
+            oldTask.setDate(task.getDate());
+            oldTask.setDateMode(task.getDateMode());
+            oldTask.setRepeatability(task.getRepeatability());
+            oldTask.setRepeatMode(task.getRepeatMode());
+            oldTask.setRepeatDaysOfWeek(task.getRepeatDaysOfWeek());
+            oldTask.setRepeatIndex(task.getRepeatIndex());
+            oldTask.setDifficulty(task.getDifficulty());
+            oldTask.setImportance(task.getImportance());
+            oldTask.setNotifyDelta(task.getNotifyDelta());
             updateTask(oldTask);
         } else {
-            UUID id = UUID.randomUUID();
-            Task newTask = new Task(title, id, repeatability, difficulty, importance, date, notify, relatedSkills);
-            tasks.add(newTask);
-            final ContentValues values = getContentValuesForTask(newTask);
+            tasks.add(task);
+            final ContentValues values = getContentValuesForTask(task);
             new AsyncTask<Void, Void, Void>(){
                 @Override
                 protected Void doInBackground(Void... params) {
@@ -134,15 +177,6 @@ public class LifeEntity {
                 }
             }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
-    }
-
-    public void addTask(String title, int repeatability, int difficulty, int importance,
-                        Date date, boolean notify, List<String> relatedSkills){
-        Skill[] skills = new Skill[relatedSkills.size()];
-        for (int i = 0; i < relatedSkills.size(); i++){
-            skills[i] = lifeEntity.getSkillByTitle(relatedSkills.get(i));
-        }
-        addTask(title, repeatability, difficulty, importance, date, notify, skills);
     }
 
     public void updateTask(Task task) {
@@ -236,8 +270,12 @@ public class LifeEntity {
         values.put(TasksTable.Cols.DIFFICULTY, task.getDifficulty());
         values.put(TasksTable.Cols.IMPORTANCE, task.getImportance());
         values.put(TasksTable.Cols.DATE, task.getDate().getTime());
-        values.put(TasksTable.Cols.NOTIFY, task.isNotify() ? 1 : 0);
+        values.put(TasksTable.Cols.NOTIFY, task.getNotifyDelta());
         values.put(TasksTable.Cols.RELATED_SKILLS, task.getRelatedSkillsString());
+        values.put(TasksTable.Cols.DATE_MODE, task.getDateMode());
+        values.put(TasksTable.Cols.REPEAT_MODE, task.getRepeatMode());
+        values.put(TasksTable.Cols.REPEAT_DAYS_OF_WEEK, task.getRepeatDaysOfWeekString());
+        values.put(TasksTable.Cols.REPEAT_INDEX, task.getRepeatIndex());
         return values;
     }
 

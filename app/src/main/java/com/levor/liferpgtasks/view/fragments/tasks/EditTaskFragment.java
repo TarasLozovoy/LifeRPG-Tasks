@@ -32,31 +32,23 @@ public class EditTaskFragment extends AddTaskFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
-        currentTask = getController().getTaskByTitle(getArguments().getString(CURRENT_TASK_TITLE_TAG));
-        if (savedInstanceState == null) {
+        if (getArguments() != null) {
+            currentTask = getController().getTaskByTitle(getArguments().getString(CURRENT_TASK_TITLE_TAG));
             taskTitleEditText.setText(currentTask.getTitle());
-            for (Skill sk : currentTask.getRelatedSkills()) {
-                relatedSkills.add(sk.getTitle());
+            date = currentTask.getDate();
+            dateMode = currentTask.getDateMode();
+            repeatability = currentTask.getRepeatability();
+            repeatMode = currentTask.getRepeatMode();
+            repeatDaysOfWeek = currentTask.getRepeatDaysOfWeek();
+            repeatIndex = currentTask.getRepeatIndex();
+            difficulty = currentTask.getDifficulty();
+            importance = currentTask.getImportance();
+            notifyDelta = currentTask.getNotifyDelta();
+            relatedSkills = new ArrayList<>();
+            for (int i = 0; i < currentTask.getRelatedSkills().size(); i++) {
+                relatedSkills.add(currentTask.getRelatedSkills().get(i).getTitle());
             }
-            int repeat = currentTask.getRepeatability();
-            if (repeat > 1) {
-//                repeatCheckbox.setChecked(true);
-//                taskRepeatEditText.setText(Integer.toString(repeat));
-//                repeatDetailedLayout.setVisibility(View.VISIBLE);
-            } else if (repeat == -1){
-//                repeatCheckbox.setChecked(true);
-//                taskRepeatEditText.setText("");
-//                repeatDetailedLayout.setVisibility(View.VISIBLE);
-            }
-            if (repeat == 1) {
-//                repeatCheckbox.setChecked(false);
-//                taskRepeatEditText.setText("");
-//                repeatDetailedLayout.setVisibility(View.GONE);
-            }
-//            difficultySpinner.setSelection(currentTask.getDifficulty());
-//            importanceSpinner.setSelection(currentTask.getImportance());
-//            setupDateTimeButtons(currentTask.getDate());
-//            notifyCheckbox.setChecked(currentTask.isNotify());
+            updateUI();
         }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(getString(R.string.edit_task_title));
@@ -166,22 +158,24 @@ public class EditTaskFragment extends AddTaskFragment {
 
     @Override
     protected void finishTask(String title, String message) {
-        getCurrentActivity().showSoftKeyboard(false, getView());
-        currentTask.setRepeatability(repeatability);
-//        currentTask.setNotify(notifyCheckbox.isChecked());
-//        currentTask.setDifficulty(difficultySpinner.getSelectedItemPosition());
-//        currentTask.setImportance(importanceSpinner.getSelectedItemPosition());
         currentTask.setTitle(title);
         currentTask.setDate(date);
-        List<Skill> skills = new ArrayList<>();
-        for (String s: relatedSkills){
-            skills.add(getController().getSkillByTitle(s));
+        currentTask.setDateMode(dateMode);
+        currentTask.setRepeatability(repeatability);
+        currentTask.setRepeatMode(repeatMode);
+        currentTask.setRepeatDaysOfWeek(repeatDaysOfWeek);
+        currentTask.setRepeatIndex(repeatIndex);
+        currentTask.setDifficulty(difficulty);
+        currentTask.setImportance(importance);
+        currentTask.setNotifyDelta(notifyDelta);
+        List<Skill> skillsList = new ArrayList<>();
+        for (int i = 0; i < relatedSkills.size(); i++) {
+            skillsList.add(getController().getSkillByTitle(relatedSkills.get(i)));
         }
-        currentTask.setRelatedSkills(skills);
+        currentTask.setRelatedSkills(skillsList);
         getController().updateTask(currentTask);
-        createNotification(title);
+        createNotification(currentTask);
         getCurrentActivity().showSoftKeyboard(false, getView());
-//        Snackbar.make(repeatDetailedLayout, message, Snackbar.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
     }
 }

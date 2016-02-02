@@ -15,6 +15,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.levor.liferpgtasks.AchievsList;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 import com.levor.liferpgtasks.broadcastReceivers.TaskNotification;
 import com.levor.liferpgtasks.model.Characteristic;
 import com.levor.liferpgtasks.model.Hero;
@@ -109,9 +110,8 @@ public class LifeController {
         return lifeEntity.getTaskByTitle(s);
     }
 
-    public void createNewTask(String title, int repeatability, int difficulty, int reproducibility,
-                              Date date, boolean notify, List<String> relatedSkills) {
-        lifeEntity.addTask(title, repeatability, difficulty, reproducibility, date, notify, relatedSkills);
+    public void createNewTask(Task task) {
+        lifeEntity.addTask(task);
         updateHomeScreenWidgets();
         updateStatistics(TOTAL_TASKS_NUMBER_TAG, 1);
         checkAchievements();
@@ -339,18 +339,45 @@ public class LifeController {
     }
 
     public void addTaskNotification(Task task){
+        if (task.getNotifyDelta() < 0) return;
         Date currentDate = new Date(System.currentTimeMillis());
-        if (task.getDate().before(currentDate)) return;
+        Date notifyDate = task.getNotificationDate();
+        if (notifyDate.before(currentDate)) return;
         Intent intent = new Intent(context, TaskNotification.class);
         intent.putExtra(TASK_TITLE_NOTIFICATION_TAG, task.getTitle());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                 task.getId().hashCode(), intent, 0);
         Calendar cal = Calendar.getInstance();
-        cal.setTime(task.getDate());
+        cal.setTime(notifyDate);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Activity.ALARM_SERVICE);
-        long repeatTime = 24 * 60 * 60 * 1000;
-        if (task.getRepeatability() > 0) {
-            repeatTime = 5 * 24 * 60 * 60 * 1000;
+        long repeatTime = 28l * TimeUnitUtils.DAY;
+        if (task.getRepeatMode() == Task.RepeatMode.EVERY_NTH_DAY){
+            repeatTime = TimeUnitUtils.DAY * task.getRepeatIndex();
+        } else if (task.getRepeatMode() == Task.RepeatMode.EVERY_NTH_MONTH){
+            cal.setTime(notifyDate);
+            cal.add(Calendar.MONTH, 1);
+            repeatTime = (cal.getTime().getTime() - notifyDate.getTime()) * task.getRepeatIndex();
+        } else if (task.getRepeatMode() == Task.RepeatMode.EVERY_NTH_YEAR){
+            cal.setTime(notifyDate);
+            cal.add(Calendar.YEAR, 1);
+            repeatTime = (cal.getTime().getTime() - notifyDate.getTime()) * task.getRepeatIndex();
+        } else if (task.getRepeatMode() == Task.RepeatMode.DAYS_OF_NTH_WEEK){
+            cal.setTime(notifyDate);
+            int week = cal.get(Calendar.WEEK_OF_YEAR);
+            for (int i = 0; i < task.getRepeatDaysOfWeek().length; i++) {
+                if (task.getRepeatDaysOfWeek()[cal.get(Calendar.DAY_OF_WEEK) - 1]){
+                    break;
+                } else {
+                    cal.add(Calendar.DAY_OF_YEAR, 1);
+                }
+            }
+            int newWeek = cal.get(Calendar.WEEK_OF_YEAR);
+            while (week != newWeek && (newWeek - week) % task.getRepeatIndex() != 0){
+                cal.add(Calendar.WEEK_OF_YEAR, 1);
+            }
+            repeatTime = cal.getTime().getTime() - notifyDate.getTime();
+        } else { //no notification needed for this modes
+            return;
         }
         if (task.getRepeatability() != 0) {
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), repeatTime, pendingIntent);
