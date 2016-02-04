@@ -24,6 +24,7 @@ import com.levor.liferpgtasks.LifeRPGApplication;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.model.Misc;
+import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.MainFragment;
 import com.levor.liferpgtasks.view.fragments.SettingsFragment;
@@ -205,12 +206,11 @@ public class MainActivity extends BackUpActivity{
             default:
                 throw new RuntimeException("No such menu item!");
         }
-        if (fragment instanceof DetailedTaskFragment &&
-                ((DetailedTaskFragment)fragment).getCurrentTask() == null
-                || fragment instanceof EditTaskFragment &&
-                ((EditTaskFragment)fragment).getCurrentTask() == null){
+        if (fragment instanceof DataDependantFrament &&
+                !((DataDependantFrament)fragment).isDependableDataAvailable()){
             if (fragmentID == MAIN_FRAGMENT_ID) mainFragmentsStack.pop();
             if (fragmentID == TASKS_FRAGMENT_ID) tasksFragmentsStack.pop();
+            if (fragmentID == SETTINGS_FRAGMENT_ID) settingsFragmentsStack.pop();
             showRootFragment(fragmentID);
             return;
         }
@@ -229,6 +229,13 @@ public class MainActivity extends BackUpActivity{
             fragment = getCurrentFragmentsStack().peek();
         } catch (EmptyStackException e){
             return false;
+        }
+        if (fragment instanceof DataDependantFrament &&
+                !((DataDependantFrament)fragment).isDependableDataAvailable()){
+            if (navigationTabLayout.getSelectedTabPosition() == MAIN_FRAGMENT_ID) mainFragmentsStack.pop();
+            if (navigationTabLayout.getSelectedTabPosition() == TASKS_FRAGMENT_ID) tasksFragmentsStack.pop();
+            if (navigationTabLayout.getSelectedTabPosition() == SETTINGS_FRAGMENT_ID) settingsFragmentsStack.pop();
+            return showPreviousFragment();
         }
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)

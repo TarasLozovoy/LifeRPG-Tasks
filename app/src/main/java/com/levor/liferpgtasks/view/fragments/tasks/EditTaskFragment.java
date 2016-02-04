@@ -185,7 +185,8 @@ public class EditTaskFragment extends AddTaskFragment {
         getCurrentActivity().showPreviousFragment();
     }
 
-    public Task getCurrentTask(){
-        return getController().getTaskByTitle(getArguments().getString(CURRENT_TASK_TITLE_TAG));
+    @Override
+    public boolean isDependableDataAvailable() {
+        return getController().getTaskByTitle(getArguments().getString(CURRENT_TASK_TITLE_TAG)) != null;
     }
 }

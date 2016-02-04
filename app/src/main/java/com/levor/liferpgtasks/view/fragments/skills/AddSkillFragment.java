@@ -21,9 +21,10 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.model.Characteristic;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
-public class AddSkillFragment extends DefaultFragment {
+public class AddSkillFragment extends DataDependantFrament {
     public static final String RECEIVED_CHARACTERISTIC_TITLE_TAG = "received_characteristic_title_tag";
 
     protected final String SKILL_TITLE_TAG = "skill_title_tag";
@@ -131,6 +132,11 @@ public class AddSkillFragment extends DefaultFragment {
             outState.putSerializable(KEY_CHARACTERISTIC_TITLE, keyCharacteristic.getTitle());
         }
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean isDependableDataAvailable() {
+        return true;
     }
 
     private class ChangeCharacteristicOnClickListener implements View.OnClickListener{

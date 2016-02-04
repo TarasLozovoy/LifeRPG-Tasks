@@ -22,6 +22,7 @@ import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
+import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.skills.DetailedSkillFragment;
 
@@ -32,7 +33,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
-public class DetailedTaskFragment extends DefaultFragment {
+public class DetailedTaskFragment extends DataDependantFrament {
     public final static String SELECTED_TASK_UUID_TAG = "selected_task_uuid_tag";
 
     private ListView listView;
@@ -340,5 +341,12 @@ public class DetailedTaskFragment extends DefaultFragment {
     public Task getCurrentTask(){
         UUID id = (UUID)getArguments().get(SELECTED_TASK_UUID_TAG);
         return getController().getTaskByID(id);
+    }
+
+    @Override
+    public boolean isDependableDataAvailable() {
+        UUID id = (UUID)getArguments().get(SELECTED_TASK_UUID_TAG);
+        Task task = getController().getTaskByID(id);
+        return task != null;
     }
 }

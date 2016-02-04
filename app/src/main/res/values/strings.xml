@@ -13,7 +13,7 @@
     <string name="new_task_title_edit_text">Type task title</string>
     <string name="add_skill_to_task">Add related skill</string>
     <string name="add_new_task">New task</string>
-    <string name="related_skills">Related \nskills:</string>
+    <string name="related_skills">Related skills:</string>
     <string name="related_skills_list">Related skills:</string>
     <string name="characteristic_level">Level:</string>
     <string name="characteristic_related_skills">Can be improved by enhancing next skills:</string>
@@ -280,7 +280,7 @@
     <string name="db_exported_to_filesystem">Data base exported to sdcard/LifeRGPTasks/LifeRPGTasksDB.db</string>
     <string name="db_export_error">Error while exporting data base. Please repeat operation.</string>
     <string name="db_export_error_android6">Error while exporting data base.
-        Ensure that storage access permission granted for LifeRPGTasks.</string>
+        Ensure that storage access permission granted for LifeRPG Tasks.</string>
     <string name="import_db_from_filesystem">Import data base from filesystem</string>
     <string name="db_imported">Data base imported</string>
     <string name="db_import_error">Error while importing data base. Please repeat operation.</string>

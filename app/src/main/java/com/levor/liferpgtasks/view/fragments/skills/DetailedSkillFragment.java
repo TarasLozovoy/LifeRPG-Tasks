@@ -18,6 +18,7 @@ import com.levor.liferpgtasks.adapters.TasksAdapter;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.AddTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class DetailedSkillFragment extends DefaultFragment {
+public class DetailedSkillFragment extends DataDependantFrament {
 
     public final static String SELECTED_SKILL_UUID_TAG = "selected_skill_UUID_tag";
     private TextView skillTitleTV;
@@ -142,5 +143,12 @@ public class DetailedSkillFragment extends DefaultFragment {
         levelValue.setText(Integer.toString(currentSkill.getLevel()));
         sublevelValue.setText(sublevelString);
         toNextLevel.setText(toNextLevelString);
+    }
+
+    @Override
+    public boolean isDependableDataAvailable() {
+        UUID id = (UUID)getArguments().get(SELECTED_SKILL_UUID_TAG);
+        Skill skill = getController().getSkillByID(id);
+        return skill != null;
     }
 }

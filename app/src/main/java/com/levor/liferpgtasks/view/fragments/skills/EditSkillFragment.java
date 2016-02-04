@@ -118,4 +118,9 @@ public class EditSkillFragment extends AddSkillFragment {
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
     }
+
+    @Override
+    public boolean isDependableDataAvailable() {
+        return getController().getSkillByID((UUID) getArguments().get(EDIT_SKILL_UUID_TAG)) != null;
+    }
 }

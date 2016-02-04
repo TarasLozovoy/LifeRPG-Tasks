@@ -248,7 +248,7 @@
     <!-- -->
 
     <!-- DB-->
-    <string name="export_import_db">Испорт/Экспорт быза данных</string>
+    <string name="export_import_db">Импорт/Экспорт базы данных</string>
     <string name="export_db_to_filesystem">Экспортировать в файловую систему</string>
     <string name="db_exported_to_filesystem">База данных экспортирована в sdcard/LifeRGPTasks/LifeRPGTasksDB.db</string>
     <string name="db_export_error">Ошибка при экспорте базы данных. Пожалуйста повторите операцию.</string>

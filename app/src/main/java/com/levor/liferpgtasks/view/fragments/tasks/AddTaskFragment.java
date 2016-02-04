@@ -39,6 +39,7 @@ import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.model.Task.RepeatMode;
+import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ import java.util.List;
 
 import static com.levor.liferpgtasks.model.Task.DateMode;
 
-public class AddTaskFragment extends DefaultFragment {
+public class AddTaskFragment extends DataDependantFrament {
     public static final String RECEIVED_SKILL_TITLE_TAG = "received_skill_tag";
 
     public static final String REPEAT_MODE_TAG = "repeat_mode_tag";
@@ -968,6 +969,11 @@ public class AddTaskFragment extends DefaultFragment {
         ((RadioButton)notifyRadioGroup.getChildAt(0)).setChecked(true);
         alertDialog.setView(dialogView);
         alertDialog.show();
+    }
+
+    @Override
+    public boolean isDependableDataAvailable() {
+        return true;
     }
 
     @SuppressLint("ValidFragment")

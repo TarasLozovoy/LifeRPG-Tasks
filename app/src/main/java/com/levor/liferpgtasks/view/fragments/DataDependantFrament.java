@@ -1,4 +1,6 @@
 package com.levor.liferpgtasks.view.fragments;
 
-public class DataDependantFrament {
+public abstract class DataDependantFrament extends DefaultFragment{
+
+    public abstract boolean isDependableDataAvailable();
 }
