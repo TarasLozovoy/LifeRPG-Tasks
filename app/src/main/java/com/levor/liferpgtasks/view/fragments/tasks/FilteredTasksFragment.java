@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +59,7 @@ public class FilteredTasksFragment extends DefaultFragment{
         filter = getArguments().getInt(FILTER_ARG);
         listView = (ListView) view.findViewById(R.id.listViewTasks);
         emptyList = (TextView) view.findViewById(R.id.empty_list);
+        if (filter == DONE) emptyList.setText(R.string.empty_done_list_view);
         SharedPreferences prefs = getActivity()
                 .getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
         sorting = prefs.getInt(SORTING_KEY, Task.SortingOrder.DATE_DESC);
@@ -165,9 +165,6 @@ public class FilteredTasksFragment extends DefaultFragment{
             case UNDO_CONTEXT_MENU_ITEM:
                 getController().undoTask(currentTask);
                 setupListView();
-                currentTask.increaseDateByNDays(-1);
-                getController().updateTaskNotification(currentTask);
-                getController().updateTask(currentTask);
                 return true;
             case EDIT_CONTEXT_MENU_ITEM:
                 DefaultFragment f = new EditTaskFragment();

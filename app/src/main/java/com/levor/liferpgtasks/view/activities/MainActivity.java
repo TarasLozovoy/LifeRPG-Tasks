@@ -232,9 +232,6 @@ public class MainActivity extends BackUpActivity{
         }
         if (fragment instanceof DataDependantFrament &&
                 !((DataDependantFrament)fragment).isDependableDataAvailable()){
-            if (navigationTabLayout.getSelectedTabPosition() == MAIN_FRAGMENT_ID) mainFragmentsStack.pop();
-            if (navigationTabLayout.getSelectedTabPosition() == TASKS_FRAGMENT_ID) tasksFragmentsStack.pop();
-            if (navigationTabLayout.getSelectedTabPosition() == SETTINGS_FRAGMENT_ID) settingsFragmentsStack.pop();
             return showPreviousFragment();
         }
         getSupportFragmentManager().beginTransaction()

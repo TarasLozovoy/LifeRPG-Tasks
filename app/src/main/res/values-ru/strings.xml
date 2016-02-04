@@ -47,6 +47,7 @@
     <string name="task_already_done">Задача завершена. Снова сделать эту задачу активной?</string>
     <string name="all_related_skills_added">Все доступные навыки уже добавлены.</string>
     <string name="empty_list_view">В текущей категории нет задач. Нажмите на кнопку + чтобы добавить новую задачу.</string>
+    <string name="empty_done_list_view">Выполненных задач пока нет.</string>
     <string name="no_related_skills">В этой задаче пока нету связанных навыков. Нажмите кнопку редактировать чтобы добавить связанные навыки.</string>
     <string name="task">Задача</string>
     <string name="removing_task_description">Вы действительно хотите удалить текущую задачу?</string>

@@ -22,18 +22,24 @@ import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
 import com.levor.liferpgtasks.view.activities.MainActivity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class TasksAdapter extends BaseAdapter implements ListAdapter{
-    private List<String> items;
+    private List<Task> items = new ArrayList<>();
     private MainActivity activity;
     private LifeController lifeController;
 
     public TasksAdapter(List<String> array, MainActivity activity) {
-        this.items = array;
         this.activity = activity;
         lifeController = LifeController.getInstance(activity.getApplicationContext());
+        for (int i = 0; i < array.size(); i++) {
+            Task task = lifeController.getTaskByTitle(array.get(i));
+            if (task != null) {
+                items.add(task);
+            }
+        }
     }
 
     @Override
@@ -43,12 +49,12 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
 
     @Override
     public Object getItem(int position) {
-        return items.get(position);
+        return items.get(position).getTitle();
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
@@ -59,14 +65,14 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
             view = inflater.inflate(R.layout.tasks_list_item, null);
         }
 
-        final Task task = lifeController.getTaskByTitle(items.get(position));
+        final Task task = items.get(position);
         ImageButton doBtn = (ImageButton) view.findViewById(R.id.check_button);
         final View finalView = view;
         doBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PerformTaskAlertBuilder alert = new PerformTaskAlertBuilder(activity,
-                        lifeController.getTaskByTitle(items.get(position)),
+                        task,
                         finalView);
                 AlertDialog alertDialog = alert.create();
                 alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -78,10 +84,6 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                 alertDialog.show();
 
                 boolean isHeroLevelIncreased = lifeController.performTask(task);
-                if (task.getRepeatability() == -1 || task.getRepeatability() > 0){
-                    task.increaseDateByNDays(1);
-                    lifeController.updateTaskNotification(task);
-                }
                 if (isHeroLevelIncreased) {
                     Toast.makeText(activity, activity.getString(R.string.hero_level_increased, lifeController.getHeroName()),
                             Toast.LENGTH_LONG).show();
@@ -93,11 +95,6 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
 
         TextView listItemTV = (TextView) view.findViewById(R.id.list_item_string);
         listItemTV.setText(task.getTitle());
-        if (task.getDate().before(new Date(System.currentTimeMillis())) && task.getRepeatability() != 0){
-            listItemTV.setTextColor(activity.getResources().getColor(R.color.red));
-        } else {
-            listItemTV.setTextColor(activity.getResources().getColor(R.color.gray));
-        }
         TextView repeatabilityTV = (TextView) view.findViewById(R.id.repeatability_tasks_list_item);
         LinearLayout repeatabilityLL = (LinearLayout) view.findViewById(R.id.repeatability_container_tasks_list_item);
         int repeat = task.getRepeatability();

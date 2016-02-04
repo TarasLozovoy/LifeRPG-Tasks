@@ -128,6 +128,8 @@ public class EditTaskFragment extends AddTaskFragment {
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        repeatability = 1;
+                        updateUI();
                         dialog.dismiss();
                     }
                 })

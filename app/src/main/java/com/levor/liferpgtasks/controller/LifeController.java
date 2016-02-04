@@ -195,13 +195,12 @@ public class LifeController {
     public boolean performTask(Task task){
         Hero hero = lifeEntity.getHero();
         task.setUndonable(true);
-        if (task.getRepeatability() > 0){
-            task.setRepeatability(task.getRepeatability() - 1);
-            if (task.getRepeatability() == 0){
-                updateStatistics(FINISHED_TASKS_NUMBER_TAG, 1);
-            }
+            task.perform();
+        if (task.getRepeatability() == 0) {
+            updateStatistics(FINISHED_TASKS_NUMBER_TAG, 1);
         }
         updateTask(task);
+        updateTaskNotification(task);
         double multiplier = task.getMultiplier();
         double finalXP = hero.getBaseXP() * multiplier;
         for (Skill sk : task.getRelatedSkills()) {
@@ -254,10 +253,9 @@ public class LifeController {
     public boolean undoTask(Task task){
         Hero hero = lifeEntity.getHero();
         task.setUndonable(false);
-        if (task.getRepeatability() >= 0){
-            task.setRepeatability(task.getRepeatability() + 1);
-            updateTask(task);
-        }
+        task.undo();
+        updateTask(task);
+        updateTaskNotification(task);
         double multiplier = task.getMultiplier();
         double finalXP = hero.getBaseXP() * multiplier;
         for (Skill sk : task.getRelatedSkills()) {
@@ -350,7 +348,7 @@ public class LifeController {
         Calendar cal = Calendar.getInstance();
         cal.setTime(notifyDate);
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Activity.ALARM_SERVICE);
-        long repeatTime = 28l * TimeUnitUtils.DAY;
+        long repeatTime;
         if (task.getRepeatMode() == Task.RepeatMode.EVERY_NTH_DAY){
             repeatTime = TimeUnitUtils.DAY * task.getRepeatIndex();
         } else if (task.getRepeatMode() == Task.RepeatMode.EVERY_NTH_MONTH){
@@ -372,8 +370,8 @@ public class LifeController {
                 }
             }
             int newWeek = cal.get(Calendar.WEEK_OF_YEAR);
-            while (week != newWeek && (newWeek - week) % task.getRepeatIndex() != 0){
-                cal.add(Calendar.WEEK_OF_YEAR, 1);
+            if (week != newWeek) {
+                cal.add(Calendar.WEEK_OF_YEAR, task.getRepeatIndex() - 1);
             }
             repeatTime = cal.getTime().getTime() - notifyDate.getTime();
         } else { //no notification needed for this modes

@@ -16,7 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
@@ -29,7 +28,6 @@ import com.levor.liferpgtasks.view.fragments.skills.DetailedSkillFragment;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -80,7 +78,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
         setupRepeatability();
 
         //setup notification TextView
-        setupNotificationString();
+        setupNotificationTextView();
 
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(getString(R.string.task));
@@ -248,7 +246,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
         taskRepeatTV.setText(sb.toString());
     }
 
-    private void setupNotificationString(){
+    private void setupNotificationTextView(){
         if (currentTask.getNotifyDelta() >= 0) {
             notificationTV.setVisibility(View.VISIBLE);
             int dateMode = currentTask.getDateMode();
@@ -315,13 +313,9 @@ public class DetailedTaskFragment extends DataDependantFrament {
         alertDialog.show();
 
         boolean isHeroLevelIncreased = getController().performTask(currentTask);
-        if (currentTask.getRepeatability() == -1 || currentTask.getRepeatability() > 0){
-            currentTask.increaseDateByNDays(1);
-            getController().updateTaskNotification(currentTask);
-            getController().updateTask(currentTask);
-        }
         setupRepeatability();
         setupTaskDate();
+        setupNotificationTextView();
         if (isHeroLevelIncreased) {
             Toast.makeText(getCurrentActivity(), getString(R.string.hero_level_increased,
                     getController().getHeroName()), Toast.LENGTH_SHORT).show();
@@ -333,14 +327,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
         setupListView();
         setupTaskDate();
         setupRepeatability();
-        currentTask.increaseDateByNDays(-1);
-        getController().updateTaskNotification(currentTask);
-        getController().updateTask(currentTask);
-    }
-
-    public Task getCurrentTask(){
-        UUID id = (UUID)getArguments().get(SELECTED_TASK_UUID_TAG);
-        return getController().getTaskByID(id);
+        setupNotificationTextView();
     }
 
     @Override
