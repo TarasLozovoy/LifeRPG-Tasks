@@ -27,7 +27,9 @@ import com.levor.liferpgtasks.model.Misc;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.MainFragment;
 import com.levor.liferpgtasks.view.fragments.SettingsFragment;
+import com.levor.liferpgtasks.view.fragments.tasks.AddTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
+import com.levor.liferpgtasks.view.fragments.tasks.EditTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.TasksFragment;
 
 import java.io.IOException;
@@ -203,8 +205,16 @@ public class MainActivity extends BackUpActivity{
             default:
                 throw new RuntimeException("No such menu item!");
         }
-        if (getCurrentFragmentsStack().isEmpty() ||
-                getCurrentFragmentsStack().peek().getClass() == fragment.getClass()) return;
+        if (fragment instanceof DetailedTaskFragment &&
+                ((DetailedTaskFragment)fragment).getCurrentTask() == null
+                || fragment instanceof EditTaskFragment &&
+                ((EditTaskFragment)fragment).getCurrentTask() == null){
+            if (fragmentID == MAIN_FRAGMENT_ID) mainFragmentsStack.pop();
+            if (fragmentID == TASKS_FRAGMENT_ID) tasksFragmentsStack.pop();
+            showRootFragment(fragmentID);
+            return;
+        }
+        if (getCurrentFragmentsStack().isEmpty()) return;
         currentFragmentID = fragmentID;
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)

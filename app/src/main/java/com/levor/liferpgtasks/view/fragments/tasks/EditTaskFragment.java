@@ -46,7 +46,10 @@ public class EditTaskFragment extends AddTaskFragment {
             notifyDelta = currentTask.getNotifyDelta();
             relatedSkills = new ArrayList<>();
             for (int i = 0; i < currentTask.getRelatedSkills().size(); i++) {
-                relatedSkills.add(currentTask.getRelatedSkills().get(i).getTitle());
+                Skill sk = currentTask.getRelatedSkills().get(i);
+                if (sk != null) {
+                    relatedSkills.add(sk.getTitle());
+                }
             }
             updateUI();
         }
@@ -170,12 +173,19 @@ public class EditTaskFragment extends AddTaskFragment {
         currentTask.setNotifyDelta(notifyDelta);
         List<Skill> skillsList = new ArrayList<>();
         for (int i = 0; i < relatedSkills.size(); i++) {
-            skillsList.add(getController().getSkillByTitle(relatedSkills.get(i)));
+            Skill sk = getController().getSkillByTitle(relatedSkills.get(i));
+            if (sk != null) {
+                skillsList.add(sk);
+            }
         }
         currentTask.setRelatedSkills(skillsList);
         getController().updateTask(currentTask);
         createNotification(currentTask);
         getCurrentActivity().showSoftKeyboard(false, getView());
         getCurrentActivity().showPreviousFragment();
+    }
+
+    public Task getCurrentTask(){
+        return getController().getTaskByTitle(getArguments().getString(CURRENT_TASK_TITLE_TAG));
     }
 }

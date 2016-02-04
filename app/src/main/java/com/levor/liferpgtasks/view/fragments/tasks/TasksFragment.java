@@ -49,16 +49,6 @@ public class TasksFragment extends DefaultFragment {
         inflater.inflate(R.menu.menu_tasks, menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.new_task:
-                getCurrentActivity().showChildFragment(new AddTaskFragment(), null);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     @Override
     public void onStart() {

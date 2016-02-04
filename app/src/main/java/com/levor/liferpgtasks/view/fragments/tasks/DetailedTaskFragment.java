@@ -336,4 +336,9 @@ public class DetailedTaskFragment extends DefaultFragment {
         getController().updateTaskNotification(currentTask);
         getController().updateTask(currentTask);
     }
+
+    public Task getCurrentTask(){
+        UUID id = (UUID)getArguments().get(SELECTED_TASK_UUID_TAG);
+        return getController().getTaskByID(id);
+    }
 }

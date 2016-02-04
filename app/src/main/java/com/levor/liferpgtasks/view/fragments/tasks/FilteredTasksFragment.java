@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,10 +69,34 @@ public class FilteredTasksFragment extends DefaultFragment{
         getCurrentActivity().showActionBarHomeButtonAsBack(false);
         return view;
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.new_task:
+                Bundle b = new Bundle();
+                b.putInt(AddTaskFragment.REPEAT_MODE_TAG, filter == INFINITE ?
+                        Task.RepeatMode.EVERY_NTH_DAY : Task.RepeatMode.SIMPLE_REPEAT);
+                b.putInt(AddTaskFragment.REPEAT_TAG, filter == INFINITE ? -1 : 1);
+
+                getCurrentActivity().showChildFragment(new AddTaskFragment(), b);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
+
+        MenuItem doneItem = menu.findItem(R.id.new_task);
+        if (filter == DONE) {
+            doneItem.setEnabled(false);
+            doneItem.getIcon().setAlpha(75);
+        } else {
+            doneItem.setEnabled(true);
+            doneItem.getIcon().setAlpha(255);
+        }
 
         SortingSpinner sortingSpinner = new SortingSpinner(getActivity());
         Spinner orderSpinner = sortingSpinner.getSortingSpinner();

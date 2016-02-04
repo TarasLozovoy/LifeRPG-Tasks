@@ -53,9 +53,10 @@ import static com.levor.liferpgtasks.model.Task.DateMode;
 public class AddTaskFragment extends DefaultFragment {
     public static final String RECEIVED_SKILL_TITLE_TAG = "received_skill_tag";
 
+    public static final String REPEAT_MODE_TAG = "repeat_mode_tag";
+    public static final String REPEAT_TAG = "repeat_tag";
     public static final String TASK_TITLE_TAG = "task_title_tag";
     private final String RELATED_SKILLS_TAG = "related_skills_tag";
-//    private final String REPEAT_TAG = "repeat_tag";
 //    private final String DIFFICULTY_TAG = "difficulty_tag";
 //    private final String IMPORTANCE_TAG = "importance_tag";
     private final String DATE_TAG = "date_tag";
@@ -81,7 +82,7 @@ public class AddTaskFragment extends DefaultFragment {
     protected Date date;
     protected int dateMode = DateMode.TERMLESS;
     protected int repeatability = 1;
-    protected int repeatMode = RepeatMode.SIMPLE_REPEAT;
+    protected int repeatMode;
     protected Boolean[] repeatDaysOfWeek;
     protected int repeatIndex = 1;      //repeat every N days, repeatIndex == N
     protected long notifyDelta = -1;         // <0 - do not notify, >0 notify at (date - delta) time
@@ -127,13 +128,17 @@ public class AddTaskFragment extends DefaultFragment {
         } else {
             date = new Date();
         }
-        updateUI();
+        if (getArguments() != null){
+            repeatMode = getArguments().getInt(REPEAT_MODE_TAG, RepeatMode.SIMPLE_REPEAT);
+            repeatability = getArguments().getInt(REPEAT_TAG, 1);
+            dateMode = repeatMode == RepeatMode.EVERY_NTH_DAY ? DateMode.WHOLE_DAY : dateMode;
 
-        String skillTitle;
-        if (getArguments() != null && (skillTitle = getArguments().getString(RECEIVED_SKILL_TITLE_TAG)) != null) {
-            relatedSkills.add(skillTitle);
-            updateRelatedSkillsView();
+            String skillTitle;
+            if ((skillTitle = getArguments().getString(RECEIVED_SKILL_TITLE_TAG)) != null){
+                relatedSkills.add(skillTitle);
+            }
         }
+
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(getString(R.string.add_new_task));
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
@@ -236,7 +241,10 @@ public class AddTaskFragment extends DefaultFragment {
         task.setNotifyDelta(notifyDelta);
         List<Skill> skillsList = new ArrayList<>();
         for (int i = 0; i < relatedSkills.size(); i++) {
-            skillsList.add(getController().getSkillByTitle(relatedSkills.get(i)));
+            Skill sk = getController().getSkillByTitle(relatedSkills.get(i));
+            if (sk != null) {
+                skillsList.add(sk);
+            }
         }
         task.setRelatedSkills(skillsList);
         getController().createNewTask(task);
