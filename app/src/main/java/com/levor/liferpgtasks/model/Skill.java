@@ -74,8 +74,8 @@ public class Skill {
         sublevel -= value;
         if (sublevel < 0.0d) {
             keyCharacteristic.increaseLevelByN(-(1 + level/10));
-            sublevel = ((double) level) + sublevel;
             level --;
+            sublevel = ((double) level) + sublevel;
             return true;
         }
         return false;

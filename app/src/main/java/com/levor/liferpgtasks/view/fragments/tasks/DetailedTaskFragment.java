@@ -254,7 +254,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
             StringBuilder sb = new StringBuilder(getString(R.string.notify));
             sb.append(" ");
             if (notifyDelta < 0 || dateMode == Task.DateMode.TERMLESS) {
-                sb.append(getString(R.string.task_add_notification));
+                sb.append(getString(R.string.do_not_notify));
             } else {
                 if (notifyDelta % TimeUnitUtils.WEEK == 0 && notifyDelta != 0) {
                     if (notifyDelta == TimeUnitUtils.WEEK) {

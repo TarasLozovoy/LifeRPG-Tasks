@@ -28,7 +28,7 @@ public class ChangeHeroIconFragment extends DefaultFragment{
         View v = inflater.inflate(R.layout.fragment_change_hero_icon, container, false);
         assets = getContext().getAssets();
         RecyclerView recyclerView = (RecyclerView) v;
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
         try {
             imageNames = assets.list("");

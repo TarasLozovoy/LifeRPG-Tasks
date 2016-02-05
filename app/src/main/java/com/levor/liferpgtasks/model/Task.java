@@ -265,43 +265,44 @@ public class Task {
     }
 
     public void undo() {
+        if (repeatability != 0) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            switch (repeatMode) {
+                case RepeatMode.EVERY_NTH_DAY:
+                    cal.add(Calendar.DAY_OF_YEAR, -repeatIndex);
+                    break;
+                case RepeatMode.EVERY_NTH_MONTH:
+                    cal.add(Calendar.MONTH, -repeatIndex);
+                    break;
+                case RepeatMode.EVERY_NTH_YEAR:
+                    cal.add(Calendar.YEAR, -repeatIndex);
+                    break;
+                case RepeatMode.DAYS_OF_NTH_WEEK:
+                    int week = cal.get(Calendar.WEEK_OF_YEAR);
+                    cal.add(Calendar.DAY_OF_YEAR, -1);
+                    for (int i = 0; i < getRepeatDaysOfWeek().length; i++) {
+                        if (getRepeatDaysOfWeek()[cal.get(Calendar.DAY_OF_WEEK) - 1]) {
+                            break;
+                        } else {
+                            cal.add(Calendar.DAY_OF_YEAR, -1);
+                        }
+                    }
+                    int newWeek = cal.get(Calendar.WEEK_OF_YEAR);
+                    if (week != newWeek) {
+                        cal.add(Calendar.WEEK_OF_YEAR, -(repeatIndex - 1));
+                    }
+                    break;
+                default: //not repeat and simple repeat
+                    //do not change date
+                    break;
+            }
+            date = cal.getTime();
+        }
+
         if (getRepeatability() >= 0) {
             setRepeatability(getRepeatability() + 1);
         }
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        switch (repeatMode) {
-            case RepeatMode.EVERY_NTH_DAY:
-                cal.add(Calendar.DAY_OF_YEAR, -repeatIndex);
-                break;
-            case RepeatMode.EVERY_NTH_MONTH:
-                cal.add(Calendar.MONTH, -repeatIndex);
-                break;
-            case RepeatMode.EVERY_NTH_YEAR:
-                cal.add(Calendar.YEAR, -repeatIndex);
-                break;
-            case RepeatMode.DAYS_OF_NTH_WEEK:
-                int week = cal.get(Calendar.WEEK_OF_YEAR);
-                cal.add(Calendar.DAY_OF_YEAR, -1);
-                for (int i = 0; i < getRepeatDaysOfWeek().length; i++) {
-                    if (getRepeatDaysOfWeek()[cal.get(Calendar.DAY_OF_WEEK) - 1]) {
-                        break;
-                    } else {
-                        cal.add(Calendar.DAY_OF_YEAR, -1);
-                    }
-                }
-                int newWeek = cal.get(Calendar.WEEK_OF_YEAR);
-                if (week != newWeek) {
-                    cal.add(Calendar.WEEK_OF_YEAR, -(repeatIndex - 1));
-                }
-                break;
-            default: //not repeat and simple repeat
-                //do not change date
-                break;
-        }
-        date = cal.getTime();
-
     }
 
     public static class SortingOrder{

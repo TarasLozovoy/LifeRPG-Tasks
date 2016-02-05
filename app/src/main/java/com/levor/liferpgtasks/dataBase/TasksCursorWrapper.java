@@ -50,7 +50,7 @@ public class TasksCursorWrapper extends CursorWrapper {
         task.setRepeatability(repeatability);
         task.setRepeatMode(repeatMode);
         task.setRepeatDaysOfWeekFromString(repeatDaysOfWeekString);
-        task.setRepeatIndex(repeatIndex);
+        task.setRepeatIndex(repeatIndex == 0 ? 1 : repeatIndex);
         task.setDifficulty(difficulty);
         task.setImportance(importance);
         task.setNotifyDelta(notifyLong);

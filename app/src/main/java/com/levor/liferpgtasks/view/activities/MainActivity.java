@@ -415,7 +415,7 @@ public class MainActivity extends BackUpActivity{
     }
 
     public void showAd(){
-        if (interstitialAd.isLoaded() && new Random().nextInt(100) < 33){
+        if (interstitialAd.isLoaded() && new Random().nextInt(100) < 35) {
             interstitialAd.show();
         } else if ((interstitialAd.isLoading() || !interstitialAd.isLoaded())
                 && lifeController.isInternetConnectionActive()){
