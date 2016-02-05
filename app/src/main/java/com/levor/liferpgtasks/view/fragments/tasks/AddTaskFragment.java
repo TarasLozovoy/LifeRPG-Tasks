@@ -855,7 +855,8 @@ public class AddTaskFragment extends DataDependantFrament {
                             -1 : Integer.parseInt(repeatTimesEditText.getText().toString());
                     if (repeatability == 0) repeatability = -1;
                     if (repeatIndex == 0) repeatIndex = 1;
-                    if (repeatDaysOfWeek != null && !(Arrays.asList(repeatDaysOfWeek)).contains(true)) {
+                    if (repeatMode == RepeatMode.DAYS_OF_NTH_WEEK &&
+                            repeatDaysOfWeek != null && !(Arrays.asList(repeatDaysOfWeek)).contains(true)) {
                         repeatMode = RepeatMode.DO_NOT_REPEAT;
                     }
                     updateRepeatView();
