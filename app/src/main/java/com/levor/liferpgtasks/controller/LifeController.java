@@ -573,7 +573,8 @@ public class LifeController {
         }
 
         skillsXPAchievePosition = achievementsLevels.get(TOP_LEVEL_SKILL.ordinal());
-        if (getAllSkills().get(0).getLevel() >= TOP_LEVEL_SKILL.getThresholdForLevel(skillsXPAchievePosition)){
+        if (!getAllSkills().isEmpty()
+                && getAllSkills().get(0).getLevel() >= TOP_LEVEL_SKILL.getThresholdForLevel(skillsXPAchievePosition)){
             unlockAchievement(TOP_LEVEL_SKILL);
         }
 
