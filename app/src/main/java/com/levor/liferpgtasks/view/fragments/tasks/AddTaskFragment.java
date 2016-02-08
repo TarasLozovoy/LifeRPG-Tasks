@@ -204,6 +204,8 @@ public class AddTaskFragment extends DataDependantFrament {
         updateDateView();
         updateNotifyView();
         updateRepeatView();
+        updateDifficultyView();
+        updateImportanceView();
         updateRelatedSkillsView();
     }
 
@@ -400,9 +402,7 @@ public class AddTaskFragment extends DataDependantFrament {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         difficulty = which;
-                        String difficultyString = getString(R.string.difficulty) + " "
-                                + getResources().getStringArray(R.array.difficulties_array)[which];
-                        difficultyTextView.setText(difficultyString);
+                        updateDifficultyView();
                         dialog.dismiss();
                     }
                 }).show();
@@ -420,9 +420,7 @@ public class AddTaskFragment extends DataDependantFrament {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         importance = which;
-                        String importanceString = getString(R.string.importance) + " " +
-                                getResources().getStringArray(R.array.importance_array)[which];
-                        importanceTextView.setText(importanceString);
+                        updateImportanceView();
                         dialog.dismiss();
                     }
                 }).show();
@@ -640,6 +638,18 @@ public class AddTaskFragment extends DataDependantFrament {
         notifyTextView.setText(sb.toString());
     }
 
+    protected void updateDifficultyView() {
+        String difficultyString = getString(R.string.difficulty) + " "
+                + getResources().getStringArray(R.array.difficulties_array)[difficulty];
+        difficultyTextView.setText(difficultyString);
+    }
+
+    private void updateImportanceView() {
+        String importanceString = getString(R.string.importance) + " " +
+                getResources().getStringArray(R.array.importance_array)[importance];
+        importanceTextView.setText(importanceString);
+    }
+
     protected void updateRelatedSkillsView(){
         StringBuilder sb = new StringBuilder();
         if (relatedSkills.isEmpty()){
@@ -748,7 +758,6 @@ public class AddTaskFragment extends DataDependantFrament {
                         break;
                     case 1: //times
                         repeatTimesEditText.setVisibility(View.VISIBLE);
-                        repeatTimesEditText.setText("1");
                         break;
                 }
             }
@@ -769,8 +778,6 @@ public class AddTaskFragment extends DataDependantFrament {
         modeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                repeatIndexEditText.setText("1");
-                repeatabilitySpinner.setSelection(0);
                 switch (position) {
                     case 0: //no date, just repeat
                         dialogView.findViewById(R.id.repeat_every_layout).setVisibility(View.GONE);
@@ -800,9 +807,9 @@ public class AddTaskFragment extends DataDependantFrament {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
-        modeSpinner.setSelection(2);
 
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
@@ -810,6 +817,7 @@ public class AddTaskFragment extends DataDependantFrament {
                 if (!onOffButton.isChecked()) {
                     repeatTextView.setText(R.string.task_repeat_do_not_repeat);
                     repeatMode = RepeatMode.DO_NOT_REPEAT;
+                    repeatability = 1;
                 } else {
                     int selectedTimeMode = modeSpinner.getSelectedItemPosition();
                     switch (selectedTimeMode) {
@@ -866,6 +874,42 @@ public class AddTaskFragment extends DataDependantFrament {
         });
         alertDialog.setView(dialogView);
         alertDialog.show();
+
+        //setup detailed repeat dialog
+        switch (repeatMode) {
+            case RepeatMode.DO_NOT_REPEAT:
+                onOffButton.setChecked(false);
+            case RepeatMode.SIMPLE_REPEAT:
+                modeSpinner.setSelection(0);
+                break;
+            case RepeatMode.EVERY_NTH_DAY:
+                modeSpinner.setSelection(1);
+                break;
+            case RepeatMode.DAYS_OF_NTH_WEEK:
+                modeSpinner.setSelection(2);
+                daysOfWeek.setVisibility(View.VISIBLE);
+                ((CheckBox) alertDialog.findViewById(R.id.sunday_checkbox)).setChecked(repeatDaysOfWeek[0]);
+                ((CheckBox) alertDialog.findViewById(R.id.monday_checkbox)).setChecked(repeatDaysOfWeek[1]);
+                ((CheckBox) alertDialog.findViewById(R.id.tuesday_checkbox)).setChecked(repeatDaysOfWeek[2]);
+                ((CheckBox) alertDialog.findViewById(R.id.wednesday_checkbox)).setChecked(repeatDaysOfWeek[3]);
+                ((CheckBox) alertDialog.findViewById(R.id.thursday_checkbox)).setChecked(repeatDaysOfWeek[4]);
+                ((CheckBox) alertDialog.findViewById(R.id.friday_checkbox)).setChecked(repeatDaysOfWeek[5]);
+                ((CheckBox) alertDialog.findViewById(R.id.saturday_checkbox)).setChecked(repeatDaysOfWeek[6]);
+                break;
+            case RepeatMode.EVERY_NTH_MONTH:
+                modeSpinner.setSelection(3);
+                break;
+            case RepeatMode.EVERY_NTH_YEAR:
+                modeSpinner.setSelection(4);
+                break;
+        }
+        repeatIndexEditText.setText(String.valueOf(repeatIndex));
+        if (repeatability > 0) {
+            repeatabilitySpinner.setSelection(1);
+            repeatTimesEditText.setText(String.valueOf(repeatability));
+        } else {
+            repeatabilitySpinner.setSelection(0);
+        }
     }
 
     private void showCustomNotifyDialog(){
