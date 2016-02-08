@@ -726,7 +726,7 @@ public class AddTaskFragment extends DataDependantFrament {
 
     private void showCustomRepeatDialog(){
         final View dialogView = View.inflate(getContext(), R.layout.specific_repeat_dialog, null);
-        final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).setCancelable(false).create();
+        final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).setCancelable(true).create();
         final Switch onOffButton = (Switch) dialogView.findViewById(R.id.turn_off_repeat_button);
         final Spinner modeSpinner = (Spinner) dialogView.findViewById(R.id.repeat_mode_spinner);
         final Spinner repeatabilitySpinner = (Spinner) dialogView.findViewById(R.id.repeatability_spinner);
