@@ -147,51 +147,53 @@ public class FilteredTasksFragment extends DefaultFragment{
             String selectedTitle = sortedTasksTitles.get(info.position);
             Task selectedTask = getController().getTaskByTitle(selectedTitle);
             menu.setHeaderTitle(selectedTitle);
-            menu.add(Menu.NONE, UNDO_CONTEXT_MENU_ITEM, UNDO_CONTEXT_MENU_ITEM, R.string.undo)
+            menu.add(filter, UNDO_CONTEXT_MENU_ITEM, UNDO_CONTEXT_MENU_ITEM, R.string.undo)
                     .setEnabled(selectedTask.isUndonable());
-            menu.add(Menu.NONE, EDIT_CONTEXT_MENU_ITEM, EDIT_CONTEXT_MENU_ITEM, R.string.edit_task);
-            menu.add(Menu.NONE, DELETE_CONTEXT_MENU_ITEM, DELETE_CONTEXT_MENU_ITEM, R.string.remove);
+            menu.add(filter, EDIT_CONTEXT_MENU_ITEM, EDIT_CONTEXT_MENU_ITEM, R.string.edit_task);
+            menu.add(filter, DELETE_CONTEXT_MENU_ITEM, DELETE_CONTEXT_MENU_ITEM, R.string.remove);
         }
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        String selectedTitle = sortedTasksTitles.get(info.position);
-        final Task currentTask = getController().getTaskByTitle(selectedTitle);
+        if (item.getGroupId() == filter) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            String selectedTitle = sortedTasksTitles.get(info.position);
+            final Task currentTask = getController().getTaskByTitle(selectedTitle);
 
-        int menuItemIndex = item.getItemId();
-        switch (menuItemIndex) {
-            case UNDO_CONTEXT_MENU_ITEM:
-                getController().undoTask(currentTask);
-                setupListView();
-                return true;
-            case EDIT_CONTEXT_MENU_ITEM:
-                DefaultFragment f = new EditTaskFragment();
-                Bundle b = new Bundle();
-                b.putSerializable(EditTaskFragment.CURRENT_TASK_TITLE_TAG, selectedTitle);
-                getCurrentActivity().showChildFragment(f, b);
-                return true;
-            case DELETE_CONTEXT_MENU_ITEM:
-                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle(getString(R.string.removing) + " " + currentTask.getTitle())
-                        .setMessage(getString(R.string.removing_task_description))
-                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                getController().removeTask(currentTask);
-                                dialog.dismiss();
-                                setupListView();
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .show();
-                return true;
+            int menuItemIndex = item.getItemId();
+            switch (menuItemIndex) {
+                case UNDO_CONTEXT_MENU_ITEM:
+                    getController().undoTask(currentTask);
+                    setupListView();
+                    return true;
+                case EDIT_CONTEXT_MENU_ITEM:
+                    DefaultFragment f = new EditTaskFragment();
+                    Bundle b = new Bundle();
+                    b.putSerializable(EditTaskFragment.CURRENT_TASK_TITLE_TAG, selectedTitle);
+                    getCurrentActivity().showChildFragment(f, b);
+                    return true;
+                case DELETE_CONTEXT_MENU_ITEM:
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    alert.setTitle(getString(R.string.removing) + " " + currentTask.getTitle())
+                            .setMessage(getString(R.string.removing_task_description))
+                            .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getController().removeTask(currentTask);
+                                    dialog.dismiss();
+                                    setupListView();
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
+                    return true;
+            }
         }
         return false;
     }

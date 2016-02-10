@@ -207,6 +207,9 @@ public class LifeEntity {
 
     public List<Task> getTasks(){
         if (tasks != null){
+            if (tasks.contains(null)) {
+                tasks.removeAll(Collections.singleton(null));
+            }
             return tasks;
         } else {
             List<Task> tasksList = new ArrayList<>();
