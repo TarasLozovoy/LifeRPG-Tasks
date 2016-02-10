@@ -18,7 +18,6 @@ import com.levor.liferpgtasks.dataBase.SkillsCursorWrapper;
 import com.levor.liferpgtasks.dataBase.TasksCursorWrapper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -301,24 +300,30 @@ public class LifeEntity {
         values.put(SkillsTable.Cols.UUID, skill.getId().toString());
         values.put(SkillsTable.Cols.LEVEL, skill.getLevel());
         values.put(SkillsTable.Cols.SUBLEVEL, skill.getSublevel());
-        values.put(SkillsTable.Cols.KEY_CHARACTERISTC_TITLE, skill.getKeyCharacteristic().getTitle());
+        values.put(SkillsTable.Cols.KEY_CHARACTERISTC_TITLE, skill.getKeyCharacteristicsString());
         return values;
     }
 
-    public void addSkill(String title, Characteristic keyCharacteristic){
-        addSkill(title, 1, 0.0f, keyCharacteristic);
+    public void addSkill(String title, List<Characteristic> characteristicList){
+        addSkill(title, 1, 0.0f, characteristicList);
     }
 
-    public void addSkill(String title, int level, float sublevel, Characteristic keyCharacteristic){
+    public void addSkill(String title, Characteristic characteristic){
+        List<Characteristic> chars = new ArrayList<>();
+        chars.add(characteristic);
+        addSkill(title, 1, 0.0f, chars);
+    }
+
+    public void addSkill(String title, int level, float sublevel, List<Characteristic> characteristicList){
         Skill oldSkill = getSkillByTitle(title);
         if (oldSkill != null) {
             oldSkill.setLevel(level);
             oldSkill.setSublevel(sublevel);
-            oldSkill.setKeyCharacteristic(keyCharacteristic);
+            oldSkill.setKeyCharacteristicsList(characteristicList);
             updateSkill(oldSkill);
         } else {
             UUID id = UUID.randomUUID();
-            Skill newSkill = new Skill(title, level, sublevel, id, keyCharacteristic);
+            Skill newSkill = new Skill(title, level, sublevel, id, characteristicList);
             skills.add(newSkill);
             final ContentValues values = getContentValuesForSkill(newSkill);
             new AsyncTask<Void, Void, Void>(){
@@ -367,7 +372,7 @@ public class LifeEntity {
     public ArrayList<Skill> getSkillsByCharacteristic(Characteristic ch){
         ArrayList<Skill> sk = new ArrayList<>();
         for (Skill skill : getSkills()){
-            if (skill.getKeyCharacteristic().equals(ch)){
+            if (skill.getKeyCharacteristicsList().contains(ch)){
                 sk.add(skill);
             }
         }

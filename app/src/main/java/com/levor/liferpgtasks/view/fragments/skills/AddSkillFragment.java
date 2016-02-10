@@ -1,10 +1,14 @@
 package com.levor.liferpgtasks.view.fragments.skills;
 
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,8 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +24,10 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.model.Characteristic;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
-import com.levor.liferpgtasks.view.fragments.DefaultFragment;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class AddSkillFragment extends DataDependantFrament {
     public static final String RECEIVED_CHARACTERISTIC_TITLE_TAG = "received_characteristic_title_tag";
@@ -30,36 +35,39 @@ public class AddSkillFragment extends DataDependantFrament {
     protected final String SKILL_TITLE_TAG = "skill_title_tag";
     protected final String KEY_CHARACTERISTIC_TITLE = "key_characteristic_title";
 
+    protected View relatedCharacteristicsView;
     protected EditText titleEditText;
-    protected TextView keyCharacteristicTV;
-    protected Button setKeyCharacteristicButton;
+    protected TextView relatedCharacteristicsTextView;
 
-    protected Characteristic keyCharacteristic;
+    protected List<String> keyCharacteristicsTitleList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_skill, container, false);
         titleEditText = (EditText) v.findViewById(R.id.new_skill_title_edit_text);
-        keyCharacteristicTV = (TextView) v.findViewById(R.id.key_characteristic_value);
-        setKeyCharacteristicButton = (Button) v.findViewById(R.id.set_key_characteristic_button);
-        setKeyCharacteristicButton.setOnClickListener(new ChangeCharacteristicOnClickListener());
+        relatedCharacteristicsTextView = (TextView) v.findViewById(R.id.related_characteristics_text_view);
+        relatedCharacteristicsView = v.findViewById(R.id.add_characteristic_ll);
+
+        relatedCharacteristicsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KeyCharacteristicsSelectionDialog dialog = new KeyCharacteristicsSelectionDialog();
+                dialog.show(getCurrentActivity().getSupportFragmentManager(), "CharacteristicsSelection");
+            }
+        });
+
         String title;
         if (getArguments()!= null && (title = getArguments().getString(RECEIVED_CHARACTERISTIC_TITLE_TAG)) != null){
-            setKeyCharacteristicByTitle(title);
+            keyCharacteristicsTitleList.add(title);
         }
         if (savedInstanceState != null) {
             titleEditText.setText(savedInstanceState.getString(SKILL_TITLE_TAG));
-            String charTitle = savedInstanceState.getString(KEY_CHARACTERISTIC_TITLE);
-            if (charTitle != null) {
-                setKeyCharacteristicByTitle(charTitle);
-
-            }
         }
         titleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus){
+                if (!hasFocus) {
                     getCurrentActivity().showSoftKeyboard(false, getView());
                 }
             }
@@ -97,7 +105,7 @@ public class AddSkillFragment extends DataDependantFrament {
             case R.id.ok_menu_item:
                 if (titleEditText.getText().toString().equals("")){
                     Toast.makeText(getContext(), getString(R.string.empty_skill_title_error), Toast.LENGTH_SHORT).show();
-                } else if (keyCharacteristic == null){
+                } else if (keyCharacteristicsTitleList.isEmpty()){
                     Toast.makeText(getContext(), getString(R.string.no_key_characteristic_error), Toast.LENGTH_SHORT).show();
                 } else if (getController().getSkillByTitle(titleEditText.getText().toString()) != null){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -128,10 +136,23 @@ public class AddSkillFragment extends DataDependantFrament {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(SKILL_TITLE_TAG, titleEditText.getText().toString());
-        if (keyCharacteristic != null) {
-            outState.putSerializable(KEY_CHARACTERISTIC_TITLE, keyCharacteristic.getTitle());
-        }
         super.onSaveInstanceState(outState);
+    }
+
+    private void updateRelatedCharacteristicsView(){
+        StringBuilder sb = new StringBuilder();
+        if (keyCharacteristicsTitleList.isEmpty()) {
+            sb.append(getString(R.string.key_characteristic_empty));
+        } else {
+            sb.append(getString(R.string.key_characteristic))
+                    .append(" ");
+            for (String s : keyCharacteristicsTitleList) {
+                sb.append(s)
+                        .append(", ");
+            }
+            sb.delete(sb.length() - 2, sb.length() - 1);
+        }
+        relatedCharacteristicsTextView.setText(sb.toString());
     }
 
     @Override
@@ -139,27 +160,12 @@ public class AddSkillFragment extends DataDependantFrament {
         return true;
     }
 
-    private class ChangeCharacteristicOnClickListener implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-            final ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_item
-                    , getController().getCharacteristicsTitlesArray());
-            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-            dialog.setTitle(getString(R.string.select_characteristic));
-            dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    setKeyCharacteristicByTitle(adapter.getItem(which));
-                    setKeyCharacteristicButton.setText(R.string.change_characteristic);
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();
-        }
-    }
-
     protected void finish(String title, String message) {
-        getController().addSkill(title, keyCharacteristic);
+        List<Characteristic> chars = new ArrayList<>();
+        for (String s : keyCharacteristicsTitleList) {
+            chars.add(getController().getCharacteristicByTitle(s));
+        }
+        getController().addSkill(title, chars);
         Toast.makeText(getCurrentActivity(), message, Toast.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
 
@@ -169,8 +175,51 @@ public class AddSkillFragment extends DataDependantFrament {
                 .build());
     }
 
-    protected void setKeyCharacteristicByTitle(String title) {
-        keyCharacteristic = getController().getCharacteristicByTitle(title);
-        keyCharacteristicTV.setText(title);
+    @Override
+    public void updateUI() {
+        super.updateUI();
+        updateRelatedCharacteristicsView();
+    }
+
+    @SuppressLint("ValidFragment")
+    public class KeyCharacteristicsSelectionDialog extends DialogFragment {
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            List<Characteristic> allCharacteristics = getController().getCharacteristics();
+            Collections.sort(allCharacteristics, Characteristic.LEVEL_COMPARATOR);
+            String[] characteristicsNames = new String[allCharacteristics.size()];
+            boolean[] characteristicsStates = new boolean[allCharacteristics.size()];
+
+            for (int i = 0; i < allCharacteristics.size(); i++) {
+                characteristicsNames[i] = allCharacteristics.get(i).getTitle();
+                characteristicsStates[i] = keyCharacteristicsTitleList.contains(allCharacteristics.get(i).getTitle());
+            }
+
+            final String[] items = characteristicsNames;
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.skill_choosing)
+                    .setMultiChoiceItems(items, characteristicsStates,
+                            new DialogInterface.OnMultiChoiceClickListener() {
+                                public void onClick(DialogInterface dialog, int item, boolean isChecked) {
+                                    if (isChecked){
+                                        keyCharacteristicsTitleList.add(items[item]);
+                                    } else {
+                                        keyCharacteristicsTitleList.remove(items[item]);
+                                    }
+                                }
+                            })
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            updateRelatedCharacteristicsView();
+                            dialog.dismiss();
+                        }
+                    })
+                    .setCancelable(false);
+
+            return builder.create();
+        }
     }
 }

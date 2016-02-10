@@ -124,8 +124,8 @@ public class LifeController {
         performBackUpToDropBox();
     }
 
-    public void addSkill(String title, Characteristic keyChar){
-        lifeEntity.addSkill(title, keyChar);
+    public void addSkill(String title, List<Characteristic> keyCharList){
+        lifeEntity.addSkill(title, keyCharList);
         performBackUpToDropBox();
     }
 
@@ -152,13 +152,8 @@ public class LifeController {
         return strings.toArray(new String[strings.size()]);
     }
 
-    public String[] getCharacteristicsTitlesArray(){
-        List<Characteristic> characteristics = lifeEntity.getCharacteristics();
-        ArrayList<String> strings = new ArrayList<>();
-        for (Characteristic ch : characteristics){
-            strings.add(ch.getTitle());
-        }
-        return strings.toArray(new String[strings.size()]);
+    public List<Characteristic> getCharacteristics(){
+        return lifeEntity.getCharacteristics();
     }
 
     public Characteristic getCharacteristicByTitle(String title) {
@@ -205,7 +200,9 @@ public class LifeController {
         double finalXP = hero.getBaseXP() * multiplier;
         for (Skill sk : task.getRelatedSkills()) {
             if (sk.increaseSublevel(finalXP)){
-                lifeEntity.updateCharacteristic(sk.getKeyCharacteristic());
+                for (Characteristic ch : sk.getKeyCharacteristicsList()) {
+                    lifeEntity.updateCharacteristic(ch);
+                }
             }
             updateSkill(sk);
             updateStatistics(TOTAL_SKILLS_XP_TAG, (float) finalXP);
@@ -260,7 +257,9 @@ public class LifeController {
         double finalXP = hero.getBaseXP() * multiplier;
         for (Skill sk : task.getRelatedSkills()) {
             if (sk.decreaseSublevel(finalXP)){
-                lifeEntity.updateCharacteristic(sk.getKeyCharacteristic());
+                for (Characteristic ch : sk.getKeyCharacteristicsList()) {
+                    lifeEntity.updateCharacteristic(ch);
+                }
             }
             updateSkill(sk);
             updateStatistics(TOTAL_SKILLS_XP_TAG, (float) -finalXP);

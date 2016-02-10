@@ -214,7 +214,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
             } else if (repeatMode == Task.RepeatMode.SIMPLE_REPEAT) {
                 if (repeat > 0) {
                     sb.append(repeat);
-                } else if (repeat == -1) {
+                } else if (repeat < 0) {
                     sb.append(getString(R.string.infinite));
                 }
             } else {    //weeks

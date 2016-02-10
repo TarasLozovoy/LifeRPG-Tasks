@@ -1,12 +1,12 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/save_zone_margin"
+    android:orientation="vertical"
     tools:context="com.levor.liferpgtasks.view.fragments.skills.AddSkillFragment">
 
     <LinearLayout
-        android:id="@+id/add_title_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/new_skill_title"
-            android:textSize="22sp" />
+            style="@style/LifeRPGTextStyle" />
 
         <EditText
             android:id="@+id/new_skill_title_edit_text"
@@ -24,31 +24,22 @@
             android:hint="@string/new_skill_title_edit_text" />
     </LinearLayout>
 
+    <View style="@style/HorizontalDivider"/>
+
     <LinearLayout
         android:id="@+id/add_characteristic_ll"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/add_title_layout"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/key_characteristic"
-            android:textSize="22sp" />
-
-        <TextView
-            android:id="@+id/key_characteristic_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
-
-        <Button
-            android:id="@+id/set_key_characteristic_button"
-            style="@style/LifeRPGDefaultButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/set_key_characteristic" />
+            style="@style/LifeRPGTextInListStyle"
+            android:id="@+id/related_characteristics_text_view"/>
     </LinearLayout>
 
-</RelativeLayout>
+    <View style="@style/HorizontalDivider"/>
+
+</LinearLayout>

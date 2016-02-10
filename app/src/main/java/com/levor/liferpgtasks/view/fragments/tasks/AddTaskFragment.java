@@ -573,7 +573,7 @@ public class AddTaskFragment extends DataDependantFrament {
                         .append(": ");
                 if (repeatability > 0) {
                     sb.append(repeatability);
-                } else if (repeatability == -1) {
+                } else if (repeatability < 0) {
                     sb.append(getString(R.string.infinite));
                 }
                 if (dateMode != DateMode.TERMLESS){

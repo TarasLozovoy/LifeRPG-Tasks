@@ -138,7 +138,8 @@
     <!-- Skills-->
     <string name="new_skill_title">Title:</string>
     <string name="new_skill_title_edit_text">type skill title</string>
-    <string name="key_characteristic">Key characteristic:</string>
+    <string name="key_characteristic">Related characteristics:</string>
+    <string name="key_characteristic_empty">Add related characteristics</string>
     <string name="set_key_characteristic">Set characteristic</string>
     <string name="create_new_skill">Add new skill</string>
     <string name="add_new_skill">New skill</string>
