@@ -9,13 +9,15 @@ import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.levor.liferpgtasks.adapters.CustomPagerAdapter;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class TasksFragment extends DefaultFragment {
     private ViewPager viewPager;
@@ -57,7 +59,7 @@ public class TasksFragment extends DefaultFragment {
     }
 
     private void createViewPager(){
-        PagerAdapter adapter = new PagerAdapter
+        final PagerAdapter adapter = new PagerAdapter
                 (getChildFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -66,10 +68,12 @@ public class TasksFragment extends DefaultFragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
             }
+
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
 
             }
+
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
@@ -77,7 +81,18 @@ public class TasksFragment extends DefaultFragment {
         });
     }
 
+    public void updateChildFragmentsUI(){
+        PagerAdapter adapter = (PagerAdapter) viewPager.getAdapter();
+        for (DefaultFragment f : adapter.getFragments()) {
+            if (f != null && f.isCreated()){
+                f.updateUI();
+            }
+        }
+    }
+
     public class PagerAdapter extends CustomPagerAdapter {
+
+        private Set<DefaultFragment> fragments = new HashSet<>();
 
         public PagerAdapter(FragmentManager fm, int NumOfTabs) {
             super(fm, NumOfTabs);
@@ -104,6 +119,25 @@ public class TasksFragment extends DefaultFragment {
             Fragment f = new FilteredTasksFragment();
             f.setArguments(b);
             return f;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            DefaultFragment f = (DefaultFragment) super.instantiateItem(container, position);
+            fragments.add(f);
+            return f;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            DefaultFragment f = (DefaultFragment) object;
+            fragments.remove(f);
+            super.destroyItem(container, position, object);
+
+        }
+
+        public Set<DefaultFragment> getFragments() {
+            return fragments;
         }
     }
 }

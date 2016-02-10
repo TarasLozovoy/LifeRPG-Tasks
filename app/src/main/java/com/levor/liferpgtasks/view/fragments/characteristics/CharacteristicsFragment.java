@@ -40,7 +40,7 @@ public class CharacteristicsFragment extends DefaultFragment {
     }
 
     @Override
-    protected void updateUI(){
+    public void updateUI(){
         String[] chars = getController().getCharacteristicsTitleAndLevelAsArray();
         listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, chars));
     }

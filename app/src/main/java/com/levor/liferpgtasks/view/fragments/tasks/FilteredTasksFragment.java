@@ -67,6 +67,7 @@ public class FilteredTasksFragment extends DefaultFragment{
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(R.string.tasks);
         getCurrentActivity().showActionBarHomeButtonAsBack(false);
+        isCreated = true;
         return view;
     }
     @Override
@@ -165,7 +166,7 @@ public class FilteredTasksFragment extends DefaultFragment{
             switch (menuItemIndex) {
                 case UNDO_CONTEXT_MENU_ITEM:
                     getController().undoTask(currentTask);
-                    setupListView();
+                    updateFilteredFragmentsUI();
                     return true;
                 case EDIT_CONTEXT_MENU_ITEM:
                     DefaultFragment f = new EditTaskFragment();
@@ -182,7 +183,7 @@ public class FilteredTasksFragment extends DefaultFragment{
                                 public void onClick(DialogInterface dialog, int which) {
                                     getController().removeTask(currentTask);
                                     dialog.dismiss();
-                                    setupListView();
+                                    updateFilteredFragmentsUI();
                                 }
                             })
                             .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -274,7 +275,7 @@ public class FilteredTasksFragment extends DefaultFragment{
             adapter.registerDataSetObserver(new DataSetObserver() {
                 @Override
                 public void onChanged() {
-                    updateUI();
+                    updateFilteredFragmentsUI();
                     super.onChanged();
                 }
             });
@@ -294,7 +295,11 @@ public class FilteredTasksFragment extends DefaultFragment{
     }
 
     @Override
-    protected void updateUI() {
+    public void updateUI() {
         setupListView();
+    }
+
+    private void updateFilteredFragmentsUI(){
+        ((TasksFragment)getParentFragment()).updateChildFragmentsUI();
     }
 }

@@ -10,6 +10,7 @@ import com.levor.liferpgtasks.view.activities.MainActivity;
 
 public  class DefaultFragment extends Fragment {
     private Activity activity;
+    protected boolean isCreated = false;
 
     protected MainActivity getCurrentActivity(){
         return (MainActivity) activity;
@@ -31,7 +32,17 @@ public  class DefaultFragment extends Fragment {
         updateUI();
     }
 
-    protected void updateUI(){}
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        isCreated = false;
+    }
+
+    public void updateUI(){}
 
     public void onRestoreFromBackStack(){}
+
+    public boolean isCreated(){
+        return isCreated;
+    }
 }

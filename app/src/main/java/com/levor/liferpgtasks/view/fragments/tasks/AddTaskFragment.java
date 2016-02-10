@@ -40,7 +40,6 @@ import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.model.Task.RepeatMode;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
-import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -199,7 +198,7 @@ public class AddTaskFragment extends DataDependantFrament {
     }
 
     @Override
-    protected void updateUI() {
+    public void updateUI() {
         super.updateUI();
         updateDateView();
         updateNotifyView();
