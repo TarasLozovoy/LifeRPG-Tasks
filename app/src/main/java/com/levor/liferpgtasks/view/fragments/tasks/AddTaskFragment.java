@@ -191,7 +191,7 @@ public class AddTaskFragment extends DataDependantFrament {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable(TASK_TITLE_TAG, taskTitleEditText.getText().toString());
+        outState.putSerializable(TASK_TITLE_TAG, taskTitleEditText != null ? taskTitleEditText.getText().toString() : "");
         outState.putSerializable(RELATED_SKILLS_TAG, relatedSkills);
         outState.putSerializable(DATE_TAG, date);
         super.onSaveInstanceState(outState);
