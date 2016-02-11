@@ -6,6 +6,7 @@
 /build
 /captures
 signconfig.properties
+gradle.properties
 
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio
 
@@ -34,4 +35,3 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
-gradle.properties
