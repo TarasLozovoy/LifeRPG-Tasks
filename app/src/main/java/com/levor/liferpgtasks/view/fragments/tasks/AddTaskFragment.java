@@ -819,17 +819,21 @@ public class AddTaskFragment extends DataDependantFrament {
                     repeatability = 1;
                 } else {
                     int selectedTimeMode = modeSpinner.getSelectedItemPosition();
+                    String repeatIndexString = repeatIndexEditText.getText().toString();
+                    String repeatTimesString = repeatTimesEditText.getText().toString();
+                    if (repeatIndexString.isEmpty()) repeatIndexString = "1";
+                    if (repeatTimesString.isEmpty()) repeatTimesString = "1";
                     switch (selectedTimeMode) {
                         case 0: //simple repeat
                             repeatMode = RepeatMode.SIMPLE_REPEAT;
                             break;
                         case 1: //everyday
                             repeatMode = RepeatMode.EVERY_NTH_DAY;
-                            repeatIndex = Integer.parseInt(repeatIndexEditText.getText().toString());
+                            repeatIndex = Integer.parseInt(repeatIndexString);
                             break;
                         case 2: //every week
                             repeatMode = RepeatMode.DAYS_OF_NTH_WEEK;
-                            repeatIndex = Integer.parseInt(repeatIndexEditText.getText().toString());
+                            repeatIndex = Integer.parseInt(repeatIndexString);
                             repeatDaysOfWeek = new Boolean[7];
                             for (int i = 0; i < repeatDaysOfWeek.length; i++) {
                                 repeatDaysOfWeek[i] = false;
@@ -851,15 +855,15 @@ public class AddTaskFragment extends DataDependantFrament {
                             break;
                         case 3: //every month
                             repeatMode = RepeatMode.EVERY_NTH_MONTH;
-                            repeatIndex = Integer.parseInt(repeatIndexEditText.getText().toString());
+                            repeatIndex = Integer.parseInt(repeatIndexString);
                             break;
                         case 4: //every year
                             repeatMode = RepeatMode.EVERY_NTH_YEAR;
-                            repeatIndex = Integer.parseInt(repeatIndexEditText.getText().toString());
+                            repeatIndex = Integer.parseInt(repeatIndexString);
                             break;
                     }
                     repeatability = repeatabilitySpinner.getSelectedItemPosition() == 0 ?
-                            -1 : Integer.parseInt(repeatTimesEditText.getText().toString());
+                            -1 : Integer.parseInt(repeatTimesString);
                     if (repeatability == 0) repeatability = -1;
                     if (repeatIndex == 0) repeatIndex = 1;
                     if (repeatMode == RepeatMode.DAYS_OF_NTH_WEEK &&
@@ -971,10 +975,12 @@ public class AddTaskFragment extends DataDependantFrament {
                         notifyEditTextMaxValue = 4;
                         break;
                 }
-                if (notifyEditText.getText().toString().isEmpty()) {
+                String notifyString = notifyEditText.getText().toString();
+                if (notifyString.isEmpty()) {
                     notifyEditText.setText("1");
+                    notifyString = "1";
                 }
-                int typedValue = Integer.parseInt(notifyEditText.getText().toString());
+                int typedValue = Integer.parseInt(notifyString);
                 if (typedValue > notifyEditTextMaxValue) {
                     notifyEditText.setText(String.valueOf(notifyEditTextMaxValue));
                 }
@@ -987,7 +993,9 @@ public class AddTaskFragment extends DataDependantFrament {
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                int typedValue = Integer.parseInt(notifyEditText.getText().toString());
+                String typedString = notifyEditText.getText().toString();
+                if (typedString.isEmpty()) typedString = "0";
+                int typedValue = Integer.parseInt(typedString);
                 int checkedRadioButton = notifyRadioGroup.getCheckedRadioButtonId();
                 int selectedRadioButton = notifyRadioGroup.indexOfChild(notifyRadioGroup.findViewById(checkedRadioButton));
                 long timeUnit = 0;
