@@ -1,5 +1,7 @@
 package com.levor.liferpgtasks.view.fragments.tasks;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,14 +16,20 @@ import android.view.ViewGroup;
 
 import com.levor.liferpgtasks.adapters.CustomPagerAdapter;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class TasksFragment extends DefaultFragment {
+    public static final String SHARED_PREFS_TAG = "shared_prefs_tag";
+    public static final String SORTING_KEY = "sorting_key";
+
     private ViewPager viewPager;
     private TabLayout tabLayout;
+
+    private int sorting;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,6 +48,9 @@ public class TasksFragment extends DefaultFragment {
         if (actionBar != null) {
             actionBar.setElevation(0);
         }
+        SharedPreferences prefs = getActivity()
+                .getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+        sorting = prefs.getInt(SORTING_KEY, Task.SortingOrder.DATE_DESC);
         getCurrentActivity().showActionBarHomeButtonAsBack(false);
         setHasOptionsMenu(true);
         return view;
@@ -88,6 +99,17 @@ public class TasksFragment extends DefaultFragment {
                 f.updateUI();
             }
         }
+    }
+
+    public int getSorting() {
+        return sorting;
+    }
+
+    public void setSorting(int sorting) {
+        this.sorting = sorting;
+        SharedPreferences prefs = getActivity()
+                .getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+        prefs.edit().putInt(SORTING_KEY, sorting).apply();
     }
 
     public class PagerAdapter extends CustomPagerAdapter {

@@ -32,8 +32,6 @@ import java.util.UUID;
 
 public class FilteredTasksFragment extends DefaultFragment{
     public static final String FILTER_ARG = "filter_arg";
-    public static final String SHARED_PREFS_TAG = "shared_prefs_tag";
-    public static final String SORTING_KEY = "sorting_key";
 
     public static final int ALL = 0;
     public static final int INFINITE = 1;
@@ -50,7 +48,7 @@ public class FilteredTasksFragment extends DefaultFragment{
 
     private List<String> sortingOrdersList = new ArrayList<>();
     private List<String> sortedTasksTitles = new ArrayList<>();
-    private int sorting;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,9 +58,6 @@ public class FilteredTasksFragment extends DefaultFragment{
         listView = (ListView) view.findViewById(R.id.listViewTasks);
         emptyList = (TextView) view.findViewById(R.id.empty_list);
         if (filter == DONE) emptyList.setText(R.string.empty_done_list_view);
-        SharedPreferences prefs = getActivity()
-                .getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-        sorting = prefs.getInt(SORTING_KEY, Task.SortingOrder.DATE_DESC);
         setupListView();
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(R.string.tasks);
@@ -104,29 +99,23 @@ public class FilteredTasksFragment extends DefaultFragment{
         MenuItem item = menu.findItem(R.id.sorting);
         item.setActionView(sortingSpinner);
         if (orderSpinner.getAdapter() == null || orderSpinner.getAdapter().isEmpty()) {
-            sortingOrdersList.add(getString(R.string.completion_task_order));
-            sortingOrdersList.add(getString(R.string.title_asc_task_order));
-            sortingOrdersList.add(getString(R.string.title_desc_task_order));
-            sortingOrdersList.add(getString(R.string.importance_ask_task_order));
-            sortingOrdersList.add(getString(R.string.importance_desc_task_order));
-            sortingOrdersList.add(getString(R.string.difficulty_asc_task_order));
-            sortingOrdersList.add(getString(R.string.difficulty_desc_task_order));
-            sortingOrdersList.add(getString(R.string.date_asc_task_order));
-            sortingOrdersList.add(getString(R.string.date_desc_task_order));
+            String[] sortingStrings = getResources().getStringArray(R.array.sorting_spinner_items);
+            for (int i = 0; i < sortingStrings.length; i++) {
+                if (!sortingOrdersList.contains(sortingStrings[i])) {
+                    sortingOrdersList.add(sortingStrings[i]);
+                }
+            }
             final HighlightStringAdapter adapter = new HighlightStringAdapter(getCurrentActivity(),
                     R.layout.simple_list_item_1, sortingOrdersList);
             orderSpinner.setAdapter(adapter);
-            adapter.setSelection(sorting);
+            adapter.setSelection(getSorting());
             orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (sorting != position) {
-                        sorting = position;
-                        adapter.setSelection(sorting);
+                    if (getSorting() != position) {
+                        setSorting(position);
+                        adapter.setSelection(getSorting());
                         updateFilteredFragmentsUI();
-                        SharedPreferences prefs = getActivity()
-                                .getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-                        prefs.edit().putInt(SORTING_KEY, sorting).apply();
                     }
                 }
 
@@ -137,7 +126,7 @@ public class FilteredTasksFragment extends DefaultFragment{
 
 
             });
-            orderSpinner.setSelection(sorting);
+            orderSpinner.setSelection(getSorting());
         }
     }
 
@@ -208,7 +197,7 @@ public class FilteredTasksFragment extends DefaultFragment{
     private void setupListView() {
         List<Task> tasks = getController().getAllTasks();
         Comparator<Task> comparator = null;
-        switch (sorting){
+        switch (getSorting()){
             case Task.SortingOrder.COMPLETION :
                 comparator = Task.COMPLETION_TASKS_COMPARATOR;
                 break;
@@ -301,5 +290,13 @@ public class FilteredTasksFragment extends DefaultFragment{
 
     private void updateFilteredFragmentsUI(){
         ((TasksFragment)getParentFragment()).updateChildFragmentsUI();
+    }
+
+    private int getSorting() {
+        return ((TasksFragment)getParentFragment()).getSorting();
+    }
+
+    private void setSorting(int sorting) {
+        ((TasksFragment)getParentFragment()).setSorting(sorting);
     }
 }

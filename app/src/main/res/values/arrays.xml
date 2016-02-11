@@ -67,4 +67,17 @@
         <item>@string/notify_60_minute_before</item>
         <item>@string/notify_custom</item>
     </string-array>
+
+    <string-array
+        name="sorting_spinner_items">
+        <item>@string/completion_task_order</item>
+        <item>@string/title_asc_task_order</item>
+        <item>@string/title_desc_task_order</item>
+        <item>@string/importance_ask_task_order</item>
+        <item>@string/importance_desc_task_order</item>
+        <item>@string/difficulty_asc_task_order</item>
+        <item>@string/difficulty_desc_task_order</item>
+        <item>@string/date_asc_task_order</item>
+        <item>@string/date_desc_task_order</item>
+    </string-array>
 </resources>
