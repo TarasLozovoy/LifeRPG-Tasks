@@ -123,7 +123,7 @@ public class FilteredTasksFragment extends DefaultFragment{
                     if (sorting != position) {
                         sorting = position;
                         adapter.setSelection(sorting);
-                        setupListView();
+                        updateFilteredFragmentsUI();
                         SharedPreferences prefs = getActivity()
                                 .getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
                         prefs.edit().putInt(SORTING_KEY, sorting).apply();

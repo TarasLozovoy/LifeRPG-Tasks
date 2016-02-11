@@ -71,6 +71,7 @@ public class Task {
         Collections.sort(relatedSkills, Skill.LEVEL_COMPARATOR);
         StringBuilder sb = new StringBuilder();
         for (Skill sk : relatedSkills) {
+            if (sk == null) continue;
             sb.append(sk.getId())
                     .append("::");
         }
