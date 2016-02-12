@@ -199,6 +199,7 @@ public class LifeController {
         double multiplier = task.getMultiplier();
         double finalXP = hero.getBaseXP() * multiplier;
         for (Skill sk : task.getRelatedSkills()) {
+            if (sk == null) continue;
             if (sk.increaseSublevel(finalXP)){
                 for (Characteristic ch : sk.getKeyCharacteristicsList()) {
                     lifeEntity.updateCharacteristic(ch);
@@ -256,6 +257,7 @@ public class LifeController {
         double multiplier = task.getMultiplier();
         double finalXP = hero.getBaseXP() * multiplier;
         for (Skill sk : task.getRelatedSkills()) {
+            if (sk == null) continue;
             if (sk.decreaseSublevel(finalXP)){
                 for (Characteristic ch : sk.getKeyCharacteristicsList()) {
                     lifeEntity.updateCharacteristic(ch);
