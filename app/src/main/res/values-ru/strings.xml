@@ -294,6 +294,9 @@
     <string name="notification_text">Пора выполнять задание!</string>
     <string name="removing">Удаление</string>
     <string name="error_on_loading_image">>Возникла ошибка при загрузке иконке. Выберите, пожалуйста, другую иконку.</string>
+    <string name="reset">Стереть данные</string>
+    <string name="reset_message">Все добавленные задачи, навыки и весь прогресс будет удален. Вы действительно хотите стереть данные?</string>
+    <string name="reset_performed">Все данные успешно стерты</string>
     <!-- -->
 
 </resources>

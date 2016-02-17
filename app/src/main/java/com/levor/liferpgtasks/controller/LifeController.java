@@ -431,7 +431,7 @@ public class LifeController {
             statisticsNumbers.put(TOTAL_SKILLS_XP_TAG, prefs.getFloat(TOTAL_SKILLS_XP_TAG, 0f));
             statisticsNumbers.put(ACHIEVEMENTS_COUNT_TAG, prefs.getFloat(ACHIEVEMENTS_COUNT_TAG, 0f));
         }
-        statisticsNumbers.put(XP_MULTIPLIER_TAG, (float)getHero().getBaseXP());
+        statisticsNumbers.put(XP_MULTIPLIER_TAG, (float) getHero().getBaseXP());
 
     }
 
@@ -642,10 +642,14 @@ public class LifeController {
         lifeEntity.openDBConnection();
     }
 
-    public void onNewDBImported(){
-        lifeEntity.onNewDBImported();
+    public void onDBFileUpdated(boolean isFileDeleted) {
+        lifeEntity.onDBFileUpdated(isFileDeleted);
+        if (isFileDeleted) {
+            lifeEntity.resetMisc();
+        }
         initAchievements();
         initStatistics();
+
     }
 
     public boolean isDropBoxAutoBackupEnabled(){

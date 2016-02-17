@@ -11,8 +11,6 @@ import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -62,6 +60,10 @@ public class ExportImportDBFragment extends DefaultFragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     getCurrentActivity().checkAndBackupToDropBox();
+                } else {
+                    SharedPreferences prefs = getCurrentActivity()
+                            .getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+                    prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, false).apply();
                 }
             }
         });
@@ -158,7 +160,7 @@ public class ExportImportDBFragment extends DefaultFragment {
                         Toast.makeText(getContext(), getString(R.string.db_imported), Toast.LENGTH_LONG)
                                 .show();
                         getController().openDBConnection();
-                        getCurrentActivity().onDBImported();
+                        getCurrentActivity().onDBFileUpdated(false);
                     } catch (IOException e){
                         Toast.makeText(getContext(), getString(R.string.db_import_error), Toast.LENGTH_LONG)
                                 .show();

@@ -327,6 +327,9 @@
     <string name="notification_text">Task need to be performed</string>
     <string name="removing">Removing</string>
     <string name="error_on_loading_image">Error occurred at attempt to load selected image. Try to select another image.</string>
+    <string name="reset">Reset data</string>
+    <string name="reset_message">Reset will remove all tasks, skills and progress. Are you sure tou want to perform reset?</string>
+    <string name="reset_performed">Reset successfully performed</string>
     <!-- -->
 
 </resources>
