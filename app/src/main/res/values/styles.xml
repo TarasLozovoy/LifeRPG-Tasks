@@ -51,4 +51,10 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
+    <!-- Default text for list elements style -->
+    <style name="LifeRPGSettingsItemsStyle">
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">7dp</item>
+    </style>
+
 </resources>

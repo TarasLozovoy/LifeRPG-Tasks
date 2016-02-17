@@ -16,40 +16,45 @@ import com.levor.liferpgtasks.view.fragments.tasks.ExportImportDBFragment;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class SettingsFragment extends DefaultFragment {
+    @Bind(R.id.statistics_layout)           View statisticsView;
+    @Bind(R.id.achievements_layout)         View achievementsView;
+    @Bind(R.id.export_import_db_layout)     View exportImportDBView;
+    @Bind(R.id.contact_layout)              View contactView;
+    @Bind(R.id.app_on_google_play_layout)   View playMarketView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
-        Button showStatisticsButton = (Button) v.findViewById(R.id.show_statistics_button);
-        Button showAchievementsButton = (Button) v.findViewById(R.id.show_achievements_button);
-        Button export_importDBButton = (Button) v.findViewById(R.id.export_db_button);
-        Button contactButton = (Button) v.findViewById(R.id.contact_button);
-        Button playMarketButton = (Button) v.findViewById(R.id.play_market_button);
+        ButterKnife.bind(this, v);
 
-        showStatisticsButton.setOnClickListener(new View.OnClickListener() {
+        statisticsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getCurrentActivity().showChildFragment(new StatisticsFragment(), null);
             }
         });
 
-        showAchievementsButton.setOnClickListener(new View.OnClickListener() {
+        achievementsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getCurrentActivity().showChildFragment(new AchievementsFragment(), null);
             }
         });
 
-        export_importDBButton.setOnClickListener(new View.OnClickListener() {
+        exportImportDBView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getCurrentActivity().showChildFragment(new ExportImportDBFragment(), null);
             }
         });
 
-        contactButton.setOnClickListener(new View.OnClickListener() {
+        contactView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
@@ -67,7 +72,7 @@ public class SettingsFragment extends DefaultFragment {
             }
         });
 
-        playMarketButton.setOnClickListener(new View.OnClickListener() {
+        playMarketView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW,
@@ -86,5 +91,11 @@ public class SettingsFragment extends DefaultFragment {
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Settings Fragment");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
     }
 }

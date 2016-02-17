@@ -2,59 +2,125 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.levor.liferpgtasks.view.fragments.SettingsFragment">
+    tools:context="com.levor.liferpgtasks.view.fragments.SettingsFragment"
+    android:layout_margin="@dimen/save_zone_margin">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/show_statistics_button"
-            style="@style/LifeRPGDefaultButton"
+        <RelativeLayout
+            android:id="@+id/statistics_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/statistics" />
+            style="@style/LifeRPGSettingsItemsStyle">
 
-        <Button
-            android:id="@+id/show_achievements_button"
-            style="@style/LifeRPGDefaultButton"
+            <ImageView
+                android:id="@+id/statistics_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toRightOf="@id/statistics_arrow"
+                android:text="@string/statistics" />
+        </RelativeLayout>
+
+        <View style="@style/HorizontalDivider"/>
+
+        <RelativeLayout
+            android:id="@+id/achievements_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/show_statistics_button"
-            android:layout_marginBottom="2dp"
-            android:gravity="center"
-            android:text="@string/achievements" />
+            style="@style/LifeRPGSettingsItemsStyle">
 
-        <Button
-            android:id="@+id/export_db_button"
-            style="@style/LifeRPGDefaultButton"
+            <ImageView
+                android:id="@+id/achievements_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toRightOf="@id/achievements_arrow"
+                android:text="@string/achievements" />
+        </RelativeLayout>
+
+        <View style="@style/HorizontalDivider"/>
+
+        <RelativeLayout
+            android:id="@+id/export_import_db_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/show_achievements_button"
-            android:layout_marginBottom="2dp"
-            android:gravity="center"
-            android:text="@string/export_import_db" />
+            style="@style/LifeRPGSettingsItemsStyle">
 
-        <Button
-            android:id="@+id/contact_button"
-            style="@style/LifeRPGDefaultButton"
+            <ImageView
+                android:id="@+id/export_import_db_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toRightOf="@id/export_import_db_arrow"
+                android:text="@string/export_import_db" />
+        </RelativeLayout>
+
+        <View style="@style/HorizontalDivider"/>
+
+        <RelativeLayout
+            android:id="@+id/contact_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/export_db_button"
-            android:layout_marginBottom="2dp"
-            android:gravity="center"
-            android:text="@string/contact" />
+            style="@style/LifeRPGSettingsItemsStyle">
 
-        <Button
-            android:id="@+id/play_market_button"
-            style="@style/LifeRPGDefaultButton"
+            <ImageView
+                android:id="@+id/contact_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toRightOf="@id/contact_arrow"
+                android:text="@string/contact" />
+        </RelativeLayout>
+
+        <View style="@style/HorizontalDivider"/>
+
+        <RelativeLayout
+            android:id="@+id/app_on_google_play_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/contact_button"
-            android:layout_marginBottom="2dp"
-            android:gravity="center"
-            android:text="@string/app_on_google_play" />
+            style="@style/LifeRPGSettingsItemsStyle">
 
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/app_on_google_play_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toRightOf="@id/app_on_google_play_arrow"
+                android:text="@string/app_on_google_play" />
+        </RelativeLayout>
+    </LinearLayout>
 </ScrollView>

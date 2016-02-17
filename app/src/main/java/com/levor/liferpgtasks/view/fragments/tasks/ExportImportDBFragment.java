@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.levor.liferpgtasks.R;
@@ -27,6 +28,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class ExportImportDBFragment extends DefaultFragment {
     private static final int SELECT_FILE_IN_FILESYSTEM = 100;
 
@@ -34,36 +38,42 @@ public class ExportImportDBFragment extends DefaultFragment {
             +"/LifeRGPTasks/";
     public static final String DB_EXPORT_FILE_NAME = DB_EXPORT_PATH + "LifeRPGTasksDB.db";
 
+    @Bind(R.id.auto_backup_to_dropbox_layout)       View exportToDropboxView;
+    @Bind(R.id.auto_backup_to_dropbox_switch)       Switch exportToDropboxSwitch;
+    @Bind(R.id.import_db_from_dropbox_layout)       View importFromDropboxView;
+    @Bind(R.id.export_db_to_filesystem_layout)      View exportToFileSystemView;
+    @Bind(R.id.import_db_from_filesystem_layout)    View importFromFileSystemView;
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_import_export_db, container, false);
-        CheckBox exportToDropbox = (CheckBox) v.findViewById(R.id.export_dropbox_checkbox);
-        Button importFromDropbox = (Button) v.findViewById(R.id.import_db_from_dropbox);
-        Button exportToFileSystem = (Button) v.findViewById(R.id.export_db_to_filesystem);
-        Button importFromFileSystem = (Button) v.findViewById(R.id.import_db_from_filesystem);
+        ButterKnife.bind(this, v);
 
-        SharedPreferences prefs = getCurrentActivity().getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-        exportToDropbox.setChecked(prefs.getBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, false));
-        exportToDropbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        exportToDropboxView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exportToDropboxSwitch.setChecked(!exportToDropboxSwitch.isChecked());
+            }
+        });
+
+        exportToDropboxSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences prefs = getCurrentActivity().getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-                prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, isChecked).apply();
                 if (isChecked) {
                     getCurrentActivity().checkAndBackupToDropBox();
                 }
             }
         });
 
-        importFromDropbox.setOnClickListener(new View.OnClickListener() {
+        importFromDropboxView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getCurrentActivity().checkAndImportFromDropBox();
             }
         });
 
-        exportToFileSystem.setOnClickListener(new View.OnClickListener() {
+        exportToFileSystemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getController().closeDBConnection();
@@ -91,7 +101,7 @@ public class ExportImportDBFragment extends DefaultFragment {
             }
         });
 
-        importFromFileSystem.setOnClickListener(new View.OnClickListener() {
+        importFromFileSystemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showFileChooserDialog();
@@ -106,8 +116,17 @@ public class ExportImportDBFragment extends DefaultFragment {
 
     @Override
     public void onResume() {
+        getController().sendScreenNameToAnalytics("Export/Import DB Fragment");
+        SharedPreferences prefs = getCurrentActivity().getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+        exportToDropboxSwitch.setChecked(prefs.getBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, false));
         getController().updateMiscToDB();
         super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
     }
 
     private void showFileChooserDialog(){
