@@ -1035,6 +1035,7 @@ public class AddTaskFragment extends DataDependantFrament {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             List<Skill> allSkills = getController().getAllSkills();
+            allSkills.removeAll(Collections.singleton(null));
             Collections.sort(allSkills, Skill.TITLE_COMPARATOR);
             String[] skillNames = new String[allSkills.size()];
             boolean[] skillStates = new boolean[allSkills.size()];

@@ -63,11 +63,13 @@ public class Task {
     }
 
     public List<Skill> getRelatedSkills() {
+        relatedSkills.removeAll(Collections.singleton(null));
         Collections.sort(relatedSkills, Skill.LEVEL_COMPARATOR);
         return relatedSkills;
     }
 
     public String getRelatedSkillsString() {
+        relatedSkills.removeAll(Collections.singleton(null));
         Collections.sort(relatedSkills, Skill.LEVEL_COMPARATOR);
         StringBuilder sb = new StringBuilder();
         for (Skill sk : relatedSkills) {

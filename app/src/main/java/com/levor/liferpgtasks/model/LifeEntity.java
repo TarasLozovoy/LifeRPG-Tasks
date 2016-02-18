@@ -342,6 +342,7 @@ public class LifeEntity {
 
     public List<Skill> getSkills(){
         if (skills != null){
+            skills.removeAll(Collections.singleton(null));
             Collections.sort(skills, Skill.LEVEL_COMPARATOR); //change achievements if changing comparator
             return skills;
         }
@@ -355,6 +356,7 @@ public class LifeEntity {
             }} finally {
             cursorWrapper.close();
         }
+        skillsList.removeAll(Collections.singleton(null));
         Collections.sort(skillsList, Skill.LEVEL_COMPARATOR);
         return skillsList;
     }
