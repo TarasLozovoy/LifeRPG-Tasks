@@ -3,19 +3,17 @@ package com.levor.liferpgtasks.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.design.widget.Snackbar;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
@@ -23,7 +21,6 @@ import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
 import com.levor.liferpgtasks.view.activities.MainActivity;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class TasksAdapter extends BaseAdapter implements ListAdapter{
@@ -93,8 +90,21 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
             }
         });
 
-        TextView listItemTV = (TextView) view.findViewById(R.id.list_item_string);
-        listItemTV.setText(task.getTitle());
+        TextView listItemTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
+        TextView listItemDateTextView = (TextView) view.findViewById(R.id.list_item_date);
+
+        listItemTitleTextView.setText(task.getTitle());
+        if (task.getRepeatability() != 0 && task.getDateMode() != Task.DateMode.TERMLESS) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(DateFormat.format(Task.getDateFormatting(), task.getDate()));
+            if (task.getDateMode() == Task.DateMode.SPECIFIC_TIME) {
+                sb.append(" ");
+                sb.append(DateFormat.format(Task.getTimeFormatting(), task.getDate()));
+            }
+            listItemDateTextView.setVisibility(View.VISIBLE);
+            listItemDateTextView.setText(sb.toString());
+        }
+
         TextView repeatabilityTV = (TextView) view.findViewById(R.id.repeatability_tasks_list_item);
         LinearLayout repeatabilityLL = (LinearLayout) view.findViewById(R.id.repeatability_container_tasks_list_item);
         int repeat = task.getRepeatability();

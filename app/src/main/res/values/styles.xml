@@ -18,6 +18,12 @@
         <item name="android:textSize">@dimen/default_title_text_size</item>
     </style>
 
+    <!-- Second level text style -->
+    <style name="LifeRPGListItemSecondLevelTextStyle">
+        <item name="android:textSize">@dimen/second_level_text_size</item>
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
     <!-- Default text for list elements style -->
     <style name="LifeRPGTextInListStyle">
         <item name="android:textSize">@dimen/default_text_size</item>
@@ -51,7 +57,7 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <!-- Default text for list elements style -->
+    <!-- Default text for list elements style in settings -->
     <style name="LifeRPGSettingsItemsStyle">
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:layout_marginBottom">7dp</item>
