@@ -66,6 +66,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile files('/home/dtv/Desktop/Dropbox/Java/Android/LifeRPG-Tasks/libs/dropbox-android-sdk-1.6.3.jar')
     compile files('/home/dtv/Desktop/Dropbox/Java/Android/LifeRPG-Tasks/libs/json_simple-1.1.jar')
-//    compile files('D:/Development/LifeRPG/libs/dropbox-android-sdk-1.6.3.jar')
-//    compile files('D:/Development/LifeRPG/libs/json_simple-1.1.jar')
+    //    compile files('D:/Development/LifeRPG/libs/dropbox-android-sdk-1.6.3.jar')
+    //    compile files('D:/Development/LifeRPG/libs/json_simple-1.1.jar')
+    compile 'joda-time:joda-time:2.9.2'
 }

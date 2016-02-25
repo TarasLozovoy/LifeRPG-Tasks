@@ -28,6 +28,9 @@ import com.levor.liferpgtasks.widget.LifeRPGWidgetProvider;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -211,6 +214,7 @@ public class LifeController {
         boolean isLevelIncreased = hero.increaseXP(finalXP);
         lifeEntity.updateHero(hero);
         updateStatistics(TOTAL_HERO_XP_TAG, (float) finalXP);
+        checkTaskHabitGeneration(task);
 
         //GA
         if (isLevelIncreased){
@@ -270,6 +274,7 @@ public class LifeController {
         lifeEntity.updateHero(hero);
         updateStatistics(TOTAL_HERO_XP_TAG, (float) -finalXP);
         updateStatistics(PERFORMED_TASKS_TAG, -1);
+        checkTaskHabitGeneration(task);
         checkAchievements();
         performBackUpToDropBox();
         return isLevelChanged;
@@ -324,6 +329,39 @@ public class LifeController {
         hero.setName(name);
         lifeEntity.updateHero(hero);
         performBackUpToDropBox();
+    }
+
+    public void checkHabitGenerationForAllTasks(){
+        List<Task> tasks = getAllTasks();
+        for (Task t : tasks) {
+            if (t.getRepeatability() < 0 && t.getHabitDays() > 0) {
+                checkTaskHabitGeneration(t);
+            }
+        }
+    }
+
+    public void checkTaskHabitGeneration(Task t) {
+        LocalDate nextRepeatDate = LocalDate.fromDateFields(t.getDate());
+        LocalDate today = new LocalDate();
+        LocalDate habitStartDate = t.getHabitStartDate();
+
+        if (nextRepeatDate.isBefore(today)) {
+            t.setHabitStartDate(today.minusDays(1));
+            t.setHabitDaysLeft(t.getHabitDays());
+            Toast.makeText(currentActivity, currentActivity.getString(R.string.habit_generation_failed,t.getTitle()),
+                    Toast.LENGTH_LONG)
+                    .show();
+        } else if (Days.daysBetween(today, nextRepeatDate).getDays() != 0) {
+            int diff = Math.abs(Days.daysBetween(today, habitStartDate).getDays());
+            t.setHabitDaysLeft(t.getHabitDays() - diff);
+            if (t.getHabitDaysLeft() < 0) {
+                t.setHabitDaysLeft(-1);
+                t.setHabitDays(-1);
+                Toast.makeText(currentActivity, currentActivity.getString(R.string.habit_generation_finished,t.getTitle()),
+                        Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
     }
 
     public void setupTasksNotifications(){

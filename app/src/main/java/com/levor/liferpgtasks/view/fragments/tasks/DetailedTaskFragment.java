@@ -40,6 +40,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
     private TextView taskDateTV;
     private TextView notificationTV;
     private TextView noRelatedSkillsTV;
+    private TextView habitGenerationTV;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +51,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
         TextView taskTitleTV = (TextView) header.findViewById(R.id.task_title);
         TextView taskDifficultyTV = (TextView) header.findViewById(R.id.task_difficulty_text_view);
         TextView taskImportanceTV = (TextView) header.findViewById(R.id.task_importance_text_view);
+        habitGenerationTV = (TextView) header.findViewById(R.id.habit_generation_text_view);
         taskRepeatTV = (TextView) header.findViewById(R.id.task_repeat_times_text_view);
         taskDateTV = (TextView) header.findViewById(R.id.task_date_text_view);
         noRelatedSkillsTV = (TextView) header.findViewById(R.id.no_related_skills);
@@ -79,6 +81,9 @@ public class DetailedTaskFragment extends DataDependantFrament {
 
         //setup notification TextView
         setupNotificationTextView();
+
+        //setup habit generation TextView
+        setupHabitGenerationView();
 
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(getString(R.string.task));
@@ -288,6 +293,16 @@ public class DetailedTaskFragment extends DataDependantFrament {
         }
     }
 
+    private void setupHabitGenerationView() {
+        if (currentTask.getRepeatability() < 0 && currentTask.getHabitDays() > 0
+                && currentTask.getHabitDaysLeft() > 0) {
+            habitGenerationTV.setVisibility(View.VISIBLE);
+            habitGenerationTV.setText(getString(R.string.generating_habit, currentTask.getHabitDaysLeft()));
+        } else {
+            habitGenerationTV.setVisibility(View.GONE);
+        }
+    }
+
     private void setupListView(){
         ArrayList<String> skills = new ArrayList<>();
         for (Skill sk : currentTask.getRelatedSkills()) {
@@ -316,6 +331,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
         setupRepeatability();
         setupTaskDate();
         setupNotificationTextView();
+        setupHabitGenerationView();
         if (isHeroLevelIncreased) {
             Toast.makeText(getCurrentActivity(), getString(R.string.hero_level_increased,
                     getController().getHeroName()), Toast.LENGTH_SHORT).show();
@@ -328,6 +344,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
         setupTaskDate();
         setupRepeatability();
         setupNotificationTextView();
+        setupHabitGenerationView();
     }
 
     @Override

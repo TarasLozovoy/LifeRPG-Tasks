@@ -85,6 +85,7 @@
     <string name="task_repeat_custom">Custom…</string>
     <string name="repeat_every">Repeat every</string>
     <string name="day">day</string>
+    <string name="days">days</string>
     <string name="week">week</string>
     <string name="month">month</string>
     <string name="year">year</string>
@@ -133,6 +134,15 @@
     <string name="medium">Medium</string>
     <string name="high">High</string>
     <string name="insane">Insane</string>
+    <string name="start_generating_habit">Start generating habit</string>
+    <string name="generate_habit">Generate habit</string>
+    <string name="generating_habit">Generating habit, %1d days left</string>
+    <string name="rewrite_habit_alert_message">Start new generation or continue previous?</string>
+    <string name="habit_new">New</string>
+    <string name="habit_continue">Previous</string>
+    <string name="habit_stop_generating">Remove</string>
+    <string name="habit_generation_finished">Finished generating habit for task "%1s"</string>
+    <string name="habit_generation_failed">Failed generating habit for task "%1s". Restarting…</string>
     <!-- -->
 
     <!-- Skills-->

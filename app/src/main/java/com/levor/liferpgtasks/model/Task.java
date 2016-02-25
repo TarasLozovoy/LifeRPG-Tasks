@@ -2,13 +2,13 @@ package com.levor.liferpgtasks.model;
 
 import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 
+import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,6 +31,9 @@ public class Task {
     private int dateMode = DateMode.TERMLESS;
     private boolean undonable = false;
     private long notifyDelta = 24 * TimeUnitUtils.HOUR;
+    private int habitDays = -1;
+    private int habitDaysLeft = -1;
+    private LocalDate habitStartDate = new LocalDate();
 
     public static final Comparator<Task> COMPLETION_TASKS_COMPARATOR = new CompletionTasksComparator();
     public static final Comparator<Task> TITLE_ASC_TASKS_COMPARATOR = new TitleAscTasksComparator();
@@ -203,6 +206,32 @@ public class Task {
 
     public void setNotifyDelta(long notifyDelta) {
         this.notifyDelta = notifyDelta;
+    }
+
+    public int getHabitDays() {
+        return habitDays;
+    }
+
+    public void setHabitDays(int habitDays) {
+        if (habitDays == 0) habitDays = -1;
+        this.habitDays = habitDays;
+    }
+
+    public int getHabitDaysLeft() {
+        return habitDaysLeft;
+    }
+
+    public void setHabitDaysLeft(int habitDaysLeft) {
+        if (habitDaysLeft == 0) habitDaysLeft = -1;
+        this.habitDaysLeft = habitDaysLeft;
+    }
+
+    public LocalDate getHabitStartDate() {
+        return habitStartDate;
+    }
+
+    public void setHabitStartDate(LocalDate habitStartDate) {
+        this.habitStartDate = habitStartDate;
     }
 
     public double getMultiplier(){

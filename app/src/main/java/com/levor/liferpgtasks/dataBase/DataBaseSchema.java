@@ -49,6 +49,9 @@ public class DataBaseSchema {
             public static final String REPEAT_MODE = "repeat_mode";
             public static final String REPEAT_DAYS_OF_WEEK = "repeat_days_of_week";
             public static final String REPEAT_INDEX = "repeat_index";
+            public static final String HABIT_DAYS = "habit_days";
+            public static final String HABIT_DAYS_LEFT = "habit_days_left";
+            public static final String HABIT_START_DATE = "habit_start_date";
         }
     }
 

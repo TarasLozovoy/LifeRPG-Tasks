@@ -41,12 +41,18 @@ import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.model.Task.RepeatMode;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 
+import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.levor.liferpgtasks.model.Task.DateMode;
 
@@ -63,21 +69,24 @@ public class AddTaskFragment extends DataDependantFrament {
 //    private final String NOTIFY_TAG = "notify_tag";
 //    private final String REPEAT_CHECKBOX_TAG = "repeat_checkbox_tag";
 
-    protected EditText taskTitleEditText;
-    protected TextView dateTextView;
-    protected View dateView;
-    protected TextView notifyTextView;
-    protected View notifyView;
-    protected ImageView notifyImageView;
-    protected TextView repeatTextView;
-    protected View repeatView;
-    protected ImageView repeatImageView;
-    protected TextView difficultyTextView;
-    protected View difficultyView;
-    protected TextView importanceTextView;
-    protected View importanceView;
-    protected TextView relatedSkillsTextView;
-    protected View relatedSkillsView;
+    @Bind(R.id.task_title_edit_text)        protected EditText taskTitleEditText;
+    @Bind(R.id.date_time_text_view)         protected TextView dateTextView;
+    @Bind(R.id.date_time_layout)            protected View dateView;
+    @Bind(R.id.notification_text_view)      protected TextView notifyTextView;
+    @Bind(R.id.notification_layout)         protected View notifyView;
+    @Bind(R.id.notify_image_view)           protected ImageView notifyImageView;
+    @Bind(R.id.repeat_text_view)            protected TextView repeatTextView;
+    @Bind(R.id.repeat_layout)               protected View repeatView;
+    @Bind(R.id.repeat_image_view)           protected ImageView repeatImageView;
+    @Bind(R.id.difficulty_text_view)        protected TextView difficultyTextView;
+    @Bind(R.id.difficulty_layout)           protected View difficultyView;
+    @Bind(R.id.importance_text_view)        protected TextView importanceTextView;
+    @Bind(R.id.importance_layout)           protected View importanceView;
+    @Bind(R.id.related_skills_text_view)    protected TextView relatedSkillsTextView;
+    @Bind(R.id.related_skills_layout)       protected View relatedSkillsView;
+    @Bind(R.id.habit_generation_text_view)  protected TextView habitGenerationTextView;
+    @Bind(R.id.habit_generation_layout)     protected View habitGenerationsView;
+    @Bind(R.id.habit_generation_image_view) protected ImageView habitGenerationsImageView;
 
     protected Date date;
     protected int dateMode = DateMode.TERMLESS;
@@ -88,6 +97,9 @@ public class AddTaskFragment extends DataDependantFrament {
     protected long notifyDelta = -1;         // <0 - do not notify, >0 notify at (date - delta) time
     protected int difficulty = Task.LOW;
     protected int importance = Task.LOW;
+    protected int habitdays = -1;
+    protected int habitdaysLeft = -1;
+    protected LocalDate habitStartDate;
     protected ArrayList<String> relatedSkills = new ArrayList<>();
 
     private int notifyEditTextMaxValue = 600;
@@ -96,21 +108,7 @@ public class AddTaskFragment extends DataDependantFrament {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_add_task, container, false);
-        taskTitleEditText = (EditText) v.findViewById(R.id.task_title_edit_text);
-        dateTextView = (TextView) v.findViewById(R.id.date_time_text_view);
-        dateView = v.findViewById(R.id.date_time_layout);
-        repeatTextView = (TextView) v.findViewById(R.id.repeat_text_view);
-        repeatView = v.findViewById(R.id.repeat_layout);
-        repeatImageView = (ImageView) v.findViewById(R.id.repeat_image_view);
-        notifyTextView = (TextView) v.findViewById(R.id.notification_text_view);
-        notifyView = v.findViewById(R.id.notification_layout);
-        notifyImageView = (ImageView) v.findViewById(R.id.notify_image_view);
-        difficultyTextView = (TextView) v.findViewById(R.id.difficulty_text_view);
-        difficultyView = v.findViewById(R.id.difficulty_layout);
-        importanceTextView = (TextView) v.findViewById(R.id.importance_text_view);
-        importanceView = v.findViewById(R.id.importance_layout);
-        relatedSkillsTextView = (TextView) v.findViewById(R.id.related_skills_text_view);
-        relatedSkillsView = v.findViewById(R.id.related_skills_layout);
+        ButterKnife.bind(this, v);
 
         dateTextView.setText(getString(R.string.task_date_termless));
         repeatTextView.setText(getString(R.string.task_repeat_do_not_repeat));
@@ -205,6 +203,7 @@ public class AddTaskFragment extends DataDependantFrament {
         updateRepeatView();
         updateDifficultyView();
         updateImportanceView();
+        updateHabitView();
         updateRelatedSkillsView();
     }
 
@@ -231,6 +230,9 @@ public class AddTaskFragment extends DataDependantFrament {
     }
 
     protected void finishTask(String title, String message){
+        if (repeatMode == RepeatMode.SIMPLE_REPEAT) {
+            date = new Date(1980, 1, 1, 1, 1, 1);
+        }
         Task task = new Task(title);
         task.setDate(date);
         task.setDateMode(dateMode);
@@ -241,6 +243,9 @@ public class AddTaskFragment extends DataDependantFrament {
         task.setDifficulty(difficulty);
         task.setImportance(importance);
         task.setNotifyDelta(notifyDelta);
+        task.setHabitDays(habitdays);
+        task.setHabitDaysLeft(habitdaysLeft);
+        task.setHabitStartDate(habitStartDate.minusDays(1));
         List<Skill> skillsList = new ArrayList<>();
         for (int i = 0; i < relatedSkills.size(); i++) {
             Skill sk = getController().getSkillByTitle(relatedSkills.get(i));
@@ -352,6 +357,7 @@ public class AddTaskFragment extends DataDependantFrament {
                                 break;
                         }
                         updateRepeatView();
+                        updateHabitView();
                     }
                 }).show();
             }
@@ -423,6 +429,32 @@ public class AddTaskFragment extends DataDependantFrament {
                         dialog.dismiss();
                     }
                 }).show();
+            }
+        });
+
+        habitGenerationsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ((habitdays > 0)) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getCurrentActivity());
+                    alert.setMessage(R.string.rewrite_habit_alert_message)
+                            .setPositiveButton(R.string.habit_continue, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    new HabitGenerationDialog().show(getCurrentActivity().getSupportFragmentManager(), "HabitGeneration");
+                                }
+                            })
+                            .setNeutralButton(R.string.habit_new, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    habitStartDate = new LocalDate();
+                                    new HabitGenerationDialog().show(getCurrentActivity().getSupportFragmentManager(), "HabitGeneration");
+                                }
+                            })
+                            .show();
+                } else {
+                    new HabitGenerationDialog().show(getCurrentActivity().getSupportFragmentManager(), "HabitGeneration");
+                }
             }
         });
 
@@ -600,7 +632,10 @@ public class AddTaskFragment extends DataDependantFrament {
         //
 
         repeatTextView.setText(sb.toString());
-        if (startDateMode != dateMode) updateDateView();
+        if (startDateMode != dateMode) {
+            updateDateView();
+            updateHabitView();
+        }
     }
 
     private void updateNotifyView(){
@@ -647,6 +682,30 @@ public class AddTaskFragment extends DataDependantFrament {
         String importanceString = getString(R.string.importance) + " " +
                 getResources().getStringArray(R.array.importance_array)[importance];
         importanceTextView.setText(importanceString);
+    }
+
+    private void updateHabitView() {
+        StringBuilder sb = new StringBuilder();
+        if ((repeatMode == RepeatMode.EVERY_NTH_DAY || repeatMode == RepeatMode.EVERY_NTH_YEAR
+                || repeatMode == RepeatMode.DAYS_OF_NTH_WEEK || repeatMode == RepeatMode.EVERY_NTH_MONTH)
+                && repeatability < 0) {
+            if (habitdays < 0) {
+                sb.append(getString(R.string.generate_habit));
+            } else {
+                sb.append(getString(R.string.generating_habit, habitdaysLeft));
+            }
+            habitGenerationsView.setEnabled(true);
+            habitGenerationTextView.setEnabled(true);
+            habitGenerationsImageView.setAlpha(1f);
+        } else {
+            sb.append(getString(R.string.generate_habit));
+            habitGenerationsView.setEnabled(false);
+            habitGenerationTextView.setEnabled(false);
+            habitGenerationsImageView.setAlpha(0.4f);
+            habitdays = -1;
+            habitdaysLeft = -1;
+        }
+        habitGenerationTextView.setText(sb.toString());
     }
 
     protected void updateRelatedSkillsView(){
@@ -715,7 +774,7 @@ public class AddTaskFragment extends DataDependantFrament {
                     date = cal.getTime();
                     dateMode = DateMode.SPECIFIC_TIME;
                 }
-                updateDateView();
+                updateUI();
                 alertDialog.dismiss();
             }
         });
@@ -1014,7 +1073,7 @@ public class AddTaskFragment extends DataDependantFrament {
                         break;
                 }
                 notifyDelta = typedValue * timeUnit;
-                updateNotifyView();
+                updateUI();
                 alertDialog.dismiss();
             }
         });
@@ -1026,6 +1085,52 @@ public class AddTaskFragment extends DataDependantFrament {
     @Override
     public boolean isDependableDataAvailable() {
         return true;
+    }
+
+    @SuppressLint("ValidFragment")
+    public class HabitGenerationDialog extends DialogFragment {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            View dialogView = View.inflate(getContext(), R.layout.habit_generation_dialog, null);
+            final Switch habitSwitch = (Switch) dialogView.findViewById(R.id.habit_generation_switch);
+            final EditText habitEditText = (EditText) dialogView.findViewById(R.id.habit_days_edit_text);
+            final View habitDaysLayout = dialogView.findViewById(R.id.habit_days_layout);
+            habitSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    habitEditText.setEnabled(isChecked);
+                    habitDaysLayout.setAlpha(isChecked ? 1.0f : 0.4f);
+                }
+            });
+            habitSwitch.setChecked(habitdays >= 0);
+            if (habitdays > 0) {
+                habitEditText.setText(String.valueOf(habitdays));
+            } else {
+                habitEditText.setEnabled(false);
+                habitDaysLayout.setAlpha(0.4f);
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            return builder.setView(dialogView)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (habitSwitch.isChecked()) {
+                                String daysString = habitEditText.getText().toString();
+                                if (daysString.isEmpty()) daysString = "-1";
+                                int days = Integer.parseInt(daysString);
+                                habitdays = days;
+                                habitdaysLeft = days;
+                                habitStartDate = new LocalDate();
+                            } else {
+                                habitdays = -1;
+                                habitdaysLeft = -1;
+                            }
+                            updateHabitView();
+                        }
+                    })
+                    .create();
+        }
     }
 
     @SuppressLint("ValidFragment")

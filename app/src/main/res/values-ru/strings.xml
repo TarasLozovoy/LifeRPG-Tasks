@@ -76,6 +76,7 @@
     <string name="task_repeat_custom">Настроить…</string>
     <string name="repeat_every">Раз в</string>
     <string name="day">дн.</string>
+    <string name="days">дн.</string>
     <string name="week">нед.</string>
     <string name="month">мес.</string>
     <string name="year">г./лет</string>
@@ -124,6 +125,15 @@
     <string name="medium">Средняя</string>
     <string name="high">Высокая</string>
     <string name="insane">Безумная</string>
+    <string name="start_generating_habit">Начать вырабатывать привычку</string>
+    <string name="generate_habit">Вырабатывать привычку</string>
+    <string name="generating_habit">Привычка вырабатывается, осталось дней: %1d</string>
+    <string name="rewrite_habit_alert_message">Начать выработку новой привычки или редактировать предыдущую?</string>
+    <string name="habit_new">Новая</string>
+    <string name="habit_continue">Предыдущая</string>
+    <string name="habit_stop_generating">Прекратить</string>
+    <string name="habit_generation_finished">Завершена выработка привычки для задачи \"%1s\"</string>
+    <string name="habit_generation_failed">Выработка привычки для задачи \"%1s\" провалилась. Начинаем сначала…</string>
     <!-- -->
 
     <!-- Skills-->

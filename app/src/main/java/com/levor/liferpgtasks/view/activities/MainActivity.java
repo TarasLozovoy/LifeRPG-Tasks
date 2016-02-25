@@ -116,6 +116,7 @@ public class MainActivity extends BackUpActivity{
         }
 
         setupAds();
+        lifeController.checkHabitGenerationForAllTasks();
     }
 
     @Override

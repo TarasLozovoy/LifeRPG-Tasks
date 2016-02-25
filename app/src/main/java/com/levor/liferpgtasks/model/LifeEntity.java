@@ -168,6 +168,8 @@ public class LifeEntity {
             oldTask.setDifficulty(task.getDifficulty());
             oldTask.setImportance(task.getImportance());
             oldTask.setNotifyDelta(task.getNotifyDelta());
+            oldTask.setHabitDays(task.getHabitDays());
+            oldTask.setHabitDaysLeft(task.getHabitDaysLeft());
             updateTask(oldTask);
         } else {
             tasks.add(task);
@@ -282,6 +284,9 @@ public class LifeEntity {
         values.put(TasksTable.Cols.REPEAT_MODE, task.getRepeatMode());
         values.put(TasksTable.Cols.REPEAT_DAYS_OF_WEEK, task.getRepeatDaysOfWeekString());
         values.put(TasksTable.Cols.REPEAT_INDEX, task.getRepeatIndex());
+        values.put(TasksTable.Cols.HABIT_DAYS, task.getHabitDays());
+        values.put(TasksTable.Cols.HABIT_DAYS_LEFT, task.getHabitDaysLeft());
+        values.put(TasksTable.Cols.HABIT_START_DATE, task.getHabitStartDate().toDate().getTime());
         return values;
     }
 

@@ -3,6 +3,7 @@ package com.levor.liferpgtasks.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,13 +104,22 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
             }
             listItemDateTextView.setVisibility(View.VISIBLE);
             listItemDateTextView.setText(sb.toString());
+        } else {
+            listItemDateTextView.setVisibility(View.GONE);
         }
 
         TextView repeatabilityTV = (TextView) view.findViewById(R.id.repeatability_tasks_list_item);
+        TextView habitDaysLeftTV = (TextView) view.findViewById(R.id.habit_days_left_text_view);
         LinearLayout repeatabilityLL = (LinearLayout) view.findViewById(R.id.repeatability_container_tasks_list_item);
+        habitDaysLeftTV.setVisibility(View.GONE);
         int repeat = task.getRepeatability();
         if (repeat < 0) {
-            repeatabilityLL.setBackground(view.getResources().getDrawable(R.drawable.infinity));
+            if (task.getHabitDays() > 0) {
+                habitDaysLeftTV.setVisibility(View.VISIBLE);
+                habitDaysLeftTV.setText(String.valueOf(task.getHabitDaysLeft()));
+            }
+            int drawableId = task.getHabitDays() > 0 ? R.drawable.ic_generate_habit_black_24dp : R.drawable.infinity;
+            repeatabilityLL.setBackground(view.getResources().getDrawable(drawableId));
             repeatabilityTV.setText("");
             doBtn.setEnabled(true);
         } else if (repeat > 0) {
