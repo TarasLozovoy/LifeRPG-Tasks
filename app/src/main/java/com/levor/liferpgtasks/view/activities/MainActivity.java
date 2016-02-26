@@ -115,7 +115,7 @@ public class MainActivity extends BackUpActivity{
             }
         }
 
-        setupAds();
+        setupInterstitialAds();
         lifeController.checkHabitGenerationForAllTasks();
     }
 
@@ -391,9 +391,9 @@ public class MainActivity extends BackUpActivity{
         });
     }
 
-    private void setupAds() {
+    private void setupInterstitialAds() {
         interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId(getString(R.string.banner_ad_unit_id));
+        interstitialAd.setAdUnitId(getString(R.string.interstitial_perform_task_banner_ad_unit_id));
         interstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
@@ -412,7 +412,7 @@ public class MainActivity extends BackUpActivity{
         interstitialAd.loadAd(adRequest);
     }
 
-    public void showAd(){
+    public void showInterstitialAd(){
         if (interstitialAd.isLoaded() && new Random().nextInt(100) < 35) {
             interstitialAd.show();
         } else if ((interstitialAd.isLoading() || !interstitialAd.isLoaded())

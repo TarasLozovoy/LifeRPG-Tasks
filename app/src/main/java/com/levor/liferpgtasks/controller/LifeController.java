@@ -11,6 +11,8 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.levor.liferpgtasks.AchievsList;
@@ -699,5 +701,16 @@ public class LifeController {
         if (isDropBoxAutoBackupEnabled()){
             currentActivity.checkAndBackupToDropBox();
         }
+    }
+
+    /*
+    ADs
+     */
+    public void loadNewAdBanner(AdView adView){
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("9DA2C80CC6BDB238BAD014DE697F3902")
+                .build();
+        adView.loadAd(adRequest);
     }
 }

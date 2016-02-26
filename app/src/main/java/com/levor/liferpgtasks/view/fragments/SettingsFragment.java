@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdView;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.dataBase.DataBaseHelper;
@@ -33,6 +35,7 @@ public class SettingsFragment extends DefaultFragment {
     @Bind(R.id.contact_layout)              View contactView;
     @Bind(R.id.app_on_google_play_layout)   View playMarketView;
     @Bind(R.id.reset_layout)                View resetView;
+    @Bind(R.id.ad_view)                     AdView adView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

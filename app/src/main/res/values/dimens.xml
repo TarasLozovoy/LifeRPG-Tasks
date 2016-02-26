@@ -13,4 +13,6 @@
 
     <dimen name="change_hero_image_item_height">120dp</dimen>
     <dimen name="hero_icon_item_margin">5dp</dimen>
+
+    <dimen name="standard_elevation">6dp</dimen>
 </resources>

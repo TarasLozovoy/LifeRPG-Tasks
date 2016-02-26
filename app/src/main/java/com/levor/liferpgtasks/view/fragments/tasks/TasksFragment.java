@@ -30,6 +30,7 @@ public class TasksFragment extends DefaultFragment {
     private TabLayout tabLayout;
 
     private int sorting;
+    private float defaultElevation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +68,20 @@ public class TasksFragment extends DefaultFragment {
     public void onStart() {
         super.onStart();
         createViewPager();
+        ActionBar actionBar = getCurrentActivity().getSupportActionBar();
+        if(actionBar != null) {
+            defaultElevation = actionBar.getElevation();
+            actionBar.setElevation(0);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        ActionBar actionBar = getCurrentActivity().getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setElevation(defaultElevation);
+        }
     }
 
     private void createViewPager(){
