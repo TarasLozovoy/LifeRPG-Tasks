@@ -35,7 +35,6 @@ public class SettingsFragment extends DefaultFragment {
     @Bind(R.id.contact_layout)              View contactView;
     @Bind(R.id.app_on_google_play_layout)   View playMarketView;
     @Bind(R.id.reset_layout)                View resetView;
-    @Bind(R.id.ad_view)                     AdView adView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
