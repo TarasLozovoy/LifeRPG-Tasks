@@ -96,6 +96,11 @@ public class Hero {
             level--;
             xpToNextLevel = xpToLevel(level);
             xp = xpToNextLevel + xp;
+            if (level < 0) {
+                level = 0;
+                xp = 0;
+                xpToNextLevel = xpToLevel(level);
+            }
             return true;
         }
         return false;
