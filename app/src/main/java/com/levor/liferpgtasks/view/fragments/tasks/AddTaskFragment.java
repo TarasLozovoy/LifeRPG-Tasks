@@ -99,7 +99,7 @@ public class AddTaskFragment extends DataDependantFrament {
     protected int importance = Task.LOW;
     protected int habitdays = -1;
     protected int habitdaysLeft = -1;
-    protected LocalDate habitStartDate;
+    protected LocalDate habitStartDate = new LocalDate();
     protected ArrayList<String> relatedSkills = new ArrayList<>();
 
     private int notifyEditTextMaxValue = 600;

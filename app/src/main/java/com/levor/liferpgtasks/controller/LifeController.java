@@ -343,6 +343,7 @@ public class LifeController {
     }
 
     public void checkTaskHabitGeneration(Task t) {
+        if (t.getHabitDays() < 1) return;
         LocalDate nextRepeatDate = LocalDate.fromDateFields(t.getDate());
         LocalDate today = new LocalDate();
         LocalDate habitStartDate = t.getHabitStartDate();
