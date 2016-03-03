@@ -64,4 +64,13 @@ public class DataBaseSchema {
             public static final String IMAGE_AVATAR = "hero_image_avatar";
         }
     }
+
+    public static final class TasksPerDayTable {
+        public static final String NAME = "real_life_tasks_per_day";
+
+        public static final class Cols {
+            public static final String DATE = "date";
+            public static final String TASKS_PERFORMED = "tasks_performed";
+        }
+    }
 }

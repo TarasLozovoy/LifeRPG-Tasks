@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.Utils.TimeUnitUtils;
@@ -16,12 +17,17 @@ import com.levor.liferpgtasks.dataBase.HeroCursorWrapper;
 import com.levor.liferpgtasks.dataBase.MiscCursorWrapper;
 import com.levor.liferpgtasks.dataBase.SkillsCursorWrapper;
 import com.levor.liferpgtasks.dataBase.TasksCursorWrapper;
+import com.levor.liferpgtasks.dataBase.TasksPerDayCursorWrapper;
+
+import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 
 public class LifeEntity {
@@ -33,6 +39,7 @@ public class LifeEntity {
     private List<Skill> skills;
     private List<Characteristic> characteristics;
     private Hero hero;
+    private Map<LocalDate, Integer> tasksPerDay = new TreeMap<>();
     private Context context;
 
     public static LifeEntity getInstance(Context context){
@@ -57,6 +64,7 @@ public class LifeEntity {
             skills = getSkills();
             tasks = getTasks();
             getMiscFromDB();    //added for version 1.0.2
+            getTasksPerDay();
 
             //adding new characteristic for new version (1.0.2)
             Characteristic health = new Characteristic(context.getString(R.string.health), 1);
@@ -616,6 +624,53 @@ public class LifeEntity {
         Misc.ACHIEVEMENTS_LEVELS = null;
         Misc.HERO_IMAGE_PATH = "elegant5.png";
         Misc.STATISTICS_NUMBERS = null;
+    }
+
+    public Map<LocalDate, Integer> getTasksPerDay() {
+        if (tasksPerDay.size() == 0) {
+            TasksPerDayCursorWrapper cursorWrapper = new TasksPerDayCursorWrapper(database.query(
+                    TasksPerDayTable.NAME, null, null, null, null, null, null));
+            try {
+                cursorWrapper.moveToFirst();
+                while (!cursorWrapper.isAfterLast()) {
+                    cursorWrapper.getTasksPerDay(tasksPerDay);
+                    cursorWrapper.moveToNext();
+                }} finally {
+                cursorWrapper.close();
+            }
+        }
+        return tasksPerDay;
+    }
+
+    public void updateTasksPerDay(LocalDate date, int tasksNumber) {
+        final long dateInMillis = date.toDate().getTime();
+        final ContentValues values = getContentValuesForTasksPerDay(dateInMillis, tasksNumber);
+        if (tasksPerDay.containsKey(date)) {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    database.update(TasksPerDayTable.NAME, values,
+                            TasksPerDayTable.Cols.DATE + " =?", new String[]{String.valueOf(dateInMillis)});
+                    return null;
+                }
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    database.insert(TasksPerDayTable.NAME, null, values);
+                    return null;
+                }
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+        tasksPerDay.put(date, tasksNumber);
+    }
+
+    private ContentValues getContentValuesForTasksPerDay(long dateInMillis, int tasksNumber) {
+        ContentValues values = new ContentValues();
+        values.put(TasksPerDayTable.Cols.DATE, dateInMillis);
+        values.put(TasksPerDayTable.Cols.TASKS_PERFORMED, tasksNumber);
+        return values;
     }
 
     public void closeDBConnection(){

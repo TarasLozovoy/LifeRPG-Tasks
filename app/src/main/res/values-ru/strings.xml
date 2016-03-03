@@ -164,6 +164,7 @@
 
     <!-- Characteristics-->
     <string name="change_characteristic">Изменить характеристику</string>
+    <string name="characteristics_chart">График характеристик</string>
     <!-- -->
 
     <!-- Main fragment child fragments names-->
@@ -298,6 +299,7 @@
     <string name="reset">Стереть данные</string>
     <string name="reset_message">Все добавленные задачи, навыки и весь прогресс будет удален. Вы действительно хотите стереть данные?</string>
     <string name="reset_performed">Все данные успешно стерты</string>
+    <string name="show_chart">Показать график</string>
     <!-- -->
 
 </resources>

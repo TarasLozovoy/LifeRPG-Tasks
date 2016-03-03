@@ -217,6 +217,7 @@ public class LifeController {
         lifeEntity.updateHero(hero);
         updateStatistics(TOTAL_HERO_XP_TAG, (float) finalXP);
         checkTaskHabitGeneration(task);
+        increaseTasksPerDay(1);
 
         //GA
         if (isLevelIncreased){
@@ -277,6 +278,7 @@ public class LifeController {
         updateStatistics(TOTAL_HERO_XP_TAG, (float) -finalXP);
         updateStatistics(PERFORMED_TASKS_TAG, -1);
         checkTaskHabitGeneration(task);
+        increaseTasksPerDay(-1);
         checkAchievements();
         performBackUpToDropBox();
         return isLevelChanged;
@@ -673,6 +675,21 @@ public class LifeController {
         updateAchievementsToMisc();
         updateStatisticsToMisc();
         lifeEntity.updateMiscToDB();
+    }
+
+    public Map<LocalDate, Integer> getTasksPerDayMap() {
+        return lifeEntity.getTasksPerDay();
+    }
+
+    public void increaseTasksPerDay(int diff){
+        Map<LocalDate, Integer> map = getTasksPerDayMap();
+        LocalDate localDate = new LocalDate();
+        Integer value = map.get(localDate);
+        if (value == null) {
+            lifeEntity.updateTasksPerDay(localDate, diff);
+        } else {
+            lifeEntity.updateTasksPerDay(localDate, value + diff);
+        }
     }
 
     public void closeDBConnection(){

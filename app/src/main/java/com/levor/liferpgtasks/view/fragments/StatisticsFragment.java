@@ -8,14 +8,24 @@ import android.widget.TextView;
 
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
+import com.levor.liferpgtasks.view.fragments.characteristics.CharacteristicsChartFragment;
+
+import org.joda.time.LocalDate;
+
+import java.util.Map;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class StatisticsFragment extends DefaultFragment {
+    @Bind(R.id.statistics_text_view)            TextView statisticsTV;
+    @Bind(R.id.characteristics_chart_layout)    View charsChartView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_statistics, container, false);
-        TextView statisticsTV = (TextView) v.findViewById(R.id.statistics_text_view);
+        ButterKnife.bind(this, v);
 
         StringBuilder sb = new StringBuilder();
         sb.append(getString(R.string.performed_tasks_number))
@@ -46,7 +56,20 @@ public class StatisticsFragment extends DefaultFragment {
                 .append(" ")
                 .append(getController().getStatisticsValue(LifeController.XP_MULTIPLIER_TAG))
                 .append("\n");
+        for (Map.Entry<LocalDate, Integer> e : getController().getTasksPerDayMap().entrySet()) {
+            sb.append(e.getKey())
+                    .append(" - ")
+                    .append(e.getValue())
+                    .append(":::");
+        }
         statisticsTV.setText(sb.toString());
+
+        charsChartView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().showChildFragment(new CharacteristicsChartFragment(), null);
+            }
+        });
 
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(getResources().getString(R.string.statistics));

@@ -9,6 +9,7 @@ public class Characteristic implements Comparable<Characteristic>{
     private int level;
 
     public static final Comparator<Characteristic> LEVEL_COMPARATOR = new CharacteristicByLevelComparator();
+    public static final Comparator<Characteristic> TITLE_COMPARATOR = new CharacteristicByNameComparator();
 
     public Characteristic(String title, int level) {
         this.title = title;
@@ -64,6 +65,14 @@ public class Characteristic implements Comparable<Characteristic>{
             } else {
                 return lhs.getTitle().compareTo(rhs.getTitle());
             }
+        }
+    }
+
+    private static class CharacteristicByNameComparator implements Comparator<Characteristic> {
+
+        @Override
+        public int compare(Characteristic lhs, Characteristic rhs) {
+            return lhs.getTitle().compareTo(rhs.getTitle());
         }
     }
 }
