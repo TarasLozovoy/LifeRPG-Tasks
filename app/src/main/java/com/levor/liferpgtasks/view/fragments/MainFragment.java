@@ -21,6 +21,8 @@ public class MainFragment extends DefaultFragment{
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
+    private float defaultElevation;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,10 +35,7 @@ public class MainFragment extends DefaultFragment{
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager) v.findViewById(R.id.pager);
-        ActionBar actionBar = getCurrentActivity().getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setElevation(0);
-        }
+
         getCurrentActivity().setActionBarTitle(R.string.app_name);
         getCurrentActivity().showActionBarHomeButtonAsBack(false);
         return v;
@@ -46,6 +45,20 @@ public class MainFragment extends DefaultFragment{
     public void onStart() {
         super.onStart();
         createViewPager();
+        ActionBar actionBar = getCurrentActivity().getSupportActionBar();
+        if(actionBar != null) {
+            defaultElevation = actionBar.getElevation();
+            actionBar.setElevation(0);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        ActionBar actionBar = getCurrentActivity().getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setElevation(defaultElevation);
+        }
     }
 
     private void createViewPager(){

@@ -20,11 +20,7 @@
     <string name="edit_task">Edit</string>
     <string name="do_task">DO</string>
     <string name="repeat">Repeat</string>
-    <string name="repeat_times_edit_text_hint">infinite</string>
-    <string name="times">times</string>
-    <string name="infinite_number_of">Repeat task infinitely</string>
     <string name="task_finished">Task finished.</string>
-    <string name="max_task_repeat">Task can be repeated for 999 times max.</string>
     <string name="all_tasks">All</string>
     <string name="every_day_tasks">Dailies</string>
     <string name="simple_tasks">To do</string>
@@ -33,7 +29,6 @@
     <string name="difficulty">Difficulty:</string>
     <string name="importance">Importance:</string>
     <string name="date">Date:</string>
-    <string name="time">Time:</string>
     <string name="tasks_order_title">Tasks order</string>
     <string name="completion_task_order">Completion</string>
     <string name="title_asc_task_order">Name asc.</string>
@@ -49,12 +44,9 @@
     <string name="close">Close</string>
     <string name="done">done!</string>
     <string name="undo">Undo</string>
-    <string name="repeat_question">Repeat?</string>
-    <string name="notify_question">Notify?</string>
     <string name="show_notification">Task notification will be shown.</string>
     <string name="overdue">- overdue!</string>
     <string name="task_already_done">This task has been already done. Are you sure you want to make this task active?</string>
-    <string name="all_related_skills_added">All available skills already added</string>
     <string name="empty_list_view">There are no task in current category. To add new task press button +</string>
     <string name="empty_done_list_view">There are no done task yet.</string>
     <string name="no_related_skills">This task doesn\'t have related skills yet. Press edit button to add new related skills.</string>
@@ -85,6 +77,7 @@
     <string name="task_repeat_custom">Custom…</string>
     <string name="repeat_every">Repeat every</string>
     <string name="day">day</string>
+    <string name="days">days</string>
     <string name="week">week</string>
     <string name="month">month</string>
     <string name="year">year</string>
@@ -133,13 +126,22 @@
     <string name="medium">Medium</string>
     <string name="high">High</string>
     <string name="insane">Insane</string>
+    <string name="start_generating_habit">Start generating habit</string>
+    <string name="generate_habit">Generate habit</string>
+    <string name="generating_habit">Generating habit, %1d days left</string>
+    <string name="rewrite_habit_alert_message">Start new generation or continue previous?</string>
+    <string name="habit_new">New</string>
+    <string name="habit_continue">Previous</string>
+    <string name="habit_stop_generating">Remove</string>
+    <string name="habit_generation_finished">Finished generating habit for task "%1s"</string>
+    <string name="habit_generation_failed">Failed generating habit for task "%1s". Restarting…</string>
     <!-- -->
 
     <!-- Skills-->
     <string name="new_skill_title">Title:</string>
     <string name="new_skill_title_edit_text">type skill title</string>
-    <string name="key_characteristic">Key characteristic:</string>
-    <string name="set_key_characteristic">Set characteristic</string>
+    <string name="key_characteristic">Related characteristics:</string>
+    <string name="key_characteristic_empty">Add related characteristics</string>
     <string name="create_new_skill">Add new skill</string>
     <string name="add_new_skill">New skill</string>
     <string name="new_skill">Add new skill</string>
@@ -171,7 +173,6 @@
 
     <!-- Characteristics-->
     <string name="change_characteristic">Change characteristic</string>
-    <string name="select_characteristic">Select key characteristic</string>
     <!-- -->
 
     <!-- Main fragment child fragments names-->
@@ -316,7 +317,8 @@
     <string name="closing_app_toast">Press back again to exit</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="banner_ad_unit_id">ca-app-pub-3618933742218575/7397853043</string>
+    <string name="interstitial_perform_task_banner_ad_unit_id">ca-app-pub-3618933742218575/7397853043</string>
+    <string name="edit_hero_banner_ad_unit_id">ca-app-pub-3618933742218575/5052831049</string>
     <string name="app_email">liferpgtasks@gmail.com</string>
     <string name="app_address_on_market">https://play.google.com/store/apps/details?id=com.levor.liferpgtasks</string>
     <string name="contact">Contact</string>
@@ -326,6 +328,9 @@
     <string name="notification_text">Task need to be performed</string>
     <string name="removing">Removing</string>
     <string name="error_on_loading_image">Error occurred at attempt to load selected image. Try to select another image.</string>
+    <string name="reset">Reset data</string>
+    <string name="reset_message">Reset will remove all tasks, skills and progress. Are you sure tou want to perform reset?</string>
+    <string name="reset_performed">Reset successfully performed</string>
     <!-- -->
 
 </resources>

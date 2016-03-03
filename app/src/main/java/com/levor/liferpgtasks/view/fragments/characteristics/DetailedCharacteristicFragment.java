@@ -18,7 +18,9 @@ import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.skills.AddSkillFragment;
 import com.levor.liferpgtasks.view.fragments.skills.DetailedSkillFragment;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class DetailedCharacteristicFragment extends DefaultFragment {
     public final static String CHARACTERISTIC_TITLE = "characteristic_title";
@@ -79,8 +81,13 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
     private void createAdapter(){
         ArrayList<String> skills = new ArrayList<>();
         currentSkills = getController().getSkillsByCharacteristic(currentCharacteristic);
+        DecimalFormat df = new DecimalFormat("#.##");
         for (Skill sk : currentSkills){
-            skills.add(sk.getTitle() + " - " + sk.getLevel() + "(" + sk.getSublevel() + ")");
+            if (sk == null) {
+                currentSkills.remove(sk);
+                continue;
+            }
+            skills.add(sk.getTitle() + " - " + sk.getLevel() + "(" + df.format(sk.getSublevel()) + ")");
         }
         listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, skills));
     }

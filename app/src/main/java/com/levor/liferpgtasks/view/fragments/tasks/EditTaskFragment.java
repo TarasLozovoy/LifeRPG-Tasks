@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +17,10 @@ import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 
+import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,6 +46,9 @@ public class EditTaskFragment extends AddTaskFragment {
             difficulty = currentTask.getDifficulty();
             importance = currentTask.getImportance();
             notifyDelta = currentTask.getNotifyDelta();
+            habitdays = currentTask.getHabitDays();
+            habitdaysLeft = currentTask.getHabitDaysLeft();
+            habitStartDate = currentTask.getHabitStartDate();
             relatedSkills = new ArrayList<>();
             for (int i = 0; i < currentTask.getRelatedSkills().size(); i++) {
                 Skill sk = currentTask.getRelatedSkills().get(i);
@@ -163,6 +168,9 @@ public class EditTaskFragment extends AddTaskFragment {
 
     @Override
     protected void finishTask(String title, String message) {
+        if (repeatMode == Task.RepeatMode.SIMPLE_REPEAT) {
+            date = new Date(1980, 1, 1, 1, 1, 1);
+        }
         currentTask.setTitle(title);
         currentTask.setDate(date);
         currentTask.setDateMode(dateMode);
@@ -173,6 +181,9 @@ public class EditTaskFragment extends AddTaskFragment {
         currentTask.setDifficulty(difficulty);
         currentTask.setImportance(importance);
         currentTask.setNotifyDelta(notifyDelta);
+        currentTask.setHabitDays(habitdays);
+        currentTask.setHabitDaysLeft(habitdaysLeft);
+        currentTask.setHabitStartDate(habitStartDate.minusDays(1));
         List<Skill> skillsList = new ArrayList<>();
         for (int i = 0; i < relatedSkills.size(); i++) {
             Skill sk = getController().getSkillByTitle(relatedSkills.get(i));

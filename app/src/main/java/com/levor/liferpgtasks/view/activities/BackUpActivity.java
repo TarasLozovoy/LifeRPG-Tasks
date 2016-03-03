@@ -116,7 +116,7 @@ public class BackUpActivity extends AppCompatActivity {
                                     Toast.makeText(BackUpActivity.this, getString(R.string.db_imported), Toast.LENGTH_LONG)
                                             .show();
                                     lifeController.openDBConnection();
-                                    onDBImported();
+                                    onDBFileUpdated(false);
                                 }
                             });
                         } catch (IOException e){
@@ -160,14 +160,16 @@ public class BackUpActivity extends AppCompatActivity {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
+                SharedPreferences prefs = getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
                 try {
                     getDBApi().accountInfo();
                 } catch (DropboxUnlinkedException e) {
                     authorizeToDropbox();
+                    prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, false).apply();
                     return null;
                 } catch (DropboxException ignored) {}
 
-                SharedPreferences prefs = getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+                prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, true).apply();
                 String lastLoadedFileRev = prefs.getString(LAST_LOADED_DB_REVISION_TAG, null);
                 String dropboxFileRev = getDropboxFileRevision();
                 if (lastLoadedFileRev != null) {
@@ -210,13 +212,16 @@ public class BackUpActivity extends AppCompatActivity {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
+                SharedPreferences prefs = getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
                 try {
                     getDBApi().accountInfo();
                 } catch (DropboxUnlinkedException e) {
                     authorizeToDropbox();
+                    prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, false).apply();
                     return null;
                 } catch (DropboxException ignored) {}
 
+                prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, true).apply();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -279,7 +284,7 @@ public class BackUpActivity extends AppCompatActivity {
                 .show();
     }
 
-    public void onDBImported(){}
+    public void onDBFileUpdated(boolean isFileDeleted){}
 
     protected LifeRPGApplication getCurrentApplication() {
         return (LifeRPGApplication) getApplication();

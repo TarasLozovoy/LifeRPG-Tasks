@@ -74,7 +74,7 @@ public class SkillsFragment extends DefaultFragment {
     }
 
     @Override
-    protected void updateUI() {
+    public void updateUI() {
         List<Skill> skills = getController().getAllSkills();
         List<String> rows = new ArrayList<>(skills.size());
         DecimalFormat df = new DecimalFormat("#.##");

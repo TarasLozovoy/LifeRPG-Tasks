@@ -18,7 +18,6 @@ import com.levor.liferpgtasks.dataBase.SkillsCursorWrapper;
 import com.levor.liferpgtasks.dataBase.TasksCursorWrapper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -51,92 +50,7 @@ public class LifeEntity {
         Cursor cursor = database.rawQuery(count, null);
         cursor.moveToFirst();
         if(cursor.getInt(0) < 1) {
-            characteristics = new ArrayList<>();
-            skills = new ArrayList<>();
-            tasks = new ArrayList<>();
-            Characteristic intelligence = new Characteristic(context.getString(R.string.intelligence), 1);
-            Characteristic wisdom = new Characteristic(context.getString(R.string.wisdom), 1);
-            Characteristic strength = new Characteristic(context.getString(R.string.strength), 1);
-            Characteristic stamina = new Characteristic(context.getString(R.string.stamina), 1);
-            Characteristic health = new Characteristic(context.getString(R.string.health), 1);
-            Characteristic dexterity = new Characteristic(context.getString(R.string.dexterity), 1);
-            Characteristic perception = new Characteristic(context.getString(R.string.perception), 1);
-            Characteristic memory = new Characteristic(context.getString(R.string.memory), 1);
-            Characteristic charisma = new Characteristic(context.getString(R.string.charisma), 1);
-
-            addCharacteristic(intelligence);
-            addCharacteristic(wisdom);
-            addCharacteristic(strength);
-            addCharacteristic(stamina);
-            addCharacteristic(health);
-            addCharacteristic(dexterity);
-            addCharacteristic(perception);
-            addCharacteristic(memory);
-            addCharacteristic(charisma);
-
-            addSkill(context.getString(R.string.erudition), wisdom);
-            addSkill(context.getString(R.string.spanish), intelligence);
-            addSkill(context.getString(R.string.powerlifting), strength);
-            addSkill(context.getString(R.string.running), stamina);
-
-            Calendar c = Calendar.getInstance();
-            c.add(Calendar.HOUR_OF_DAY, 1);
-            Date today = c.getTime();
-            c.add(Calendar.DATE, 1);
-            Date tomorrow = c.getTime();
-
-            Task task1 = new Task(context.getString(R.string.read_book));
-            task1.setDate(today);
-            task1.setDateMode(Task.DateMode.WHOLE_DAY);
-            task1.setRepeatability(-1);
-            task1.setRepeatMode(Task.RepeatMode.EVERY_NTH_DAY);
-            task1.setRepeatIndex(1);
-            task1.setDifficulty(Task.LOW);
-            task1.setImportance(Task.LOW);
-            task1.setNotifyDelta(4 * TimeUnitUtils.HOUR);
-            task1.addRelatedSkill(getSkillByTitle(context.getString(R.string.erudition)));
-
-            Task task2 = new Task(context.getString(R.string.learn_spanish));
-            task2.setDate(tomorrow);
-            task2.setDateMode(Task.DateMode.WHOLE_DAY);
-            task2.setRepeatability(1);
-            task2.setRepeatMode(Task.RepeatMode.SIMPLE_REPEAT);
-            task2.setRepeatIndex(1);
-            task2.setDifficulty(Task.MEDIUM);
-            task2.setImportance(Task.MEDIUM);
-            task2.setNotifyDelta(5 * TimeUnitUtils.HOUR);
-            task2.addRelatedSkill(getSkillByTitle(context.getString(R.string.spanish)));
-
-            Task task3 = new Task(context.getString(R.string.perform_workout));
-            task3.setDate(tomorrow);
-            task3.setDateMode(Task.DateMode.WHOLE_DAY);
-            task3.setRepeatability(1);
-            task3.setRepeatMode(Task.RepeatMode.SIMPLE_REPEAT);
-            task3.setRepeatIndex(1);
-            task3.setDifficulty(Task.HIGH);
-            task3.setImportance(Task.HIGH);
-            task3.setNotifyDelta(5 * TimeUnitUtils.HOUR);
-            task3.addRelatedSkill(getSkillByTitle(context.getString(R.string.powerlifting)));
-
-            Task task4 = new Task(context.getString(R.string.morning_running));
-            task4.setDate(tomorrow);
-            task4.setDateMode(Task.DateMode.WHOLE_DAY);
-            task4.setRepeatability(-1);
-            task4.setRepeatMode(Task.RepeatMode.EVERY_NTH_DAY);
-            task4.setRepeatIndex(1);
-            task4.setDifficulty(Task.INSANE);
-            task4.setImportance(Task.INSANE);
-            task4.setNotifyDelta(5 * TimeUnitUtils.HOUR);
-            task4.addRelatedSkill(getSkillByTitle(context.getString(R.string.running)));
-
-            addTask(task1);
-            addTask(task2);
-            addTask(task3);
-            addTask(task4);
-
-            addHero(new Hero(0, 0, 1, context.getString(R.string.default_hero_name)));
-
-            addMiscToDB(); //added for version 1.0.2
+            firstLaunchPreSetup();
         } else {
             hero = getHero();
             characteristics = getCharacteristics();
@@ -153,6 +67,95 @@ public class LifeEntity {
         cursor.close();
     }
 
+    private void firstLaunchPreSetup(){
+        characteristics = new ArrayList<>();
+        skills = new ArrayList<>();
+        tasks = new ArrayList<>();
+        Characteristic intelligence = new Characteristic(context.getString(R.string.intelligence), 1);
+        Characteristic wisdom = new Characteristic(context.getString(R.string.wisdom), 1);
+        Characteristic strength = new Characteristic(context.getString(R.string.strength), 1);
+        Characteristic stamina = new Characteristic(context.getString(R.string.stamina), 1);
+        Characteristic health = new Characteristic(context.getString(R.string.health), 1);
+        Characteristic dexterity = new Characteristic(context.getString(R.string.dexterity), 1);
+        Characteristic perception = new Characteristic(context.getString(R.string.perception), 1);
+        Characteristic memory = new Characteristic(context.getString(R.string.memory), 1);
+        Characteristic charisma = new Characteristic(context.getString(R.string.charisma), 1);
+
+        addCharacteristic(intelligence);
+        addCharacteristic(wisdom);
+        addCharacteristic(strength);
+        addCharacteristic(stamina);
+        addCharacteristic(health);
+        addCharacteristic(dexterity);
+        addCharacteristic(perception);
+        addCharacteristic(memory);
+        addCharacteristic(charisma);
+
+        addSkill(context.getString(R.string.erudition), wisdom);
+        addSkill(context.getString(R.string.spanish), intelligence);
+        addSkill(context.getString(R.string.powerlifting), strength);
+        addSkill(context.getString(R.string.running), stamina);
+
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.HOUR_OF_DAY, 1);
+        Date today = c.getTime();
+        c.add(Calendar.DATE, 1);
+        Date tomorrow = c.getTime();
+
+        Task task1 = new Task(context.getString(R.string.read_book));
+        task1.setDate(today);
+        task1.setDateMode(Task.DateMode.WHOLE_DAY);
+        task1.setRepeatability(-1);
+        task1.setRepeatMode(Task.RepeatMode.EVERY_NTH_DAY);
+        task1.setRepeatIndex(1);
+        task1.setDifficulty(Task.LOW);
+        task1.setImportance(Task.LOW);
+        task1.setNotifyDelta(4 * TimeUnitUtils.HOUR);
+        task1.addRelatedSkill(getSkillByTitle(context.getString(R.string.erudition)));
+
+        Task task2 = new Task(context.getString(R.string.learn_spanish));
+        task2.setDate(tomorrow);
+        task2.setDateMode(Task.DateMode.WHOLE_DAY);
+        task2.setRepeatability(1);
+        task2.setRepeatMode(Task.RepeatMode.SIMPLE_REPEAT);
+        task2.setRepeatIndex(1);
+        task2.setDifficulty(Task.MEDIUM);
+        task2.setImportance(Task.MEDIUM);
+        task2.setNotifyDelta(5 * TimeUnitUtils.HOUR);
+        task2.addRelatedSkill(getSkillByTitle(context.getString(R.string.spanish)));
+
+        Task task3 = new Task(context.getString(R.string.perform_workout));
+        task3.setDate(tomorrow);
+        task3.setDateMode(Task.DateMode.WHOLE_DAY);
+        task3.setRepeatability(1);
+        task3.setRepeatMode(Task.RepeatMode.SIMPLE_REPEAT);
+        task3.setRepeatIndex(1);
+        task3.setDifficulty(Task.HIGH);
+        task3.setImportance(Task.HIGH);
+        task3.setNotifyDelta(5 * TimeUnitUtils.HOUR);
+        task3.addRelatedSkill(getSkillByTitle(context.getString(R.string.powerlifting)));
+
+        Task task4 = new Task(context.getString(R.string.morning_running));
+        task4.setDate(tomorrow);
+        task4.setDateMode(Task.DateMode.WHOLE_DAY);
+        task4.setRepeatability(-1);
+        task4.setRepeatMode(Task.RepeatMode.EVERY_NTH_DAY);
+        task4.setRepeatIndex(1);
+        task4.setDifficulty(Task.INSANE);
+        task4.setImportance(Task.INSANE);
+        task4.setNotifyDelta(5 * TimeUnitUtils.HOUR);
+        task4.addRelatedSkill(getSkillByTitle(context.getString(R.string.running)));
+
+        addTask(task1);
+        addTask(task2);
+        addTask(task3);
+        addTask(task4);
+
+        addHero(new Hero(0, 0, 1, context.getString(R.string.default_hero_name)));
+
+        addMiscToDB(); //added for version 1.0.2
+    }
+
     public void addTask(Task task){
         Task oldTask = getTaskByTitle(task.getTitle());
         if (oldTask != null) {
@@ -165,6 +168,8 @@ public class LifeEntity {
             oldTask.setDifficulty(task.getDifficulty());
             oldTask.setImportance(task.getImportance());
             oldTask.setNotifyDelta(task.getNotifyDelta());
+            oldTask.setHabitDays(task.getHabitDays());
+            oldTask.setHabitDaysLeft(task.getHabitDaysLeft());
             updateTask(oldTask);
         } else {
             tasks.add(task);
@@ -207,6 +212,9 @@ public class LifeEntity {
 
     public List<Task> getTasks(){
         if (tasks != null){
+            if (tasks.contains(null)) {
+                tasks.removeAll(Collections.singleton(null));
+            }
             return tasks;
         } else {
             List<Task> tasksList = new ArrayList<>();
@@ -276,6 +284,9 @@ public class LifeEntity {
         values.put(TasksTable.Cols.REPEAT_MODE, task.getRepeatMode());
         values.put(TasksTable.Cols.REPEAT_DAYS_OF_WEEK, task.getRepeatDaysOfWeekString());
         values.put(TasksTable.Cols.REPEAT_INDEX, task.getRepeatIndex());
+        values.put(TasksTable.Cols.HABIT_DAYS, task.getHabitDays());
+        values.put(TasksTable.Cols.HABIT_DAYS_LEFT, task.getHabitDaysLeft());
+        values.put(TasksTable.Cols.HABIT_START_DATE, task.getHabitStartDate().toDate().getTime());
         return values;
     }
 
@@ -298,24 +309,30 @@ public class LifeEntity {
         values.put(SkillsTable.Cols.UUID, skill.getId().toString());
         values.put(SkillsTable.Cols.LEVEL, skill.getLevel());
         values.put(SkillsTable.Cols.SUBLEVEL, skill.getSublevel());
-        values.put(SkillsTable.Cols.KEY_CHARACTERISTC_TITLE, skill.getKeyCharacteristic().getTitle());
+        values.put(SkillsTable.Cols.KEY_CHARACTERISTC_TITLE, skill.getKeyCharacteristicsString());
         return values;
     }
 
-    public void addSkill(String title, Characteristic keyCharacteristic){
-        addSkill(title, 1, 0.0f, keyCharacteristic);
+    public void addSkill(String title, List<Characteristic> characteristicList){
+        addSkill(title, 1, 0.0f, characteristicList);
     }
 
-    public void addSkill(String title, int level, float sublevel, Characteristic keyCharacteristic){
+    public void addSkill(String title, Characteristic characteristic){
+        List<Characteristic> chars = new ArrayList<>();
+        chars.add(characteristic);
+        addSkill(title, 1, 0.0f, chars);
+    }
+
+    public void addSkill(String title, int level, float sublevel, List<Characteristic> characteristicList){
         Skill oldSkill = getSkillByTitle(title);
         if (oldSkill != null) {
             oldSkill.setLevel(level);
             oldSkill.setSublevel(sublevel);
-            oldSkill.setKeyCharacteristic(keyCharacteristic);
+            oldSkill.setKeyCharacteristicsList(characteristicList);
             updateSkill(oldSkill);
         } else {
             UUID id = UUID.randomUUID();
-            Skill newSkill = new Skill(title, level, sublevel, id, keyCharacteristic);
+            Skill newSkill = new Skill(title, level, sublevel, id, characteristicList);
             skills.add(newSkill);
             final ContentValues values = getContentValuesForSkill(newSkill);
             new AsyncTask<Void, Void, Void>(){
@@ -330,6 +347,7 @@ public class LifeEntity {
 
     public List<Skill> getSkills(){
         if (skills != null){
+            skills.removeAll(Collections.singleton(null));
             Collections.sort(skills, Skill.LEVEL_COMPARATOR); //change achievements if changing comparator
             return skills;
         }
@@ -343,6 +361,7 @@ public class LifeEntity {
             }} finally {
             cursorWrapper.close();
         }
+        skillsList.removeAll(Collections.singleton(null));
         Collections.sort(skillsList, Skill.LEVEL_COMPARATOR);
         return skillsList;
     }
@@ -364,7 +383,7 @@ public class LifeEntity {
     public ArrayList<Skill> getSkillsByCharacteristic(Characteristic ch){
         ArrayList<Skill> sk = new ArrayList<>();
         for (Skill skill : getSkills()){
-            if (skill.getKeyCharacteristic().equals(ch)){
+            if (skill.getKeyCharacteristicsList().contains(ch)){
                 sk.add(skill);
             }
         }
@@ -593,6 +612,12 @@ public class LifeEntity {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public void resetMisc(){
+        Misc.ACHIEVEMENTS_LEVELS = null;
+        Misc.HERO_IMAGE_PATH = "elegant5.png";
+        Misc.STATISTICS_NUMBERS = null;
+    }
+
     public void closeDBConnection(){
         if (database.isOpen()) {
             database.close();
@@ -606,15 +631,20 @@ public class LifeEntity {
         database = new DataBaseHelper(context.getApplicationContext()).getWritableDatabase();
     }
 
-    public void onNewDBImported(){
+    public void onDBFileUpdated(boolean isFileDeleted){
         hero = null;
-        hero = getHero();
         characteristics = null;
-        characteristics = getCharacteristics();
         skills = null;
-        skills = getSkills();
         tasks = null;
-        tasks = getTasks();
-        getMiscFromDB();
+        if (isFileDeleted) {
+            resetMisc();
+            firstLaunchPreSetup();
+        } else {
+            hero = getHero();
+            characteristics = getCharacteristics();
+            skills = getSkills();
+            tasks = getTasks();
+            getMiscFromDB();
+        }
     }
 }

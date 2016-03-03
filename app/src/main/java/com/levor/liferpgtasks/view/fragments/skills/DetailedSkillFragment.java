@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.levor.liferpgtasks.adapters.TasksAdapter;
+import com.levor.liferpgtasks.model.Characteristic;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
@@ -73,13 +74,6 @@ public class DetailedSkillFragment extends DataDependantFrament {
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
 
         setupListView();
-        adapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                currentSkill = getController().getSkillByTitle(currentSkill.getTitle());
-                updateSkillDetails();
-            }
-        });
         updateSkillDetails();
         return v;
     }
@@ -131,6 +125,14 @@ public class DetailedSkillFragment extends DataDependantFrament {
         currentTasks = titles;
         adapter = new TasksAdapter(titles, getCurrentActivity());
         listView.setAdapter(adapter);
+
+        adapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                currentSkill = getController().getSkillByTitle(currentSkill.getTitle());
+                updateSkillDetails();
+            }
+        });
     }
 
     private void updateSkillDetails(){
@@ -139,8 +141,14 @@ public class DetailedSkillFragment extends DataDependantFrament {
         String toNextLevelString = df.format(currentSkill.getLevel() - currentSkill.getSublevel());
 
         skillTitleTV.setText(currentSkill.getTitle());
-        keyCharTV.setText(currentSkill.getKeyCharacteristic().getTitle());
-        levelValue.setText(Integer.toString(currentSkill.getLevel()));
+        StringBuilder sb = new StringBuilder();
+        for (Characteristic ch : currentSkill.getKeyCharacteristicsList()) {
+            sb.append(ch.getTitle())
+                    .append(", ");
+        }
+        sb.delete(sb.length() - 2, sb.length() - 1);
+        keyCharTV.setText(sb.toString());
+        levelValue.setText(String.valueOf(currentSkill.getLevel()));
         sublevelValue.setText(sublevelString);
         toNextLevel.setText(toNextLevelString);
     }

@@ -65,7 +65,7 @@ public class HeroFragment extends DefaultFragment {
         getController().sendScreenNameToAnalytics("Hero Fragment");
     }
 
-    protected void updateUI() {
+    public void updateUI() {
         xpProgress.setMax((int) getController().getHeroXpToNextLevel());
         xpProgress.setProgress((int) getController().getHeroXp());
         DecimalFormat df = new DecimalFormat("#.##");

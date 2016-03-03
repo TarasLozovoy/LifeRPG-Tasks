@@ -2,62 +2,103 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.levor.liferpgtasks.view.fragments.SettingsFragment">
+    tools:context="com.levor.liferpgtasks.view.fragments.SettingsFragment"
+    android:layout_margin="@dimen/save_zone_margin">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/export_db_to_dropbox"
+            android:id="@+id/auto_backup_to_dropbox_layout"
+            style="@style/LifeRPGSettingsItemsStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/save_zone_margin">
+            android:layout_height="wrap_content">
+
+            <Switch
+                android:id="@+id/auto_backup_to_dropbox_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:checked="false" />
 
             <TextView
-                style="@style/LifeRPGTextTitleStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/auto_backup_to_dropbox"
                 android:layout_alignParentLeft="true"
-                android:id="@+id/auto_backup_to_dropbox_text_view"/>
-
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/export_dropbox_checkbox"
-                android:layout_marginLeft="3dp"
-                android:layout_toRightOf="@id/auto_backup_to_dropbox_text_view"/>
-
-
+                android:layout_toRightOf="@id/auto_backup_to_dropbox_switch"
+                android:text="@string/auto_backup_to_dropbox" />
         </RelativeLayout>
 
-        <Button
-            android:id="@+id/import_db_from_dropbox"
-            style="@style/LifeRPGDefaultButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/export_db_to_dropbox"
-            android:gravity="center"
-            android:text="@string/import_db_from_dropbox" />
+        <View style="@style/HorizontalDivider" />
 
-        <Button
-            android:id="@+id/export_db_to_filesystem"
-            style="@style/LifeRPGDefaultButton"
+        <RelativeLayout
+            android:id="@+id/import_db_from_dropbox_layout"
+            style="@style/LifeRPGSettingsItemsStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/import_db_from_dropbox"
-            android:gravity="center"
-            android:text="@string/export_db_to_filesystem" />
+            android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/import_db_from_filesystem"
-            style="@style/LifeRPGDefaultButton"
+            <ImageView
+                android:id="@+id/import_db_from_dropbox_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toRightOf="@id/import_db_from_dropbox_arrow"
+                android:text="@string/import_db_from_dropbox" />
+        </RelativeLayout>
+
+        <View style="@style/HorizontalDivider" />
+
+        <RelativeLayout
+            android:id="@+id/export_db_to_filesystem_layout"
+            style="@style/LifeRPGSettingsItemsStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/export_db_to_filesystem"
-            android:gravity="center"
-            android:text="@string/import_db_from_filesystem" />
+            android:layout_height="wrap_content">
 
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/export_db_to_filesystem_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toRightOf="@id/export_db_to_filesystem_arrow"
+                android:text="@string/export_db_to_filesystem" />
+        </RelativeLayout>
+
+        <View style="@style/HorizontalDivider" />
+
+        <RelativeLayout
+            android:id="@+id/import_db_from_filesystem_layout"
+            style="@style/LifeRPGSettingsItemsStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/import_db_from_filesystem_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toRightOf="@id/import_db_from_filesystem_arrow"
+                android:text="@string/import_db_from_filesystem" />
+        </RelativeLayout>
+
+    </LinearLayout>
 </ScrollView>

@@ -11,11 +11,7 @@
     <string name="edit_task">Редактировать</string>
     <string name="do_task">Сделано</string>
     <string name="repeat">Повторять</string>
-    <string name="repeat_times_edit_text_hint">бесконечно</string>
-    <string name="times">раз</string>
-    <string name="infinite_number_of">Повторять задачу бесконечно</string>
     <string name="task_finished">Задача завершена.</string>
-    <string name="max_task_repeat">Максимально число 999.</string>
     <string name="all_tasks">Все</string>
     <string name="every_day_tasks">Привычки</string>
     <string name="simple_tasks">Задачи</string>
@@ -24,7 +20,6 @@
     <string name="difficulty">Сложность:</string>
     <string name="importance">Важность:</string>
     <string name="date">Дата:</string>
-    <string name="time">Время:</string>
     <string name="tasks_order_title">Порядок задач</string>
     <string name="completion_task_order">Завершенность</string>
     <string name="title_asc_task_order">Название А > Я</string>
@@ -40,12 +35,9 @@
     <string name="close">Закрыть</string>
     <string name="done">выполнена!</string>
     <string name="undo">Отменить</string>
-    <string name="repeat_question">Повторять?</string>
-    <string name="notify_question">Уведомлять?</string>
     <string name="show_notification">Будет показано уведомления о задаче.</string>
     <string name="overdue">- просрочено!</string>
     <string name="task_already_done">Задача завершена. Снова сделать эту задачу активной?</string>
-    <string name="all_related_skills_added">Все доступные навыки уже добавлены.</string>
     <string name="empty_list_view">В текущей категории нет задач. Нажмите на кнопку + чтобы добавить новую задачу.</string>
     <string name="empty_done_list_view">Выполненных задач пока нет.</string>
     <string name="no_related_skills">В этой задаче пока нету связанных навыков. Нажмите кнопку редактировать чтобы добавить связанные навыки.</string>
@@ -76,6 +68,7 @@
     <string name="task_repeat_custom">Настроить…</string>
     <string name="repeat_every">Раз в</string>
     <string name="day">дн.</string>
+    <string name="days">дн.</string>
     <string name="week">нед.</string>
     <string name="month">мес.</string>
     <string name="year">г./лет</string>
@@ -124,13 +117,22 @@
     <string name="medium">Средняя</string>
     <string name="high">Высокая</string>
     <string name="insane">Безумная</string>
+    <string name="start_generating_habit">Начать вырабатывать привычку</string>
+    <string name="generate_habit">Вырабатывать привычку</string>
+    <string name="generating_habit">Привычка вырабатывается, осталось дней: %1d</string>
+    <string name="rewrite_habit_alert_message">Начать выработку новой привычки или редактировать предыдущую?</string>
+    <string name="habit_new">Новая</string>
+    <string name="habit_continue">Предыдущая</string>
+    <string name="habit_stop_generating">Прекратить</string>
+    <string name="habit_generation_finished">Завершена выработка привычки для задачи \"%1s\"</string>
+    <string name="habit_generation_failed">Выработка привычки для задачи \"%1s\" провалилась. Начинаем сначала…</string>
     <!-- -->
 
     <!-- Skills-->
     <string name="new_skill_title">Название:</string>
     <string name="new_skill_title_edit_text">введите название навыка</string>
-    <string name="key_characteristic">Ключевая характеристика:</string>
-    <string name="set_key_characteristic">Установить харктеристику</string>
+    <string name="key_characteristic">Связанные характеристики:</string>
+    <string name="key_characteristic_empty">Добавить связанные харакетристики</string>
     <string name="create_new_skill">Добавить навык</string>
     <string name="add_new_skill">Новый навык</string>
     <string name="new_skill">Новый навык</string>
@@ -162,7 +164,6 @@
 
     <!-- Characteristics-->
     <string name="change_characteristic">Изменить характеристику</string>
-    <string name="select_characteristic">Выберите ключевую характеристику</string>
     <!-- -->
 
     <!-- Main fragment child fragments names-->
@@ -294,6 +295,9 @@
     <string name="notification_text">Пора выполнять задание!</string>
     <string name="removing">Удаление</string>
     <string name="error_on_loading_image">>Возникла ошибка при загрузке иконке. Выберите, пожалуйста, другую иконку.</string>
+    <string name="reset">Стереть данные</string>
+    <string name="reset_message">Все добавленные задачи, навыки и весь прогресс будет удален. Вы действительно хотите стереть данные?</string>
+    <string name="reset_performed">Все данные успешно стерты</string>
     <!-- -->
 
 </resources>

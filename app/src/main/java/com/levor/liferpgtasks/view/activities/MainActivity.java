@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.levor.liferpgtasks.LifeRPGApplication;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.model.Misc;
@@ -28,9 +27,7 @@ import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.MainFragment;
 import com.levor.liferpgtasks.view.fragments.SettingsFragment;
-import com.levor.liferpgtasks.view.fragments.tasks.AddTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
-import com.levor.liferpgtasks.view.fragments.tasks.EditTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.TasksFragment;
 
 import java.io.IOException;
@@ -118,7 +115,8 @@ public class MainActivity extends BackUpActivity{
             }
         }
 
-        setupAds();
+        setupInterstitialAds();
+        lifeController.checkHabitGenerationForAllTasks();
     }
 
     @Override
@@ -356,8 +354,8 @@ public class MainActivity extends BackUpActivity{
     }
 
     @Override
-    public void onDBImported(){
-        getController().onNewDBImported();
+    public void onDBFileUpdated(boolean isFileDeleted){
+        getController().onDBFileUpdated(isFileDeleted);
         updateHeroNavigationTab();
         mainFragmentsStack = new Stack<>();
         tasksFragmentsStack = new Stack<>();
@@ -393,9 +391,9 @@ public class MainActivity extends BackUpActivity{
         });
     }
 
-    private void setupAds() {
+    private void setupInterstitialAds() {
         interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId(getString(R.string.banner_ad_unit_id));
+        interstitialAd.setAdUnitId(getString(R.string.interstitial_perform_task_banner_ad_unit_id));
         interstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
@@ -414,7 +412,7 @@ public class MainActivity extends BackUpActivity{
         interstitialAd.loadAd(adRequest);
     }
 
-    public void showAd(){
+    public void showInterstitialAd(){
         if (interstitialAd.isLoaded() && new Random().nextInt(100) < 35) {
             interstitialAd.show();
         } else if ((interstitialAd.isLoading() || !interstitialAd.isLoaded())

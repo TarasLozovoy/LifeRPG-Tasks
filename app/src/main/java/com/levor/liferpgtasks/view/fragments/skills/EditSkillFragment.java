@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.levor.liferpgtasks.model.Characteristic;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.R;
 
@@ -31,8 +32,9 @@ public class EditSkillFragment extends AddSkillFragment {
         View v = super.onCreateView(inflater, container, savedInstanceState);
         currentSkill = getController().getSkillByID((UUID) getArguments().get(EDIT_SKILL_UUID_TAG));
         titleEditText.setText(currentSkill.getTitle());
-        setKeyCharacteristicByTitle(currentSkill.getKeyCharacteristic().getTitle());
-        setKeyCharacteristicButton.setText(R.string.change_characteristic);
+        for (Characteristic ch : currentSkill.getKeyCharacteristicsList()) {
+            keyCharacteristicsTitleList.add(ch.getTitle());
+        }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Edit skill");
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
@@ -51,7 +53,7 @@ public class EditSkillFragment extends AddSkillFragment {
             case R.id.ok_menu_item:
                 if (titleEditText.getText().toString().equals("")){
                     Toast.makeText(getContext(), getString(R.string.empty_skill_title_error), Toast.LENGTH_SHORT).show();
-                } else if (keyCharacteristic == null){
+                } else if (keyCharacteristicsTitleList.isEmpty()){
                     Toast.makeText(getContext(), getString(R.string.no_key_characteristic_error), Toast.LENGTH_SHORT).show();
                 } else if (getController().getSkillByTitle(titleEditText.getText().toString()) != null
                         && !getController().getSkillByTitle(titleEditText.getText().toString()).equals(currentSkill)){
@@ -113,7 +115,9 @@ public class EditSkillFragment extends AddSkillFragment {
     protected void finish(String title, String message) {
         getCurrentActivity().showSoftKeyboard(false, getView());
         currentSkill.setTitle(title);
-        currentSkill.setKeyCharacteristic(keyCharacteristic);
+        for (String s : keyCharacteristicsTitleList) {
+            currentSkill.addKeyCharacteristic(getController().getCharacteristicByTitle(s));
+        }
         getController().updateSkill(currentSkill);
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();

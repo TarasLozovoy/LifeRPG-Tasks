@@ -3,19 +3,18 @@ package com.levor.liferpgtasks.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.design.widget.Snackbar;
+import android.graphics.drawable.Drawable;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
@@ -23,7 +22,6 @@ import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
 import com.levor.liferpgtasks.view.activities.MainActivity;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class TasksAdapter extends BaseAdapter implements ListAdapter{
@@ -93,13 +91,35 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
             }
         });
 
-        TextView listItemTV = (TextView) view.findViewById(R.id.list_item_string);
-        listItemTV.setText(task.getTitle());
+        TextView listItemTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
+        TextView listItemDateTextView = (TextView) view.findViewById(R.id.list_item_date);
+
+        listItemTitleTextView.setText(task.getTitle());
+        if (task.getRepeatability() != 0 && task.getDateMode() != Task.DateMode.TERMLESS) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(DateFormat.format(Task.getDateFormatting(), task.getDate()));
+            if (task.getDateMode() == Task.DateMode.SPECIFIC_TIME) {
+                sb.append(" ");
+                sb.append(DateFormat.format(Task.getTimeFormatting(), task.getDate()));
+            }
+            listItemDateTextView.setVisibility(View.VISIBLE);
+            listItemDateTextView.setText(sb.toString());
+        } else {
+            listItemDateTextView.setVisibility(View.GONE);
+        }
+
         TextView repeatabilityTV = (TextView) view.findViewById(R.id.repeatability_tasks_list_item);
+        TextView habitDaysLeftTV = (TextView) view.findViewById(R.id.habit_days_left_text_view);
         LinearLayout repeatabilityLL = (LinearLayout) view.findViewById(R.id.repeatability_container_tasks_list_item);
+        habitDaysLeftTV.setVisibility(View.GONE);
         int repeat = task.getRepeatability();
         if (repeat < 0) {
-            repeatabilityLL.setBackground(view.getResources().getDrawable(R.drawable.infinity));
+            if (task.getHabitDays() > 0) {
+                habitDaysLeftTV.setVisibility(View.VISIBLE);
+                habitDaysLeftTV.setText(String.valueOf(task.getHabitDaysLeft()));
+            }
+            int drawableId = task.getHabitDays() > 0 ? R.drawable.ic_generate_habit_black_24dp : R.drawable.infinity;
+            repeatabilityLL.setBackground(view.getResources().getDrawable(drawableId));
             repeatabilityTV.setText("");
             doBtn.setEnabled(true);
         } else if (repeat > 0) {

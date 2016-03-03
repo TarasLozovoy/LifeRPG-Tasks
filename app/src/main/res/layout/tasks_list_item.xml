@@ -2,19 +2,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants"
-    android:orientation="vertical">
+    android:descendantFocusability="blocksDescendants">
 
-    <TextView
-        android:id="@+id/list_item_string"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/repeatability_container_tasks_list_item"
-        android:paddingLeft="4dp"
-        android:textSize="15sp" />
+        android:gravity="left|center_vertical"
+        android:orientation="vertical"
+        android:paddingLeft="4dp">
+
+        <TextView
+            android:id="@+id/list_item_title"
+            style="@style/LifeRPGTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/list_item_date"
+            style="@style/LifeRPGListItemSecondLevelTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/repeatability_container_tasks_list_item"
@@ -33,6 +47,19 @@
             android:textSize="7sp" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/habit_days_left_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/repeatability_container_tasks_list_item"
+        android:layout_alignRight="@+id/repeatability_container_tasks_list_item"
+        android:layout_below="@+id/repeatability_container_tasks_list_item"
+        android:layout_toLeftOf="@+id/check_button"
+        android:paddingTop="2dp"
+        android:text="123"
+        android:textColor="@color/black"
+        android:textSize="8sp"
+        android:visibility="gone"/>
 
     <ImageButton
         android:id="@+id/check_button"
@@ -44,8 +71,6 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="2dp"
         android:layout_marginTop="2dp"
-        android:src="@drawable/ic_done_black_24dp"
-        />
-        <!--android:text="@string/do_task" />-->
+        android:src="@drawable/ic_done_black_24dp" />
 
 </RelativeLayout>

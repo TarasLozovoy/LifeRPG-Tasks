@@ -32,8 +32,6 @@ import java.util.UUID;
 
 public class FilteredTasksFragment extends DefaultFragment{
     public static final String FILTER_ARG = "filter_arg";
-    public static final String SHARED_PREFS_TAG = "shared_prefs_tag";
-    public static final String SORTING_KEY = "sorting_key";
 
     public static final int ALL = 0;
     public static final int INFINITE = 1;
@@ -50,7 +48,7 @@ public class FilteredTasksFragment extends DefaultFragment{
 
     private List<String> sortingOrdersList = new ArrayList<>();
     private List<String> sortedTasksTitles = new ArrayList<>();
-    private int sorting;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,13 +58,11 @@ public class FilteredTasksFragment extends DefaultFragment{
         listView = (ListView) view.findViewById(R.id.listViewTasks);
         emptyList = (TextView) view.findViewById(R.id.empty_list);
         if (filter == DONE) emptyList.setText(R.string.empty_done_list_view);
-        SharedPreferences prefs = getActivity()
-                .getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-        sorting = prefs.getInt(SORTING_KEY, Task.SortingOrder.DATE_DESC);
         setupListView();
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(R.string.tasks);
         getCurrentActivity().showActionBarHomeButtonAsBack(false);
+        isCreated = true;
         return view;
     }
     @Override
@@ -103,29 +99,23 @@ public class FilteredTasksFragment extends DefaultFragment{
         MenuItem item = menu.findItem(R.id.sorting);
         item.setActionView(sortingSpinner);
         if (orderSpinner.getAdapter() == null || orderSpinner.getAdapter().isEmpty()) {
-            sortingOrdersList.add(getString(R.string.completion_task_order));
-            sortingOrdersList.add(getString(R.string.title_asc_task_order));
-            sortingOrdersList.add(getString(R.string.title_desc_task_order));
-            sortingOrdersList.add(getString(R.string.importance_ask_task_order));
-            sortingOrdersList.add(getString(R.string.importance_desc_task_order));
-            sortingOrdersList.add(getString(R.string.difficulty_asc_task_order));
-            sortingOrdersList.add(getString(R.string.difficulty_desc_task_order));
-            sortingOrdersList.add(getString(R.string.date_asc_task_order));
-            sortingOrdersList.add(getString(R.string.date_desc_task_order));
+            String[] sortingStrings = getResources().getStringArray(R.array.sorting_spinner_items);
+            for (int i = 0; i < sortingStrings.length; i++) {
+                if (!sortingOrdersList.contains(sortingStrings[i])) {
+                    sortingOrdersList.add(sortingStrings[i]);
+                }
+            }
             final HighlightStringAdapter adapter = new HighlightStringAdapter(getCurrentActivity(),
                     R.layout.simple_list_item_1, sortingOrdersList);
             orderSpinner.setAdapter(adapter);
-            adapter.setSelection(sorting);
+            adapter.setSelection(getSorting());
             orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (sorting != position) {
-                        sorting = position;
-                        adapter.setSelection(sorting);
-                        setupListView();
-                        SharedPreferences prefs = getActivity()
-                                .getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-                        prefs.edit().putInt(SORTING_KEY, sorting).apply();
+                    if (getSorting() != position) {
+                        setSorting(position);
+                        adapter.setSelection(getSorting());
+                        updateFilteredFragmentsUI();
                     }
                 }
 
@@ -136,7 +126,7 @@ public class FilteredTasksFragment extends DefaultFragment{
 
 
             });
-            orderSpinner.setSelection(sorting);
+            orderSpinner.setSelection(getSorting());
         }
     }
 
@@ -147,51 +137,53 @@ public class FilteredTasksFragment extends DefaultFragment{
             String selectedTitle = sortedTasksTitles.get(info.position);
             Task selectedTask = getController().getTaskByTitle(selectedTitle);
             menu.setHeaderTitle(selectedTitle);
-            menu.add(Menu.NONE, UNDO_CONTEXT_MENU_ITEM, UNDO_CONTEXT_MENU_ITEM, R.string.undo)
+            menu.add(filter, UNDO_CONTEXT_MENU_ITEM, UNDO_CONTEXT_MENU_ITEM, R.string.undo)
                     .setEnabled(selectedTask.isUndonable());
-            menu.add(Menu.NONE, EDIT_CONTEXT_MENU_ITEM, EDIT_CONTEXT_MENU_ITEM, R.string.edit_task);
-            menu.add(Menu.NONE, DELETE_CONTEXT_MENU_ITEM, DELETE_CONTEXT_MENU_ITEM, R.string.remove);
+            menu.add(filter, EDIT_CONTEXT_MENU_ITEM, EDIT_CONTEXT_MENU_ITEM, R.string.edit_task);
+            menu.add(filter, DELETE_CONTEXT_MENU_ITEM, DELETE_CONTEXT_MENU_ITEM, R.string.remove);
         }
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        String selectedTitle = sortedTasksTitles.get(info.position);
-        final Task currentTask = getController().getTaskByTitle(selectedTitle);
+        if (item.getGroupId() == filter) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            String selectedTitle = sortedTasksTitles.get(info.position);
+            final Task currentTask = getController().getTaskByTitle(selectedTitle);
 
-        int menuItemIndex = item.getItemId();
-        switch (menuItemIndex) {
-            case UNDO_CONTEXT_MENU_ITEM:
-                getController().undoTask(currentTask);
-                setupListView();
-                return true;
-            case EDIT_CONTEXT_MENU_ITEM:
-                DefaultFragment f = new EditTaskFragment();
-                Bundle b = new Bundle();
-                b.putSerializable(EditTaskFragment.CURRENT_TASK_TITLE_TAG, selectedTitle);
-                getCurrentActivity().showChildFragment(f, b);
-                return true;
-            case DELETE_CONTEXT_MENU_ITEM:
-                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle(getString(R.string.removing) + " " + currentTask.getTitle())
-                        .setMessage(getString(R.string.removing_task_description))
-                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                getController().removeTask(currentTask);
-                                dialog.dismiss();
-                                setupListView();
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .show();
-                return true;
+            int menuItemIndex = item.getItemId();
+            switch (menuItemIndex) {
+                case UNDO_CONTEXT_MENU_ITEM:
+                    getController().undoTask(currentTask);
+                    updateFilteredFragmentsUI();
+                    return true;
+                case EDIT_CONTEXT_MENU_ITEM:
+                    DefaultFragment f = new EditTaskFragment();
+                    Bundle b = new Bundle();
+                    b.putSerializable(EditTaskFragment.CURRENT_TASK_TITLE_TAG, selectedTitle);
+                    getCurrentActivity().showChildFragment(f, b);
+                    return true;
+                case DELETE_CONTEXT_MENU_ITEM:
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    alert.setTitle(getString(R.string.removing) + " " + currentTask.getTitle())
+                            .setMessage(getString(R.string.removing_task_description))
+                            .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    getController().removeTask(currentTask);
+                                    dialog.dismiss();
+                                    updateFilteredFragmentsUI();
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .show();
+                    return true;
+            }
         }
         return false;
     }
@@ -205,7 +197,7 @@ public class FilteredTasksFragment extends DefaultFragment{
     private void setupListView() {
         List<Task> tasks = getController().getAllTasks();
         Comparator<Task> comparator = null;
-        switch (sorting){
+        switch (getSorting()){
             case Task.SortingOrder.COMPLETION :
                 comparator = Task.COMPLETION_TASKS_COMPARATOR;
                 break;
@@ -272,7 +264,7 @@ public class FilteredTasksFragment extends DefaultFragment{
             adapter.registerDataSetObserver(new DataSetObserver() {
                 @Override
                 public void onChanged() {
-                    updateUI();
+                    updateFilteredFragmentsUI();
                     super.onChanged();
                 }
             });
@@ -292,7 +284,19 @@ public class FilteredTasksFragment extends DefaultFragment{
     }
 
     @Override
-    protected void updateUI() {
+    public void updateUI() {
         setupListView();
+    }
+
+    private void updateFilteredFragmentsUI(){
+        ((TasksFragment)getParentFragment()).updateChildFragmentsUI();
+    }
+
+    private int getSorting() {
+        return ((TasksFragment)getParentFragment()).getSorting();
+    }
+
+    private void setSorting(int sorting) {
+        ((TasksFragment)getParentFragment()).setSorting(sorting);
     }
 }

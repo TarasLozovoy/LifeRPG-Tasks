@@ -11,6 +11,8 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.levor.liferpgtasks.AchievsList;
@@ -27,6 +29,9 @@ import com.levor.liferpgtasks.view.activities.MainActivity;
 import com.levor.liferpgtasks.widget.LifeRPGWidgetProvider;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
+
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -124,8 +129,8 @@ public class LifeController {
         performBackUpToDropBox();
     }
 
-    public void addSkill(String title, Characteristic keyChar){
-        lifeEntity.addSkill(title, keyChar);
+    public void addSkill(String title, List<Characteristic> keyCharList){
+        lifeEntity.addSkill(title, keyCharList);
         performBackUpToDropBox();
     }
 
@@ -152,13 +157,8 @@ public class LifeController {
         return strings.toArray(new String[strings.size()]);
     }
 
-    public String[] getCharacteristicsTitlesArray(){
-        List<Characteristic> characteristics = lifeEntity.getCharacteristics();
-        ArrayList<String> strings = new ArrayList<>();
-        for (Characteristic ch : characteristics){
-            strings.add(ch.getTitle());
-        }
-        return strings.toArray(new String[strings.size()]);
+    public List<Characteristic> getCharacteristics(){
+        return lifeEntity.getCharacteristics();
     }
 
     public Characteristic getCharacteristicByTitle(String title) {
@@ -204,8 +204,11 @@ public class LifeController {
         double multiplier = task.getMultiplier();
         double finalXP = hero.getBaseXP() * multiplier;
         for (Skill sk : task.getRelatedSkills()) {
+            if (sk == null) continue;
             if (sk.increaseSublevel(finalXP)){
-                lifeEntity.updateCharacteristic(sk.getKeyCharacteristic());
+                for (Characteristic ch : sk.getKeyCharacteristicsList()) {
+                    lifeEntity.updateCharacteristic(ch);
+                }
             }
             updateSkill(sk);
             updateStatistics(TOTAL_SKILLS_XP_TAG, (float) finalXP);
@@ -213,6 +216,7 @@ public class LifeController {
         boolean isLevelIncreased = hero.increaseXP(finalXP);
         lifeEntity.updateHero(hero);
         updateStatistics(TOTAL_HERO_XP_TAG, (float) finalXP);
+        checkTaskHabitGeneration(task);
 
         //GA
         if (isLevelIncreased){
@@ -259,8 +263,11 @@ public class LifeController {
         double multiplier = task.getMultiplier();
         double finalXP = hero.getBaseXP() * multiplier;
         for (Skill sk : task.getRelatedSkills()) {
+            if (sk == null) continue;
             if (sk.decreaseSublevel(finalXP)){
-                lifeEntity.updateCharacteristic(sk.getKeyCharacteristic());
+                for (Characteristic ch : sk.getKeyCharacteristicsList()) {
+                    lifeEntity.updateCharacteristic(ch);
+                }
             }
             updateSkill(sk);
             updateStatistics(TOTAL_SKILLS_XP_TAG, (float) -finalXP);
@@ -269,6 +276,7 @@ public class LifeController {
         lifeEntity.updateHero(hero);
         updateStatistics(TOTAL_HERO_XP_TAG, (float) -finalXP);
         updateStatistics(PERFORMED_TASKS_TAG, -1);
+        checkTaskHabitGeneration(task);
         checkAchievements();
         performBackUpToDropBox();
         return isLevelChanged;
@@ -323,6 +331,40 @@ public class LifeController {
         hero.setName(name);
         lifeEntity.updateHero(hero);
         performBackUpToDropBox();
+    }
+
+    public void checkHabitGenerationForAllTasks(){
+        List<Task> tasks = getAllTasks();
+        for (Task t : tasks) {
+            if (t.getRepeatability() < 0 && t.getHabitDays() > 0) {
+                checkTaskHabitGeneration(t);
+            }
+        }
+    }
+
+    public void checkTaskHabitGeneration(Task t) {
+        if (t.getHabitDays() < 1) return;
+        LocalDate nextRepeatDate = LocalDate.fromDateFields(t.getDate());
+        LocalDate today = new LocalDate();
+        LocalDate habitStartDate = t.getHabitStartDate();
+
+        if (nextRepeatDate.isBefore(today)) {
+            t.setHabitStartDate(today.minusDays(1));
+            t.setHabitDaysLeft(t.getHabitDays());
+            Toast.makeText(currentActivity, currentActivity.getString(R.string.habit_generation_failed,t.getTitle()),
+                    Toast.LENGTH_LONG)
+                    .show();
+        } else if (Days.daysBetween(today, nextRepeatDate).getDays() != 0) {
+            int diff = Math.abs(Days.daysBetween(today, habitStartDate).getDays());
+            t.setHabitDaysLeft(t.getHabitDays() - diff);
+            if (t.getHabitDaysLeft() < 0) {
+                t.setHabitDaysLeft(-1);
+                t.setHabitDays(-1);
+                Toast.makeText(currentActivity, currentActivity.getString(R.string.habit_generation_finished,t.getTitle()),
+                        Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
     }
 
     public void setupTasksNotifications(){
@@ -430,7 +472,7 @@ public class LifeController {
             statisticsNumbers.put(TOTAL_SKILLS_XP_TAG, prefs.getFloat(TOTAL_SKILLS_XP_TAG, 0f));
             statisticsNumbers.put(ACHIEVEMENTS_COUNT_TAG, prefs.getFloat(ACHIEVEMENTS_COUNT_TAG, 0f));
         }
-        statisticsNumbers.put(XP_MULTIPLIER_TAG, (float)getHero().getBaseXP());
+        statisticsNumbers.put(XP_MULTIPLIER_TAG, (float) getHero().getBaseXP());
 
     }
 
@@ -641,10 +683,14 @@ public class LifeController {
         lifeEntity.openDBConnection();
     }
 
-    public void onNewDBImported(){
-        lifeEntity.onNewDBImported();
+    public void onDBFileUpdated(boolean isFileDeleted) {
+        lifeEntity.onDBFileUpdated(isFileDeleted);
+        if (isFileDeleted) {
+            lifeEntity.resetMisc();
+        }
         initAchievements();
         initStatistics();
+
     }
 
     public boolean isDropBoxAutoBackupEnabled(){
@@ -656,5 +702,16 @@ public class LifeController {
         if (isDropBoxAutoBackupEnabled()){
             currentActivity.checkAndBackupToDropBox();
         }
+    }
+
+    /*
+    ADs
+     */
+    public void loadNewAdBanner(AdView adView){
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .addTestDevice("9DA2C80CC6BDB238BAD014DE697F3902")
+                .build();
+        adView.loadAd(adRequest);
     }
 }

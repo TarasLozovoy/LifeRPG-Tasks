@@ -1,27 +1,29 @@
 package com.levor.liferpgtasks.model;
 
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.UUID;
 
 public class Skill {
     private String title;
     private int level;
     private double sublevel;
-    private Characteristic keyCharacteristic;
+    private List<Characteristic> keyCharacteristicsList;
     private UUID id;
 
     public static final Comparator<Skill> TITLE_COMPARATOR = new SkillByTitleComparator();
     public static final Comparator<Skill> LEVEL_COMPARATOR = new SkillByLevelComparator();
 
-    public Skill(String title, UUID id, Characteristic keyCharacteristic) {
-        this(title, 1, 0.0f, id, keyCharacteristic);
+    public Skill(String title, UUID id, List<Characteristic> keyCharacteristicsList) {
+        this(title, 1, 0.0f, id, keyCharacteristicsList);
     }
 
-    public Skill(String title, int level, double sublevel, UUID id, Characteristic keyCharacteristic) {
+    public Skill(String title, int level, double sublevel, UUID id, List<Characteristic> keyCharacteristicsList) {
         this.title = title;
         this.level = level;
         this.sublevel = sublevel;
-        this.keyCharacteristic = keyCharacteristic;
+        this.keyCharacteristicsList = keyCharacteristicsList;
         this.id = id;
     }
 
@@ -45,12 +47,34 @@ public class Skill {
         this.sublevel = sublevel;
     }
 
-    public Characteristic getKeyCharacteristic() {
-        return keyCharacteristic;
+    public List<Characteristic> getKeyCharacteristicsList() {
+        return keyCharacteristicsList;
     }
 
-    public void setKeyCharacteristic(Characteristic keyCharacteristic) {
-        this.keyCharacteristic = keyCharacteristic;
+    public void setKeyCharacteristicsList(List<Characteristic> keyCharacteristicsList) {
+        this.keyCharacteristicsList = keyCharacteristicsList;
+    }
+
+    public void addKeyCharacteristic(Characteristic characteristic){
+        if (characteristic != null && !keyCharacteristicsList.contains(characteristic)) {
+            keyCharacteristicsList.add(characteristic);
+        }
+    }
+
+    public void removeKeyCharacteristic(Characteristic characteristic){
+        if (characteristic != null) {
+            keyCharacteristicsList.remove(characteristic);
+        }
+    }
+
+    public String getKeyCharacteristicsString() {
+        Collections.sort(keyCharacteristicsList, Characteristic.LEVEL_COMPARATOR);
+        StringBuilder sb = new StringBuilder();
+        for (Characteristic ch : keyCharacteristicsList) {
+            sb.append(ch.getTitle())
+                    .append("::");
+        }
+        return sb.toString();
     }
 
     /**
@@ -61,7 +85,9 @@ public class Skill {
         if (sublevel >= ((double)level)){
             sublevel = sublevel - ((double) level);
             level++;
-            keyCharacteristic.increaseLevelByN(1 + level/10);
+            for (Characteristic ch : keyCharacteristicsList) {
+                ch.increaseLevelByN(1 + level / 10);
+            }
             return true;
         }
         return false;
@@ -73,7 +99,9 @@ public class Skill {
     public boolean decreaseSublevel(double value){
         sublevel -= value;
         if (sublevel < 0.0d) {
-            keyCharacteristic.increaseLevelByN(-(1 + level/10));
+            for (Characteristic ch : keyCharacteristicsList) {
+                ch.increaseLevelByN(-(1 + level / 10));
+            }
             level --;
             sublevel = ((double) level) + sublevel;
             return true;

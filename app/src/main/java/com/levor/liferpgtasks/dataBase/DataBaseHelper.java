@@ -9,7 +9,7 @@ import com.levor.liferpgtasks.model.Task;
 import static com.levor.liferpgtasks.dataBase.DataBaseSchema.*;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-    private static final int VERSION = 3;
+    private static final int VERSION = 4;
     public static final String DATABASE_NAME = "RealLifeBase.db";
 
     public DataBaseHelper(Context context) {
@@ -55,7 +55,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 TasksTable.Cols.REPEAT_INDEX + ", " +
                 TasksTable.Cols.REPEAT_DAYS_OF_WEEK + ", " +
                 TasksTable.Cols.REPEAT_MODE + ", " +
-                TasksTable.Cols.DATE_MODE +
+                TasksTable.Cols.DATE_MODE + ", " +
+                TasksTable.Cols.HABIT_DAYS + ", " +
+                TasksTable.Cols.HABIT_DAYS_LEFT + ", " +
+                TasksTable.Cols.HABIT_START_DATE +
                 ")");
 
         //v2+
@@ -91,6 +94,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         TasksTable.Cols.REPEAT_MODE);
                 db.execSQL("alter table " + TasksTable.NAME + " add column " +
                         TasksTable.Cols.DATE_MODE);
+            case 3:
+                db.execSQL("alter table " + TasksTable.NAME + " add column " +
+                        TasksTable.Cols.HABIT_DAYS);
+                db.execSQL("alter table " + TasksTable.NAME + " add column " +
+                        TasksTable.Cols.HABIT_DAYS_LEFT);
+                db.execSQL("alter table " + TasksTable.NAME + " add column " +
+                        TasksTable.Cols.HABIT_START_DATE);
         }
     }
 }
