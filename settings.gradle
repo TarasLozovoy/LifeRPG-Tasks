@@ -1,2 +1,2 @@
 include ':app', ':vksdk_library'
-project(':vksdk_library').projectDir = new File('libs/vksdk_library')
+project(':vksdk_library').projectDir = new File('app/libs/vksdk_library')
