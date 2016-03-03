@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -25,7 +26,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class BackUpActivity extends AppCompatActivity {
+public class BackUpActivity extends ActionBarActivity {
     private final static String LAST_LOADED_DB_REVISION_TAG = "last_loaded_db_revision";
 
     private final static String DB_ADDRESS_IN_DROPBOX = "/LifeRPGTasksDB.db";

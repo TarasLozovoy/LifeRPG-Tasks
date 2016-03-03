@@ -3,6 +3,9 @@ package com.levor.liferpgtasks.view.fragments.characteristics;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -11,6 +14,7 @@ import android.widget.ListView;
 
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
+import com.levor.liferpgtasks.view.fragments.hero.EditHeroFragment;
 
 public class CharacteristicsFragment extends DefaultFragment {
     private ListView listView;
@@ -30,6 +34,7 @@ public class CharacteristicsFragment extends DefaultFragment {
                 getCurrentActivity().showChildFragment(f, b);
             }
         });
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -37,6 +42,23 @@ public class CharacteristicsFragment extends DefaultFragment {
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Characteristics Fragment");
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_characteristics_fragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.show_chart:
+                getCurrentActivity().showChildFragment(new CharacteristicsChartFragment(), null);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

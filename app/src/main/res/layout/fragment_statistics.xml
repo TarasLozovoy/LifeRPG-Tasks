@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/save_zone_margin">
+    android:layout_margin="@dimen/save_zone_margin">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,4 +15,31 @@
         android:id="@+id/statistics_text_view"
         style="@style/LifeRPGTextStyle"/>
 
-</LinearLayout>
+        <View style="@style/HorizontalDivider"/>
+
+        <RelativeLayout
+            android:id="@+id/characteristics_chart_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/LifeRPGSettingsItemsStyle">
+
+            <ImageView
+                android:id="@+id/characteristics_chart_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toRightOf="@id/characteristics_chart_arrow"
+                android:text="@string/characteristics_chart" />
+        </RelativeLayout>
+
+        <View style="@style/HorizontalDivider"/>
+
+    </LinearLayout>
+
+</ScrollView>
