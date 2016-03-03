@@ -116,6 +116,7 @@ public class MainActivity extends BackUpActivity{
         }
 
         setupInterstitialAds();
+        lifeController.checkTasksPerDay();
         lifeController.checkHabitGenerationForAllTasks();
     }
 

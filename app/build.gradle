@@ -14,7 +14,7 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         release {
-            File confFile = project.rootProject.file('signconfig.properties')
+            File confFile = project.file('signconfig.properties')
             Properties properties = new Properties()
             properties.load(confFile.newDataInputStream())
             storeFile project.file(properties.getProperty('RELEASE_STORE_FILE'))
@@ -24,7 +24,7 @@ android {
         }
     }
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId "com.levor.liferpgtasks"
         minSdkVersion 16

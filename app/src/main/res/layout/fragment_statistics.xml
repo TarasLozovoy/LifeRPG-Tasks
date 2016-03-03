@@ -40,6 +40,29 @@
 
         <View style="@style/HorizontalDivider"/>
 
+        <RelativeLayout
+            android:id="@+id/tasks_per_day_chart_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/LifeRPGSettingsItemsStyle">
+
+            <ImageView
+                android:id="@+id/tasks_per_day_chart_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toRightOf="@id/tasks_per_day_chart_arrow"
+                android:text="@string/tasks_per_day_chart" />
+        </RelativeLayout>
+
+        <View style="@style/HorizontalDivider"/>
+
     </LinearLayout>
 
 </ScrollView>

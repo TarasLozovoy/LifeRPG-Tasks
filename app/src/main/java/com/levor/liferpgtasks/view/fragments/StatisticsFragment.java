@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.view.fragments.characteristics.CharacteristicsChartFragment;
+import com.levor.liferpgtasks.view.fragments.tasks.TasksPerDayChartFragment;
 
 import org.joda.time.LocalDate;
 
@@ -20,6 +21,7 @@ import butterknife.ButterKnife;
 public class StatisticsFragment extends DefaultFragment {
     @Bind(R.id.statistics_text_view)            TextView statisticsTV;
     @Bind(R.id.characteristics_chart_layout)    View charsChartView;
+    @Bind(R.id.tasks_per_day_chart_layout)      View tasksPerDayChartView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,18 +58,19 @@ public class StatisticsFragment extends DefaultFragment {
                 .append(" ")
                 .append(getController().getStatisticsValue(LifeController.XP_MULTIPLIER_TAG))
                 .append("\n");
-        for (Map.Entry<LocalDate, Integer> e : getController().getTasksPerDayMap().entrySet()) {
-            sb.append(e.getKey())
-                    .append(" - ")
-                    .append(e.getValue())
-                    .append(":::");
-        }
         statisticsTV.setText(sb.toString());
 
         charsChartView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getCurrentActivity().showChildFragment(new CharacteristicsChartFragment(), null);
+            }
+        });
+
+        tasksPerDayChartView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().showChildFragment(new TasksPerDayChartFragment(), null);
             }
         });
 

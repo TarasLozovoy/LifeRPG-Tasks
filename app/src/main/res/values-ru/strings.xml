@@ -300,6 +300,8 @@
     <string name="reset_message">Все добавленные задачи, навыки и весь прогресс будет удален. Вы действительно хотите стереть данные?</string>
     <string name="reset_performed">Все данные успешно стерты</string>
     <string name="show_chart">Показать график</string>
+    <string name="tasks_per_day">Заданий выполнено по дням</string>
+    <string name="tasks_per_day_chart">График выполненных заданий по дням</string>
     <!-- -->
 
 </resources>

@@ -690,6 +690,20 @@ public class LifeController {
         } else {
             lifeEntity.updateTasksPerDay(localDate, value + diff);
         }
+
+        checkTasksPerDay();
+    }
+
+    public void checkTasksPerDay() {
+        LocalDate checkDay = new LocalDate();
+        Map<LocalDate, Integer> map = getTasksPerDayMap();
+
+        if (map.containsKey(checkDay)) return;
+        lifeEntity.updateTasksPerDay(checkDay, 0);
+        if (map.size() == 1) return;
+        while (!map.containsKey(checkDay = checkDay.minusDays(1))) {
+            lifeEntity.updateTasksPerDay(checkDay, 0);
+        }
     }
 
     public void closeDBConnection(){

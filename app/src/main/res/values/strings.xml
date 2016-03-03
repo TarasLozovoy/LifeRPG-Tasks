@@ -321,6 +321,7 @@
     <string name="interstitial_perform_task_banner_ad_unit_id">ca-app-pub-3618933742218575/7397853043</string>
     <string name="edit_hero_banner_ad_unit_id">ca-app-pub-3618933742218575/5052831049</string>
     <string name="characteristics_chart_banner_ad_unit_id">ca-app-pub-3618933742218575/7526142641</string>
+    <string name="tasks_per_day_chart_banner_ad_unit_id">ca-app-pub-3618933742218575/2587912243</string>
     <string name="app_email">liferpgtasks@gmail.com</string>
     <string name="app_address_on_market">https://play.google.com/store/apps/details?id=com.levor.liferpgtasks</string>
     <string name="contact">Contact</string>
@@ -334,6 +335,8 @@
     <string name="reset_message">Reset will remove all tasks, skills and progress. Are you sure tou want to perform reset?</string>
     <string name="reset_performed">Reset successfully performed</string>
     <string name="show_chart">Show chart</string>
+    <string name="tasks_per_day">Tasks performed per day</string>
+    <string name="tasks_per_day_chart">Tasks per day chart</string>
     <!-- -->
 
 </resources>
