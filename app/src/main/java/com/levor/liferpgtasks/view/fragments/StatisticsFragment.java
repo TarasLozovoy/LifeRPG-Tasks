@@ -10,6 +10,10 @@ import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.view.fragments.characteristics.CharacteristicsChartFragment;
 
+import org.joda.time.LocalDate;
+
+import java.util.Map;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -52,6 +56,12 @@ public class StatisticsFragment extends DefaultFragment {
                 .append(" ")
                 .append(getController().getStatisticsValue(LifeController.XP_MULTIPLIER_TAG))
                 .append("\n");
+        for (Map.Entry<LocalDate, Integer> e : getController().getTasksPerDayMap().entrySet()) {
+            sb.append(e.getKey())
+                    .append(" - ")
+                    .append(e.getValue())
+                    .append(":::");
+        }
         statisticsTV.setText(sb.toString());
 
         charsChartView.setOnClickListener(new View.OnClickListener() {
