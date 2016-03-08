@@ -4,19 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/ad_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:visibility="invisible"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/tasks_per_day_chart_banner_ad_unit_id" />
-
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/line_chart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/ad_view" />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

@@ -40,7 +40,9 @@ public  class DefaultFragment extends Fragment {
 
     public void updateUI(){}
 
-    public void onRestoreFromBackStack(){}
+    public boolean onBackPressed(){
+        return false;
+    }
 
     public boolean isCreated(){
         return isCreated;

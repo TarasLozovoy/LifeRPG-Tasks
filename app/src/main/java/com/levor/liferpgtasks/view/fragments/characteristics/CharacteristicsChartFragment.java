@@ -3,6 +3,7 @@ package com.levor.liferpgtasks.view.fragments.characteristics;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,6 +16,7 @@ import com.google.android.gms.ads.AdView;
 import com.levor.liferpgtasks.R;
 
 import com.levor.liferpgtasks.model.Characteristic;
+import com.levor.liferpgtasks.view.activities.MainActivity;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 import java.util.ArrayList;
@@ -26,7 +28,6 @@ import butterknife.ButterKnife;
 
 public class CharacteristicsChartFragment extends DefaultFragment{
     @Bind(R.id.radar_chart)     RadarChart radarChart;
-    @Bind(R.id.ad_view)         AdView adView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,13 +35,6 @@ public class CharacteristicsChartFragment extends DefaultFragment{
         View view = inflater.inflate(R.layout.fragment_characteristics_chart, container, false);
         ButterKnife.bind(this, view);
         createChart();
-        adView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                adView.setVisibility(View.VISIBLE);
-            }
-        });
-        getController().loadNewAdBanner(adView);
 
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return view;
@@ -50,17 +44,23 @@ public class CharacteristicsChartFragment extends DefaultFragment{
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Characteristics Chart Fragment");
-        if (adView != null) {
-            adView.resume();
-        }
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        if (adView != null) {
-            adView.pause();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getCurrentActivity().showInterstitialAd(MainActivity.AdType.CHARACTERISTICS_CHART);
+                break;
         }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        getCurrentActivity().showInterstitialAd(MainActivity.AdType.CHARACTERISTICS_CHART);
+        getCurrentActivity().showPreviousFragment();
+        return true;
     }
 
     private void createChart() {

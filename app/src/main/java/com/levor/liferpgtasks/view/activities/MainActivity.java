@@ -42,7 +42,9 @@ public class MainActivity extends BackUpActivity{
     public final static int SETTINGS_FRAGMENT_ID = 2;
     private static final String SELECTED_FRAGMENT_TAG = "selected_fragment_tag";
 
-    InterstitialAd interstitialAd;
+    InterstitialAd performTaskAd;
+    InterstitialAd charsChartAd;
+    InterstitialAd tasksChartAd;
     private TabLayout navigationTabLayout;
     private TabLayout.Tab heroNavigationTab;
     private static Stack<DefaultFragment> mainFragmentsStack = new Stack<>();
@@ -114,7 +116,6 @@ public class MainActivity extends BackUpActivity{
                 showChildFragment(new DetailedTaskFragment(), b);
             }
         }
-
         setupInterstitialAds();
         lifeController.checkTasksPerDay();
         lifeController.checkHabitGenerationForAllTasks();
@@ -142,8 +143,8 @@ public class MainActivity extends BackUpActivity{
 
     @Override
     protected void onPause() {
-        lifeController.updateMiscToDB();
         super.onPause();
+        lifeController.updateMiscToDB();
     }
 
     @Override
@@ -238,7 +239,6 @@ public class MainActivity extends BackUpActivity{
                 .replace(R.id.content_frame, fragment)
                 .commit();
         getSupportFragmentManager().executePendingTransactions();
-        fragment.onRestoreFromBackStack();
         return true;
     }
 
@@ -268,7 +268,7 @@ public class MainActivity extends BackUpActivity{
 
     @Override
     public void onBackPressed() {
-        if (!showPreviousFragment()){
+        if (!getCurrentFragmentsStack().peek().onBackPressed() && !showPreviousFragment()){
             if (System.currentTimeMillis() - appClosingTime > 2500){
                 appClosingTime = System.currentTimeMillis();
                 Toast.makeText(this, getString(R.string.closing_app_toast), Toast.LENGTH_SHORT).show();
@@ -393,33 +393,72 @@ public class MainActivity extends BackUpActivity{
     }
 
     private void setupInterstitialAds() {
-        interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId(getString(R.string.interstitial_perform_task_banner_ad_unit_id));
-        interstitialAd.setAdListener(new AdListener() {
+        performTaskAd = new InterstitialAd(this);
+        performTaskAd.setAdUnitId(getString(R.string.interstitial_perform_task_banner_ad_unit_id));
+        performTaskAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
-                requestNewInterstitial();
+                requestNewInterstitial(performTaskAd);
             }
         });
-        requestNewInterstitial();
+        requestNewInterstitial(performTaskAd);
+
+        charsChartAd = new InterstitialAd(this);
+        charsChartAd.setAdUnitId(getString(R.string.interstitial_chars_chart_banner_ad_unit_id));
+        charsChartAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial(charsChartAd);
+            }
+        });
+        requestNewInterstitial(charsChartAd);
+
+        tasksChartAd = new InterstitialAd(this);
+        tasksChartAd.setAdUnitId(getString(R.string.interstitial_tasks_per_day_chart_banner_ad_unit_id));
+        tasksChartAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                requestNewInterstitial(tasksChartAd);
+            }
+        });
+        requestNewInterstitial(tasksChartAd);
     }
 
-    private void requestNewInterstitial() {
+    private void requestNewInterstitial(InterstitialAd ad) {
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice("9DA2C80CC6BDB238BAD014DE697F3902")
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
 
-        interstitialAd.loadAd(adRequest);
+        ad.loadAd(adRequest);
     }
 
-    public void showInterstitialAd(){
-        if (interstitialAd.isLoaded() && new Random().nextInt(100) < 35) {
-            interstitialAd.show();
-        } else if ((interstitialAd.isLoading() || !interstitialAd.isLoaded())
+    public void showInterstitialAd(AdType type){
+        InterstitialAd ad = null;
+        int successShowRate = 0;
+        switch (type) {
+            case PERFORM_TASK:
+                successShowRate = 35;
+                ad = performTaskAd;
+                break;
+            case CHARACTERISTICS_CHART:
+                successShowRate = 50;
+                ad = charsChartAd;
+                break;
+            case TASKS_PER_DAY_CHART:
+                successShowRate = 50;
+                ad = tasksChartAd;
+                break;
+        }
+        if (ad == null) return;
+        if (ad.isLoaded() && new Random().nextInt(100) < successShowRate) {
+            ad.show();
+        } else if ((ad.isLoading() || !ad.isLoaded())
                 && lifeController.isInternetConnectionActive()){
-            requestNewInterstitial();
+            requestNewInterstitial(ad);
         }
     }
+
+    public enum AdType { PERFORM_TASK, CHARACTERISTICS_CHART, TASKS_PER_DAY_CHART}
 
 }

@@ -3,6 +3,7 @@ package com.levor.liferpgtasks.view.fragments.tasks;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,9 +12,8 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdView;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.view.activities.MainActivity;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 import org.joda.time.LocalDate;
@@ -27,7 +27,6 @@ import butterknife.ButterKnife;
 
 public class TasksPerDayChartFragment extends DefaultFragment {
     @Bind(R.id.line_chart)      LineChart lineChart;
-    @Bind(R.id.ad_view)         AdView adView;
 
     @Nullable
     @Override
@@ -35,13 +34,6 @@ public class TasksPerDayChartFragment extends DefaultFragment {
         View view = inflater.inflate(R.layout.fragment_tasks_per_day_chart, container, false);
         ButterKnife.bind(this, view);
         createChart();
-        adView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                adView.setVisibility(View.VISIBLE);
-            }
-        });
-        getController().loadNewAdBanner(adView);
 
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return view;
@@ -51,17 +43,23 @@ public class TasksPerDayChartFragment extends DefaultFragment {
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Tasks Per Day Chart Fragment");
-        if (adView != null) {
-            adView.resume();
-        }
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        if (adView != null) {
-            adView.pause();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getCurrentActivity().showInterstitialAd(MainActivity.AdType.TASKS_PER_DAY_CHART);
+                break;
         }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        getCurrentActivity().showInterstitialAd(MainActivity.AdType.TASKS_PER_DAY_CHART);
+        getCurrentActivity().showPreviousFragment();
+        return true;
     }
 
     private void createChart() {

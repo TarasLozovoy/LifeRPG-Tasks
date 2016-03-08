@@ -34,7 +34,7 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
                 .setNeutralButton(root.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((MainActivity)context).showInterstitialAd();
+                        ((MainActivity)context).showInterstitialAd(MainActivity.AdType.PERFORM_TASK);
                         dialog.dismiss();
                     }
                 })
@@ -83,7 +83,7 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
                     .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            ((MainActivity)context).showInterstitialAd();
+                            ((MainActivity)context).showInterstitialAd(MainActivity.AdType.PERFORM_TASK);
                             dialog.dismiss();
                         }
                     }).show();

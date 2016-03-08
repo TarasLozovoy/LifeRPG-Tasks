@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" 
-    android:layout_height="match_parent"
-    xmlns:ads="http://schemas.android.com/apk/res-auto">
-
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/ad_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/characteristics_chart_banner_ad_unit_id"
-        android:layout_alignParentBottom="true"
-        />
+    android:layout_height="match_parent">
     
     <com.github.mikephil.charting.charts.RadarChart
         android:id="@+id/radar_chart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/ad_view"/>
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>
