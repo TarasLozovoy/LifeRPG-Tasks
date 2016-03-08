@@ -289,6 +289,7 @@ public class AddTaskFragment extends DataDependantFrament {
                                 cal.set(Calendar.SECOND, 59);
                                 date = cal.getTime();
                                 dateMode = DateMode.WHOLE_DAY;
+                                showTimePickerDialog();
                                 break;
                             case 2:
                                 Calendar c = Calendar.getInstance();
@@ -298,6 +299,7 @@ public class AddTaskFragment extends DataDependantFrament {
                                 c.set(Calendar.SECOND, 59);
                                 date = c.getTime();
                                 dateMode = DateMode.WHOLE_DAY;
+                                showTimePickerDialog();
                                 break;
                             case 3:
                                 showDatePickerDialog();
