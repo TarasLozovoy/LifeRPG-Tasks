@@ -71,6 +71,16 @@ public class LifeEntity {
             if (!characteristics.contains(health)){
                 addCharacteristic(health);
             }
+
+            //adding new characteristics for new version (1.1.5)
+            Characteristic willpower = new Characteristic(context.getString(R.string.willpower), 1);
+            Characteristic workmanship = new Characteristic(context.getString(R.string.workmanship), 1);
+            if (!characteristics.contains(willpower)){
+                addCharacteristic(willpower);
+            }
+            if (!characteristics.contains(workmanship)){
+                addCharacteristic(workmanship);
+            }
         }
         cursor.close();
     }
@@ -88,6 +98,8 @@ public class LifeEntity {
         Characteristic perception = new Characteristic(context.getString(R.string.perception), 1);
         Characteristic memory = new Characteristic(context.getString(R.string.memory), 1);
         Characteristic charisma = new Characteristic(context.getString(R.string.charisma), 1);
+        Characteristic willpower = new Characteristic(context.getString(R.string.willpower), 1);
+        Characteristic workmanship = new Characteristic(context.getString(R.string.workmanship), 1);
 
         addCharacteristic(intelligence);
         addCharacteristic(wisdom);
@@ -98,6 +110,8 @@ public class LifeEntity {
         addCharacteristic(perception);
         addCharacteristic(memory);
         addCharacteristic(charisma);
+        addCharacteristic(willpower);
+        addCharacteristic(workmanship);
 
         addSkill(context.getString(R.string.erudition), wisdom);
         addSkill(context.getString(R.string.spanish), intelligence);

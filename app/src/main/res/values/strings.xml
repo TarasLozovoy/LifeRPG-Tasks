@@ -267,6 +267,8 @@
     <string name="perception">Perception</string>
     <string name="memory">Memory</string>
     <string name="charisma">Charisma</string>
+    <string name="willpower">Willpower</string>
+    <string name="workmanship">Workmanship</string>
     <string name="erudition">Erudition</string>
     <string name="spanish">Spanish</string>
     <string name="powerlifting">Powerlifting</string>

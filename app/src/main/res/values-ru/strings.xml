@@ -240,6 +240,8 @@
     <string name="perception">Восприятие</string>
     <string name="memory">Память</string>
     <string name="charisma">Харизма</string>
+    <string name="willpower">Сила воли</string>
+    <string name="workmanship">Мастерство</string>
     <string name="erudition">Эрудиция</string>
     <string name="spanish">Испанский</string>
     <string name="powerlifting">Пауэрлифтинг</string>
