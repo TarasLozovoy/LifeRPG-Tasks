@@ -9,11 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
-import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.levor.liferpgtasks.AchievsList;
@@ -366,18 +363,22 @@ public class LifeController {
                     Toast.LENGTH_LONG)
                     .show();
             return true;
-        } else if (Days.daysBetween(today, nextRepeatDate).getDays() != 0) {
+        } else if (Days.daysBetween(today, nextRepeatDate).getDays() == 0) {
+            if (today.equals(habitStartDate)) return false;
+            int diff = Math.abs(Days.daysBetween(today.minusDays(1), habitStartDate).getDays());
+            t.setHabitDaysLeft(t.getHabitDays() - diff);
+        } else {
             int diff = Math.abs(Days.daysBetween(today, habitStartDate).getDays());
             t.setHabitDaysLeft(t.getHabitDays() - diff);
-            if (t.getHabitDaysLeft() < 0) {
-                t.setHabitDaysLeft(-1);
-                t.setHabitDays(-1);
-                Toast.makeText(currentActivity, currentActivity.getString(R.string.habit_generation_finished,t.getTitle()),
-                        Toast.LENGTH_LONG)
-                        .show();
-                lifeEntity.updateTask(t);
-                return true;
-            }
+        }
+        if (t.getHabitDaysLeft() < 0) {
+            t.setHabitDaysLeft(-1);
+            t.setHabitDays(-1);
+            Toast.makeText(currentActivity, currentActivity.getString(R.string.habit_generation_finished,t.getTitle()),
+                    Toast.LENGTH_LONG)
+                    .show();
+            lifeEntity.updateTask(t);
+            return true;
         }
         return false;
     }
