@@ -91,11 +91,13 @@ public class MainActivity extends BackUpActivity{
         if (savedInstanceState == null) {
             DefaultFragment fragment = new MainFragment();
             currentFragmentID = MAIN_FRAGMENT_ID;
+            mainFragmentsStack = new Stack<>();
             mainFragmentsStack.push(fragment);
             FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction()
                     .add(R.id.content_frame, fragment)
                     .commit();
+            fm.executePendingTransactions();
         } else {
             currentFragmentID = savedInstanceState.getInt(SELECTED_FRAGMENT_TAG);
             TabLayout.Tab tab = navigationTabLayout.getTabAt(currentFragmentID);
@@ -124,7 +126,7 @@ public class MainActivity extends BackUpActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (getCurrentFragmentsStack().isEmpty() ||
-                getCurrentFragmentsStack().peek().onOptionsItemSelected(item)) return true;
+                getCurrentFragment().onOptionsItemSelected(item)) return true;
         switch (item.getItemId()) {
             case android.R.id.home:
                 showPreviousFragment();
@@ -149,7 +151,7 @@ public class MainActivity extends BackUpActivity{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        getCurrentFragmentsStack().peek().onActivityResult(requestCode, resultCode, data);
+        getCurrentFragment().onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -174,6 +176,10 @@ public class MainActivity extends BackUpActivity{
             default:
                 throw new RuntimeException("Unexpected fragment ID");
         }
+    }
+
+    public DefaultFragment getCurrentFragment() {
+        return getCurrentFragmentsStack().peek();
     }
 
     private void showRootFragment(int fragmentID) {
@@ -221,33 +227,32 @@ public class MainActivity extends BackUpActivity{
                 .commit();
     }
 
-    public boolean showPreviousFragment() {
-        if (getCurrentFragmentsStack().isEmpty()) return false;
+    public void showPreviousFragment() {
+        if (getCurrentFragmentsStack().isEmpty()) return;
         getCurrentFragmentsStack().pop();
         DefaultFragment fragment;
         try {
-            fragment = getCurrentFragmentsStack().peek();
+            fragment = getCurrentFragment();
         } catch (EmptyStackException e){
-            return false;
+            return;
         }
         if (fragment instanceof DataDependantFrament &&
                 !((DataDependantFrament)fragment).isDependableDataAvailable()){
-            return showPreviousFragment();
+            showPreviousFragment();
         }
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)
                 .replace(R.id.content_frame, fragment)
                 .commit();
         getSupportFragmentManager().executePendingTransactions();
-        return true;
     }
 
-    public boolean showNthPreviousFragment(int n) {
+    public void showNthPreviousFragment(int n) {
         if (n < 2 || getCurrentFragmentsStack().size() == 2) {
-            return showPreviousFragment();
+            showPreviousFragment();
         }
         getCurrentFragmentsStack().pop();
-        return showNthPreviousFragment(n - 1);
+        showNthPreviousFragment(n - 1);
     }
 
     public void showChildFragment(DefaultFragment fragment, Bundle bundle){
@@ -268,13 +273,18 @@ public class MainActivity extends BackUpActivity{
 
     @Override
     public void onBackPressed() {
-        if (!getCurrentFragmentsStack().peek().onBackPressed() && !showPreviousFragment()){
+        if (getCurrentFragment().onBackPressed()) return;
+        if (getCurrentFragmentsStack().size() == 1) {
             if (System.currentTimeMillis() - appClosingTime > 2500){
                 appClosingTime = System.currentTimeMillis();
                 Toast.makeText(this, getString(R.string.closing_app_toast), Toast.LENGTH_SHORT).show();
             } else {
                 super.onBackPressed();
             }
+        } else if (getCurrentFragmentsStack().size() > 1){
+            showPreviousFragment();
+        } else { //something went wrong and fragmentStack size < 1
+            super.onBackPressed();
         }
     }
 
