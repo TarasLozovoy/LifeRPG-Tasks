@@ -4,5 +4,6 @@
     <item android:id="@+id/show_chart"
         android:title="@string/show_chart"
         android:orderInCategory="100"
-        app:showAsAction="never"/>
+        android:icon="@drawable/ic_chart_black_24dp"
+        app:showAsAction="ifRoom"/>
 </menu>
