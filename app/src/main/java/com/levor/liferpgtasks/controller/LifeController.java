@@ -338,15 +338,23 @@ public class LifeController {
 
     public void checkHabitGenerationForAllTasks(){
         List<Task> tasks = getAllTasks();
-        for (Task t : tasks) {
+        boolean[] updateTasks = new boolean[tasks.size()];
+        for (int i = 0; i < tasks.size(); i++) {
+            Task t = tasks.get(i);
             if (t.getRepeatability() < 0 && t.getHabitDays() > 0) {
-                checkTaskHabitGeneration(t);
+                boolean update = checkTaskHabitGeneration(t);
+                updateTasks[i] = update;
+            }
+        }
+        for (int i = 0; i < tasks.size(); i++) {
+            if (updateTasks[i]) {
+                lifeEntity.updateTask(tasks.get(i));
             }
         }
     }
 
-    public void checkTaskHabitGeneration(Task t) {
-        if (t.getHabitDays() < 1) return;
+    public boolean checkTaskHabitGeneration(Task t) {
+        if (t.getHabitDays() < 1) return false;
         LocalDate nextRepeatDate = LocalDate.fromDateFields(t.getDate());
         LocalDate today = new LocalDate();
         LocalDate habitStartDate = t.getHabitStartDate();
@@ -357,6 +365,7 @@ public class LifeController {
             Toast.makeText(currentActivity, currentActivity.getString(R.string.habit_generation_failed,t.getTitle()),
                     Toast.LENGTH_LONG)
                     .show();
+            return true;
         } else if (Days.daysBetween(today, nextRepeatDate).getDays() != 0) {
             int diff = Math.abs(Days.daysBetween(today, habitStartDate).getDays());
             t.setHabitDaysLeft(t.getHabitDays() - diff);
@@ -366,8 +375,11 @@ public class LifeController {
                 Toast.makeText(currentActivity, currentActivity.getString(R.string.habit_generation_finished,t.getTitle()),
                         Toast.LENGTH_LONG)
                         .show();
+                lifeEntity.updateTask(t);
+                return true;
             }
         }
+        return false;
     }
 
     public void setupTasksNotifications(){
