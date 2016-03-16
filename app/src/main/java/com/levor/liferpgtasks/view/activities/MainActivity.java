@@ -228,7 +228,8 @@ public class MainActivity extends BackUpActivity{
     }
 
     public void showPreviousFragment() {
-        if (getCurrentFragmentsStack().isEmpty()) return;
+        if (getCurrentFragmentsStack().isEmpty()
+                || getCurrentFragmentsStack().size() == 1) return;
         getCurrentFragmentsStack().pop();
         DefaultFragment fragment;
         try {
@@ -248,8 +249,9 @@ public class MainActivity extends BackUpActivity{
     }
 
     public void showNthPreviousFragment(int n) {
-        if (n < 2 || getCurrentFragmentsStack().size() == 2) {
+        if (n < 2 || getCurrentFragmentsStack().size() <= 2) {
             showPreviousFragment();
+            return;
         }
         getCurrentFragmentsStack().pop();
         showNthPreviousFragment(n - 1);
