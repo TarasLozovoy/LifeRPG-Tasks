@@ -146,6 +146,7 @@
     <string name="empty_skill_title_error">Название навыка не может быть пустым</string>
     <string name="no_key_characteristic_error">Нужно указать ключевую характеристику</string>
     <string name="skill_duplicate_error">Навык с таким же названием уже существует. Перезапсать?</string>
+    <string name="skill_duplicate_error_no_question">Навык с таким же названием уже существует.</string>
     <string name="skill_added_message">Навык добавлен</string>
     <string name="skill_updated_message">Навык изменен</string>
     <string name="removing_skill_message">Вы действительно хотите удалить этот навык?</string>

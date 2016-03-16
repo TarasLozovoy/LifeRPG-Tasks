@@ -154,7 +154,8 @@
     <string name="to_next_lvl">Points left to next level:</string>
     <string name="empty_skill_title_error">Skill title can\'t be empty</string>
     <string name="no_key_characteristic_error">Key characteristic should be set</string>
-    <string name="skill_duplicate_error">Skill with same title is already exists. Overwrite?</string>
+    <string name="skill_duplicate_error">Skill with same title already exists. Overwrite?</string>
+    <string name="skill_duplicate_error_no_question">Skill with same title already exists.</string>
     <string name="skill_added_message">Skill added</string>
     <string name="skill_updated_message">Skill updated</string>
     <string name="removing_skill_message">Are you really want to remove this skill?</string>
