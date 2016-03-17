@@ -1,4 +1,4 @@
-package com.levor.liferpgtasks.view.fragments;
+package com.levor.liferpgtasks.view.fragments.settings;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.levor.liferpgtasks.AchievsList;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 public class DetailedAchievementsFragment extends DefaultFragment {
     public static final String ACHIEVEMNT_ORDINAL_TAG = "achievement_ordinal_tag";

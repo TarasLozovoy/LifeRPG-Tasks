@@ -1,4 +1,4 @@
-package com.levor.liferpgtasks.view.fragments;
+package com.levor.liferpgtasks.view.fragments.settings;
 
 
 import android.app.AlertDialog;
@@ -15,11 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdView;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.dataBase.DataBaseHelper;
+import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.ExportImportDBFragment;
 
 import java.io.File;
@@ -32,9 +31,8 @@ public class SettingsFragment extends DefaultFragment {
     @Bind(R.id.statistics_layout)           View statisticsView;
     @Bind(R.id.achievements_layout)         View achievementsView;
     @Bind(R.id.export_import_db_layout)     View exportImportDBView;
-    @Bind(R.id.contact_layout)              View contactView;
-    @Bind(R.id.app_on_google_play_layout)   View playMarketView;
     @Bind(R.id.reset_layout)                View resetView;
+    @Bind(R.id.about_layout)                View aboutView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,33 +61,6 @@ public class SettingsFragment extends DefaultFragment {
             }
         });
 
-        contactView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{getString(R.string.app_email)});
-                emailIntent.setType("text/plain");
-                final PackageManager pm = getCurrentActivity().getPackageManager();
-                final List<ResolveInfo> matches = pm.queryIntentActivities(emailIntent, 0);
-                ResolveInfo best = null;
-                for (final ResolveInfo info : matches)
-                    if (info.activityInfo.packageName.endsWith(".gm") || info.activityInfo.name.toLowerCase().contains("gmail"))
-                        best = info;
-                if (best != null)
-                    emailIntent.setClassName(best.activityInfo.packageName, best.activityInfo.name);
-                getCurrentActivity().startActivity(emailIntent);
-            }
-        });
-
-        playMarketView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(getString(R.string.app_address_on_market)));
-                startActivity(browserIntent);
-            }
-        });
-
         resetView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +86,13 @@ public class SettingsFragment extends DefaultFragment {
                         })
                         .setNegativeButton(R.string.no, null)
                         .show();
+            }
+        });
+
+        aboutView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().showChildFragment(new AboutFragment(), null);
             }
         });
 

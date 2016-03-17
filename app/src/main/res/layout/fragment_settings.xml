@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.levor.liferpgtasks.view.fragments.SettingsFragment"
+    tools:context=".view.fragments.settings.SettingsFragment"
     android:layout_margin="@dimen/save_zone_margin">
 
     <LinearLayout
@@ -80,52 +80,6 @@
         <View style="@style/HorizontalDivider"/>
 
         <RelativeLayout
-            android:id="@+id/contact_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/LifeRPGSettingsItemsStyle">
-
-            <ImageView
-                android:id="@+id/contact_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_toRightOf="@id/contact_arrow"
-                android:text="@string/contact" />
-        </RelativeLayout>
-
-        <View style="@style/HorizontalDivider"/>
-
-        <RelativeLayout
-            android:id="@+id/app_on_google_play_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/LifeRPGSettingsItemsStyle">
-
-            <ImageView
-                android:id="@+id/app_on_google_play_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_toRightOf="@id/app_on_google_play_arrow"
-                android:text="@string/app_on_google_play" />
-        </RelativeLayout>
-
-        <View style="@style/HorizontalDivider"/>
-
-        <RelativeLayout
             android:id="@+id/reset_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -143,7 +97,33 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_toRightOf="@id/reset_arrow"
+                android:textColor="@color/red"
                 android:text="@string/reset" />
         </RelativeLayout>
+
+        <View style="@style/HorizontalDivider"/>
+
+        <RelativeLayout
+            android:id="@+id/about_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/LifeRPGSettingsItemsStyle">
+
+            <ImageView
+                android:id="@+id/about_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toRightOf="@id/about_arrow"
+                android:text="@string/about" />
+        </RelativeLayout>
+
+        <View style="@style/HorizontalDivider"/>
     </LinearLayout>
 </ScrollView>

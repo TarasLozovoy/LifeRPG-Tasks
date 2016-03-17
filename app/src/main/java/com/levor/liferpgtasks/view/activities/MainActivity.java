@@ -26,7 +26,7 @@ import com.levor.liferpgtasks.model.Misc;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.MainFragment;
-import com.levor.liferpgtasks.view.fragments.SettingsFragment;
+import com.levor.liferpgtasks.view.fragments.settings.SettingsFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.TasksFragment;
 

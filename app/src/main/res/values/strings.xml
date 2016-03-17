@@ -339,6 +339,8 @@
     <string name="show_chart">Show chart</string>
     <string name="tasks_per_day">Tasks performed per day</string>
     <string name="tasks_per_day_chart">Tasks per day chart</string>
+    <string name="about">About</string>
+    <string name="credits">Credits</string>
     <!-- -->
 
 </resources>

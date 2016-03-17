@@ -1,4 +1,4 @@
-package com.levor.liferpgtasks.view.fragments;
+package com.levor.liferpgtasks.view.fragments.settings;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
+import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.characteristics.CharacteristicsChartFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.TasksPerDayChartFragment;
 

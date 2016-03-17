@@ -305,6 +305,8 @@
     <string name="show_chart">Показать график</string>
     <string name="tasks_per_day">Заданий выполнено по дням</string>
     <string name="tasks_per_day_chart">График выполненных заданий по дням</string>
+    <string name="about">О приложении</string>
+    <string name="credits">Благодарности</string>
     <!-- -->
 
 </resources>

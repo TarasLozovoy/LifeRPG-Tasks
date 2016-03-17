@@ -1,4 +1,4 @@
-package com.levor.liferpgtasks.view.fragments;
+package com.levor.liferpgtasks.view.fragments.settings;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.widget.ListView;
 import com.levor.liferpgtasks.AchievsList;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.adapters.TwoStringsRowAdapter;
+import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 import java.util.ArrayList;
 import java.util.List;
