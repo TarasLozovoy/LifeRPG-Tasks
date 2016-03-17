@@ -20,7 +20,7 @@
     <string name="difficulty">Сложность:</string>
     <string name="importance">Важность:</string>
     <string name="date">Дата:</string>
-    <string name="tasks_order_title">Порядок задач</string>
+    <string name="tasks_order_title">Сортировать задачи</string>
     <string name="completion_task_order">Завершенность</string>
     <string name="title_asc_task_order">Название А > Я</string>
     <string name="title_desc_task_order">Название Я > А</string>
@@ -307,6 +307,8 @@
     <string name="tasks_per_day_chart">График выполненных заданий по дням</string>
     <string name="about">О приложении</string>
     <string name="credits">Благодарности</string>
+    <string name="search">Поиск</string>
+    <string name="current_sorting">Текущая сортировка:</string>
     <!-- -->
 
 </resources>

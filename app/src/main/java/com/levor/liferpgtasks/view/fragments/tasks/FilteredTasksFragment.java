@@ -1,11 +1,10 @@
 package com.levor.liferpgtasks.view.fragments.tasks;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,16 +12,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.levor.liferpgtasks.adapters.HighlightStringAdapter;
 import com.levor.liferpgtasks.adapters.TasksAdapter;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
-import com.levor.liferpgtasks.view.SortingSpinner;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,10 +40,10 @@ public class FilteredTasksFragment extends DefaultFragment{
     private static final int DELETE_CONTEXT_MENU_ITEM = 2;
 
     private int filter;
+    private String searchQuery = "";
     private ListView listView;
     private TextView emptyList;
 
-    private List<String> sortingOrdersList = new ArrayList<>();
     private List<String> sortedTasksTitles = new ArrayList<>();
 
 
@@ -76,6 +73,25 @@ public class FilteredTasksFragment extends DefaultFragment{
 
                 getCurrentActivity().showChildFragment(new AddTaskFragment(), b);
                 return true;
+            case R.id.sorting:
+                String[] sortingVariants = getResources().getStringArray(R.array.sorting_spinner_items);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                        android.R.layout.select_dialog_item, sortingVariants);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (getSorting() != which) {
+                            setSorting(which);
+                            updateFilteredFragmentsUI();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+                String currentSorting = getString(R.string.current_sorting) + "\n" + sortingVariants[getSorting()];
+                dialog.setTitle(currentSorting);
+                dialog.show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -94,40 +110,30 @@ public class FilteredTasksFragment extends DefaultFragment{
             doneItem.getIcon().setAlpha(255);
         }
 
-        SortingSpinner sortingSpinner = new SortingSpinner(getActivity());
-        Spinner orderSpinner = sortingSpinner.getSortingSpinner();
-        MenuItem item = menu.findItem(R.id.sorting);
-        item.setActionView(sortingSpinner);
-        if (orderSpinner.getAdapter() == null || orderSpinner.getAdapter().isEmpty()) {
-            String[] sortingStrings = getResources().getStringArray(R.array.sorting_spinner_items);
-            for (int i = 0; i < sortingStrings.length; i++) {
-                if (!sortingOrdersList.contains(sortingStrings[i])) {
-                    sortingOrdersList.add(sortingStrings[i]);
-                }
+        final MenuItem searchItem = menu.findItem(R.id.search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
             }
-            final HighlightStringAdapter adapter = new HighlightStringAdapter(getCurrentActivity(),
-                    R.layout.simple_list_item_1, sortingOrdersList);
-            orderSpinner.setAdapter(adapter);
-            adapter.setSelection(getSorting());
-            orderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (getSorting() != position) {
-                        setSorting(position);
-                        adapter.setSelection(getSorting());
-                        updateFilteredFragmentsUI();
-                    }
-                }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchQuery = newText;
+                setupListView();
+                return true;
+            }
+        });
 
-                }
-
-
-            });
-            orderSpinner.setSelection(getSorting());
-        }
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                searchQuery = "";
+                setupListView();
+                return false;
+            }
+        });
     }
 
     @Override
@@ -230,6 +236,8 @@ public class FilteredTasksFragment extends DefaultFragment{
         Collections.sort(tasks, comparator);
         sortedTasksTitles = new ArrayList<>();
         for (Task t : tasks) {
+            if (!searchQuery.isEmpty()
+                    && !t.getTitle().toLowerCase().contains(searchQuery.toLowerCase())) continue;
             switch (filter) {
                 case ALL:
                     sortedTasksTitles.add(t.getTitle());

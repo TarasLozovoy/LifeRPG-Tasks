@@ -5,13 +5,20 @@
     <item
         android:id="@+id/new_task"
         android:icon="@drawable/ic_add_black_24dp"
-        android:orderInCategory="100"
+        android:orderInCategory="99"
         android:title="@string/add_new_task"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/sorting"
         android:icon="@drawable/ic_sort_black_24dp"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         android:title="@string/tasks_order_title"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:orderInCategory="1"
+        android:title="@string/search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="collapseActionView|ifRoom" />
 </menu>
