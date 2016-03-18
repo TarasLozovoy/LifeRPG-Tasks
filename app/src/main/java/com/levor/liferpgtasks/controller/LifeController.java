@@ -129,6 +129,10 @@ public class LifeController {
 
     public void addSkill(String title, List<Characteristic> keyCharList){
         lifeEntity.addSkill(title, keyCharList);
+        getGATracker().send(new HitBuilders.EventBuilder()
+                .setCategory(context.getString(R.string.GA_action))
+                .setAction("New skill: " + title)
+                .build());
         performBackUpToDropBox();
     }
 

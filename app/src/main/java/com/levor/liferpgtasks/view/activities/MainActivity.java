@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.model.Misc;
@@ -407,32 +408,17 @@ public class MainActivity extends BackUpActivity{
     private void setupInterstitialAds() {
         performTaskAd = new InterstitialAd(this);
         performTaskAd.setAdUnitId(getString(R.string.interstitial_perform_task_banner_ad_unit_id));
-        performTaskAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                requestNewInterstitial(performTaskAd);
-            }
-        });
+        performTaskAd.setAdListener(new CustomAdListener());
         requestNewInterstitial(performTaskAd);
 
         charsChartAd = new InterstitialAd(this);
         charsChartAd.setAdUnitId(getString(R.string.interstitial_chars_chart_banner_ad_unit_id));
-        charsChartAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                requestNewInterstitial(charsChartAd);
-            }
-        });
+        charsChartAd.setAdListener(new CustomAdListener());
         requestNewInterstitial(charsChartAd);
 
         tasksChartAd = new InterstitialAd(this);
         tasksChartAd.setAdUnitId(getString(R.string.interstitial_tasks_per_day_chart_banner_ad_unit_id));
-        tasksChartAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                requestNewInterstitial(tasksChartAd);
-            }
-        });
+        tasksChartAd.setAdListener(new CustomAdListener());
         requestNewInterstitial(tasksChartAd);
     }
 
@@ -472,5 +458,17 @@ public class MainActivity extends BackUpActivity{
     }
 
     public enum AdType { PERFORM_TASK, CHARACTERISTICS_CHART, TASKS_PER_DAY_CHART}
+
+    private class CustomAdListener extends AdListener {
+        @Override
+        public void onAdClosed() {
+            requestNewInterstitial(tasksChartAd);
+            lifeController.getGATracker().send(new HitBuilders.EventBuilder()
+                    .setCategory(getString(R.string.GA_action))
+                    .setAction(getString(R.string.GA_ad_shown))
+                    .setValue(1)
+                    .build());
+        }
+    }
 
 }

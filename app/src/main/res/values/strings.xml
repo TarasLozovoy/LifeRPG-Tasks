@@ -202,6 +202,7 @@
     <string name="GA_add_new_skill">Add new skill</string>
     <string name="GA_task_performed">Task performed</string>
     <string name="GA_task_performed_internet">Task performed with internet</string>
+    <string name="GA_ad_shown">Ad shown</string>
     <string name="GA_task_finished">Task finished</string>
     <string name="GA_hero_level_increased">Hero level increased to </string>
     <string name="GA_share_button">Share button pressed</string>
