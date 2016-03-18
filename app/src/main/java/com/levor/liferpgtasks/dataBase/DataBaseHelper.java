@@ -9,7 +9,7 @@ import com.levor.liferpgtasks.model.Task;
 import static com.levor.liferpgtasks.dataBase.DataBaseSchema.*;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-    private static final int VERSION = 5;
+    private static final int VERSION = 6;
     public static final String DATABASE_NAME = "RealLifeBase.db";
 
     public DataBaseHelper(Context context) {
@@ -58,7 +58,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 TasksTable.Cols.DATE_MODE + ", " +
                 TasksTable.Cols.HABIT_DAYS + ", " +
                 TasksTable.Cols.HABIT_DAYS_LEFT + ", " +
-                TasksTable.Cols.HABIT_START_DATE +
+                TasksTable.Cols.HABIT_START_DATE + ", " +
+                TasksTable.Cols.FINISH_DATE  + " INTEGER" +
                 ")");
 
         //v2+
@@ -114,6 +115,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         TasksPerDayTable.Cols.DATE + " TEXT, " +
                         TasksPerDayTable.Cols.TASKS_PERFORMED +
                         ")");
+            case 5:
+                db.execSQL("alter table " + TasksTable.NAME + " add column " +
+                        TasksTable.Cols.FINISH_DATE + " INTEGER");
         }
     }
 }

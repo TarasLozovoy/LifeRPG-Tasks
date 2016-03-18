@@ -28,12 +28,15 @@ public class Task {
     private int difficulty = LOW;
     private int importance = LOW;
     private Date date;
+    private Date finishDate;    //used for finished tasks that can be undone
     private int dateMode = DateMode.TERMLESS;
     private boolean undonable = false;
     private long notifyDelta = 24 * TimeUnitUtils.HOUR;
     private int habitDays = -1;
     private int habitDaysLeft = -1;
     private LocalDate habitStartDate = new LocalDate();
+
+    private boolean updateNeeded = false;
 
     public static final Comparator<Task> COMPLETION_TASKS_COMPARATOR = new CompletionTasksComparator();
     public static final Comparator<Task> TITLE_ASC_TASKS_COMPARATOR = new TitleAscTasksComparator();
@@ -137,6 +140,22 @@ public class Task {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public Date getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
+    }
+
+    public boolean isUpdateNeeded() {
+        return updateNeeded;
+    }
+
+    public void setUpdateNeeded(boolean updateNeeded) {
+        this.updateNeeded = updateNeeded;
     }
 
     public boolean isUndonable() {
@@ -467,13 +486,15 @@ public class Task {
 
         @Override
         public int compare(Task lhs, Task rhs) {
-            if (lhs.getDate() != rhs.getDate()){
+            Date dateLhs = lhs.isTaskDone() ? lhs.getFinishDate() : lhs.getDate();
+            Date dateRhs = rhs.isTaskDone() ? rhs.getFinishDate() : rhs.getDate();
+            if (dateLhs != dateRhs){
                 if (lhs.repeatability == 0 && rhs.repeatability == 0){
-                    return lhs.getDate().compareTo(rhs.getDate());
+                    return dateLhs.compareTo(dateRhs);
                 }
                 if (lhs.repeatability == 0) return 1;
                 if (rhs.repeatability == 0) return -1;
-                return lhs.getDate().compareTo(rhs.getDate());
+                return dateLhs.compareTo(dateRhs);
             }
             return rhs.getTitle().compareTo(lhs.getTitle());
         }
@@ -483,13 +504,15 @@ public class Task {
 
         @Override
         public int compare(Task lhs, Task rhs) {
-            if (lhs.getDate() != rhs.getDate()){
+            Date dateLhs = lhs.isTaskDone() ? lhs.getFinishDate() : lhs.getDate();
+            Date dateRhs = rhs.isTaskDone() ? rhs.getFinishDate() : rhs.getDate();
+            if (dateLhs != dateRhs){
                 if (lhs.repeatability == 0 && rhs.repeatability == 0){
-                    return rhs.getDate().compareTo(lhs.getDate());
+                    return dateRhs.compareTo(dateLhs);
                 }
                 if (lhs.repeatability == 0) return 1;
                 if (rhs.repeatability == 0) return -1;
-                return rhs.getDate().compareTo(lhs.getDate());
+                return dateRhs.compareTo(dateLhs);
             }
             return rhs.getTitle().compareTo(lhs.getTitle());
         }

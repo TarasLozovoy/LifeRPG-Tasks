@@ -32,6 +32,7 @@ public class TasksCursorWrapper extends CursorWrapper {
         int difficulty = getInt(getColumnIndex(TasksTable.Cols.DIFFICULTY));
         int importance = getInt(getColumnIndex(TasksTable.Cols.IMPORTANCE));
         long dateLong = getLong(getColumnIndex(TasksTable.Cols.DATE));
+        long finishDateLong = getLong(getColumnIndex(TasksTable.Cols.FINISH_DATE));
         long notifyLong = getLong(getColumnIndex(TasksTable.Cols.NOTIFY));
         int dateMode = getInt(getColumnIndex(TasksTable.Cols.DATE_MODE));
         int repeatMode = getInt(getColumnIndex(TasksTable.Cols.REPEAT_MODE));
@@ -48,6 +49,7 @@ public class TasksCursorWrapper extends CursorWrapper {
         }
 
         Date date  = new Date(dateLong);
+
         LocalDate habitStartDate = LocalDate.fromDateFields(new Date(habitStartDateMillis));
 
         Task task = new Task(title, UUID.fromString(uuid));
@@ -64,6 +66,13 @@ public class TasksCursorWrapper extends CursorWrapper {
         task.setHabitDays(habitDays);
         task.setHabitDaysLeft(habitDaysLeft);
         task.setHabitStartDate(habitStartDate);
+
+        if (repeatability == 0) {
+            Date finishDate = finishDateLong > 0 ? new Date(finishDateLong) : new Date();
+            task.setFinishDate(finishDate);
+            task.setDateMode(Task.DateMode.SPECIFIC_TIME);
+            task.setUpdateNeeded(true);
+        }
         return task;
     }
 

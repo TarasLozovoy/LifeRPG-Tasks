@@ -22,6 +22,7 @@ import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
 import com.levor.liferpgtasks.view.activities.MainActivity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TasksAdapter extends BaseAdapter implements ListAdapter{
@@ -95,12 +96,14 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
         TextView listItemDateTextView = (TextView) view.findViewById(R.id.list_item_date);
 
         listItemTitleTextView.setText(task.getTitle());
-        if (task.getRepeatability() != 0 && task.getDateMode() != Task.DateMode.TERMLESS) {
+        boolean isTaskFinished = task.getRepeatability() == 0;
+        if (task.getDateMode() != Task.DateMode.TERMLESS || isTaskFinished) {
+            Date date = isTaskFinished ? task.getFinishDate() : task.getDate();
             StringBuilder sb = new StringBuilder();
-            sb.append(DateFormat.format(Task.getDateFormatting(), task.getDate()));
-            if (task.getDateMode() == Task.DateMode.SPECIFIC_TIME) {
+            sb.append(DateFormat.format(Task.getDateFormatting(), date));
+            if (task.getDateMode() == Task.DateMode.SPECIFIC_TIME || isTaskFinished) {
                 sb.append(" ");
-                sb.append(DateFormat.format(Task.getTimeFormatting(), task.getDate()));
+                sb.append(DateFormat.format(Task.getTimeFormatting(), date));
             }
             listItemDateTextView.setVisibility(View.VISIBLE);
             listItemDateTextView.setText(sb.toString());

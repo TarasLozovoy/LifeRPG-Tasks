@@ -240,7 +240,9 @@ public class FilteredTasksFragment extends DefaultFragment{
                     && !t.getTitle().toLowerCase().contains(searchQuery.toLowerCase())) continue;
             switch (filter) {
                 case ALL:
-                    sortedTasksTitles.add(t.getTitle());
+                    if (t.getRepeatability() != 0) {
+                        sortedTasksTitles.add(t.getTitle());
+                    }
                     break;
                 case INFINITE:
                     if (t.getRepeatability() < 0) {

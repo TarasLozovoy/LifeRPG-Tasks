@@ -197,8 +197,9 @@ public class LifeController {
     public boolean performTask(Task task){
         Hero hero = lifeEntity.getHero();
         task.setUndonable(true);
-            task.perform();
+        task.perform();
         if (task.getRepeatability() == 0) {
+            task.setFinishDate(new Date());
             updateStatistics(FINISHED_TASKS_NUMBER_TAG, 1);
         }
         updateTask(task);
@@ -261,6 +262,7 @@ public class LifeController {
         Hero hero = lifeEntity.getHero();
         task.setUndonable(false);
         task.undo();
+        task.setFinishDate(null);
         updateTask(task);
         updateTaskNotification(task);
         double multiplier = task.getMultiplier();

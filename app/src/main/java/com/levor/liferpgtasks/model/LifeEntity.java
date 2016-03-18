@@ -63,6 +63,12 @@ public class LifeEntity {
             characteristics = getCharacteristics();
             skills = getSkills();
             tasks = getTasks();
+
+            for (Task t : tasks) {
+                if (t.isTaskDone() && t.isUpdateNeeded()) {
+                    updateTaskInDB(t);
+                }
+            }
             getMiscFromDB();    //added for version 1.0.2
             getTasksPerDay();
 
@@ -207,18 +213,22 @@ public class LifeEntity {
     }
 
     public void updateTask(Task task) {
-        final String uuid = task.getId().toString();
         if (tasks.remove(task)) {
             tasks.add(task);
-            final ContentValues values = getContentValuesForTask(task);
-            new AsyncTask<Void, Void, Void>(){
-                @Override
-                protected Void doInBackground(Void... params) {
-                    database.update(TasksTable.NAME, values, TasksTable.Cols.UUID + " = ?", new String[]{uuid});
-                    return null;
-                }
-            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            updateTaskInDB(task);
         }
+    }
+
+    private void updateTaskInDB(Task task) {
+        final String uuid = task.getId().toString();
+        final ContentValues values = getContentValuesForTask(task);
+        new AsyncTask<Void, Void, Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+                database.update(TasksTable.NAME, values, TasksTable.Cols.UUID + " = ?", new String[]{uuid});
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public void removeTask(final Task task) {
@@ -244,7 +254,8 @@ public class LifeEntity {
             try {
                 cursorWrapper.moveToFirst();
                 while (!cursorWrapper.isAfterLast()) {
-                    tasksList.add(cursorWrapper.getTask());
+                    Task t = cursorWrapper.getTask();
+                    tasksList.add(t);
                     cursorWrapper.moveToNext();
                 }
             } finally {
@@ -309,6 +320,7 @@ public class LifeEntity {
         values.put(TasksTable.Cols.HABIT_DAYS, task.getHabitDays());
         values.put(TasksTable.Cols.HABIT_DAYS_LEFT, task.getHabitDaysLeft());
         values.put(TasksTable.Cols.HABIT_START_DATE, task.getHabitStartDate().toDate().getTime());
+        values.put(TasksTable.Cols.FINISH_DATE, task.getFinishDate() == null ? 0 : task.getFinishDate().getTime());
         return values;
     }
 

@@ -135,6 +135,7 @@ public class EditTaskFragment extends AddTaskFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         repeatability = 1;
                         updateUI();
+                        currentTask.setFinishDate(null);
                         dialog.dismiss();
                     }
                 })
