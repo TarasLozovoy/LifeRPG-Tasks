@@ -92,6 +92,29 @@ public class FilteredTasksFragment extends DefaultFragment{
                 dialog.setTitle(currentSorting);
                 dialog.show();
                 return true;
+            case R.id.delete_all_finished:
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setTitle(R.string.delete_all_finished_tasks)
+                        .setMessage(R.string.delete_all_finished_tasks_message)
+                        .setNegativeButton(R.string.no, null)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                List<Task> tasks = getController().getAllTasks();
+                                List<Task> finishedTasks = new ArrayList<>();
+                                for (Task t : tasks) {
+                                    if (t.isTaskDone()) {
+                                        finishedTasks.add(t);
+                                    }
+                                }
+                                for (Task t : finishedTasks) {
+                                    getController().removeTask(t);
+                                }
+                                updateUI();
+                            }
+                        })
+                        .show();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -101,13 +124,24 @@ public class FilteredTasksFragment extends DefaultFragment{
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        MenuItem doneItem = menu.findItem(R.id.new_task);
+        MenuItem newTask = menu.findItem(R.id.new_task);
+        MenuItem deleteFinished = menu.findItem(R.id.delete_all_finished);
         if (filter == DONE) {
-            doneItem.setEnabled(false);
-            doneItem.getIcon().setAlpha(75);
+            newTask.setEnabled(false);
+            newTask.getIcon().setAlpha(75);
+
+            boolean anyTaskFinished = false;
+            for (Task t : getController().getAllTasks()) {
+                if (t.isTaskDone()) {
+                    anyTaskFinished = true;
+                    break;
+                }
+            }
+            deleteFinished.setVisible(anyTaskFinished);
         } else {
-            doneItem.setEnabled(true);
-            doneItem.getIcon().setAlpha(255);
+            newTask.setEnabled(true);
+            newTask.getIcon().setAlpha(255);
+            deleteFinished.setVisible(false);
         }
 
         final MenuItem searchItem = menu.findItem(R.id.search);

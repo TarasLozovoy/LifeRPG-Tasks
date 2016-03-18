@@ -309,6 +309,8 @@
     <string name="credits">Благодарности</string>
     <string name="search">Поиск</string>
     <string name="current_sorting">Текущая сортировка:</string>
+    <string name="delete_all_finished_tasks">Удалить все завершенные задачи</string>
+    <string name="delete_all_finished_tasks_message">Вы уверены, что хотите удалить все выполненные задачи?</string>
     <!-- -->
 
 </resources>

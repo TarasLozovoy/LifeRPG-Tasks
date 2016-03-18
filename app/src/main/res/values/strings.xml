@@ -344,6 +344,8 @@
     <string name="credits">Credits</string>
     <string name="search">Search</string>
     <string name="current_sorting">Current sorting:</string>
+    <string name="delete_all_finished_tasks">Delete all finished tasks</string>
+    <string name="delete_all_finished_tasks_message">Are you really want to delete all finished tasks?</string>
     <!-- -->
 
 </resources>
