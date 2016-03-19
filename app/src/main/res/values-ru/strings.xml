@@ -48,7 +48,7 @@
     <string name="finish_edit_task_message">Редатирование завершено</string>
     <string name="task_duplicate_error">Задача с таким названием уже существует. Перезаписать ее?</string>
     <string name="task_duplicate_negative_answer">Нет</string>
-    <string name="new_task_added">Добавдена задача: </string>
+    <string name="new_task_added">Добавлена задача: </string>
     <string name="skill_choosing">Выберите навык</string>
     <string name="task_date_termless">Бессрочная задача</string>
     <string name="task_date_today">Сегодня</string>
