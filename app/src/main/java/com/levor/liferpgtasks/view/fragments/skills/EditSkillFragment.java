@@ -115,6 +115,7 @@ public class EditSkillFragment extends AddSkillFragment {
     protected void finish(String title, String message) {
         getCurrentActivity().showSoftKeyboard(false, getView());
         currentSkill.setTitle(title);
+        currentSkill.removeAllKeyCharacteristics();
         for (String s : keyCharacteristicsTitleList) {
             currentSkill.addKeyCharacteristic(getController().getCharacteristicByTitle(s));
         }

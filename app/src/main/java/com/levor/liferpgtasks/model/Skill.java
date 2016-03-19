@@ -67,6 +67,10 @@ public class Skill {
         }
     }
 
+    public void removeAllKeyCharacteristics() {
+        keyCharacteristicsList.clear();
+    }
+
     public String getKeyCharacteristicsString() {
         Collections.sort(keyCharacteristicsList, Characteristic.LEVEL_COMPARATOR);
         StringBuilder sb = new StringBuilder();
