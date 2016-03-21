@@ -129,14 +129,14 @@
     <!-- -->
 
     <!-- Skills-->
-    <string name="new_skill_title">Название:</string>
+    <string name="new_item_title">Название:</string>
     <string name="new_skill_title_edit_text">введите название навыка</string>
     <string name="key_characteristic">Связанные характеристики:</string>
     <string name="key_characteristic_empty">Добавить связанные харакетристики</string>
     <string name="create_new_skill">Добавить навык</string>
     <string name="add_new_skill">Новый навык</string>
     <string name="new_skill">Новый навык</string>
-    <string name="edit_skill">Редактировать</string>
+    <string name="edit">Редактировать</string>
     <string name="increases">Увеличивает: </string>
     <string name="tasks_enhancing_skill">Навык развивается после выполнения следующих задач:
     </string>
@@ -311,6 +311,11 @@
     <string name="current_sorting">Текущая сортировка:</string>
     <string name="delete_all_finished_tasks">Удалить все завершенные задачи</string>
     <string name="delete_all_finished_tasks_message">Вы уверены, что хотите удалить все выполненные задачи?</string>
+    <string name="new_characteristic_title_edit_text">введите название</string>
+    <string name="empty_characteristic_title_error">Название характеристики не может быть пустым</string>
+    <string name="duplicate_characteristic_title_error">Характеристика с таким названим уже существует</string>
+    <string name="removing_characteristic_message">Вы действительно хотите удалить эту характеристику?</string>
+    <string name="add_new_characteristic">Новая характеристика</string>
     <!-- -->
 
 </resources>

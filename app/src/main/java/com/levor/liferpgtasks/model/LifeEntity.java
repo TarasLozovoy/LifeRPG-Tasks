@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.Utils.TimeUnitUtils;
@@ -59,36 +58,49 @@ public class LifeEntity {
         if(cursor.getInt(0) < 1) {
             firstLaunchPreSetup();
         } else {
-            hero = getHero();
-            characteristics = getCharacteristics();
-            skills = getSkills();
-            tasks = getTasks();
-
-            for (Task t : tasks) {
-                if (t.isTaskDone() && t.isUpdateNeeded()) {
-                    updateTaskInDB(t);
-                }
-            }
-            getMiscFromDB();    //added for version 1.0.2
-            getTasksPerDay();
-
-            //adding new characteristic for new version (1.0.2)
-            Characteristic health = new Characteristic(context.getString(R.string.health), 1);
-            if (!characteristics.contains(health)){
-                addCharacteristic(health);
-            }
-
-            //adding new characteristics for new version (1.1.5)
-            Characteristic willpower = new Characteristic(context.getString(R.string.willpower), 1);
-            Characteristic workmanship = new Characteristic(context.getString(R.string.workmanship), 1);
-            if (!characteristics.contains(willpower)){
-                addCharacteristic(willpower);
-            }
-            if (!characteristics.contains(workmanship)){
-                addCharacteristic(workmanship);
-            }
+            preSetup();
         }
         cursor.close();
+    }
+
+    private void preSetup() {
+        hero = getHero();
+        characteristics = getCharacteristics();
+        skills = getSkills();
+        tasks = getTasks();
+
+        for (Characteristic ch : characteristics) {
+            if (ch.isUpdateNeeded()) {
+                updateCharacteristicInDbByTitle(ch);
+                for (Skill sk : getSkillsByCharacteristic(ch)) {
+                    updateSkill(sk);
+                }
+            }
+        }
+
+        for (Task t : tasks) {
+            if (t.isTaskDone() && t.isUpdateNeeded()) {
+                updateTaskInDB(t);
+            }
+        }
+        getMiscFromDB();    //added for version 1.0.2
+        getTasksPerDay();
+
+        //adding new characteristic for new version (1.0.2)
+        Characteristic health = new Characteristic(context.getString(R.string.health), 1);
+        if (!characteristics.contains(health)){
+            addCharacteristic(health);
+        }
+
+        //adding new characteristics for new version (1.1.5)
+        Characteristic willpower = new Characteristic(context.getString(R.string.willpower), 1);
+        Characteristic workmanship = new Characteristic(context.getString(R.string.workmanship), 1);
+        if (!characteristics.contains(willpower)){
+            addCharacteristic(willpower);
+        }
+        if (!characteristics.contains(workmanship)){
+            addCharacteristic(workmanship);
+        }
     }
 
     private void firstLaunchPreSetup(){
@@ -475,10 +487,11 @@ public class LifeEntity {
         ContentValues values = new ContentValues();
         values.put(CharacteristicsTable.Cols.TITLE, characteristic.getTitle());
         values.put(CharacteristicsTable.Cols.LEVEL, characteristic.getLevel());
+        values.put(CharacteristicsTable.Cols.ID, characteristic.getId().toString());
         return values;
     }
 
-    private void addCharacteristic(Characteristic characteristic){
+    public void addCharacteristic(Characteristic characteristic){
         characteristics.add(characteristic);
         final ContentValues values = getContentValuesForCharacteristic(characteristic);
         new AsyncTask<Void, Void, Void>() {
@@ -516,16 +529,46 @@ public class LifeEntity {
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                    database.update(CharacteristicsTable.NAME, values, CharacteristicsTable.Cols.TITLE + " = ?", new String[]{characteristic.getTitle()});
+                    database.update(CharacteristicsTable.NAME, values, CharacteristicsTable.Cols.ID + " = ?", new String[]{characteristic.getId().toString()});
                     return null;
                 }
             }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 
+    private void updateCharacteristicInDbByTitle(final Characteristic ch) {
+        final ContentValues values = getContentValuesForCharacteristic(ch);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                database.update(CharacteristicsTable.NAME, values, CharacteristicsTable.Cols.TITLE + " = ?", new String[]{ch.getTitle()});
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void removeCharacteristic(final Characteristic characteristic) {
+        characteristics.remove(characteristic);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                database.delete(CharacteristicsTable.NAME, CharacteristicsTable.Cols.ID + " = ?", new String[]{characteristic.getId().toString()});
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Deprecated
     public Characteristic getCharacteristicByTitle(String title) {
         for (Characteristic ch : getCharacteristics()){
             if (ch.getTitle().equals(title)) return ch;
+        }
+        return null;
+    }
+
+    public Characteristic getCharacteristicById(UUID id) {
+        for (Characteristic ch : getCharacteristics()){
+            if (ch.getId().equals(id)) return ch;
         }
         return null;
     }
@@ -721,11 +764,7 @@ public class LifeEntity {
             resetMisc();
             firstLaunchPreSetup();
         } else {
-            hero = getHero();
-            characteristics = getCharacteristics();
-            skills = getSkills();
-            tasks = getTasks();
-            getMiscFromDB();
+            preSetup();
         }
     }
 }

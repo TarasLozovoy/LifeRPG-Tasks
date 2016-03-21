@@ -4,12 +4,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.levor.liferpgtasks.model.Task;
-
 import static com.levor.liferpgtasks.dataBase.DataBaseSchema.*;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-    private static final int VERSION = 6;
+    private static final int VERSION = 7;
     public static final String DATABASE_NAME = "RealLifeBase.db";
 
     public DataBaseHelper(Context context) {
@@ -30,7 +28,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.execSQL("create table " + CharacteristicsTable.NAME + " (" +
                 " _id integer primary key autoincrement, " +
                 CharacteristicsTable.Cols.TITLE + ", " +
-                CharacteristicsTable.Cols.LEVEL +
+                CharacteristicsTable.Cols.LEVEL + ", " +
+                CharacteristicsTable.Cols.ID + " TEXT DEFAULT ''" +
                 ")");
 
         db.execSQL("create table " + SkillsTable.NAME + " (" +
@@ -118,6 +117,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             case 5:
                 db.execSQL("alter table " + TasksTable.NAME + " add column " +
                         TasksTable.Cols.FINISH_DATE + " INTEGER");
+            case 6:
+                db.execSQL("alter table " + CharacteristicsTable.NAME + " add column " +
+                        CharacteristicsTable.Cols.ID + " TEXT DEFAULT ''");
         }
     }
 }

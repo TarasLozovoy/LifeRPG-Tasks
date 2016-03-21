@@ -19,6 +19,7 @@ public class DataBaseSchema {
         public static final class Cols {
             public static final String TITLE = "characteristic_title";
             public static final String LEVEL = "characteristic_level";
+            public static final String ID = "characteristic_id";
         }
     }
     public static final class SkillsTable {

@@ -14,7 +14,6 @@ import android.widget.ListView;
 
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
-import com.levor.liferpgtasks.view.fragments.hero.EditHeroFragment;
 
 public class CharacteristicsFragment extends DefaultFragment {
     private ListView listView;
@@ -28,8 +27,9 @@ public class CharacteristicsFragment extends DefaultFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle b = new Bundle();
-                b.putSerializable(DetailedCharacteristicFragment.CHARACTERISTIC_TITLE
-                        , getController().getCharacteristicsTitleAndLevelAsArray()[position].split(" ")[0]);
+                String charTitle = getController().getCharacteristicsTitleAndLevelAsArray()[position].split(" ")[0];
+                b.putSerializable(DetailedCharacteristicFragment.CHARACTERISTIC_ID
+                        , getController().getCharacteristicByTitle(charTitle).getId());
                 DefaultFragment f = new DetailedCharacteristicFragment();
                 getCurrentActivity().showChildFragment(f, b);
             }
@@ -55,6 +55,9 @@ public class CharacteristicsFragment extends DefaultFragment {
         switch (item.getItemId()){
             case R.id.show_chart:
                 getCurrentActivity().showChildFragment(new CharacteristicsChartFragment(), null);
+                return true;
+            case R.id.add:
+                getCurrentActivity().showChildFragment(new EditCharacteristicFragment(), null);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

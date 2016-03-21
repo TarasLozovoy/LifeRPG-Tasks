@@ -24,9 +24,10 @@ import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class AddSkillFragment extends DataDependantFrament {
-    public static final String RECEIVED_CHARACTERISTIC_TITLE_TAG = "received_characteristic_title_tag";
+    public static final String RECEIVED_CHARACTERISTIC_ID_TAG = "received_characteristic_title_tag";
 
     protected final String SKILL_TITLE_TAG = "skill_title_tag";
     protected final String KEY_CHARACTERISTIC_TITLE = "key_characteristic_title";
@@ -35,7 +36,7 @@ public class AddSkillFragment extends DataDependantFrament {
     protected EditText titleEditText;
     protected TextView relatedCharacteristicsTextView;
 
-    protected ArrayList<String> keyCharacteristicsTitleList = new ArrayList<>();
+    protected ArrayList<UUID> keyCharacteristicsIdList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,12 +51,12 @@ public class AddSkillFragment extends DataDependantFrament {
             public void onClick(View v) {
                 KeyCharacteristicsSelectionDialog dialog = new KeyCharacteristicsSelectionDialog();
                 Bundle b = new Bundle();
-                b.putStringArrayList(KeyCharacteristicsSelectionDialog.CHARS_LIST, keyCharacteristicsTitleList);
+                b.putStringArrayList(KeyCharacteristicsSelectionDialog.CHARS_LIST, convertIdsToTitles());
                 dialog.setArguments(b);
                 dialog.setListener(new KeyCharacteristicsSelectionDialog.KeyCharacteristicsChangedListener() {
                     @Override
                     public void onChanged(ArrayList<String> charsTitles) {
-                        keyCharacteristicsTitleList = charsTitles;
+                        convertTitlesToIds(charsTitles);
                         updateRelatedCharacteristicsView();
                     }
                 });
@@ -63,9 +64,9 @@ public class AddSkillFragment extends DataDependantFrament {
             }
         });
 
-        String title;
-        if (getArguments()!= null && (title = getArguments().getString(RECEIVED_CHARACTERISTIC_TITLE_TAG)) != null){
-            keyCharacteristicsTitleList.add(title);
+        UUID uuid;
+        if (getArguments()!= null && (uuid = (UUID) getArguments().getSerializable(RECEIVED_CHARACTERISTIC_ID_TAG)) != null){
+            keyCharacteristicsIdList.add(uuid);
         }
         if (savedInstanceState != null) {
             titleEditText.setText(savedInstanceState.getString(SKILL_TITLE_TAG));
@@ -93,9 +94,8 @@ public class AddSkillFragment extends DataDependantFrament {
     @Override
     public void onPause() {
         super.onPause();
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (getView() != null) {
-            imm.hideSoftInputFromWindow(getView().getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+            getCurrentActivity().showSoftKeyboard(false, getView());
         }
     }
 
@@ -111,7 +111,7 @@ public class AddSkillFragment extends DataDependantFrament {
             case R.id.ok_menu_item:
                 if (titleEditText.getText().toString().equals("")){
                     Toast.makeText(getContext(), getString(R.string.empty_skill_title_error), Toast.LENGTH_SHORT).show();
-                } else if (keyCharacteristicsTitleList.isEmpty()){
+                } else if (keyCharacteristicsIdList.isEmpty()){
                     Toast.makeText(getContext(), getString(R.string.no_key_characteristic_error), Toast.LENGTH_SHORT).show();
                 } else if (getController().getSkillByTitle(titleEditText.getText().toString()) != null){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -145,14 +145,32 @@ public class AddSkillFragment extends DataDependantFrament {
         super.onSaveInstanceState(outState);
     }
 
+    private ArrayList<String> convertIdsToTitles() {
+        ArrayList<String> titles = new ArrayList<>();
+        for (UUID id : keyCharacteristicsIdList) {
+            titles.add(getController().getCharacteristicByID(id).getTitle());
+        }
+        return titles;
+    }
+
+    private void convertTitlesToIds(List<String> titles) {
+        keyCharacteristicsIdList.clear();
+        for (String s : titles) {
+            keyCharacteristicsIdList.add(getController().getCharacteristicByTitle(s).getId());
+        }
+    }
+
     private void updateRelatedCharacteristicsView(){
         StringBuilder sb = new StringBuilder();
-        if (keyCharacteristicsTitleList.isEmpty()) {
+        if (keyCharacteristicsIdList.isEmpty()) {
             sb.append(getString(R.string.key_characteristic_empty));
         } else {
             sb.append(getString(R.string.key_characteristic))
                     .append(" ");
-            for (String s : keyCharacteristicsTitleList) {
+            for (UUID id : keyCharacteristicsIdList) {
+                Characteristic keyChar = getController().getCharacteristicByID(id);
+                if (keyChar == null) continue;
+                String s = keyChar.getTitle();
                 sb.append(s)
                         .append(", ");
             }
@@ -168,8 +186,8 @@ public class AddSkillFragment extends DataDependantFrament {
 
     protected void finish(String title, String message) {
         List<Characteristic> chars = new ArrayList<>();
-        for (String s : keyCharacteristicsTitleList) {
-            chars.add(getController().getCharacteristicByTitle(s));
+        for (UUID id : keyCharacteristicsIdList) {
+            chars.add(getController().getCharacteristicByID(id));
         }
         getController().addSkill(title, chars);
         Toast.makeText(getCurrentActivity(), message, Toast.LENGTH_LONG).show();

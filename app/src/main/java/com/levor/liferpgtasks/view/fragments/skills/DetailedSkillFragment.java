@@ -146,7 +146,9 @@ public class DetailedSkillFragment extends DataDependantFrament {
             sb.append(ch.getTitle())
                     .append(", ");
         }
-        sb.delete(sb.length() - 2, sb.length() - 1);
+        if (sb.length() > 2) {
+            sb.delete(sb.length() - 2, sb.length() - 1);
+        }
         keyCharTV.setText(sb.toString());
         levelValue.setText(String.valueOf(currentSkill.getLevel()));
         sublevelValue.setText(sublevelString);

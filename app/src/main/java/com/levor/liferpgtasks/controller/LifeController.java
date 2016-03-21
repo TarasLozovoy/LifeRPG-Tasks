@@ -167,8 +167,16 @@ public class LifeController {
         return lifeEntity.getCharacteristicByTitle(title);
     }
 
+    public Characteristic getCharacteristicByID(UUID id) {
+        return lifeEntity.getCharacteristicById(id);
+    }
+
     public ArrayList<Skill> getSkillsByCharacteristic(Characteristic ch) {
         return lifeEntity.getSkillsByCharacteristic(ch);
+    }
+
+    public void updateCharacteristic(Characteristic ch) {
+        lifeEntity.updateCharacteristic(ch);
     }
 
     public Task getTaskByID(UUID id) {
@@ -194,6 +202,18 @@ public class LifeController {
         performBackUpToDropBox();
     }
 
+    public void removeCharacteristic(Characteristic ch) {
+        List<Skill> affectedSkils = getSkillsByCharacteristic(ch);
+        for (Skill sk : affectedSkils) {
+            sk.removeKeyCharacteristic(ch);
+        }
+        lifeEntity.removeCharacteristic(ch);
+    }
+
+    public void addCharacteristic(Characteristic characteristic) {
+        lifeEntity.addCharacteristic(characteristic);
+    }
+
     public boolean performTask(Task task){
         Hero hero = lifeEntity.getHero();
         task.setUndonable(true);
@@ -210,7 +230,7 @@ public class LifeController {
             if (sk == null) continue;
             if (sk.increaseSublevel(finalXP)){
                 for (Characteristic ch : sk.getKeyCharacteristicsList()) {
-                    lifeEntity.updateCharacteristic(ch);
+                    updateCharacteristic(ch);
                 }
             }
             updateSkill(sk);
@@ -271,7 +291,7 @@ public class LifeController {
             if (sk == null) continue;
             if (sk.decreaseSublevel(finalXP)){
                 for (Characteristic ch : sk.getKeyCharacteristicsList()) {
-                    lifeEntity.updateCharacteristic(ch);
+                    updateCharacteristic(ch);
                 }
             }
             updateSkill(sk);
@@ -736,9 +756,6 @@ public class LifeController {
 
     public void onDBFileUpdated(boolean isFileDeleted) {
         lifeEntity.onDBFileUpdated(isFileDeleted);
-        if (isFileDeleted) {
-            lifeEntity.resetMisc();
-        }
         initAchievements();
         initStatistics();
 

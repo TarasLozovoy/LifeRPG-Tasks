@@ -48,6 +48,7 @@ public class Skill {
     }
 
     public List<Characteristic> getKeyCharacteristicsList() {
+        keyCharacteristicsList.removeAll(Collections.singleton(null));
         return keyCharacteristicsList;
     }
 
@@ -75,7 +76,7 @@ public class Skill {
         Collections.sort(keyCharacteristicsList, Characteristic.LEVEL_COMPARATOR);
         StringBuilder sb = new StringBuilder();
         for (Characteristic ch : keyCharacteristicsList) {
-            sb.append(ch.getTitle())
+            sb.append(ch.getId().toString())
                     .append("::");
         }
         return sb.toString();

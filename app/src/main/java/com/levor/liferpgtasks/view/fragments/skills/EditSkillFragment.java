@@ -33,7 +33,7 @@ public class EditSkillFragment extends AddSkillFragment {
         currentSkill = getController().getSkillByID((UUID) getArguments().get(EDIT_SKILL_UUID_TAG));
         titleEditText.setText(currentSkill.getTitle());
         for (Characteristic ch : currentSkill.getKeyCharacteristicsList()) {
-            keyCharacteristicsTitleList.add(ch.getTitle());
+            keyCharacteristicsIdList.add(ch.getId());
         }
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle("Edit skill");
@@ -53,7 +53,7 @@ public class EditSkillFragment extends AddSkillFragment {
             case R.id.ok_menu_item:
                 if (titleEditText.getText().toString().equals("")){
                     Toast.makeText(getContext(), getString(R.string.empty_skill_title_error), Toast.LENGTH_SHORT).show();
-                } else if (keyCharacteristicsTitleList.isEmpty()){
+                } else if (keyCharacteristicsIdList.isEmpty()){
                     Toast.makeText(getContext(), getString(R.string.no_key_characteristic_error), Toast.LENGTH_SHORT).show();
                 } else if (getController().getSkillByTitle(titleEditText.getText().toString()) != null
                         && !getController().getSkillByTitle(titleEditText.getText().toString()).equals(currentSkill)){
@@ -93,7 +93,7 @@ public class EditSkillFragment extends AddSkillFragment {
 
     private void removeSkill(){
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-        alert.setTitle(getString(R.string.skill_updated_message) + " " + currentSkill.getTitle())
+        alert.setTitle(currentSkill.getTitle())
                 .setMessage(getString(R.string.removing_skill_message))
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
@@ -116,8 +116,8 @@ public class EditSkillFragment extends AddSkillFragment {
         getCurrentActivity().showSoftKeyboard(false, getView());
         currentSkill.setTitle(title);
         currentSkill.removeAllKeyCharacteristics();
-        for (String s : keyCharacteristicsTitleList) {
-            currentSkill.addKeyCharacteristic(getController().getCharacteristicByTitle(s));
+        for (UUID id : keyCharacteristicsIdList) {
+            currentSkill.addKeyCharacteristic(getController().getCharacteristicByID(id));
         }
         getController().updateSkill(currentSkill);
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();

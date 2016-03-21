@@ -27,11 +27,17 @@ public class SkillsCursorWrapper extends CursorWrapper {
         int level = getInt(getColumnIndex(SkillsTable.Cols.LEVEL));
         double sublevel = getFloat(getColumnIndex(SkillsTable.Cols.SUBLEVEL));
 
+
+
         List<Characteristic> chars = new ArrayList<>();
         String[] charsArray = keyCharString.split("::");
         for (String s : charsArray) {
             if (s.equals("")) continue;
-            chars.add(lifeEntity.getCharacteristicByTitle(s));
+            Characteristic characteristic = lifeEntity.getCharacteristicByTitle(s);
+            if (characteristic == null) {
+                characteristic = lifeEntity.getCharacteristicById(UUID.fromString(s));
+            }
+            chars.add(characteristic);
         }
         return new Skill(title, level, sublevel, UUID.fromString(uuid), chars);
     }

@@ -3,6 +3,9 @@ package com.levor.liferpgtasks.view.fragments.characteristics;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,10 +23,10 @@ import com.levor.liferpgtasks.view.fragments.skills.DetailedSkillFragment;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.UUID;
 
 public class DetailedCharacteristicFragment extends DefaultFragment {
-    public final static String CHARACTERISTIC_TITLE = "characteristic_title";
+    public final static String CHARACTERISTIC_ID = "characteristic_id";
 
     private ListView listView;
 
@@ -36,22 +39,20 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
         View v = inflater.inflate(R.layout.fragment_detailed_characteristic, container, false);
         listView = (ListView) v;
         View header = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.detailed_characteristic_header, null);
-        currentCharacteristic = getController().getCharacteristicByTitle(getArguments().getString(CHARACTERISTIC_TITLE));
-        getCurrentActivity().setActionBarTitle(currentCharacteristic.getTitle());
+        currentCharacteristic = getController().getCharacteristicByID((UUID) getArguments().get(CHARACTERISTIC_ID));
 
         TextView levelValue = (TextView) header.findViewById(R.id.level_value);
         TextView characteristicTitle = (TextView) header.findViewById(R.id.characteristic_title);
         Button addSkillButton = (Button) header.findViewById(R.id.add_skill_button);
 
         characteristicTitle.setText(currentCharacteristic.getTitle());
-        getCurrentActivity().showActionBarHomeButtonAsBack(true);
         levelValue.setText(Integer.toString(currentCharacteristic.getLevel()));
 
         addSkillButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle b = new Bundle();
-                b.putSerializable(AddSkillFragment.RECEIVED_CHARACTERISTIC_TITLE_TAG, currentCharacteristic.getTitle());
+                b.putSerializable(AddSkillFragment.RECEIVED_CHARACTERISTIC_ID_TAG, currentCharacteristic.getId());
                 getCurrentActivity().showChildFragment(new AddSkillFragment(), b);
             }
         });
@@ -69,6 +70,10 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
                 getCurrentActivity().showChildFragment(f, b);
             }
         });
+
+        setHasOptionsMenu(true);
+        getCurrentActivity().setActionBarTitle(currentCharacteristic.getTitle());
+        getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return v;
     }
 
@@ -76,6 +81,25 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Detailed Characteristic Fragment");
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_detailed_characteristic, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.edit_characteristic:
+                Bundle b = new Bundle();
+                b.putSerializable(EditCharacteristicFragment.CHARACTERISTIC_TAG, currentCharacteristic.getId());
+                getCurrentActivity().showChildFragment(new EditCharacteristicFragment(), b);
+                return true;
+            default:
+                return false;
+        }
     }
 
     private void createAdapter(){

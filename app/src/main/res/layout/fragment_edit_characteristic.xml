@@ -18,28 +18,10 @@
             style="@style/LifeRPGTextStyle" />
 
         <EditText
-            android:id="@+id/new_skill_title_edit_text"
+            android:id="@+id/new_characteristic_title_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/new_skill_title_edit_text" />
+            android:hint="@string/new_characteristic_title_edit_text" />
     </LinearLayout>
-
-    <View style="@style/HorizontalDivider"/>
-
-    <LinearLayout
-        android:id="@+id/add_characteristic_ll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/key_characteristic"
-            style="@style/LifeRPGTextInListStyle"
-            android:id="@+id/related_characteristics_text_view"/>
-    </LinearLayout>
-
-    <View style="@style/HorizontalDivider"/>
 
 </LinearLayout>

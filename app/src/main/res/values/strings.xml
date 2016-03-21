@@ -138,14 +138,14 @@
     <!-- -->
 
     <!-- Skills-->
-    <string name="new_skill_title">Title:</string>
+    <string name="new_item_title">Title:</string>
     <string name="new_skill_title_edit_text">type skill title</string>
     <string name="key_characteristic">Related characteristics:</string>
     <string name="key_characteristic_empty">Add related characteristics</string>
     <string name="create_new_skill">Add new skill</string>
     <string name="add_new_skill">New skill</string>
     <string name="new_skill">Add new skill</string>
-    <string name="edit_skill">Edit</string>
+    <string name="edit">Edit</string>
     <string name="increases">Increases: </string>
     <string name="tasks_enhancing_skill">Skill XP may be increased by performing next tasks:
     </string>
@@ -346,6 +346,11 @@
     <string name="current_sorting">Current sorting:</string>
     <string name="delete_all_finished_tasks">Delete all finished tasks</string>
     <string name="delete_all_finished_tasks_message">Are you really want to delete all finished tasks?</string>
+    <string name="new_characteristic_title_edit_text">type new title</string>
+    <string name="empty_characteristic_title_error">Characteristics title can\'t be null</string>
+    <string name="duplicate_characteristic_title_error">Characteristic with same title already exists</string>
+    <string name="removing_characteristic_message">Are you really want to remove this characteristic?</string>
+    <string name="add_new_characteristic">New Characteristic</string>
     <!-- -->
 
 </resources>
