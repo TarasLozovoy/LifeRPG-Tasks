@@ -351,6 +351,7 @@
     <string name="duplicate_characteristic_title_error">Characteristic with same title already exists</string>
     <string name="removing_characteristic_message">Are you really want to remove this characteristic?</string>
     <string name="add_new_characteristic">New Characteristic</string>
+    <string name="select_key_characteristic">Select characteristics</string>
     <!-- -->
 
 </resources>

@@ -24,6 +24,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.model.Misc;
+import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.MainFragment;

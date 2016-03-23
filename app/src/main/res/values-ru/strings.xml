@@ -316,6 +316,7 @@
     <string name="duplicate_characteristic_title_error">Характеристика с таким названим уже существует</string>
     <string name="removing_characteristic_message">Вы действительно хотите удалить эту характеристику?</string>
     <string name="add_new_characteristic">Новая характеристика</string>
+    <string name="select_key_characteristic">Выберите хараткеристики</string>
     <!-- -->
 
 </resources>

@@ -52,7 +52,7 @@ public class KeyCharacteristicsSelectionDialog extends DialogFragment {
 
         final String[] items = characteristicsNames;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.skill_choosing)
+        builder.setTitle(R.string.select_key_characteristic)
                 .setMultiChoiceItems(items, characteristicsStates,
                         new DialogInterface.OnMultiChoiceClickListener() {
                             public void onClick(DialogInterface dialog, int item, boolean isChecked) {

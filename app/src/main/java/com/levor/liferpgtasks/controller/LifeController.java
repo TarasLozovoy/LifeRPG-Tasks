@@ -2,6 +2,7 @@ package com.levor.liferpgtasks.controller;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -410,6 +411,10 @@ public class LifeController {
     }
 
     public void setupTasksNotifications(){
+        // remove all previous notifications
+        NotificationManager nManager = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
+        nManager.cancelAll();
+
         for (Task t: getAllTasks()){
             updateTaskNotification(t);
         }
@@ -462,7 +467,7 @@ public class LifeController {
             return;
         }
         if (task.getRepeatability() != 0) {
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), repeatTime, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.RTC, cal.getTimeInMillis(), repeatTime, pendingIntent);
         }
     }
 
