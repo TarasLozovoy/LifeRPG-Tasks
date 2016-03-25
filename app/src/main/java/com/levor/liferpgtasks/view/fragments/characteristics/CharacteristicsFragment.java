@@ -27,7 +27,7 @@ public class CharacteristicsFragment extends DefaultFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle b = new Bundle();
-                String charTitle = getController().getCharacteristicsTitleAndLevelAsArray()[position].split(" ")[0];
+                String charTitle = getController().getCharacteristics().get(position).getTitle();
                 b.putSerializable(DetailedCharacteristicFragment.CHARACTERISTIC_ID
                         , getController().getCharacteristicByTitle(charTitle).getId());
                 DefaultFragment f = new DetailedCharacteristicFragment();
