@@ -116,8 +116,11 @@ public class MainActivity extends BackUpActivity{
                 switchToRootFragment(TASKS_FRAGMENT_ID);
 
                 Bundle b = new Bundle();
-                b.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, lifeController.getTaskByTitle(taskFromNotification).getId());
-                showChildFragment(new DetailedTaskFragment(), b);
+                Task t =  lifeController.getTaskByTitle(taskFromNotification);
+                if (t != null) {
+                    b.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, t.getId());
+                    showChildFragment(new DetailedTaskFragment(), b);
+                }
             }
         }
         setupInterstitialAds();
