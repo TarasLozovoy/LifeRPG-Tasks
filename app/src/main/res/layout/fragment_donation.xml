@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/save_zone_margin"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/purchase_premium_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/LifeRPGSettingsItemsStyle">
+
+        <ImageView
+            android:id="@+id/purchase_premium_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+        <TextView
+            android:id="@+id/purchase_premium_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toRightOf="@id/purchase_premium_arrow"
+            android:text="@string/purchase_premium_text" />
+    </RelativeLayout>
+
+
+    <View style="@style/HorizontalDivider" />
+
+    <RelativeLayout
+        android:id="@+id/donate_1_usd_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/LifeRPGSettingsItemsStyle">
+
+        <ImageView
+            android:id="@+id/donate_1_usd_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+        <TextView
+            android:id="@+id/donate_1_usd_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toRightOf="@id/donate_1_usd_arrow"
+            android:text="@string/donate_1_usd" />
+    </RelativeLayout>
+
+    <View style="@style/HorizontalDivider" />
+
+    <RelativeLayout
+        android:id="@+id/donate_2_usd_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/LifeRPGSettingsItemsStyle">
+
+        <ImageView
+            android:id="@+id/donate_2_usd_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+        <TextView
+            android:id="@+id/donate_2_usd_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toRightOf="@id/donate_2_usd_arrow"
+            android:text="@string/donate_2_usd" />
+    </RelativeLayout>
+
+    <View style="@style/HorizontalDivider" />
+
+    <RelativeLayout
+        android:id="@+id/donate_3_usd_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/LifeRPGSettingsItemsStyle">
+
+        <ImageView
+            android:id="@+id/donate_3_usd_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+        <TextView
+            android:id="@+id/donate_3_usd_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toRightOf="@id/donate_3_usd_arrow"
+            android:text="@string/donate_3_usd" />
+    </RelativeLayout>
+
+    <View style="@style/HorizontalDivider" />
+
+    <RelativeLayout
+        android:id="@+id/donate_5_usd_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/LifeRPGSettingsItemsStyle">
+
+        <ImageView
+            android:id="@+id/donate_5_usd_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+        <TextView
+            android:id="@+id/donate_5_usd_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toRightOf="@id/donate_5_usd_arrow"
+            android:text="@string/donate_5_usd" />
+    </RelativeLayout>
+
+    <View style="@style/HorizontalDivider" />
+
+</LinearLayout>

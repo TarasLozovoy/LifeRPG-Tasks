@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.levor.liferpgtasks.R;
@@ -31,6 +32,8 @@ public class SettingsFragment extends DefaultFragment {
     @Bind(R.id.statistics_layout)           View statisticsView;
     @Bind(R.id.achievements_layout)         View achievementsView;
     @Bind(R.id.export_import_db_layout)     View exportImportDBView;
+    @Bind(R.id.donate_layout)               View donateView;
+    @Bind(R.id.donate_text_view)            TextView donateTextView;
     @Bind(R.id.reset_layout)                View resetView;
     @Bind(R.id.about_layout)                View aboutView;
 
@@ -39,6 +42,8 @@ public class SettingsFragment extends DefaultFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_settings, container, false);
         ButterKnife.bind(this, v);
+
+        donateTextView.setText(getCurrentActivity().isPremium() ? getString(R.string.donate) : getString(R.string.remove_ads));
 
         statisticsView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +63,13 @@ public class SettingsFragment extends DefaultFragment {
             @Override
             public void onClick(View v) {
                 getCurrentActivity().showChildFragment(new ExportImportDBFragment(), null);
+            }
+        });
+
+        donateView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().showChildFragment(new DonationFragment(), null);
             }
         });
 

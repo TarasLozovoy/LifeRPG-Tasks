@@ -1,12 +1,20 @@
 package com.levor.liferpgtasks.view.activities;
 
+import android.app.PendingIntent;
 import android.app.Service;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
@@ -17,6 +25,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.android.vending.billing.IInAppBillingService;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -32,9 +41,15 @@ import com.levor.liferpgtasks.view.fragments.settings.SettingsFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.TasksFragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.EmptyStackException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.Stack;
 
@@ -43,6 +58,7 @@ public class MainActivity extends BackUpActivity{
     public final static int TASKS_FRAGMENT_ID = 1;
     public final static int SETTINGS_FRAGMENT_ID = 2;
     private static final String SELECTED_FRAGMENT_TAG = "selected_fragment_tag";
+    private static final String PREMIUM_BOUGHT_TAG = "premium_bought_tag";
 
     InterstitialAd performTaskAd;
     InterstitialAd charsChartAd;
@@ -55,6 +71,20 @@ public class MainActivity extends BackUpActivity{
     private int currentFragmentID;
 
     private long appClosingTime;
+    private IInAppBillingService mService;
+    private Map<String, String> availablePurchases = new HashMap<>();
+    private boolean premium = false;
+
+    private ServiceConnection mServiceConn = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+        }
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mService = IInAppBillingService.Stub.asInterface(service);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +153,8 @@ public class MainActivity extends BackUpActivity{
                 }
             }
         }
+        bindInAppPurchasesService();
+        queryAvailablePurchases();
         setupInterstitialAds();
         lifeController.checkTasksPerDay();
         lifeController.checkHabitGenerationForAllTasks();
@@ -164,6 +196,14 @@ public class MainActivity extends BackUpActivity{
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(SELECTED_FRAGMENT_TAG, currentFragmentID);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mService != null) {
+            unbindService(mServiceConn);
+        }
     }
 
     public LifeController getController(){
@@ -410,6 +450,7 @@ public class MainActivity extends BackUpActivity{
     }
 
     private void setupInterstitialAds() {
+        if(premium) return;
         performTaskAd = new InterstitialAd(this);
         performTaskAd.setAdUnitId(getString(R.string.interstitial_perform_task_banner_ad_unit_id));
         performTaskAd.setAdListener(new CustomAdListener());
@@ -436,6 +477,7 @@ public class MainActivity extends BackUpActivity{
     }
 
     public void showInterstitialAd(AdType type){
+        if(premium) return;
         InterstitialAd ad = null;
         int successShowRate = 0;
         switch (type) {
@@ -458,6 +500,131 @@ public class MainActivity extends BackUpActivity{
         } else if ((ad.isLoading() || !ad.isLoaded())
                 && lifeController.isInternetConnectionActive()){
             requestNewInterstitial(ad);
+        }
+    }
+
+    private void bindInAppPurchasesService() {
+        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+        serviceIntent.setPackage("com.android.vending");
+        bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+    }
+
+    private void queryAvailablePurchases() {
+        ArrayList<String> skuList = new ArrayList<>();
+        skuList.add(getString(R.string.purchase_premium));
+        skuList.add(getString(R.string.purchase_1_donation));
+        skuList.add(getString(R.string.purchase_2_donation));
+        skuList.add(getString(R.string.purchase_3_donation));
+        skuList.add(getString(R.string.purchase_5_donation));
+        Bundle querySkus = new Bundle();
+        querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
+        new AsyncTask<Bundle, Void, Bundle>() {
+            @Override
+            protected Bundle doInBackground(Bundle... params) {
+                Bundle querySkus = params[0];
+                try {
+                    if (mService == null) {
+                        return null;
+                    }
+                    return mService.getSkuDetails(3, getPackageName(), "inapp", querySkus);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Bundle skuDetails) {
+                if (skuDetails == null) {
+                    queryAvailablePurchases();
+                    return;
+                }
+                int response = skuDetails.getInt("RESPONSE_CODE");
+                if (response == 0) {
+                    ArrayList<String> responseList = skuDetails.getStringArrayList("DETAILS_LIST");
+                    for (String thisResponse : responseList) {
+                        try {
+                            JSONObject object = new JSONObject(thisResponse);
+                            String sku = object.getString("productId");
+                            String price = object.getString("price");
+                            availablePurchases.put(sku, price);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (!availablePurchases.containsKey(getString(R.string.purchase_premium))) {
+                        premium = true;
+                        switchPremiumMode(premium);
+                    }
+                }
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, querySkus);
+    }
+
+    private void checkForPremium() {
+        premium = getController().getSharedPreferences().getBoolean(PREMIUM_BOUGHT_TAG, false);
+        try {
+            Bundle ownedItems = mService.getPurchases(3, getPackageName(), "inapp", null);
+            int response = ownedItems.getInt("RESPONSE_CODE");
+            if (response == 0) {
+                ArrayList<String> ownedSkus = ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
+                if (ownedSkus != null) {
+                    if (ownedSkus.contains(getString(R.string.purchase_premium))) {
+                        switchPremiumMode(true);
+                    } else {
+                        switchPremiumMode(false);
+                    }
+                }
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void switchPremiumMode(boolean isPremium) {
+        if (premium != isPremium) {
+            premium = isPremium;
+            getController().getSharedPreferences().edit().putBoolean(PREMIUM_BOUGHT_TAG, premium).apply();
+            if(!isPremium) {
+                setupInterstitialAds();
+            }
+        }
+    }
+
+    public boolean isPremium() {
+        return premium;
+    }
+
+    public String getPremiumPrice() {
+        String price = availablePurchases.get(getString(R.string.purchase_premium));
+        if (price == null || price.isEmpty()) {
+            return "$2";
+        } else {
+            return price;
+        }
+    }
+
+    public String getPurchasePrice(String itemKey, String defaultValue) {
+        String price = availablePurchases.get(itemKey);
+        if (price == null || price.isEmpty()) {
+            return defaultValue;
+        } else {
+            return price;
+        }
+    }
+
+    public boolean performBuy(String itemKey, String developerPayload) {
+        try {
+            Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(),
+                    itemKey, "inapp", developerPayload);
+            PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
+            startIntentSenderForResult(pendingIntent.getIntentSender(),
+                    1001, new Intent(), Integer.valueOf(0), Integer.valueOf(0),
+                    Integer.valueOf(0));
+            return true;
+        } catch (RemoteException |IntentSender.SendIntentException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

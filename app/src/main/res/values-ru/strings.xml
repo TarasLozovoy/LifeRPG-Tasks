@@ -317,6 +317,16 @@
     <string name="removing_characteristic_message">Вы действительно хотите удалить эту характеристику?</string>
     <string name="add_new_characteristic">Новая характеристика</string>
     <string name="select_key_characteristic">Выберите хараткеристики</string>
+    <string name="donate">Поддержать проект</string>
+    <string name="remove_ads">Убрать рекламу</string>
+    <string name="purchase_premium_text">Купить премиум и убрать всю рекламу</string>
+    <string name="donate_1_usd">Пожертвовать $1</string>
+    <string name="donate_2_usd">Пожертвовать $2</string>
+    <string name="donate_3_usd">Пожертвовать $3</string>
+    <string name="donate_5_usd">Пожертвовать $5</string>
+    <string name="donate_N_usd">Пожертвовать</string>
+    <string name="purchase_unsuccessful">Ошибка во время покупки. Пожалуйста, попробуйте еще раз.</string>
+    <string name="purchase_successful">Операция проведена успешно.</string>
     <!-- -->
 
 </resources>

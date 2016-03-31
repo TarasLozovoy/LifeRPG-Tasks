@@ -316,6 +316,14 @@
     <string name="authorization_required">Authorization required</string>
     <!-- -->
 
+    <!-- Purchases -->
+    <string name="purchase_premium">premium</string>
+    <string name="purchase_1_donation">1donation</string>
+    <string name="purchase_2_donation">2donation</string>
+    <string name="purchase_3_donation">3donation</string>
+    <string name="purchase_5_donation">5donation</string>
+    <!-- -->
+
     <!-- Other-->
     <string name="ok">OK</string>
     <string name="remove">Delete</string>
@@ -352,6 +360,16 @@
     <string name="removing_characteristic_message">Are you really want to remove this characteristic?</string>
     <string name="add_new_characteristic">New Characteristic</string>
     <string name="select_key_characteristic">Select characteristics</string>
+    <string name="donate">Support project</string>
+    <string name="remove_ads">Remove Ads</string>
+    <string name="purchase_premium_text">Purchase premium and remove all ads</string>
+    <string name="donate_1_usd">Donate $1</string>
+    <string name="donate_2_usd">Donate $2</string>
+    <string name="donate_3_usd">Donate $3</string>
+    <string name="donate_5_usd">Donate $5</string>
+    <string name="donate_N_usd">Donate</string>
+    <string name="purchase_unsuccessful">Purchase unsuccessful. Please try agaian.</string>
+    <string name="purchase_successful">Purchase successful</string>
     <!-- -->
 
 </resources>

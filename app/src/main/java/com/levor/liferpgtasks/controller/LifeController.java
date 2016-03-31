@@ -511,7 +511,7 @@ public class LifeController {
             statisticsNumbers.put(TOTAL_SKILLS_XP_TAG, numbers.get(4));
             statisticsNumbers.put(ACHIEVEMENTS_COUNT_TAG, numbers.get(5));
         } else {
-            SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+            SharedPreferences prefs = getSharedPreferences();
             statisticsNumbers.put(PERFORMED_TASKS_TAG, prefs.getFloat(PERFORMED_TASKS_TAG, 0f));
             statisticsNumbers.put(TOTAL_TASKS_NUMBER_TAG, prefs.getFloat(TOTAL_TASKS_NUMBER_TAG, 0f));
             statisticsNumbers.put(FINISHED_TASKS_NUMBER_TAG, prefs.getFloat(FINISHED_TASKS_NUMBER_TAG, 0f));
@@ -577,7 +577,7 @@ public class LifeController {
 
         //moving from preferences to DB (from ver.2)
         if (defaultString == null) {
-            SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+            SharedPreferences prefs = getSharedPreferences();
             defaultString = prefs.getString(ACHIEVEMENTS_TAG, null);
             String imagePath = prefs.getString(HERO_ICON_NAME_TAG, null);
             if (imagePath != null){
@@ -707,19 +707,21 @@ public class LifeController {
     }
 
     public boolean isFirstRun(){
-        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-        return prefs.getBoolean(FIRTS_RUN_TAG, true);
+        return getSharedPreferences().getBoolean(FIRTS_RUN_TAG, true);
     }
 
     public void setFirstRun(boolean isFirst){
-        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-        prefs.edit().putBoolean(FIRTS_RUN_TAG, isFirst).apply();
+        getSharedPreferences().edit().putBoolean(FIRTS_RUN_TAG, isFirst).apply();
     }
 
     public void updateMiscToDB(){
         updateAchievementsToMisc();
         updateStatisticsToMisc();
         lifeEntity.updateMiscToDB();
+    }
+
+    public SharedPreferences getSharedPreferences() {
+        return context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
     }
 
     public Map<LocalDate, Integer> getTasksPerDayMap() {
@@ -767,8 +769,7 @@ public class LifeController {
     }
 
     public boolean isDropBoxAutoBackupEnabled(){
-        SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-        return prefs.getBoolean(DROPBOX_AUTO_BACKUP_ENABLED, false);
+        return getSharedPreferences().getBoolean(DROPBOX_AUTO_BACKUP_ENABLED, false);
     }
 
     private void performBackUpToDropBox(){
