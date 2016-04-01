@@ -49,6 +49,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Stack;
@@ -73,6 +74,7 @@ public class MainActivity extends BackUpActivity{
     private long appClosingTime;
     private IInAppBillingService mService;
     private Map<String, String> availablePurchases = new HashMap<>();
+    private Map<String, String> purchasedItemsData = new HashMap<>();
     private boolean premium = false;
 
     private ServiceConnection mServiceConn = new ServiceConnection() {
@@ -83,6 +85,8 @@ public class MainActivity extends BackUpActivity{
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mService = IInAppBillingService.Stub.asInterface(service);
+            queryAvailablePurchases();
+            checkForPremium();
         }
     };
 
@@ -154,7 +158,6 @@ public class MainActivity extends BackUpActivity{
             }
         }
         bindInAppPurchasesService();
-        queryAvailablePurchases();
         setupInterstitialAds();
         lifeController.checkTasksPerDay();
         lifeController.checkHabitGenerationForAllTasks();
@@ -552,10 +555,6 @@ public class MainActivity extends BackUpActivity{
                             e.printStackTrace();
                         }
                     }
-                    if (!availablePurchases.containsKey(getString(R.string.purchase_premium))) {
-                        premium = true;
-                        switchPremiumMode(premium);
-                    }
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, querySkus);
@@ -575,8 +574,18 @@ public class MainActivity extends BackUpActivity{
                         switchPremiumMode(false);
                     }
                 }
+
+                //adding list of purchased items details
+                List<String> purchasedItems = ownedItems.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
+                if (purchasedItems == null) return;
+                for (String purchaseData : purchasedItems) {
+                    JSONObject o = new JSONObject(purchaseData);
+                    String purchaseToken = o.optString("purchaseToken");
+                    String itemID = o.optString("productId");
+                    purchasedItemsData.put(itemID, purchaseToken);
+                }
             }
-        } catch (RemoteException e) {
+        } catch (RemoteException | JSONException e) {
             e.printStackTrace();
         }
     }
@@ -604,8 +613,8 @@ public class MainActivity extends BackUpActivity{
         }
     }
 
-    public String getPurchasePrice(String itemKey, String defaultValue) {
-        String price = availablePurchases.get(itemKey);
+    public String getPurchasePrice(String itemID, String defaultValue) {
+        String price = availablePurchases.get(itemID);
         if (price == null || price.isEmpty()) {
             return defaultValue;
         } else {
@@ -613,8 +622,13 @@ public class MainActivity extends BackUpActivity{
         }
     }
 
+    public String getPurchaseToken(String itemID) {
+        return purchasedItemsData.get(itemID);
+    }
+
     public boolean performBuy(String itemKey, String developerPayload) {
         try {
+            if (mService == null) return false;
             Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(),
                     itemKey, "inapp", developerPayload);
             PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
