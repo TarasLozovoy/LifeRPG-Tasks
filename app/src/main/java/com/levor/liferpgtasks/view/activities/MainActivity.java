@@ -628,6 +628,16 @@ public class MainActivity extends BackUpActivity{
         }
     }
 
+    public int consumePurchase(String token) {
+        try {
+            int response = mService.consumePurchase(3, getPackageName(), token);
+            return response;
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
     public enum AdType { PERFORM_TASK, CHARACTERISTICS_CHART, TASKS_PER_DAY_CHART}
 
     private class CustomAdListener extends AdListener {

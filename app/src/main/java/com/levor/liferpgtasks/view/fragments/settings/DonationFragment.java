@@ -125,10 +125,13 @@ public class DonationFragment extends DefaultFragment {
                     JSONObject jo = new JSONObject(purchaseData);
                     String sku = jo.getString("productId");
                     String payload = jo.getString("developerPayload");
+                    String purchaseToken = jo.getString("purchaseToken");
                     if (developerPayload.equals(payload)) {
                         if (sku.equals(getString(R.string.purchase_premium))) {
                             getCurrentActivity().switchPremiumMode(true);
                             purchasePremiumLayout.setVisibility(View.GONE);
+                        } else {
+                            getCurrentActivity().consumePurchase(purchaseToken);
                         }
                         Toast.makeText(getCurrentActivity(), getString(R.string.purchase_successful), Toast.LENGTH_LONG).show();
                     } else {
