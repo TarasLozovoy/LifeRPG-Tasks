@@ -628,14 +628,19 @@ public class MainActivity extends BackUpActivity{
         }
     }
 
-    public int consumePurchase(String token) {
-        try {
-            int response = mService.consumePurchase(3, getPackageName(), token);
-            return response;
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        return -1;
+    public void consumePurchase(String token) {
+
+        new AsyncTask<String, Void, Void>() {
+            @Override
+            protected Void doInBackground(String... params) {
+                try {
+                    mService.consumePurchase(3, getPackageName(), params[0]);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, token);
     }
 
     public enum AdType { PERFORM_TASK, CHARACTERISTICS_CHART, TASKS_PER_DAY_CHART}
