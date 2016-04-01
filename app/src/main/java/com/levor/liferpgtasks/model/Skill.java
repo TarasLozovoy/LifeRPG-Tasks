@@ -90,7 +90,7 @@ public class Skill {
         if (sublevel >= ((double)level)){
             sublevel = sublevel - ((double) level);
             level++;
-            for (Characteristic ch : keyCharacteristicsList) {
+            for (Characteristic ch : getKeyCharacteristicsList()) {
                 ch.increaseLevelByN(1 + level / 10);
             }
             return true;
@@ -104,7 +104,7 @@ public class Skill {
     public boolean decreaseSublevel(double value){
         sublevel -= value;
         if (sublevel < 0.0d) {
-            for (Characteristic ch : keyCharacteristicsList) {
+            for (Characteristic ch : getKeyCharacteristicsList()) {
                 ch.increaseLevelByN(-(1 + level / 10));
             }
             level --;

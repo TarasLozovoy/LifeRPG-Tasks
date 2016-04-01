@@ -99,14 +99,16 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
         boolean isTaskFinished = task.getRepeatability() == 0;
         if (task.getDateMode() != Task.DateMode.TERMLESS || isTaskFinished) {
             Date date = isTaskFinished ? task.getFinishDate() : task.getDate();
-            StringBuilder sb = new StringBuilder();
-            sb.append(DateFormat.format(Task.getDateFormatting(), date));
-            if (task.getDateMode() == Task.DateMode.SPECIFIC_TIME || isTaskFinished) {
-                sb.append(" ");
-                sb.append(DateFormat.format(Task.getTimeFormatting(), date));
+            if (date != null) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(DateFormat.format(Task.getDateFormatting(), date));
+                if (task.getDateMode() == Task.DateMode.SPECIFIC_TIME || isTaskFinished) {
+                    sb.append(" ");
+                    sb.append(DateFormat.format(Task.getTimeFormatting(), date));
+                }
+                listItemDateTextView.setVisibility(View.VISIBLE);
+                listItemDateTextView.setText(sb.toString());
             }
-            listItemDateTextView.setVisibility(View.VISIBLE);
-            listItemDateTextView.setText(sb.toString());
         } else {
             listItemDateTextView.setVisibility(View.GONE);
         }
