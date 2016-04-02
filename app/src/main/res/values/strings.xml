@@ -370,6 +370,7 @@
     <string name="donate_N_usd">Donate</string>
     <string name="purchase_unsuccessful">Purchase unsuccessful. Please try agaian.</string>
     <string name="purchase_successful">Purchase successful</string>
+    <string name="level_short">lvl</string>
     <!-- -->
 
 </resources>

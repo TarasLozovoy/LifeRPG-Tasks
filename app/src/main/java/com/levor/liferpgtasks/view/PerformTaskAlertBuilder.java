@@ -11,8 +11,12 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.adapters.ShareDialogAdapter;
 import com.levor.liferpgtasks.controller.LifeController;
+import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.view.activities.MainActivity;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class PerformTaskAlertBuilder extends AlertDialog.Builder {
@@ -25,12 +29,45 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
         super(context);
         this.context = context;
         this.task = t;
+        StringBuilder sb = new StringBuilder();
+
         lifeController = LifeController.getInstance(context.getApplicationContext());
+        Map<Skill, Integer> skillsLevels = new HashMap<>();
+        for (Skill sk : task.getRelatedSkills()) {
+            skillsLevels.put(sk, sk.getLevel());
+        }
+
+        //performing task
+        boolean isHeroLevelIncreased = lifeController.performTask(task);
+        if (isHeroLevelIncreased) {
+            Toast.makeText(context, context.getString(R.string.hero_level_increased, lifeController.getHeroName()),
+                    Toast.LENGTH_LONG).show();
+        }
+
         double xp = lifeController.getHero().getBaseXP() * t.getMultiplier();
+        sb.append(root.getResources().getString(R.string.task_performed))
+                .append("\n")
+                .append(root.getResources().getString(R.string.XP_gained, xp));
+        for (Map.Entry<Skill, Integer> pair : skillsLevels.entrySet()) {
+            Skill sk = pair.getKey();
+            int oldLevel = pair.getValue();
+            if (sk.getLevel() > oldLevel) {
+                sb.append("\n")
+                        .append("+")
+                        .append(sk.getLevel() - oldLevel)
+                        .append(context.getString(R.string.level_short))
+                        .append(" ")
+                        .append(sk.getTitle())
+                        .append("\n+")
+                        .append(sk.getKeyCharacteristicsGrowth() * (sk.getLevel() - oldLevel))
+                        .append(" ")
+                        .append(sk.getKeyCharacteristicsStringForUI());
+            }
+        }
+
         this.setCancelable(false)
                 .setTitle(t.getTitle())
-                .setMessage(root.getResources().getString(R.string.task_performed) + "\n" +
-                        root.getResources().getString(R.string.XP_gained, xp))
+                .setMessage(sb.toString())
                 .setNeutralButton(root.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

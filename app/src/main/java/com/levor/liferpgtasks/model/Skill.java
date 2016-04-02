@@ -72,12 +72,25 @@ public class Skill {
         keyCharacteristicsList.clear();
     }
 
-    public String getKeyCharacteristicsString() {
+    public String getKeyCharacteristicsStringForDB() {
         Collections.sort(keyCharacteristicsList, Characteristic.LEVEL_COMPARATOR);
         StringBuilder sb = new StringBuilder();
         for (Characteristic ch : keyCharacteristicsList) {
             sb.append(ch.getId().toString())
                     .append("::");
+        }
+        return sb.toString();
+    }
+
+    public String getKeyCharacteristicsStringForUI() {
+        Collections.sort(keyCharacteristicsList, Characteristic.LEVEL_COMPARATOR);
+        StringBuilder sb = new StringBuilder();
+        for (Characteristic ch : keyCharacteristicsList) {
+            sb.append(ch.getTitle().toString())
+                    .append(", ");
+        }
+        if (keyCharacteristicsList.size() > 0) {
+            sb.delete(sb.length() - 2, sb.length() - 1);
         }
         return sb.toString();
     }
@@ -91,7 +104,7 @@ public class Skill {
             sublevel = sublevel - ((double) level);
             level++;
             for (Characteristic ch : getKeyCharacteristicsList()) {
-                ch.increaseLevelByN(1 + level / 10);
+                ch.increaseLevelByN(getKeyCharacteristicsGrowth());
             }
             return true;
         }
@@ -105,13 +118,17 @@ public class Skill {
         sublevel -= value;
         if (sublevel < 0.0d) {
             for (Characteristic ch : getKeyCharacteristicsList()) {
-                ch.increaseLevelByN(-(1 + level / 10));
+                ch.increaseLevelByN(-getKeyCharacteristicsGrowth());
             }
             level --;
             sublevel = ((double) level) + sublevel;
             return true;
         }
         return false;
+    }
+
+    public int getKeyCharacteristicsGrowth() {
+        return 1 + level / 5;
     }
 
     public UUID getId() {

@@ -82,11 +82,11 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                 });
                 alertDialog.show();
 
-                boolean isHeroLevelIncreased = lifeController.performTask(task);
-                if (isHeroLevelIncreased) {
-                    Toast.makeText(activity, activity.getString(R.string.hero_level_increased, lifeController.getHeroName()),
-                            Toast.LENGTH_LONG).show();
-                }
+//                boolean isHeroLevelIncreased = lifeController.performTask(task);
+//                if (isHeroLevelIncreased) {
+//                    Toast.makeText(activity, activity.getString(R.string.hero_level_increased, lifeController.getHeroName()),
+//                            Toast.LENGTH_LONG).show();
+//                }
                 notifyDataSetChanged();
 
             }

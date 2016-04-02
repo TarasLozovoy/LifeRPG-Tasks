@@ -327,15 +327,15 @@ public class DetailedTaskFragment extends DataDependantFrament {
         });
         alertDialog.show();
 
-        boolean isHeroLevelIncreased = getController().performTask(currentTask);
+//        boolean isHeroLevelIncreased = getController().performTask(currentTask);
         setupRepeatability();
         setupTaskDate();
         setupNotificationTextView();
         setupHabitGenerationView();
-        if (isHeroLevelIncreased) {
-            Toast.makeText(getCurrentActivity(), getString(R.string.hero_level_increased,
-                    getController().getHeroName()), Toast.LENGTH_SHORT).show();
-        }
+//        if (isHeroLevelIncreased) {
+//            Toast.makeText(getCurrentActivity(), getString(R.string.hero_level_increased,
+//                    getController().getHeroName()), Toast.LENGTH_SHORT).show();
+//        }
     }
 
     private void undoTask(){

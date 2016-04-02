@@ -327,6 +327,7 @@
     <string name="donate_N_usd">Пожертвовать</string>
     <string name="purchase_unsuccessful">Ошибка во время покупки. Пожалуйста, попробуйте еще раз.</string>
     <string name="purchase_successful">Операция проведена успешно.</string>
+    <string name="level_short">ур.</string>
     <!-- -->
 
 </resources>

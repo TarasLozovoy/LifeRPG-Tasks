@@ -355,7 +355,7 @@ public class LifeEntity {
         values.put(SkillsTable.Cols.UUID, skill.getId().toString());
         values.put(SkillsTable.Cols.LEVEL, skill.getLevel());
         values.put(SkillsTable.Cols.SUBLEVEL, skill.getSublevel());
-        values.put(SkillsTable.Cols.KEY_CHARACTERISTC_TITLE, skill.getKeyCharacteristicsString());
+        values.put(SkillsTable.Cols.KEY_CHARACTERISTC_TITLE, skill.getKeyCharacteristicsStringForDB());
         return values;
     }
 
