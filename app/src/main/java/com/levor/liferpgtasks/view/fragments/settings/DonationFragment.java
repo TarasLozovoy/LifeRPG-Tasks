@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
@@ -66,6 +67,12 @@ public class DonationFragment extends DefaultFragment {
                 : getString(R.string.remove_ads));
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Donation Fragment");
     }
 
     private void registerListeners() {
@@ -133,6 +140,11 @@ public class DonationFragment extends DefaultFragment {
                         } else {
                             getCurrentActivity().consumePurchase(purchaseToken);
                         }
+                        getController().getGATracker().send(new HitBuilders.EventBuilder()
+                                .setCategory(getCurrentActivity().getString(R.string.GA_action))
+                                .setAction("Performed purchase of " + sku)
+                                .setValue(1)
+                                .build());
                         Toast.makeText(getCurrentActivity(), getString(R.string.purchase_successful), Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(getCurrentActivity(), getString(R.string.purchase_unsuccessful), Toast.LENGTH_LONG).show();

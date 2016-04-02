@@ -213,6 +213,11 @@ public class LifeController {
 
     public void addCharacteristic(Characteristic characteristic) {
         lifeEntity.addCharacteristic(characteristic);
+        getGATracker().send(new HitBuilders.EventBuilder()
+                .setCategory(context.getString(R.string.GA_action))
+                .setAction("Added characteristic: " + characteristic.getTitle())
+                .setValue(1)
+                .build());
     }
 
     public boolean performTask(Task task){
