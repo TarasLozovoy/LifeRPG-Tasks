@@ -9,7 +9,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.net.ConnectivityManager;
+import android.view.Display;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -781,5 +783,12 @@ public class LifeController {
         if (isDropBoxAutoBackupEnabled()){
             currentActivity.checkAndBackupToDropBox();
         }
+    }
+
+    public int getScreenWidth() {
+        Display display = currentActivity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        return size.x;
     }
 }

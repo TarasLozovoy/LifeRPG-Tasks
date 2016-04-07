@@ -10,9 +10,10 @@ import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.levor.liferpgtasks.adapters.CustomPagerAdapter;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.adapters.CustomPagerAdapter;
 import com.levor.liferpgtasks.view.fragments.characteristics.CharacteristicsFragment;
 import com.levor.liferpgtasks.view.fragments.hero.HeroFragment;
 import com.levor.liferpgtasks.view.fragments.skills.SkillsFragment;
@@ -29,9 +30,21 @@ public class MainFragment extends DefaultFragment{
         View v = inflater.inflate(R.layout.fragment_pager_with_tabs, container, false);
 
         tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.hero_fragment_name));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.characteristics_fragment_name));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.skills_fragment_name));
+
+        TabLayout.Tab heroTab = tabLayout.newTab().setText(R.string.hero_fragment_name);
+        TabLayout.Tab characteristicsTab = tabLayout.newTab().setText(R.string.characteristics_fragment_name);
+        TabLayout.Tab skillsTab = tabLayout.newTab().setText(R.string.skills_fragment_name);
+
+        if (getController().getScreenWidth() < 500) {
+            View customView = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.tab_in_fragment_layout, null);
+            TextView tv = (TextView) customView.findViewById(R.id.custom_text);
+            tv.setText(R.string.characteristics_fragment_name);
+            characteristicsTab.setCustomView(customView);
+        }
+
+        tabLayout.addTab(heroTab);
+        tabLayout.addTab(characteristicsTab);
+        tabLayout.addTab(skillsTab);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager) v.findViewById(R.id.pager);
