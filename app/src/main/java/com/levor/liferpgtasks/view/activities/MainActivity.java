@@ -14,6 +14,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.IBinder;
+import android.os.PersistableBundle;
 import android.os.RemoteException;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -181,6 +182,9 @@ public class MainActivity extends BackUpActivity{
         if (lifeController.isFirstRun()){
             showCoachmarks();
         }
+        if (getCurrentFragmentsStack().isEmpty()) {
+            switchToRootFragment(currentFragmentID);
+        }
     }
 
     @Override
@@ -268,7 +272,7 @@ public class MainActivity extends BackUpActivity{
             showRootFragment(fragmentID);
             return;
         }
-        if (getCurrentFragmentsStack().isEmpty()) return;
+//        if (getCurrentFragmentsStack().isEmpty()) return;
         currentFragmentID = fragmentID;
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
@@ -323,7 +327,9 @@ public class MainActivity extends BackUpActivity{
 
     @Override
     public void onBackPressed() {
-        if (getCurrentFragment().onBackPressed()) return;
+        if (getCurrentFragmentsStack().isEmpty()) {
+            switchToRootFragment(currentFragmentID);
+        } else if (getCurrentFragment().onBackPressed()) return;
         if (getCurrentFragmentsStack().size() == 1) {
             if (System.currentTimeMillis() - appClosingTime > 2500){
                 appClosingTime = System.currentTimeMillis();
