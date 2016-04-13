@@ -31,32 +31,32 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class DetailedTaskFragment extends DataDependantFrament {
     public final static String SELECTED_TASK_UUID_TAG = "selected_task_uuid_tag";
 
     private ListView listView;
     private Task currentTask;
-    private TextView taskRepeatTV;
-    private TextView taskDateTV;
-    private TextView notificationTV;
-    private TextView noRelatedSkillsTV;
-    private TextView habitGenerationTV;
+
+    @Bind(R.id.task_title)                          TextView taskTitleTV;
+    @Bind(R.id.task_difficulty_text_view)           TextView taskDifficultyTV;
+    @Bind(R.id.task_importance_text_view)           TextView taskImportanceTV;
+    @Bind(R.id.habit_generation_text_view)          TextView habitGenerationTV;
+    @Bind(R.id.task_repeat_times_text_view)         TextView taskRepeatTV;
+    @Bind(R.id.task_date_text_view)                 TextView taskDateTV;
+    @Bind(R.id.no_related_skills)                   TextView noRelatedSkillsTV;
+    @Bind(R.id.notification_text_view)              TextView notificationTV;
+    @Bind(R.id.number_of_executions_text_view)      TextView numberOfExecutionsTV;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v =  inflater.inflate(R.layout.fragment_detailed_task, container, false);
+        View v = inflater.inflate(R.layout.fragment_detailed_task, container, false);
         listView = (ListView) v;
         View header = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.detailed_task_header, null);
-        TextView taskTitleTV = (TextView) header.findViewById(R.id.task_title);
-        TextView taskDifficultyTV = (TextView) header.findViewById(R.id.task_difficulty_text_view);
-        TextView taskImportanceTV = (TextView) header.findViewById(R.id.task_importance_text_view);
-        habitGenerationTV = (TextView) header.findViewById(R.id.habit_generation_text_view);
-        taskRepeatTV = (TextView) header.findViewById(R.id.task_repeat_times_text_view);
-        taskDateTV = (TextView) header.findViewById(R.id.task_date_text_view);
-        noRelatedSkillsTV = (TextView) header.findViewById(R.id.no_related_skills);
-        notificationTV = (TextView) header.findViewById(R.id.notification_text_view);
-
+        ButterKnife.bind(this, header);
 
         UUID id = (UUID)getArguments().get(SELECTED_TASK_UUID_TAG);
         currentTask = getController().getTaskByID(id);
@@ -85,6 +85,9 @@ public class DetailedTaskFragment extends DataDependantFrament {
         //setup habit generation TextView
         setupHabitGenerationView();
 
+        //setup number of executions TextView
+        setupNumberOfExecutions();
+
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(getString(R.string.task));
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
@@ -102,6 +105,10 @@ public class DetailedTaskFragment extends DataDependantFrament {
             }
         });
         return v;
+    }
+
+    private void setupNumberOfExecutions() {
+        numberOfExecutionsTV.setText(getString(R.string.number_of_executions, currentTask.getNumberOfExecutions()));
     }
 
     @Override
@@ -326,25 +333,22 @@ public class DetailedTaskFragment extends DataDependantFrament {
             }
         });
         alertDialog.show();
-
-//        boolean isHeroLevelIncreased = getController().performTask(currentTask);
-        setupRepeatability();
-        setupTaskDate();
-        setupNotificationTextView();
-        setupHabitGenerationView();
-//        if (isHeroLevelIncreased) {
-//            Toast.makeText(getCurrentActivity(), getString(R.string.hero_level_increased,
-//                    getController().getHeroName()), Toast.LENGTH_SHORT).show();
-//        }
+        updateUI();
     }
 
     private void undoTask(){
         getController().undoTask(currentTask);
         setupListView();
+        updateUI();
+    }
+
+    @Override
+    public void updateUI() {
         setupTaskDate();
         setupRepeatability();
         setupNotificationTextView();
         setupHabitGenerationView();
+        setupNumberOfExecutions();
     }
 
     @Override

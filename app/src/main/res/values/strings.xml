@@ -371,6 +371,7 @@
     <string name="purchase_unsuccessful">Purchase unsuccessful. Please try agaian.</string>
     <string name="purchase_successful">Purchase successful</string>
     <string name="level_short">lvl</string>
+    <string name="number_of_executions">Number of executions: %3d</string>
     <!-- -->
 
 </resources>

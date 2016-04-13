@@ -34,6 +34,7 @@ public class Task {
     private long notifyDelta = 24 * TimeUnitUtils.HOUR;
     private int habitDays = -1;
     private int habitDaysLeft = -1;
+    private int numberOfExecutions = 0;
     private LocalDate habitStartDate = new LocalDate();
 
     private boolean updateNeeded = false;
@@ -253,6 +254,14 @@ public class Task {
         this.habitStartDate = habitStartDate;
     }
 
+    public int getNumberOfExecutions() {
+        return numberOfExecutions;
+    }
+
+    public void setNumberOfExecutions(int numberOfExecutions) {
+        this.numberOfExecutions = numberOfExecutions;
+    }
+
     public double getMultiplier(){
         return (1 + (0.25 * difficulty) + (0.25 * importance));
     }
@@ -277,6 +286,7 @@ public class Task {
 
     public void perform(){
         setRepeatability(getRepeatability() - 1);
+        numberOfExecutions++;
         if (repeatability != 0) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
@@ -316,6 +326,7 @@ public class Task {
     }
 
     public void undo() {
+        numberOfExecutions--;
         if (repeatability != 0) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);

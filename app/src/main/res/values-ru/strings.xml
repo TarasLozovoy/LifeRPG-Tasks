@@ -328,6 +328,7 @@
     <string name="purchase_unsuccessful">Ошибка во время покупки. Пожалуйста, попробуйте еще раз.</string>
     <string name="purchase_successful">Операция проведена успешно.</string>
     <string name="level_short">ур.</string>
+    <string name="number_of_executions">Задача была выполнена: %3d раз</string>
     <!-- -->
 
 </resources>

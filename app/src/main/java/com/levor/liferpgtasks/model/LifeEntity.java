@@ -332,6 +332,7 @@ public class LifeEntity {
         values.put(TasksTable.Cols.HABIT_DAYS, task.getHabitDays());
         values.put(TasksTable.Cols.HABIT_DAYS_LEFT, task.getHabitDaysLeft());
         values.put(TasksTable.Cols.HABIT_START_DATE, task.getHabitStartDate().toDate().getTime());
+        values.put(TasksTable.Cols.NUMBER_OF_EXECUTIONS, task.getNumberOfExecutions());
         values.put(TasksTable.Cols.FINISH_DATE, task.getFinishDate() == null ? 0 : task.getFinishDate().getTime());
         return values;
     }

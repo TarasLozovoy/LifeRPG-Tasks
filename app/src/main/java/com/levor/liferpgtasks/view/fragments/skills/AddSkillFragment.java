@@ -49,6 +49,7 @@ public class AddSkillFragment extends DataDependantFrament {
         relatedCharacteristicsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getCurrentActivity().showSoftKeyboard(false, getView());
                 KeyCharacteristicsSelectionDialog dialog = new KeyCharacteristicsSelectionDialog();
                 Bundle b = new Bundle();
                 b.putStringArrayList(KeyCharacteristicsSelectionDialog.CHARS_LIST, convertIdsToTitles());
@@ -131,6 +132,7 @@ public class AddSkillFragment extends DataDependantFrament {
                             })
                             .show();
                 } else {
+                    getCurrentActivity().showSoftKeyboard(false, getView());
                     finish(titleEditText.getText().toString(), getString(R.string.skill_added_message));
                 }
                 return true;

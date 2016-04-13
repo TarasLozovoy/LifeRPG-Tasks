@@ -35,7 +35,7 @@ public class MainFragment extends DefaultFragment{
         TabLayout.Tab characteristicsTab = tabLayout.newTab().setText(R.string.characteristics_fragment_name);
         TabLayout.Tab skillsTab = tabLayout.newTab().setText(R.string.skills_fragment_name);
 
-        if (getController().getScreenWidth() < 500) {
+        if (getController().getScreenWidth() < 750) {
             View customView = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.tab_in_fragment_layout, null);
             TextView tv = (TextView) customView.findViewById(R.id.custom_text);
             tv.setText(R.string.characteristics_fragment_name);

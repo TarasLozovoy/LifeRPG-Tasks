@@ -172,6 +172,7 @@ public class AddTaskFragment extends DataDependantFrament {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.finish_creating_task:
+                getCurrentActivity().showSoftKeyboard(false, getView());
                 String title = taskTitleEditText.getText().toString();
                 if (title.isEmpty()) {
                     Toast.makeText(getCurrentActivity(),
@@ -274,6 +275,7 @@ public class AddTaskFragment extends DataDependantFrament {
         dateView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getCurrentActivity().showSoftKeyboard(false, getView());
                 String[] dateVariants = getResources().getStringArray(R.array.date_pick_array);
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                         android.R.layout.select_dialog_item, dateVariants);
@@ -317,6 +319,7 @@ public class AddTaskFragment extends DataDependantFrament {
         repeatView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getCurrentActivity().showSoftKeyboard(false, getView());
                 String[] repeatVariants = getResources().getStringArray(R.array.repeat_pick_array);
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                         android.R.layout.select_dialog_item, repeatVariants);
@@ -371,6 +374,7 @@ public class AddTaskFragment extends DataDependantFrament {
         notifyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getCurrentActivity().showSoftKeyboard(false, getView());
                 String[] notifyVariants = getResources().getStringArray(R.array.notify_dialog_items);
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                         android.R.layout.select_dialog_item, notifyVariants);
@@ -404,6 +408,7 @@ public class AddTaskFragment extends DataDependantFrament {
         difficultyView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getCurrentActivity().showSoftKeyboard(false, getView());
                 String[] notifyVariants = getResources().getStringArray(R.array.difficulties_array);
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                         android.R.layout.select_dialog_item, notifyVariants);
@@ -422,6 +427,7 @@ public class AddTaskFragment extends DataDependantFrament {
         importanceView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getCurrentActivity().showSoftKeyboard(false, getView());
                 String[] notifyVariants = getResources().getStringArray(R.array.importance_array);
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                         android.R.layout.select_dialog_item, notifyVariants);
@@ -440,6 +446,7 @@ public class AddTaskFragment extends DataDependantFrament {
         habitGenerationsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getCurrentActivity().showSoftKeyboard(false, getView());
                 if ((habitdays > 0)) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(getCurrentActivity());
                     alert.setMessage(R.string.rewrite_habit_alert_message)
@@ -466,6 +473,7 @@ public class AddTaskFragment extends DataDependantFrament {
         relatedSkillsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getCurrentActivity().showSoftKeyboard(false, getView());
                 showSkillSelectionDialog();
             }
         });

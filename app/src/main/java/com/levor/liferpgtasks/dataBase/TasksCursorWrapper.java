@@ -39,6 +39,7 @@ public class TasksCursorWrapper extends CursorWrapper {
         int repeatIndex = getInt(getColumnIndex(TasksTable.Cols.REPEAT_INDEX));
         int habitDays = getInt(getColumnIndex(TasksTable.Cols.HABIT_DAYS));
         int habitDaysLeft = getInt(getColumnIndex(TasksTable.Cols.HABIT_DAYS_LEFT));
+        int numberOfExecutions = getInt(getColumnIndex(TasksTable.Cols.NUMBER_OF_EXECUTIONS));
         Long habitStartDateMillis = getLong(getColumnIndex(TasksTable.Cols.HABIT_START_DATE));
         String repeatDaysOfWeekString = getString(getColumnIndex(TasksTable.Cols.REPEAT_DAYS_OF_WEEK));
         List<Skill> skills = new ArrayList<>();
@@ -66,6 +67,7 @@ public class TasksCursorWrapper extends CursorWrapper {
         task.setHabitDays(habitDays);
         task.setHabitDaysLeft(habitDaysLeft);
         task.setHabitStartDate(habitStartDate);
+        task.setNumberOfExecutions(numberOfExecutions);
 
         if (repeatability == 0) {
             Date finishDate = finishDateLong > 0 ? new Date(finishDateLong) : new Date();

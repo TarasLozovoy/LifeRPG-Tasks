@@ -54,6 +54,7 @@ public class DataBaseSchema {
             public static final String HABIT_DAYS = "habit_days";
             public static final String HABIT_DAYS_LEFT = "habit_days_left";
             public static final String HABIT_START_DATE = "habit_start_date";
+            public static final String NUMBER_OF_EXECUTIONS = "number_of_executions";
         }
     }
 
