@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 import com.levor.liferpgtasks.model.Skill;
@@ -29,6 +28,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 import butterknife.Bind;
@@ -99,7 +99,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle b = new Bundle();
                 b.putSerializable(DetailedSkillFragment.SELECTED_SKILL_UUID_TAG,
-                        currentTask.getRelatedSkills().get(position - listView.getHeaderViewsCount()).getId());
+                        currentTask.getRelatedSkillsList().get(position - listView.getHeaderViewsCount()).getId());
                 DefaultFragment f = new DetailedSkillFragment();
                 getCurrentActivity().showChildFragment(f, b);
             }
@@ -320,10 +320,13 @@ public class DetailedTaskFragment extends DataDependantFrament {
 
     private void setupListView(){
         ArrayList<String> skills = new ArrayList<>();
-        for (Skill sk : currentTask.getRelatedSkills()) {
+        for (Map.Entry<Skill, Boolean> pair : currentTask.getRelatedSkillsMap().entrySet()) {
+            Skill sk = pair.getKey();
+            boolean increaseSkill = pair.getValue();
             if (sk == null) continue;
             DecimalFormat df = new DecimalFormat("#.##");
-            skills.add(sk.getTitle() + " - " + sk.getLevel() + "(" + df.format(sk.getSublevel()) + ")");
+            skills.add((increaseSkill ? "+" : "-") +
+                    sk.getTitle() + " - " + sk.getLevel() + "(" + df.format(sk.getSublevel()) + ")");
         }
         noRelatedSkillsTV.setVisibility(skills.isEmpty() ? View.VISIBLE : View.GONE);
         listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, skills.toArray()));

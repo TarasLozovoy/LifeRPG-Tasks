@@ -33,20 +33,27 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
 
         lifeController = LifeController.getInstance(context.getApplicationContext());
         Map<Skill, Integer> skillsLevels = new HashMap<>();
-        for (Skill sk : task.getRelatedSkills()) {
+        for (Skill sk : task.getRelatedSkillsList()) {
             skillsLevels.put(sk, sk.getLevel());
         }
+        double oldHeroXP = lifeController.getHeroXp();
+        double oldHeroLevel = lifeController.getHeroLevel();
 
         //performing task
-        boolean isHeroLevelIncreased = lifeController.performTask(task);
-        if (isHeroLevelIncreased) {
+        lifeController.performTask(task);
+        if (oldHeroLevel < lifeController.getHeroLevel()) {
             Toast.makeText(context, context.getString(R.string.hero_level_increased, lifeController.getHeroName()),
                     Toast.LENGTH_LONG).show();
         }
 
         double xp = lifeController.getHero().getBaseXP() * t.getMultiplier();
+        if (oldHeroXP > lifeController.getHeroXp() || oldHeroLevel > lifeController.getHeroLevel()) {
+            xp = - xp;
+        }
+
         sb.append(root.getResources().getString(R.string.task_performed))
                 .append("\n")
+                .append(xp >= 0 ? "+" : "")
                 .append(root.getResources().getString(R.string.XP_gained, xp));
         for (Map.Entry<Skill, Integer> pair : skillsLevels.entrySet()) {
             Skill sk = pair.getKey();
@@ -59,6 +66,17 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
                         .append(" ")
                         .append(sk.getTitle())
                         .append("\n+")
+                        .append(sk.getKeyCharacteristicsGrowth() * (sk.getLevel() - oldLevel))
+                        .append(" ")
+                        .append(sk.getKeyCharacteristicsStringForUI());
+            } else if (sk.getLevel() < oldLevel) {
+                sb.append("\n")
+                        .append("-")
+                        .append(oldLevel - sk.getLevel())
+                        .append(context.getString(R.string.level_short))
+                        .append(" ")
+                        .append(sk.getTitle())
+                        .append("\n")
                         .append(sk.getKeyCharacteristicsGrowth() * (sk.getLevel() - oldLevel))
                         .append(" ")
                         .append(sk.getKeyCharacteristicsStringForUI());

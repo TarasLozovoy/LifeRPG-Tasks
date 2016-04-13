@@ -17,11 +17,10 @@ import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 
-import org.joda.time.LocalDate;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,11 +48,15 @@ public class EditTaskFragment extends AddTaskFragment {
             habitdays = currentTask.getHabitDays();
             habitdaysLeft = currentTask.getHabitDaysLeft();
             habitStartDate = currentTask.getHabitStartDate();
-            relatedSkills = new ArrayList<>();
-            for (int i = 0; i < currentTask.getRelatedSkills().size(); i++) {
-                Skill sk = currentTask.getRelatedSkills().get(i);
+            for (Map.Entry<Skill, Boolean> pair : currentTask.getRelatedSkillsMap().entrySet()) {
+                Skill sk = pair.getKey();
+                boolean increaseSkill = pair.getValue();
                 if (sk != null) {
-                    relatedSkills.add(sk.getTitle());
+                    if (increaseSkill) {
+                        increasingRelatedSkills.add(sk.getTitle());
+                    } else {
+                        decreasingRelatedSkills.add(sk.getTitle());
+                    }
                 }
             }
             updateUI();
@@ -185,14 +188,19 @@ public class EditTaskFragment extends AddTaskFragment {
         currentTask.setHabitDays(habitdays);
         currentTask.setHabitDaysLeft(habitdaysLeft);
         currentTask.setHabitStartDate(habitStartDate.minusDays(1));
-        List<Skill> skillsList = new ArrayList<>();
-        for (int i = 0; i < relatedSkills.size(); i++) {
-            Skill sk = getController().getSkillByTitle(relatedSkills.get(i));
+        currentTask.removeAllRelatedSkills();
+        for (String increasingSkillTitle : increasingRelatedSkills) {
+            Skill sk = getController().getSkillByTitle(increasingSkillTitle);
             if (sk != null) {
-                skillsList.add(sk);
+                currentTask.addRelatedSkill(sk, true);
             }
         }
-        currentTask.setRelatedSkills(skillsList);
+        for (String increasingSkillTitle : decreasingRelatedSkills) {
+            Skill sk = getController().getSkillByTitle(increasingSkillTitle);
+            if (sk != null) {
+                currentTask.addRelatedSkill(sk, false);
+            }
+        }
         getController().updateTask(currentTask);
         createNotification(currentTask);
         getCurrentActivity().showSoftKeyboard(false, getView());

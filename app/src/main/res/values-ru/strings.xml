@@ -2,10 +2,12 @@
     <!-- Tasks-->
     <string name="new_task_title">Название:</string>
     <string name="new_task_title_edit_text">введите название задачи</string>
-    <string name="add_skill_to_task">Добавить навык</string>
+    <string name="add_increasing_skill_to_task">Добавить повышающийся навык</string>
+    <string name="add_decreasing_skill_to_task">Добавить понижающийся навык</string>
     <string name="add_new_task">Новая задача</string>
     <string name="related_skills">Связанные\nнавыки:</string>
-    <string name="related_skills_list">Связанные навыки:</string>
+    <string name="increasing_skills_list">Повышающиеся навыки:</string>
+    <string name="decreasing_skills_list">Понижающиеся навыки:</string>
     <string name="characteristic_level">Уровень:</string>
     <string name="characteristic_related_skills">Увеличиться при росте следующих навыков</string>
     <string name="edit_task">Редактировать</string>
@@ -186,7 +188,7 @@
     <string name="g_plus">Google+</string>
     <string name="vk">Вконтакте</string>
     <string name="share_additional_xp">Поделитесь и получите опыт</string>
-    <string name="XP_gained">+ %.2f опыта!</string>
+    <string name="XP_gained"> %.2f опыта!</string>
     <!-- /Sharing-->
 
     <!-- Settings-->

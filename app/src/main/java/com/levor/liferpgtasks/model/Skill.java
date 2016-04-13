@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-public class Skill {
+public class Skill implements Comparable<Skill> {
     private String title;
     private int level;
     private double sublevel;
@@ -116,7 +116,7 @@ public class Skill {
      */
     public boolean decreaseSublevel(double value){
         sublevel -= value;
-        if (sublevel < 0.0d) {
+        if (sublevel < 0.0d && level > 1) {
             for (Characteristic ch : getKeyCharacteristicsList()) {
                 ch.increaseLevelByN(-getKeyCharacteristicsGrowth());
             }
@@ -124,6 +124,7 @@ public class Skill {
             sublevel = ((double) level) + sublevel;
             return true;
         }
+        if (sublevel < 0) { sublevel = 0; }
         return false;
     }
 
@@ -145,6 +146,11 @@ public class Skill {
         else return this.id.equals(((Skill) o).id);
     }
 
+    @Override
+    public int compareTo(Skill another) {
+        return new SkillByLevelComparator().compare(this, another);
+    }
+
     private static class SkillByTitleComparator implements Comparator<Skill>{
 
         @Override
@@ -162,7 +168,7 @@ public class Skill {
         public int compare(Skill lhs, Skill rhs) {
             if (rhs.getLevel() != lhs.getLevel()) {
                 return rhs.getLevel() - lhs.getLevel();
-            } else if (rhs.getSublevel() != lhs.getSublevel()) {
+            } else if ((int)rhs.getSublevel() != (int)lhs.getSublevel()) {
                 return (int)(rhs.getSublevel() - lhs.getSublevel());
             } else {
                 return lhs.getTitle().compareTo(rhs.getTitle());

@@ -59,6 +59,7 @@ public class Characteristic implements Comparable<Characteristic>{
 
     public void increaseLevelByN(int N){
         level += N;
+        if (level < 1) level = 1;
     }
 
     @Override

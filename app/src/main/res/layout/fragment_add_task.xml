@@ -8,134 +8,128 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/add_title_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
-
-        <TextView
-            style="@style/LifeRPGTextInListStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/new_task_title" />
-
-        <EditText
-            android:id="@+id/task_title_edit_text"
+        <LinearLayout
+            android:id="@+id/add_title_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/new_task_title_edit_text" />
-    </LinearLayout>
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-    <View
-        style="@style/HorizontalDivider" />
+            <TextView
+                style="@style/LifeRPGTextInListStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/new_task_title" />
 
-    <LinearLayout
-        android:id="@+id/date_time_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <EditText
+                android:id="@+id/task_title_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/new_task_title_edit_text" />
+        </LinearLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
+        <View style="@style/HorizontalDivider" />
+
+        <LinearLayout
+            android:id="@+id/date_time_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_clock_black_24dp"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/date_time_text_view"
-            style="@style/LifeRPGTextInListStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_clock_black_24dp" />
 
-    <View
-        style="@style/HorizontalDivider" />
+            <TextView
+                android:id="@+id/date_time_text_view"
+                style="@style/LifeRPGTextInListStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/repeat_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        <View style="@style/HorizontalDivider" />
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:id="@+id/repeat_image_view"/>
-
-        <TextView
-            android:id="@+id/repeat_text_view"
-            style="@style/LifeRPGTextInListStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <View
-        style="@style/HorizontalDivider"/>
-
-    <LinearLayout
-        android:id="@+id/notification_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/repeat_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_notifications_black_24dp"
-            android:id="@+id/notify_image_view"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/notification_text_view"
-            style="@style/LifeRPGTextInListStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/repeat_image_view"
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
 
-    <View
-        style="@style/HorizontalDivider"/>
+            <TextView
+                android:id="@+id/repeat_text_view"
+                style="@style/LifeRPGTextInListStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/difficulty_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        <View style="@style/HorizontalDivider" />
 
-        <ImageView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/notification_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_difficulty_black_24dp"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/difficulty_text_view"
-            style="@style/LifeRPGTextInListStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/notify_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_notifications_black_24dp" />
 
-    <View
-        style="@style/HorizontalDivider" />
+            <TextView
+                android:id="@+id/notification_text_view"
+                style="@style/LifeRPGTextInListStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/importance_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        <View style="@style/HorizontalDivider" />
 
-        <ImageView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/difficulty_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_importance_black_24dp"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/importance_text_view"
-            style="@style/LifeRPGTextInListStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_difficulty_black_24dp" />
 
-    <View
-        style="@style/HorizontalDivider"/>
+            <TextView
+                android:id="@+id/difficulty_text_view"
+                style="@style/LifeRPGTextInListStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <View style="@style/HorizontalDivider" />
+
+        <LinearLayout
+            android:id="@+id/importance_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_importance_black_24dp" />
+
+            <TextView
+                android:id="@+id/importance_text_view"
+                style="@style/LifeRPGTextInListStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <View style="@style/HorizontalDivider" />
 
         <LinearLayout
             android:id="@+id/habit_generation_layout"
@@ -148,7 +142,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_generate_habit_black_24dp"/>
+                android:src="@drawable/ic_generate_habit_black_24dp" />
 
             <TextView
                 android:id="@+id/habit_generation_text_view"
@@ -157,25 +151,39 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-        <View
-            style="@style/HorizontalDivider"/>
+        <View style="@style/HorizontalDivider" />
 
-    <LinearLayout
-        android:id="@+id/related_skills_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/related_skills_text_view"
-            style="@style/LifeRPGTextInListStyle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/increasing_skills_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"/>
-    </LinearLayout>
+            android:orientation="horizontal">
 
-    <View
-        style="@style/HorizontalDivider" />
+            <TextView
+                android:id="@+id/increasing_skills_text_view"
+                style="@style/LifeRPGTextInListStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp" />
+        </LinearLayout>
+
+        <View style="@style/HorizontalDivider" />
+
+        <LinearLayout
+            android:id="@+id/decreasing_skills_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/decreasing_skills_text_view"
+                style="@style/LifeRPGTextInListStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp" />
+        </LinearLayout>
+
+        <View style="@style/HorizontalDivider" />
     </LinearLayout>
 
 </ScrollView>

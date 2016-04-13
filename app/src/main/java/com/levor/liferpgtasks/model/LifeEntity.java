@@ -150,8 +150,8 @@ public class LifeEntity {
         task1.setRepeatIndex(1);
         task1.setDifficulty(Task.LOW);
         task1.setImportance(Task.LOW);
-        task1.setNotifyDelta(4 * TimeUnitUtils.HOUR);
-        task1.addRelatedSkill(getSkillByTitle(context.getString(R.string.erudition)));
+//        task1.setNotifyDelta(4 * TimeUnitUtils.HOUR);
+        task1.addRelatedSkill(getSkillByTitle(context.getString(R.string.erudition)), true);
 
         Task task2 = new Task(context.getString(R.string.learn_spanish));
         task2.setDate(tomorrow);
@@ -161,8 +161,8 @@ public class LifeEntity {
         task2.setRepeatIndex(1);
         task2.setDifficulty(Task.MEDIUM);
         task2.setImportance(Task.MEDIUM);
-        task2.setNotifyDelta(5 * TimeUnitUtils.HOUR);
-        task2.addRelatedSkill(getSkillByTitle(context.getString(R.string.spanish)));
+//        task2.setNotifyDelta(5 * TimeUnitUtils.HOUR);
+        task2.addRelatedSkill(getSkillByTitle(context.getString(R.string.spanish)), true);
 
         Task task3 = new Task(context.getString(R.string.perform_workout));
         task3.setDate(tomorrow);
@@ -172,8 +172,8 @@ public class LifeEntity {
         task3.setRepeatIndex(1);
         task3.setDifficulty(Task.HIGH);
         task3.setImportance(Task.HIGH);
-        task3.setNotifyDelta(5 * TimeUnitUtils.HOUR);
-        task3.addRelatedSkill(getSkillByTitle(context.getString(R.string.powerlifting)));
+//        task3.setNotifyDelta(5 * TimeUnitUtils.HOUR);
+        task3.addRelatedSkill(getSkillByTitle(context.getString(R.string.powerlifting)), true);
 
         Task task4 = new Task(context.getString(R.string.morning_running));
         task4.setDate(tomorrow);
@@ -183,8 +183,8 @@ public class LifeEntity {
         task4.setRepeatIndex(1);
         task4.setDifficulty(Task.INSANE);
         task4.setImportance(Task.INSANE);
-        task4.setNotifyDelta(5 * TimeUnitUtils.HOUR);
-        task4.addRelatedSkill(getSkillByTitle(context.getString(R.string.running)));
+//        task4.setNotifyDelta(5 * TimeUnitUtils.HOUR);
+        task4.addRelatedSkill(getSkillByTitle(context.getString(R.string.running)), true);
 
         addTask(task1);
         addTask(task2);
@@ -210,6 +210,7 @@ public class LifeEntity {
             oldTask.setNotifyDelta(task.getNotifyDelta());
             oldTask.setHabitDays(task.getHabitDays());
             oldTask.setHabitDaysLeft(task.getHabitDaysLeft());
+            oldTask.setRelatedSkills(task.getRelatedSkillsMap());
             updateTask(oldTask);
         } else {
             tasks.add(task);
@@ -307,7 +308,7 @@ public class LifeEntity {
     public ArrayList<Task> getTasksBySkill(Skill sk){
         ArrayList<Task> tasksBySkill = new ArrayList<>();
         for (Task t : getTasks()){
-            if (t.getRelatedSkills().contains(sk)){
+            if (t.getRelatedSkillsList().contains(sk)){
                 tasksBySkill.add(t);
             }
         }

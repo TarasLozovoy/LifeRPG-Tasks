@@ -11,10 +11,12 @@
     <!-- Tasks-->
     <string name="new_task_title">Title:</string>
     <string name="new_task_title_edit_text">Type task title</string>
-    <string name="add_skill_to_task">Add related skill</string>
+    <string name="add_increasing_skill_to_task">Add increasing skill</string>
+    <string name="add_decreasing_skill_to_task">Add decreasing skill</string>
     <string name="add_new_task">New task</string>
     <string name="related_skills">Related skills:</string>
-    <string name="related_skills_list">Related skills:</string>
+    <string name="increasing_skills_list">Increasing skills:</string>
+    <string name="decreasing_skills_list">Decreasing skills:</string>
     <string name="characteristic_level">Level:</string>
     <string name="characteristic_related_skills">Can be improved by enhancing next skills:</string>
     <string name="edit_task">Edit</string>
@@ -195,7 +197,7 @@
     <string name="g_plus">Google+</string>
     <string name="vk">Vkontakte</string>
     <string name="share_additional_xp">Share to get additional XP</string>
-    <string name="XP_gained">+ %.2f XP!</string>
+    <string name="XP_gained"> %.2f XP!</string>
     <!-- /Sharing-->
 
     <!-- Google Analytics-->

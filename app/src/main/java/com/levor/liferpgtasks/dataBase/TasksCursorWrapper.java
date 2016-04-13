@@ -13,7 +13,10 @@ import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 
 public class TasksCursorWrapper extends CursorWrapper {
@@ -42,11 +45,17 @@ public class TasksCursorWrapper extends CursorWrapper {
         int numberOfExecutions = getInt(getColumnIndex(TasksTable.Cols.NUMBER_OF_EXECUTIONS));
         Long habitStartDateMillis = getLong(getColumnIndex(TasksTable.Cols.HABIT_START_DATE));
         String repeatDaysOfWeekString = getString(getColumnIndex(TasksTable.Cols.REPEAT_DAYS_OF_WEEK));
-        List<Skill> skills = new ArrayList<>();
+        Map<Skill, Boolean> skills = new TreeMap<>();
         String[] skillsArray = relatedSkills.split("::");
         for (String s : skillsArray) {
-            if (s.equals("")) continue;
-            skills.add(lifeEntity.getSkillByID(UUID.fromString(s)));
+            String[] skillString = s.split(":;");
+            String skillTitle = skillString[0];
+            if (skillTitle.equals("")) continue;
+            if (skillString.length == 1) {
+                skills.put(lifeEntity.getSkillByID(UUID.fromString(skillTitle)), true);
+            } else {
+                skills.put(lifeEntity.getSkillByID(UUID.fromString(skillTitle)), skillString[1].equals("+"));
+            }
         }
 
         Date date  = new Date(dateLong);

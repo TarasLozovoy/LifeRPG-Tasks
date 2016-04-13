@@ -9,7 +9,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 
 public class Task {
@@ -19,7 +22,7 @@ public class Task {
     public final static int INSANE = 3;
 
     private String title;
-    private List<Skill> relatedSkills = new ArrayList<>();
+    private Map<Skill, Boolean> relatedSkills = new TreeMap<>();
     private UUID id;
     private int repeatability = -1;
     private int repeatMode = RepeatMode.DO_NOT_REPEAT;
@@ -69,29 +72,61 @@ public class Task {
         return title;
     }
 
-    public List<Skill> getRelatedSkills() {
-        relatedSkills.removeAll(Collections.singleton(null));
-        Collections.sort(relatedSkills, Skill.LEVEL_COMPARATOR);
+    private void removeNullsFromRelatedSkills() {
+        List<Skill> skillsToRemove = new ArrayList<>();
+        for(Map.Entry<Skill, Boolean> pair : relatedSkills.entrySet()) {
+            if (pair.getKey() == (null)) {
+                skillsToRemove.add(pair.getKey());
+            }
+        }
+        for (Skill sk: skillsToRemove) {
+            relatedSkills.remove(sk);
+        }
+    }
+
+    public List<Skill> getRelatedSkillsList() {
+        removeNullsFromRelatedSkills();
+        List<Skill> skillsList = new ArrayList<>();
+        for (Map.Entry<Skill, Boolean> pair : relatedSkills.entrySet()) {
+            skillsList.add(pair.getKey());
+        }
+        Collections.sort(skillsList, Skill.LEVEL_COMPARATOR);
+        return skillsList;
+    }
+
+    public Map<Skill, Boolean> getRelatedSkillsMap() {
         return relatedSkills;
     }
 
     public String getRelatedSkillsString() {
-        relatedSkills.removeAll(Collections.singleton(null));
-        Collections.sort(relatedSkills, Skill.LEVEL_COMPARATOR);
+        removeNullsFromRelatedSkills();
         StringBuilder sb = new StringBuilder();
-        for (Skill sk : relatedSkills) {
+        for (Map.Entry<Skill, Boolean> pair : relatedSkills.entrySet()) {
+            Skill sk = pair.getKey();
+            boolean increaseSkill = pair.getValue();
             if (sk == null) continue;
             sb.append(sk.getId())
+                    .append(":;")
+                    .append(increaseSkill ? "+" : "-")
                     .append("::");
         }
         return sb.toString();
     }
-    public void setRelatedSkills(List<Skill> relatedSkills) {
+
+    public void removeAllRelatedSkills() {
+        relatedSkills = new TreeMap<>();
+    }
+
+    public void setRelatedSkills(Map<Skill, Boolean> relatedSkills) {
         this.relatedSkills = relatedSkills;
     }
 
-    public void addRelatedSkill(Skill skill) {
-        relatedSkills.add(skill);
+    public void addRelatedSkill(Skill skill, Boolean increaseSkill) {
+        relatedSkills.put(skill, increaseSkill);
+    }
+
+    public void removeRelatedSkill(Skill skill) {
+        relatedSkills.remove(skill);
     }
 
     public void setTitle(String title) {
@@ -268,6 +303,10 @@ public class Task {
 
     public double getShareMultiplier(){
         return getMultiplier() * 0.5d;
+    }
+
+    public boolean isContainsDecresingSkills() {
+        return relatedSkills.values().contains(false);
     }
 
     @Override

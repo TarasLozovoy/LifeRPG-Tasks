@@ -55,7 +55,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static com.levor.liferpgtasks.model.Task.DateMode;
 
@@ -66,11 +65,13 @@ public class AddTaskFragment extends DataDependantFrament {
     public static final String REPEAT_TAG = "repeat_tag";
     public static final String TASK_TITLE_TAG = "task_title_tag";
     private final String RELATED_SKILLS_TAG = "related_skills_tag";
+    private final String DECREASING_RELATED_SKILLS_TAG = "decreasing_related_skills_tag";
 //    private final String DIFFICULTY_TAG = "difficulty_tag";
 //    private final String IMPORTANCE_TAG = "importance_tag";
     private final String DATE_TAG = "date_tag";
 //    private final String NOTIFY_TAG = "notify_tag";
 //    private final String REPEAT_CHECKBOX_TAG = "repeat_checkbox_tag";
+    private final String INCREASE_SKILLS_TAG = "increase_skills_tag";
 
     @Bind(R.id.task_title_edit_text)        protected EditText taskTitleEditText;
     @Bind(R.id.date_time_text_view)         protected TextView dateTextView;
@@ -85,8 +86,10 @@ public class AddTaskFragment extends DataDependantFrament {
     @Bind(R.id.difficulty_layout)           protected View difficultyView;
     @Bind(R.id.importance_text_view)        protected TextView importanceTextView;
     @Bind(R.id.importance_layout)           protected View importanceView;
-    @Bind(R.id.related_skills_text_view)    protected TextView relatedSkillsTextView;
-    @Bind(R.id.related_skills_layout)       protected View relatedSkillsView;
+    @Bind(R.id.increasing_skills_text_view) protected TextView increasingSkillsTextView;
+    @Bind(R.id.increasing_skills_layout)    protected View increasingSkillsView;
+    @Bind(R.id.decreasing_skills_text_view) protected TextView decreasingSkillsTextView;
+    @Bind(R.id.decreasing_skills_layout)    protected View decreasingSkillsView;
     @Bind(R.id.habit_generation_text_view)  protected TextView habitGenerationTextView;
     @Bind(R.id.habit_generation_layout)     protected View habitGenerationsView;
     @Bind(R.id.habit_generation_image_view) protected ImageView habitGenerationsImageView;
@@ -103,7 +106,8 @@ public class AddTaskFragment extends DataDependantFrament {
     protected int habitdays = -1;
     protected int habitdaysLeft = -1;
     protected LocalDate habitStartDate = new LocalDate();
-    protected ArrayList<String> relatedSkills = new ArrayList<>();
+    protected ArrayList<String> increasingRelatedSkills = new ArrayList<>();
+    protected ArrayList<String> decreasingRelatedSkills = new ArrayList<>();
 
     private int notifyEditTextMaxValue = 600;
 
@@ -120,11 +124,12 @@ public class AddTaskFragment extends DataDependantFrament {
         difficultyTextView.setText(difficultyString);
         String importanceString = getString(R.string.importance) + " " + getResources().getStringArray(R.array.importance_array)[0];
         importanceTextView.setText(importanceString);
-        relatedSkillsTextView.setText(R.string.add_skill_to_task);
+        increasingSkillsTextView.setText(R.string.add_increasing_skill_to_task);
         registerListeners();
         if (savedInstanceState != null) {
             taskTitleEditText.setText(savedInstanceState.getString(TASK_TITLE_TAG));
-            relatedSkills = savedInstanceState.getStringArrayList(RELATED_SKILLS_TAG);
+            increasingRelatedSkills = savedInstanceState.getStringArrayList(RELATED_SKILLS_TAG);
+            decreasingRelatedSkills = savedInstanceState.getStringArrayList(DECREASING_RELATED_SKILLS_TAG);
             date = new Date (savedInstanceState.getLong(DATE_TAG));
         } else {
             date = new Date();
@@ -136,7 +141,7 @@ public class AddTaskFragment extends DataDependantFrament {
 
             String skillTitle;
             if ((skillTitle = getArguments().getString(RECEIVED_SKILL_TITLE_TAG)) != null){
-                relatedSkills.add(skillTitle);
+                increasingRelatedSkills.add(skillTitle);
             }
         }
 
@@ -194,7 +199,8 @@ public class AddTaskFragment extends DataDependantFrament {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(TASK_TITLE_TAG, taskTitleEditText != null ? taskTitleEditText.getText().toString() : "");
-        outState.putSerializable(RELATED_SKILLS_TAG, relatedSkills);
+        outState.putSerializable(RELATED_SKILLS_TAG, increasingRelatedSkills);
+        outState.putSerializable(DECREASING_RELATED_SKILLS_TAG, decreasingRelatedSkills);
         outState.putSerializable(DATE_TAG, date);
         super.onSaveInstanceState(outState);
     }
@@ -208,7 +214,8 @@ public class AddTaskFragment extends DataDependantFrament {
         updateDifficultyView();
         updateImportanceView();
         updateHabitView();
-        updateRelatedSkillsView();
+        updateIncreasingSkillsView();
+        updateDecreasingSkillsView();
     }
 
     protected void createIdenticalTaskRequestDialog(final String title){
@@ -250,14 +257,19 @@ public class AddTaskFragment extends DataDependantFrament {
         task.setHabitDays(habitdays);
         task.setHabitDaysLeft(habitdaysLeft);
         task.setHabitStartDate(habitStartDate.minusDays(1));
-        List<Skill> skillsList = new ArrayList<>();
-        for (int i = 0; i < relatedSkills.size(); i++) {
-            Skill sk = getController().getSkillByTitle(relatedSkills.get(i));
+        task.removeAllRelatedSkills();
+        for (String increasingSkillTitle : increasingRelatedSkills) {
+            Skill sk = getController().getSkillByTitle(increasingSkillTitle);
             if (sk != null) {
-                skillsList.add(sk);
+                task.addRelatedSkill(sk, true);
             }
         }
-        task.setRelatedSkills(skillsList);
+        for (String increasingSkillTitle : decreasingRelatedSkills) {
+            Skill sk = getController().getSkillByTitle(increasingSkillTitle);
+            if (sk != null) {
+                task.addRelatedSkill(sk, false);
+            }
+        }
         getController().createNewTask(task);
 
         getController().getGATracker().send(new HitBuilders.EventBuilder()
@@ -470,11 +482,19 @@ public class AddTaskFragment extends DataDependantFrament {
             }
         });
 
-        relatedSkillsView.setOnClickListener(new View.OnClickListener() {
+        increasingSkillsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getCurrentActivity().showSoftKeyboard(false, getView());
-                showSkillSelectionDialog();
+                showSkillSelectionDialog(true);
+            }
+        });
+
+        decreasingSkillsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().showSoftKeyboard(false, getView());
+                showSkillSelectionDialog(false);
             }
         });
     }
@@ -729,19 +749,34 @@ public class AddTaskFragment extends DataDependantFrament {
         habitGenerationTextView.setText(sb.toString());
     }
 
-    protected void updateRelatedSkillsView(){
+    protected void updateIncreasingSkillsView(){
         StringBuilder sb = new StringBuilder();
-        if (relatedSkills.isEmpty()){
-            sb.append(getString(R.string.add_skill_to_task));
+        if (increasingRelatedSkills.isEmpty()){
+            sb.append(getString(R.string.add_increasing_skill_to_task));
         } else {
-            sb.append(getString(R.string.related_skills_list));
+            sb.append(getString(R.string.increasing_skills_list));
             sb.append("\n");
-            for (int i = 0; i < relatedSkills.size(); i++) {
-                sb.append(relatedSkills.get(i));
-                if (i < relatedSkills.size() - 1) sb.append(", ");
+            for (int i = 0; i < increasingRelatedSkills.size(); i++) {
+                sb.append(increasingRelatedSkills.get(i));
+                if (i < increasingRelatedSkills.size() - 1) sb.append(", ");
             }
         }
-        relatedSkillsTextView.setText(sb.toString());
+        increasingSkillsTextView.setText(sb.toString());
+    }
+
+    protected void updateDecreasingSkillsView(){
+        StringBuilder sb = new StringBuilder();
+        if (decreasingRelatedSkills.isEmpty()){
+            sb.append(getString(R.string.add_decreasing_skill_to_task));
+        } else {
+            sb.append(getString(R.string.decreasing_skills_list));
+            sb.append("\n");
+            for (int i = 0; i < decreasingRelatedSkills.size(); i++) {
+                sb.append(decreasingRelatedSkills.get(i));
+                if (i < decreasingRelatedSkills.size() - 1) sb.append(", ");
+            }
+        }
+        decreasingSkillsTextView.setText(sb.toString());
     }
 
     protected void createNotification(Task task){
@@ -1116,8 +1151,11 @@ public class AddTaskFragment extends DataDependantFrament {
         alertDialog.show();
     }
 
-    private void showSkillSelectionDialog() {
+    private void showSkillSelectionDialog(boolean increaseSkills) {
         RelatedSkillSelectionDialog dialog = new RelatedSkillSelectionDialog();
+        Bundle b = new Bundle();
+        b.putBoolean(INCREASE_SKILLS_TAG, increaseSkills);
+        dialog.setArguments(b);
         dialog.show(getCurrentActivity().getSupportFragmentManager(), "SkillSelection");
     }
 
@@ -1178,34 +1216,51 @@ public class AddTaskFragment extends DataDependantFrament {
         @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final boolean increasingSkills = getArguments().getBoolean(INCREASE_SKILLS_TAG);
+            final ArrayList<String> skillsList = increasingSkills ? increasingRelatedSkills: decreasingRelatedSkills;
+            List<String> nonActiveList = increasingSkills ? decreasingRelatedSkills: increasingRelatedSkills;
             List<Skill> allSkills = getController().getAllSkills();
             allSkills.removeAll(Collections.singleton(null));
             Collections.sort(allSkills, Skill.TITLE_COMPARATOR);
-            String[] skillNames = new String[allSkills.size()];
-            boolean[] skillStates = new boolean[allSkills.size()];
+            List<String> skillNames = new ArrayList<>();
+            List<Boolean> skillStates = new ArrayList<>();
 
             for (int i = 0; i < allSkills.size(); i++) {
-                skillNames[i] = allSkills.get(i).getTitle();
-                skillStates[i] = relatedSkills.contains(allSkills.get(i).getTitle());
+                String skillName = allSkills.get(i).getTitle();
+                if (!nonActiveList.contains(skillName)) {
+                    skillNames.add(allSkills.get(i).getTitle());
+                    skillStates.add(skillsList.contains(allSkills.get(i).getTitle()));
+                }
             }
 
-            final String[] items = skillNames;
+            final String[] items = new String[skillNames.size()];
+            final boolean[] states = new boolean[skillStates.size()];
+            for (int i = 0; i < skillStates.size(); i++) {
+                items[i] = skillNames.get(i);
+                states[i] = skillStates.get(i);
+            }
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.skill_choosing)
-                    .setMultiChoiceItems(items, skillStates,
+                    .setMultiChoiceItems(items, states,
                             new DialogInterface.OnMultiChoiceClickListener() {
                                 public void onClick(DialogInterface dialog, int item, boolean isChecked) {
                                     if (isChecked){
-                                        relatedSkills.add(items[item]);
+                                        skillsList.add(items[item]);
                                     } else {
-                                        relatedSkills.remove(items[item]);
+                                        skillsList.remove(items[item]);
                                     }
                                 }
                             })
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            updateRelatedSkillsView();
+                            if (increasingSkills) {
+                                increasingRelatedSkills = skillsList;
+                            } else {
+                                decreasingRelatedSkills = skillsList;
+                            }
+                            updateIncreasingSkillsView();
+                            updateDecreasingSkillsView();
                             dialog.dismiss();
                         }
                     })
@@ -1213,6 +1268,9 @@ public class AddTaskFragment extends DataDependantFrament {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             NewSkillDialog newSkillDialog = new NewSkillDialog();
+                            Bundle b = new Bundle();
+                            b.putBoolean(INCREASE_SKILLS_TAG, increasingSkills);
+                            newSkillDialog.setArguments(b);
                             newSkillDialog.show(getCurrentActivity().getSupportFragmentManager(), "New skill");
                         }
                     })
@@ -1286,7 +1344,7 @@ public class AddTaskFragment extends DataDependantFrament {
                                         .build());
 
                                 dialog.dismiss();
-                                showSkillSelectionDialog();
+                                showSkillSelectionDialog(getArguments().getBoolean(INCREASE_SKILLS_TAG));
                             }
                         }
                     });
