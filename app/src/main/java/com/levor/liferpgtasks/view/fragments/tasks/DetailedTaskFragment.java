@@ -229,6 +229,14 @@ public class DetailedTaskFragment extends DataDependantFrament {
                 } else if (repeat < 0) {
                     sb.append(getString(R.string.infinite));
                 }
+            } else if (repeatMode == Task.RepeatMode.REPEAT_AFTER_COMPLETION){
+                sb.append(getString(R.string.in_N_days_after_completion, currentTask.getRepeatIndex()));
+                if (repeat > 0) {
+                    sb.append("; ")
+                            .append(getString(R.string.repeats))
+                            .append(": ")
+                            .append(repeat);
+                }
             } else {    //weeks
                 String[] days = getResources().getStringArray(R.array.days_of_week_short);
                 for (int i = 0; i < days.length; i++) {

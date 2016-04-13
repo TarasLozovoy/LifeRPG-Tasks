@@ -81,7 +81,9 @@
     <string name="week">week</string>
     <string name="month">month</string>
     <string name="year">year</string>
+    <string name="days_after_completion">days after completion</string>
     <string name="just_repeat">Just repeat</string>
+    <string name="repeat_after_completion">Repeat after completion</string>
     <string name="sunday">Sunday</string>
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>
@@ -372,6 +374,8 @@
     <string name="purchase_successful">Purchase successful</string>
     <string name="level_short">lvl</string>
     <string name="number_of_executions">Number of executions: %3d</string>
+    <string name="repeat_in_N_days_after_completion">Repeat in %2d days after completion</string>
+    <string name="in_N_days_after_completion">In %2d days after completion</string>
     <!-- -->
 
 </resources>

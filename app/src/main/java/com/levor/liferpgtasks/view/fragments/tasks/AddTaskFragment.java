@@ -624,6 +624,15 @@ public class AddTaskFragment extends DataDependantFrament {
                     dateMode = DateMode.TERMLESS;
                 }
                 break;
+            case RepeatMode.REPEAT_AFTER_COMPLETION:
+                sb.append(getString(R.string.repeat_in_N_days_after_completion, repeatIndex));
+                if (repeatability > 0) {
+                    sb.append("; ")
+                            .append(getString(R.string.repeats))
+                            .append(": ")
+                            .append(repeatability);
+                }
+                break;
         }
         if (repeatMode <= 2 && dateMode == DateMode.TERMLESS) {
             dateMode = DateMode.WHOLE_DAY;
@@ -836,12 +845,13 @@ public class AddTaskFragment extends DataDependantFrament {
         });
 
         //setting up mode spinner
-        String[] modeList = new String[5];
+        String[] modeList = new String[6];
         String[] repeatTimesArray = getResources().getStringArray(R.array.repeat_pick_array);
         modeList[0] = getString(R.string.just_repeat);
-        for (int i = 1; i < modeList.length; i++) {
+        for (int i = 1; i < modeList.length - 1; i++) {
             modeList[i] = repeatTimesArray[i];
         }
+        modeList[5] = getString(R.string.repeat_after_completion);
         ArrayAdapter<String> modeAdapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, modeList);
         modeSpinner.setAdapter(modeAdapter);
@@ -871,6 +881,11 @@ public class AddTaskFragment extends DataDependantFrament {
                     case 4: //every year
                         dialogView.findViewById(R.id.repeat_every_layout).setVisibility(View.VISIBLE);
                         timeUnit.setText(R.string.year);
+                        daysOfWeek.setVisibility(View.GONE);
+                        break;
+                    case 5: //repeat after completion
+                        dialogView.findViewById(R.id.repeat_every_layout).setVisibility(View.VISIBLE);
+                        timeUnit.setText(R.string.days_after_completion);
                         daysOfWeek.setVisibility(View.GONE);
                         break;
                 }
@@ -932,6 +947,10 @@ public class AddTaskFragment extends DataDependantFrament {
                             repeatMode = RepeatMode.EVERY_NTH_YEAR;
                             repeatIndex = Integer.parseInt(repeatIndexString);
                             break;
+                        case 5: //repeat after completion
+                            repeatMode = RepeatMode.REPEAT_AFTER_COMPLETION;
+                            repeatIndex = Integer.parseInt(repeatIndexString);
+                            break;
                     }
                     repeatability = repeatabilitySpinner.getSelectedItemPosition() == 0 ?
                             -1 : Integer.parseInt(repeatTimesString);
@@ -975,6 +994,9 @@ public class AddTaskFragment extends DataDependantFrament {
                 break;
             case RepeatMode.EVERY_NTH_YEAR:
                 modeSpinner.setSelection(4);
+                break;
+            case RepeatMode.REPEAT_AFTER_COMPLETION:
+                modeSpinner.setSelection(5);
                 break;
         }
         repeatIndexEditText.setText(String.valueOf(repeatIndex));

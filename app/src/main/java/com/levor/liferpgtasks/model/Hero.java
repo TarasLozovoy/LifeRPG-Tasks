@@ -78,7 +78,7 @@ public class Hero {
 
     private double xpToLevel(int level){
         if (level < 0) return 0;
-        return (10 + 10*Math.pow(level, 2));
+        return (10 + 5*Math.pow(level, 2));
     }
 
     private boolean checkXPCeiling(){

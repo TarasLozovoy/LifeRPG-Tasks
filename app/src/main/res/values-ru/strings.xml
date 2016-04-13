@@ -72,7 +72,9 @@
     <string name="week">нед.</string>
     <string name="month">мес.</string>
     <string name="year">г./лет</string>
+    <string name="days_after_completion">дн. после выполнения</string>
     <string name="just_repeat">Просто повторять</string>
+    <string name="repeat_after_completion">Повторять после выполнения</string>
     <string name="sunday">Воскресенье</string>
     <string name="monday">Понедельник</string>
     <string name="tuesday">Вторник</string>
@@ -329,6 +331,8 @@
     <string name="purchase_successful">Операция проведена успешно.</string>
     <string name="level_short">ур.</string>
     <string name="number_of_executions">Задача была выполнена: %3d раз</string>
+    <string name="repeat_in_N_days_after_completion">Повторять через %2d дн. после выполнения.</string>
+    <string name="in_N_days_after_completion">Через %2d дн. после выполнения.</string>
     <!-- -->
 
 </resources>

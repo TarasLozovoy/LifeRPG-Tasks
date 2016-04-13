@@ -317,6 +317,18 @@ public class Task {
                     }
 
                     break;
+                case RepeatMode.REPEAT_AFTER_COMPLETION:
+                    Calendar tempCal = Calendar.getInstance();
+                    tempCal.setTime(new Date());
+                    if (dateMode == DateMode.TERMLESS) {
+                        dateMode = DateMode.WHOLE_DAY;
+                    } else if (dateMode == DateMode.SPECIFIC_TIME) {
+                        tempCal.set(Calendar.HOUR_OF_DAY, cal.get(Calendar.HOUR_OF_DAY));
+                        tempCal.set(Calendar.MINUTE, cal.get(Calendar.MINUTE));
+                    }
+                    cal = tempCal;
+                    cal.add(Calendar.DAY_OF_YEAR, repeatIndex);
+                    break;
                 default : //not repeat and simple repeat
                     //do not change date
                     break;
@@ -355,6 +367,9 @@ public class Task {
                         cal.add(Calendar.WEEK_OF_YEAR, -(repeatIndex - 1));
                     }
                     break;
+                case RepeatMode.REPEAT_AFTER_COMPLETION:
+                    cal.add(Calendar.DAY_OF_YEAR, -repeatIndex);
+                    break;
                 default: //not repeat and simple repeat
                     //do not change date
                     break;
@@ -392,6 +407,7 @@ public class Task {
         public static final int DAYS_OF_NTH_WEEK = 3;
         public static final int DO_NOT_REPEAT = 4;
         public static final int SIMPLE_REPEAT = 5;
+        public static final int REPEAT_AFTER_COMPLETION = 6;
     }
 
     private static class CompletionTasksComparator implements Comparator<Task> {
