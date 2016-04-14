@@ -47,7 +47,7 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
         }
 
         double xp = lifeController.getHero().getBaseXP() * t.getMultiplier();
-        if (oldHeroXP > lifeController.getHeroXp() || oldHeroLevel > lifeController.getHeroLevel()) {
+        if (oldHeroXP >= lifeController.getHeroXp() || oldHeroLevel > lifeController.getHeroLevel()) {
             xp = - xp;
         }
 

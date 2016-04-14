@@ -228,10 +228,16 @@ public class LifeController {
         updateTaskNotification(task);
         double multiplier = task.getMultiplier();
         double finalXP = hero.getBaseXP() * multiplier;
-        boolean containsDecreasingSkills = false;
+        int decreasingSkillsCount = 0;
+        int increasingSkillsCount = 0;
         for (Map.Entry<Skill, Boolean> pair : task.getRelatedSkillsMap().entrySet()) {
             Skill sk = pair.getKey();
             boolean increaseSkill = pair.getValue();
+            if (!increaseSkill) {
+                decreasingSkillsCount++;
+            } else {
+                increasingSkillsCount++;
+            }
             if (sk == null) continue;
             boolean skillChanged = increaseSkill ? sk.increaseSublevel(finalXP) : sk.decreaseSublevel(finalXP);
             if (skillChanged){
@@ -241,14 +247,11 @@ public class LifeController {
             }
             updateSkill(sk);
             updateStatistics(TOTAL_SKILLS_XP_TAG, (float) (increaseSkill ? finalXP : -finalXP));
-            if (!increaseSkill) {
-                containsDecreasingSkills = true;
-            }
         }
-        if (containsDecreasingSkills) {
+        if (decreasingSkillsCount > increasingSkillsCount) {
             finalXP = - finalXP;
         }
-        boolean isLevelIncreased = hero.increaseXP(finalXP);
+        boolean isLevelIncreased = hero.addXP(finalXP);
         lifeEntity.updateHero(hero);
         updateStatistics(TOTAL_HERO_XP_TAG, (float) finalXP);
         checkTaskHabitGeneration(task);
@@ -299,10 +302,16 @@ public class LifeController {
         updateTaskNotification(task);
         double multiplier = task.getMultiplier();
         double finalXP = hero.getBaseXP() * multiplier;
-        boolean containsDecreasingSkills = false;
+        int decreasingSkillsCount = 0;
+        int increasingSkillsCount = 0;
         for (Map.Entry<Skill, Boolean> pair : task.getRelatedSkillsMap().entrySet()) {
             Skill sk = pair.getKey();
             boolean increaseSkill = pair.getValue();
+            if (!increaseSkill) {
+                decreasingSkillsCount++;
+            } else {
+                increasingSkillsCount++;
+            }
             if (sk == null) continue;
             boolean skillChanged = increaseSkill ? sk.decreaseSublevel(finalXP) : sk.increaseSublevel(finalXP);
             if (skillChanged){
@@ -312,14 +321,11 @@ public class LifeController {
             }
             updateSkill(sk);
             updateStatistics(TOTAL_SKILLS_XP_TAG, (float) (increaseSkill ? -finalXP : finalXP));
-            if (!increaseSkill) {
-                containsDecreasingSkills = true;
-            }
         }
-        if (containsDecreasingSkills) {
+        if (decreasingSkillsCount > increasingSkillsCount) {
             finalXP = - finalXP;
         }
-        boolean isLevelChanged = hero.decreaseXP(finalXP);
+        boolean isLevelChanged = hero.addXP(-finalXP);
         lifeEntity.updateHero(hero);
         updateStatistics(TOTAL_HERO_XP_TAG, (float) -finalXP);
         updateStatistics(PERFORMED_TASKS_TAG, -1);
@@ -334,7 +340,7 @@ public class LifeController {
         Hero hero = lifeEntity.getHero();
         double multiplier = task.getShareMultiplier();
         double finalXP = hero.getBaseXP() * multiplier;
-        boolean isLevelIncreased = hero.increaseXP(finalXP);
+        boolean isLevelIncreased = hero.addXP(finalXP);
         lifeEntity.updateHero(hero);
         updateStatistics(TOTAL_HERO_XP_TAG, (float) finalXP);
 
