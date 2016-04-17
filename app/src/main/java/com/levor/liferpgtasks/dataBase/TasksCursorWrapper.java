@@ -51,10 +51,12 @@ public class TasksCursorWrapper extends CursorWrapper {
             String[] skillString = s.split(":;");
             String skillTitle = skillString[0];
             if (skillTitle.equals("")) continue;
+            Skill skill = lifeEntity.getSkillByID(UUID.fromString(skillTitle));
+            if (skill == null) continue;
             if (skillString.length == 1) {
-                skills.put(lifeEntity.getSkillByID(UUID.fromString(skillTitle)), true);
+                skills.put(skill, true);
             } else {
-                skills.put(lifeEntity.getSkillByID(UUID.fromString(skillTitle)), skillString[1].equals("+"));
+                skills.put(skill, skillString[1].equals("+"));
             }
         }
 
