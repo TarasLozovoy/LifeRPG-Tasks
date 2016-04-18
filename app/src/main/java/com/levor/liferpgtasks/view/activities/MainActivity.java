@@ -9,12 +9,13 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.IBinder;
-import android.os.PersistableBundle;
 import android.os.RemoteException;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
@@ -35,6 +36,7 @@ import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.model.Misc;
 import com.levor.liferpgtasks.model.Task;
+import com.levor.liferpgtasks.view.Dialogs.WhatsNewDialog;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.MainFragment;
@@ -162,6 +164,8 @@ public class MainActivity extends BackUpActivity{
         setupInterstitialAds();
         lifeController.checkTasksPerDay();
         lifeController.checkHabitGenerationForAllTasks();
+
+        showWhatsNewDialog();
     }
 
     @Override
@@ -663,7 +667,22 @@ public class MainActivity extends BackUpActivity{
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, token);
     }
 
-    public enum AdType { PERFORM_TASK, CHARACTERISTICS_CHART, TASKS_PER_DAY_CHART}
+    private void showWhatsNewDialog() {
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = pInfo.versionName;
+            if (!version.equals(getController().getSharedPreferences().getString(LifeController.APPLICATION_VERSION_CODE_TAG, "1.0"))) {
+                WhatsNewDialog whatsNewDialog = new WhatsNewDialog();
+                Bundle b = new Bundle();
+                b.putString(LifeController.APPLICATION_VERSION_CODE_TAG, version);
+                whatsNewDialog.show(getSupportFragmentManager(), "WhatsNewFragment");
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public enum AdType { PERFORM_TASK, CHARACTERISTICS_CHART, TASKS_PER_DAY_CHART;}
 
     private class CustomAdListener extends AdListener {
         @Override

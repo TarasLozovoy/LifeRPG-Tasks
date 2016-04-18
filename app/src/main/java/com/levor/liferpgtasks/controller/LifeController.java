@@ -27,6 +27,7 @@ import com.levor.liferpgtasks.model.Misc;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.view.activities.MainActivity;
+import com.levor.liferpgtasks.view.fragments.settings.DonationFragment;
 import com.levor.liferpgtasks.widget.LifeRPGWidgetProvider;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
@@ -58,6 +59,7 @@ public class LifeController {
     public static final String ACHIEVEMENTS_TAG = "achievements_tag";
     public static final String DROPBOX_AUTO_BACKUP_ENABLED = "dropbox_auto_backup_enabled";
     public final static String DROPBOX_ACCESS_TOKEN_TAG = "db_access_token_tag";
+    public final static String APPLICATION_VERSION_CODE_TAG = "application_version_code_tag";
     private static final String HERO_ICON_NAME_TAG = "hero_icon_name_tag";
     private LifeEntity lifeEntity;
     private Context context;
@@ -810,5 +812,10 @@ public class LifeController {
         Point size = new Point();
         display.getSize(size);
         return size.x;
+    }
+
+    public void showDonationFragment() {
+        currentActivity.switchToRootFragment(MainActivity.SETTINGS_FRAGMENT_ID);
+        currentActivity.showChildFragment(new DonationFragment(), null);
     }
 }

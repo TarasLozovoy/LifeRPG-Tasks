@@ -340,6 +340,9 @@
     <string name="repeat_in_N_days_after_completion">Повторять через %2d дн. после выполнения.</string>
     <string name="in_N_days_after_completion">Через %2d дн. после выполнения.</string>
     <string name="manual_export_DB_to_dropbox">Экспортировать в Dropbox</string>
+    <string name="new_version_changes">Changes in new version</string>
+    <string name="support_project">Поддержать\nпроект</string>
+    <string name="whats_new">Список изменений</string>
     <!-- -->
 
 </resources>

@@ -91,4 +91,16 @@
         <item>@string/date_asc_task_order</item>
         <item>@string/date_desc_task_order</item>
     </string-array>
+
+    <string-array
+        name="versions_list">
+        <item>Version 1.3.6</item>
+    </string-array>
+
+    <string-array
+        name="version_descriptions_list">
+        <item>- New cool changes.\n
+              - Another cool change.</item>
+    </string-array>
+
 </resources>

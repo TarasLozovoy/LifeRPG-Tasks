@@ -383,6 +383,9 @@
     <string name="repeat_in_N_days_after_completion">Repeat in %2d days after completion</string>
     <string name="in_N_days_after_completion">In %2d days after completion</string>
     <string name="manual_export_DB_to_dropbox">Export DB to Dropbox</string>
+    <string name="new_version_changes">Changes in new version</string>
+    <string name="support_project">Support\nproject</string>
+    <string name="whats_new">Whats new</string>
     <!-- -->
 
 </resources>
