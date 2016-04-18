@@ -40,7 +40,9 @@ public class ListWidgetService extends RemoteViewsService {
             Collections.sort(tasks, Task.DATE_ASC_TASKS_COMPARATOR);
             list = new ArrayList<>();
             for (Task t : tasks){
-                list.add(t.getTitle());
+                if (!t.isTaskDone()) {
+                    list.add(t.getTitle());
+                }
             }
         }
 
@@ -51,7 +53,9 @@ public class ListWidgetService extends RemoteViewsService {
             Collections.sort(tasks, Task.DATE_ASC_TASKS_COMPARATOR);
             list = new ArrayList<>();
             for (Task t : tasks){
-                list.add(t.getTitle());
+                if (!t.isTaskDone()) {
+                    list.add(t.getTitle());
+                }
             }
         }
 
@@ -74,7 +78,7 @@ public class ListWidgetService extends RemoteViewsService {
             String taskTitle = list.get(position);
             Intent fillInIntent = new Intent();
             fillInIntent.putExtra(LifeController.TASK_TITLE_NOTIFICATION_TAG, taskTitle);
-            row.setOnClickFillInIntent(android.R.id.text1, fillInIntent);
+            row.setOnClickFillInIntent(R.id.widget_list_item, fillInIntent);
             return row;
         }
 
