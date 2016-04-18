@@ -332,7 +332,7 @@ public class AddTaskFragment extends DataDependantFrament {
             @Override
             public void onClick(View v) {
                 getCurrentActivity().showSoftKeyboard(false, getView());
-                String[] repeatVariants = getResources().getStringArray(R.array.repeat_pick_array);
+                String[] repeatVariants = getResources().getStringArray(R.array.repeat_pick_array_dialog);
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                         android.R.layout.select_dialog_item, repeatVariants);
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
@@ -346,10 +346,14 @@ public class AddTaskFragment extends DataDependantFrament {
                                 break;
                             case 1:
                                 repeatability = -1;
+                                repeatMode = RepeatMode.SIMPLE_REPEAT;
+                                break;
+                            case 2:
+                                repeatability = -1;
                                 repeatMode = RepeatMode.EVERY_NTH_DAY;
                                 repeatIndex = 1;
                                 break;
-                            case 2:
+                            case 3:
                                 repeatability = -1;
                                 repeatMode = RepeatMode.DAYS_OF_NTH_WEEK;
                                 repeatIndex = 1;
@@ -362,17 +366,17 @@ public class AddTaskFragment extends DataDependantFrament {
                                 }
                                 repeatDaysOfWeek[dayOfWeek] = true;
                                 break;
-                            case 3:
+                            case 4:
                                 repeatability = -1;
                                 repeatMode = RepeatMode.EVERY_NTH_MONTH;
                                 repeatIndex = 1;
                                 break;
-                            case 4:
+                            case 5:
                                 repeatability = -1;
                                 repeatMode = RepeatMode.EVERY_NTH_YEAR;
                                 repeatIndex = 1;
                                 break;
-                            case 5:
+                            case 6:
                                 showCustomRepeatDialog();
                                 break;
                         }
@@ -883,10 +887,9 @@ public class AddTaskFragment extends DataDependantFrament {
         String[] modeList = new String[6];
         String[] repeatTimesArray = getResources().getStringArray(R.array.repeat_pick_array);
         modeList[0] = getString(R.string.just_repeat);
-        for (int i = 1; i < modeList.length - 1; i++) {
+        for (int i = 0; i < modeList.length; i++) {
             modeList[i] = repeatTimesArray[i];
         }
-        modeList[5] = getString(R.string.repeat_after_completion);
         ArrayAdapter<String> modeAdapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, modeList);
         modeSpinner.setAdapter(modeAdapter);

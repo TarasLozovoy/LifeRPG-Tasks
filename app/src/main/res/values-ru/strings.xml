@@ -57,6 +57,7 @@
     <string name="task_date_tomorrow">Завтра</string>
     <string name="task_date_specify_date">Указать дату…</string>
     <string name="task_repeat_do_not_repeat">Не повторять</string>
+    <string name="simple_repeat">Просто повторять</string>
     <string name="task_add_notification">Добавить уведомление</string>
     <string name="is_whole_day_task">Целый день</string>
     <string name="task_repeat_every_day">Каждый день</string>

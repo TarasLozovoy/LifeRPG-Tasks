@@ -66,6 +66,7 @@
     <string name="task_date_tomorrow">Tomorrow</string>
     <string name="task_date_specify_date">Specify date…</string>
     <string name="task_repeat_do_not_repeat">Do not repeat</string>
+    <string name="simple_repeat">Simple repeat</string>
     <string name="task_add_notification">Add notification</string>
     <string name="is_whole_day_task">Whole day</string>
     <string name="task_repeat_every_day">Every day</string>

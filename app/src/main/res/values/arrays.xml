@@ -26,7 +26,18 @@
 
     <string-array
         name="repeat_pick_array">
+        <item>@string/just_repeat</item>
+        <item>@string/task_repeat_every_day</item>
+        <item>@string/task_repeat_every_week</item>
+        <item>@string/task_repeat_every_month</item>
+        <item>@string/task_repeat_every_year</item>
+        <item>@string/repeat_after_completion</item>
+    </string-array>
+
+    <string-array
+        name="repeat_pick_array_dialog">
         <item>@string/task_repeat_do_not_repeat</item>
+        <item>@string/simple_repeat</item>
         <item>@string/task_repeat_every_day</item>
         <item>@string/task_repeat_every_week</item>
         <item>@string/task_repeat_every_month</item>
