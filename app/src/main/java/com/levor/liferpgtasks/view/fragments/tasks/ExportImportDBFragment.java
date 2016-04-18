@@ -36,8 +36,9 @@ public class ExportImportDBFragment extends DefaultFragment {
             +"/LifeRGPTasks/";
     public static final String DB_EXPORT_FILE_NAME = DB_EXPORT_PATH + "LifeRPGTasksDB.db";
 
-    @Bind(R.id.auto_backup_to_dropbox_layout)       View exportToDropboxView;
-    @Bind(R.id.auto_backup_to_dropbox_switch)       Switch exportToDropboxSwitch;
+    @Bind(R.id.auto_backup_to_dropbox_layout)       View autoExportToDropboxView;
+    @Bind(R.id.auto_backup_to_dropbox_switch)       Switch autoExportToDropboxSwitch;
+    @Bind(R.id.manual_export_DB_to_dropbox)         View exportToDropboxView;
     @Bind(R.id.import_db_from_dropbox_layout)       View importFromDropboxView;
     @Bind(R.id.export_db_to_filesystem_layout)      View exportToFileSystemView;
     @Bind(R.id.import_db_from_filesystem_layout)    View importFromFileSystemView;
@@ -48,23 +49,31 @@ public class ExportImportDBFragment extends DefaultFragment {
         View v = inflater.inflate(R.layout.fragment_import_export_db, container, false);
         ButterKnife.bind(this, v);
 
-        exportToDropboxView.setOnClickListener(new View.OnClickListener() {
+        autoExportToDropboxView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                exportToDropboxSwitch.setChecked(!exportToDropboxSwitch.isChecked());
+                autoExportToDropboxSwitch.setChecked(!autoExportToDropboxSwitch.isChecked());
             }
         });
 
-        exportToDropboxSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        autoExportToDropboxSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences prefs = getCurrentActivity()
+                        .getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
                 if (isChecked) {
-                    getCurrentActivity().checkAndBackupToDropBox();
+                    getCurrentActivity().checkAndBackupToDropBox(true);
+                    prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, true).apply();
                 } else {
-                    SharedPreferences prefs = getCurrentActivity()
-                            .getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
                     prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, false).apply();
                 }
+            }
+        });
+
+        exportToDropboxView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().checkAndBackupToDropBox(false);
             }
         });
 
@@ -120,7 +129,7 @@ public class ExportImportDBFragment extends DefaultFragment {
     public void onResume() {
         getController().sendScreenNameToAnalytics("Export/Import DB Fragment");
         SharedPreferences prefs = getCurrentActivity().getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
-        exportToDropboxSwitch.setChecked(prefs.getBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, false));
+        autoExportToDropboxSwitch.setChecked(prefs.getBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, false));
         getController().updateMiscToDB();
         super.onResume();
     }

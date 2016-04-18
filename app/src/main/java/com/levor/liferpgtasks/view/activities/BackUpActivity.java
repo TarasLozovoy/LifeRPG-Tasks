@@ -1,13 +1,13 @@
 package com.levor.liferpgtasks.view.activities;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -34,6 +34,8 @@ public class BackUpActivity extends ActionBarActivity {
 
     protected LifeController lifeController;
 
+    private ProgressDialog progress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +54,7 @@ public class BackUpActivity extends ActionBarActivity {
                 SharedPreferences prefs = this.getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
                 prefs.edit().putString(LifeController.DROPBOX_ACCESS_TOKEN_TAG, accessToken).apply();
                 if (lifeController.isDropBoxAutoBackupEnabled()){
-                    checkAndBackupToDropBox();
+                    checkAndBackupToDropBox(true);
                 }
             } catch (IllegalStateException e) {
                 Log.i("DbAuthLog", "Error authenticating", e);
@@ -70,7 +72,7 @@ public class BackUpActivity extends ActionBarActivity {
         getDBApi().getSession().startOAuth2Authentication(BackUpActivity.this);
     }
 
-    private void backUpDBToDropBox() {
+    private void backUpDBToDropBox(final boolean silent) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -92,6 +94,30 @@ public class BackUpActivity extends ActionBarActivity {
                     });
                 }
                 return null;
+            }
+
+            @Override
+            protected void onPreExecute() {
+                if (!silent) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(BackUpActivity.this, R.string.db_exporting, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                if (!silent) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(BackUpActivity.this, R.string.db_exported, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         }.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
     }
@@ -157,7 +183,7 @@ public class BackUpActivity extends ActionBarActivity {
         }
     }
 
-    public void checkAndBackupToDropBox() {
+    public void checkAndBackupToDropBox(final boolean silent) {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -170,13 +196,13 @@ public class BackUpActivity extends ActionBarActivity {
                     return null;
                 } catch (DropboxException ignored) {}
 
-                prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, true).apply();
+//                prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, true).apply();
                 String lastLoadedFileRev = prefs.getString(LAST_LOADED_DB_REVISION_TAG, null);
                 String dropboxFileRev = getDropboxFileRevision();
                 if (lastLoadedFileRev != null) {
                     if (lastLoadedFileRev.equals(dropboxFileRev)) {
                         //most common situation, last load to dropbox was performed from current device
-                        backUpDBToDropBox();
+                        backUpDBToDropBox(silent);
                     } else {
                         //dropbox was updated from another device
                         if (lifeController.isInternetConnectionActive()) {
@@ -191,7 +217,7 @@ public class BackUpActivity extends ActionBarActivity {
                 } else {
                     if (dropboxFileRev == null) {
                         //first load, no files was loaded since now ever.
-                        backUpDBToDropBox();
+                        backUpDBToDropBox(silent);
                     } else {
                         //first load to dropbox from current device, dropbox already have DB version
                         if (lifeController.isInternetConnectionActive()) {
@@ -222,7 +248,7 @@ public class BackUpActivity extends ActionBarActivity {
                     return null;
                 } catch (DropboxException ignored) {}
 
-                prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, true).apply();
+//                prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, true).apply();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -259,7 +285,7 @@ public class BackUpActivity extends ActionBarActivity {
                 .setNegativeButton(R.string.backup_db_to_dropbox_no_rewrite, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        backUpDBToDropBox();
+                        backUpDBToDropBox(false);
                     }
                 })
                 .show();
@@ -279,7 +305,7 @@ public class BackUpActivity extends ActionBarActivity {
                 .setNegativeButton(R.string.export_local, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        backUpDBToDropBox();
+                        backUpDBToDropBox(false);
                     }
                 })
                 .show();

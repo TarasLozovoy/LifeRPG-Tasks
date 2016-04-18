@@ -34,6 +34,29 @@
         <View style="@style/HorizontalDivider" />
 
         <RelativeLayout
+            android:id="@+id/manual_export_DB_to_dropbox"
+            style="@style/LifeRPGSettingsItemsStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/manual_export_DB_to_dropbox_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toRightOf="@id/manual_export_DB_to_dropbox_arrow"
+                android:text="@string/manual_export_DB_to_dropbox" />
+        </RelativeLayout>
+
+        <View style="@style/HorizontalDivider" />
+
+        <RelativeLayout
             android:id="@+id/import_db_from_dropbox_layout"
             style="@style/LifeRPGSettingsItemsStyle"
             android:layout_width="match_parent"

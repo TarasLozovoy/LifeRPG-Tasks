@@ -295,6 +295,9 @@
         Ensure that storage access permission granted for LifeRPG Tasks.</string>
     <string name="import_db_from_filesystem">Import data base from filesystem</string>
     <string name="db_imported">Data base imported</string>
+    <string name="db_exported">Data base exported</string>
+    <string name="db_importing">Importing data base</string>
+    <string name="db_exporting">Exporting data base</string>
     <string name="db_import_error">Error while importing data base. Please repeat operation.</string>
     <string name="db_import_error_android6">Error while importing data base.
         Ensure that storage access permission granted for LifeRPGTasks.</string>
@@ -379,6 +382,7 @@
     <string name="number_of_executions">Number of executions: %3d</string>
     <string name="repeat_in_N_days_after_completion">Repeat in %2d days after completion</string>
     <string name="in_N_days_after_completion">In %2d days after completion</string>
+    <string name="manual_export_DB_to_dropbox">Export DB to Dropbox</string>
     <!-- -->
 
 </resources>

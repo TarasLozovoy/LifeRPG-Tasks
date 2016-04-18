@@ -801,7 +801,7 @@ public class LifeController {
 
     private void performBackUpToDropBox(){
         if (isDropBoxAutoBackupEnabled()){
-            currentActivity.checkAndBackupToDropBox();
+            currentActivity.checkAndBackupToDropBox(true);
         }
     }
 
