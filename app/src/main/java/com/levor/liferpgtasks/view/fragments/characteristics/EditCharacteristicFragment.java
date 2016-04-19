@@ -107,4 +107,10 @@ public class EditCharacteristicFragment extends DefaultFragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+    }
 }

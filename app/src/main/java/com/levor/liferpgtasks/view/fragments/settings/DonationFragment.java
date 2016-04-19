@@ -157,4 +157,10 @@ public class DonationFragment extends DefaultFragment {
             }
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+    }
 }

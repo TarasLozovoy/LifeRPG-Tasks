@@ -80,4 +80,10 @@ public class StatisticsFragment extends DefaultFragment {
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return v;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+    }
 }

@@ -89,6 +89,12 @@ public class CharacteristicsChartFragment extends DefaultFragment{
         return true;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ButterKnife.unbind(this);
+    }
+
     private void setupCharacteristicsList() {
         List<Characteristic> chars = getController().getCharacteristics();
         Collections.sort(chars, Characteristic.TITLE_COMPARATOR);
