@@ -296,6 +296,7 @@
 
     <!-- Other-->
     <string name="ok">OK</string>
+    <string name="cancel">Отмена</string>
     <string name="remove">Удалить</string>
     <string name="closing_app_toast">Нажмите еще раз для выхода</string>
     <string name="yes">Да</string>
@@ -307,9 +308,15 @@
     <string name="notification_text">Пора выполнять задание!</string>
     <string name="removing">Удаление</string>
     <string name="error_on_loading_image">>Возникла ошибка при загрузке иконке. Выберите, пожалуйста, другую иконку.</string>
-    <string name="reset">Стереть данные</string>
-    <string name="reset_message">Все добавленные задачи, навыки и весь прогресс будет удален. Вы действительно хотите стереть данные?</string>
-    <string name="reset_performed">Все данные успешно стерты</string>
+    <string name="initial_reset">Стереть данные</string>
+    <string name="hard_reset">Стереть все данные</string>
+    <string name="soft_reset">Стереть данные частично</string>
+    <string name="soft_reset_button">Cтереть\nчастично</string>
+    <string name="hard_reset_button">Cтереть\nвсё</string>
+    <string name="initial_reset_message">Нажмите Стереть всё чтобы удалить все навыки, задачи и весь прогрессю. Нажмите Стереть частично чтобы удалить только прогресс.</string>
+    <string name="hard_reset_message">Все добавленные задачи, навыки и весь прогресс будет удален. Вы действительно хотите стереть данные?</string>
+    <string name="soft_reset_message">Весь прогресс будет потерян. Задачи, навыки и характеристики не будут удалены. Вы действительно хотите стереть данные?</string>
+    <string name="reset_performed">Данные успешно стерты</string>
     <string name="show_chart">Показать график</string>
     <string name="tasks_per_day">Заданий выполнено по дням</string>
     <string name="tasks_per_day_chart">График выполненных заданий по дням</string>

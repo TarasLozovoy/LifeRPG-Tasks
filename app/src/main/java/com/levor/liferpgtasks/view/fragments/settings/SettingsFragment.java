@@ -4,11 +4,7 @@ package com.levor.liferpgtasks.view.fragments.settings;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +19,6 @@ import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.ExportImportDBFragment;
 
 import java.io.File;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -76,9 +71,9 @@ public class SettingsFragment extends DefaultFragment {
         resetView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getCurrentActivity());
-                alertBuilder.setTitle(R.string.reset)
-                        .setMessage(R.string.reset_message)
+                AlertDialog.Builder hardAlertBuilder = new AlertDialog.Builder(getCurrentActivity());
+                final AlertDialog hardResetAlert = hardAlertBuilder.setTitle(R.string.hard_reset)
+                        .setMessage(R.string.hard_reset_message)
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -97,6 +92,41 @@ public class SettingsFragment extends DefaultFragment {
                             }
                         })
                         .setNegativeButton(R.string.no, null)
+                        .create();
+                AlertDialog.Builder softAlertBuilder = new AlertDialog.Builder(getCurrentActivity());
+                final AlertDialog softResetAlert = softAlertBuilder.setTitle(R.string.soft_reset)
+                        .setMessage(R.string.soft_reset_message)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                getController().removeAllAppProgress();
+
+                                SharedPreferences prefs = getCurrentActivity()
+                                        .getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
+                                prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, false).apply();
+
+                                Toast.makeText(getContext(), getString(R.string.reset_performed), Toast.LENGTH_LONG)
+                                        .show();
+                            }
+                        })
+                        .setNegativeButton(R.string.no, null)
+                        .create();
+
+                AlertDialog.Builder initialAlertBuilder = new AlertDialog.Builder(getCurrentActivity());
+                initialAlertBuilder.setTitle(R.string.initial_reset)
+                        .setMessage(R.string.initial_reset_message)
+                        .setPositiveButton(R.string.hard_reset_button, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                hardResetAlert.show();
+                            }
+                        })
+                        .setNegativeButton(R.string.soft_reset_button, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                softResetAlert.show();
+                            }
+                        })
                         .show();
             }
         });

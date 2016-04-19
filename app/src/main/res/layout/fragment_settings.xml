@@ -122,7 +122,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_toRightOf="@id/reset_arrow"
                 android:textColor="@color/red"
-                android:text="@string/reset" />
+                android:text="@string/hard_reset" />
         </RelativeLayout>
 
         <View style="@style/HorizontalDivider"/>

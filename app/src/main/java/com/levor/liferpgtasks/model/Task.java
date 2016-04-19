@@ -421,6 +421,10 @@ public class Task {
         }
     }
 
+    public void reset() {
+        numberOfExecutions = 0;
+    }
+
     public static class SortingOrder{
         public static final int COMPLETION = 0;
         public static final int TITLE_ASC = 1;

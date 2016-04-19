@@ -151,6 +151,11 @@ public class Skill implements Comparable<Skill> {
         return new SkillByLevelComparator().compare(this, another);
     }
 
+    public void reset() {
+        level = 1;
+        sublevel = 0;
+    }
+
     private static class SkillByTitleComparator implements Comparator<Skill>{
 
         @Override

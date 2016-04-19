@@ -737,6 +737,17 @@ public class LifeEntity {
         tasksPerDay.put(date, tasksNumber);
     }
 
+    public void removeTasksPerDayData() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                database.delete(TasksPerDayTable.NAME, null, null);
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        tasksPerDay.clear();
+    }
+
     private ContentValues getContentValuesForTasksPerDay(long dateInMillis, int tasksNumber) {
         ContentValues values = new ContentValues();
         values.put(TasksPerDayTable.Cols.DATE, dateInMillis);

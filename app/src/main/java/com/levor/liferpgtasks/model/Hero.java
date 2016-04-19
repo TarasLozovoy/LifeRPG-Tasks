@@ -100,4 +100,11 @@ public class Hero {
         }
         return false;
     }
+
+    public void reset() {
+        level = 0;
+        xp = 0;
+        xpToNextLevel = xpToLevel(level);
+        baseXP = 1.0;
+    }
 }

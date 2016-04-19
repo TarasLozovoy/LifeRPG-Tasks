@@ -37,6 +37,7 @@ import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -540,13 +541,12 @@ public class LifeController {
             statisticsNumbers.put(TOTAL_SKILLS_XP_TAG, numbers.get(4));
             statisticsNumbers.put(ACHIEVEMENTS_COUNT_TAG, numbers.get(5));
         } else {
-            SharedPreferences prefs = getSharedPreferences();
-            statisticsNumbers.put(PERFORMED_TASKS_TAG, prefs.getFloat(PERFORMED_TASKS_TAG, 0f));
-            statisticsNumbers.put(TOTAL_TASKS_NUMBER_TAG, prefs.getFloat(TOTAL_TASKS_NUMBER_TAG, 0f));
-            statisticsNumbers.put(FINISHED_TASKS_NUMBER_TAG, prefs.getFloat(FINISHED_TASKS_NUMBER_TAG, 0f));
-            statisticsNumbers.put(TOTAL_HERO_XP_TAG,prefs.getFloat(TOTAL_HERO_XP_TAG, 0f));
-            statisticsNumbers.put(TOTAL_SKILLS_XP_TAG, prefs.getFloat(TOTAL_SKILLS_XP_TAG, 0f));
-            statisticsNumbers.put(ACHIEVEMENTS_COUNT_TAG, prefs.getFloat(ACHIEVEMENTS_COUNT_TAG, 0f));
+            statisticsNumbers.put(PERFORMED_TASKS_TAG, 0f);
+            statisticsNumbers.put(TOTAL_TASKS_NUMBER_TAG, 0f);
+            statisticsNumbers.put(FINISHED_TASKS_NUMBER_TAG, 0f);
+            statisticsNumbers.put(TOTAL_HERO_XP_TAG, 0f);
+            statisticsNumbers.put(TOTAL_SKILLS_XP_TAG, 0f);
+            statisticsNumbers.put(ACHIEVEMENTS_COUNT_TAG, 0f);
         }
         statisticsNumbers.put(XP_MULTIPLIER_TAG, (float) getHero().getBaseXP());
 
@@ -784,6 +784,44 @@ public class LifeController {
 
     public void closeDBConnection(){
         lifeEntity.closeDBConnection();
+    }
+
+    public void removeAllAppProgress() {
+        Hero hero = getHero();
+        hero.reset();
+        lifeEntity.updateHero(hero);
+
+        List<Task> tasksCloned = new ArrayList<>();
+        tasksCloned.addAll(getAllTasks());
+        for (Task t : tasksCloned) {
+            t.reset();
+            updateTask(t);
+        }
+
+        List<Skill> skillsCloned = new ArrayList<>();
+        skillsCloned.addAll(getAllSkills());
+        for (Skill sk : skillsCloned) {
+            sk.reset();
+            updateSkill(sk);
+        }
+
+        List<Characteristic> charsCloned = new ArrayList<>();
+        charsCloned.addAll(getCharacteristics());
+        for (Characteristic ch: charsCloned) {
+            ch.reset();
+            updateCharacteristic(ch);
+        }
+
+        Misc.ACHIEVEMENTS_LEVELS = null;
+        Misc.STATISTICS_NUMBERS = null;
+        initStatistics();
+        achievementsLevels.clear();
+        for (int i = 0; i < AchievsList.values().length; i++) {
+            achievementsLevels.add(0);
+        }
+        lifeEntity.updateMiscToDB();
+
+        lifeEntity.removeTasksPerDayData();
     }
 
     public void openDBConnection(){

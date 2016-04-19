@@ -82,6 +82,10 @@ public class Characteristic implements Comparable<Characteristic>{
         return this.title.compareTo(another.title);
     }
 
+    public void reset() {
+        level = 1;
+    }
+
     private static class CharacteristicByLevelComparator implements Comparator<Characteristic> {
 
         @Override

@@ -334,6 +334,7 @@
 
     <!-- Other-->
     <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
     <string name="remove">Delete</string>
     <string name="closing_app_toast">Press back again to exit</string>
     <string name="yes">Yes</string>
@@ -350,8 +351,14 @@
     <string name="notification_text">Task need to be performed</string>
     <string name="removing">Removing</string>
     <string name="error_on_loading_image">Error occurred at attempt to load selected image. Try to select another image.</string>
-    <string name="reset">Reset data</string>
-    <string name="reset_message">Reset will remove all tasks, skills and progress. Are you sure tou want to perform reset?</string>
+    <string name="initial_reset">Reset data</string>
+    <string name="hard_reset">Full reset data</string>
+    <string name="soft_reset">Partial reset data</string>
+    <string name="soft_reset_button">Partial\nreset</string>
+    <string name="hard_reset_button">Full\nreset</string>
+    <string name="initial_reset_message">Press full reset to delete all tasks, skills and all progress. Press partial reset to remove only progress.</string>
+    <string name="hard_reset_message">All tasks, skills and progress will be removed. Are you sure you want to perform reset?</string>
+    <string name="soft_reset_message">All progress will be lost. Skills, tasks and characteristics will not be deleted. Are you sure you want to perform reset?</string>
     <string name="reset_performed">Reset successfully performed</string>
     <string name="show_chart">Show chart</string>
     <string name="tasks_per_day">Tasks performed per day</string>
