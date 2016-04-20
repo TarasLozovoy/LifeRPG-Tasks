@@ -10,6 +10,7 @@ import android.widget.RemoteViews;
 
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.activities.MainActivity;
+import com.levor.liferpgtasks.view.activities.SplashActivity;
 
 public class LifeRPGWidgetProvider extends AppWidgetProvider {
 
@@ -24,7 +25,7 @@ public class LifeRPGWidgetProvider extends AppWidgetProvider {
             rv.setRemoteAdapter(appWidgetIds[i], R.id.widget_list_view, intent);
             rv.setEmptyView(R.id.widget_list_view, R.id.empty_view);
 
-            Intent appIntent = new Intent(context, MainActivity.class);
+            Intent appIntent = new Intent(context, SplashActivity.class);
             appIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             appIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
             appIntent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));

@@ -1,7 +1,6 @@
 package com.levor.liferpgtasks.view.activities;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -33,8 +32,6 @@ public class BackUpActivity extends ActionBarActivity {
     private final static String TEMP_DB_FILE_NAME = "temporaryDB.db";
 
     protected LifeController lifeController;
-
-    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

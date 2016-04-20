@@ -350,6 +350,7 @@
     <string name="new_version_changes">Changes in new version</string>
     <string name="support_project">Поддержать\nпроект</string>
     <string name="whats_new">Список изменений</string>
+    <string name="loading">Загрузка…</string>
     <!-- -->
 
 </resources>

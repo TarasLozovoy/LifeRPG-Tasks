@@ -10,6 +10,7 @@ import android.content.Intent;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.view.activities.MainActivity;
+import com.levor.liferpgtasks.view.activities.SplashActivity;
 
 public class TaskNotification extends BroadcastReceiver {
 
@@ -17,7 +18,7 @@ public class TaskNotification extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String taskTitle = intent.getExtras().getString(LifeController.TASK_TITLE_NOTIFICATION_TAG);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Intent notificationIntent = new Intent(context, MainActivity.class);
+        Intent notificationIntent = new Intent(context, SplashActivity.class);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         notificationIntent.putExtra(LifeController.TASK_TITLE_NOTIFICATION_TAG, taskTitle);
         PendingIntent pIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), notificationIntent, 0);

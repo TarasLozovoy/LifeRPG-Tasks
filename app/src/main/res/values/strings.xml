@@ -383,7 +383,7 @@
     <string name="donate_3_usd">Donate $3</string>
     <string name="donate_5_usd">Donate $5</string>
     <string name="donate_N_usd">Donate</string>
-    <string name="purchase_unsuccessful">Purchase unsuccessful. Please try agaian.</string>
+    <string name="purchase_unsuccessful">Purchase unsuccessful. Please try again.</string>
     <string name="purchase_successful">Purchase successful</string>
     <string name="level_short">lvl</string>
     <string name="number_of_executions">Number of executions: %3d</string>
@@ -393,6 +393,7 @@
     <string name="new_version_changes">Changes in new version</string>
     <string name="support_project">Support\nproject</string>
     <string name="whats_new">Whats new</string>
+    <string name="loading">Loading…</string>
     <!-- -->
 
 </resources>

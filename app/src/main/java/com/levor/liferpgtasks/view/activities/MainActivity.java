@@ -454,6 +454,7 @@ public class MainActivity extends BackUpActivity{
                             @Override
                             public void onClick(View v) {
                                 coachmarksDim.setVisibility(View.GONE);
+                                showWhatsNewDialog();
                             }
                         });
                     }
@@ -668,6 +669,7 @@ public class MainActivity extends BackUpActivity{
     }
 
     private void showWhatsNewDialog() {
+        if (getController().isFirstRun()) return;
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             String version = pInfo.versionName;
@@ -676,6 +678,8 @@ public class MainActivity extends BackUpActivity{
                 Bundle b = new Bundle();
                 b.putString(LifeController.APPLICATION_VERSION_CODE_TAG, version);
                 whatsNewDialog.show(getSupportFragmentManager(), "WhatsNewFragment");
+
+                getController().getSharedPreferences().edit().putString(LifeController.APPLICATION_VERSION_CODE_TAG, version).apply();
             }
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();

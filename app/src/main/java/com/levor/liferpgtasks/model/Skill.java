@@ -122,6 +122,7 @@ public class Skill implements Comparable<Skill> {
             }
             level --;
             sublevel = ((double) level) + sublevel;
+            if (sublevel < 0) { sublevel = 0; }
             return true;
         }
         if (sublevel < 0) { sublevel = 0; }
