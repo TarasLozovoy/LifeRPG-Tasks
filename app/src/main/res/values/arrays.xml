@@ -99,8 +99,14 @@
 
     <string-array
         name="version_descriptions_list">
-        <item>- New cool changes.\n
-              - Another cool change.</item>
+        <item>- Manual export to Dropbox.
+            \n- “What\'s new” dialog.
+            \n- Initial loading screen.
+            \n- “Simple repeat” task repeat mode now in quick access repeat dialog.
+            \n- Partial data reset possibility(will not delete tasks/skills).
+            \n- Fixed desktop widget. Press on widget now opens details for selected task.
+            \n- Fixed incorrect XP value displaying during hero level up.
+            \n- Fixed some crashes related to decreasing skills.</item>
     </string-array>
 
 </resources>
