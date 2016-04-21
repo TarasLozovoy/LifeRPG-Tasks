@@ -23,6 +23,7 @@ import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.skills.DetailedSkillFragment;
+import com.levor.liferpgtasks.view.fragments.skills.EditSkillFragment;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -129,12 +130,6 @@ public class DetailedTaskFragment extends DataDependantFrament {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.edit_task:
-                Bundle b = new Bundle();
-                b.putSerializable(EditTaskFragment.CURRENT_TASK_TITLE_TAG, currentTask.getTitle());
-                DefaultFragment f = new EditTaskFragment();
-                getCurrentActivity().showChildFragment(f, b);
-                return true;
             case R.id.perform_task:
                 performTask();
                 getActivity().invalidateOptionsMenu();
@@ -153,6 +148,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Detailed Task Fragment");
+        showFab();
     }
 
     private void setupTaskDate() {
@@ -360,6 +356,24 @@ public class DetailedTaskFragment extends DataDependantFrament {
         setupNotificationTextView();
         setupHabitGenerationView();
         setupNumberOfExecutions();
+    }
+
+    private void showFab() {
+        if (getCurrentActivity() == null) return;
+        getCurrentActivity().showFab(true);
+        getCurrentActivity().setFabImage(R.drawable.ic_mode_edit_black_24dp);
+        getCurrentActivity().setFabClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performTask();
+                getActivity().invalidateOptionsMenu();
+            }
+        });
+    }
+
+    @Override
+    public boolean isFabVisible() {
+        return true;
     }
 
     @Override

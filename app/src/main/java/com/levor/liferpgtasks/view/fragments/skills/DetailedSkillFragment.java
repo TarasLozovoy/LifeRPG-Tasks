@@ -21,6 +21,7 @@ import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
+import com.levor.liferpgtasks.view.fragments.characteristics.EditCharacteristicFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.AddTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
 
@@ -79,29 +80,10 @@ public class DetailedSkillFragment extends DataDependantFrament {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_detailed_skill, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.edit_skill:
-                Bundle b = new Bundle();
-                b.putSerializable(EditSkillFragment.EDIT_SKILL_UUID_TAG, currentSkill.getId());
-                DefaultFragment f = new EditSkillFragment();
-                getCurrentActivity().showChildFragment(f, b);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Detailed Skill Fragment");
+        showFab();
     }
 
     private void setupListView(){
@@ -153,6 +135,26 @@ public class DetailedSkillFragment extends DataDependantFrament {
         levelValue.setText(String.valueOf(currentSkill.getLevel()));
         sublevelValue.setText(sublevelString);
         toNextLevel.setText(toNextLevelString);
+    }
+
+    private void showFab() {
+        if (getCurrentActivity() == null) return;
+        getCurrentActivity().showFab(true);
+        getCurrentActivity().setFabImage(R.drawable.ic_mode_edit_black_24dp);
+        getCurrentActivity().setFabClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle b = new Bundle();
+                b.putSerializable(EditSkillFragment.EDIT_SKILL_UUID_TAG, currentSkill.getId());
+                DefaultFragment f = new EditSkillFragment();
+                getCurrentActivity().showChildFragment(f, b);
+            }
+        });
+    }
+
+    @Override
+    public boolean isFabVisible() {
+        return true;
     }
 
     @Override

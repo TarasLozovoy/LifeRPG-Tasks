@@ -1,4 +1,4 @@
-package com.levor.liferpgtasks.view.fragments.tasks;
+package com.levor.liferpgtasks.view.fragments;
 
 import android.app.Activity;
 import android.content.Context;

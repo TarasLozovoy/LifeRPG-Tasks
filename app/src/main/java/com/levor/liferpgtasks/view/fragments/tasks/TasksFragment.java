@@ -127,6 +127,11 @@ public class TasksFragment extends DefaultFragment {
         prefs.edit().putInt(SORTING_KEY, sorting).apply();
     }
 
+    @Override
+    public boolean isFabVisible() {
+        return true;
+    }
+
     public class PagerAdapter extends CustomPagerAdapter {
 
         private Set<DefaultFragment> fragments = new HashSet<>();

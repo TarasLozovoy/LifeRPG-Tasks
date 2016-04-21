@@ -9,14 +9,6 @@
         android:title="@string/do_task"
         app:showAsAction="always" />
 
-
-    <item
-        android:id="@+id/edit_task"
-        android:icon="@drawable/ic_mode_edit_black_24dp"
-        android:orderInCategory="2"
-        android:title="@string/edit_task"
-        app:showAsAction="ifRoom" />
-
     <item
         android:id="@+id/undo_task"
         android:orderInCategory="4"

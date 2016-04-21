@@ -16,7 +16,7 @@ import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.dataBase.DataBaseHelper;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
-import com.levor.liferpgtasks.view.fragments.tasks.ExportImportDBFragment;
+import com.levor.liferpgtasks.view.fragments.ExportImportDBFragment;
 
 import java.io.File;
 

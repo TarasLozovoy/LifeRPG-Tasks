@@ -3,12 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".TasksActivity">
     <item
-        android:id="@+id/new_task"
-        android:icon="@drawable/ic_add_black_24dp"
-        android:orderInCategory="99"
-        android:title="@string/add_new_task"
-        app:showAsAction="ifRoom" />
-    <item
         android:id="@+id/sorting"
         android:icon="@drawable/ic_sort_black_24dp"
         android:orderInCategory="3"
@@ -21,11 +15,4 @@
         android:title="@string/search"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="collapseActionView|ifRoom" />
-
-    <item
-        android:id="@+id/delete_all_finished"
-        android:icon="@drawable/ic_delete_black_24dp"
-        android:orderInCategory="1"
-        android:title="@string/delete_all_finished_tasks"
-        app:showAsAction="ifRoom" />
 </menu>

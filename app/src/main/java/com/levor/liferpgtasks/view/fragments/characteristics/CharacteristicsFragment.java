@@ -8,12 +8,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
+import com.levor.liferpgtasks.view.fragments.hero.EditHeroFragment;
 
 public class CharacteristicsFragment extends DefaultFragment {
     private ListView listView;
@@ -56,12 +58,38 @@ public class CharacteristicsFragment extends DefaultFragment {
             case R.id.show_chart:
                 getCurrentActivity().showChildFragment(new CharacteristicsChartFragment(), null);
                 return true;
-            case R.id.add:
-                getCurrentActivity().showChildFragment(new EditCharacteristicFragment(), null);
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (!isVisibleToUser) return;
+        showFab();
+    }
+
+    private void showFab() {
+        if (getCurrentActivity() == null) return;
+        getCurrentActivity().showFab(true);
+        getCurrentActivity().setFabImage(R.drawable.ic_add_black_24dp);
+        getCurrentActivity().setFabClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().showChildFragment(new EditCharacteristicFragment(), null);
+            }
+        });
+    }
+
+    @Override
+    public boolean isFabVisible() {
+        return true;
+    }
+
+    private void hideFab(){
+        if (getCurrentActivity() == null) return;
+        getCurrentActivity().showFab(false);
     }
 
     @Override

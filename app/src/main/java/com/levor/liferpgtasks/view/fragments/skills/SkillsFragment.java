@@ -14,6 +14,7 @@ import android.widget.ListView;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
+import com.levor.liferpgtasks.view.fragments.characteristics.EditCharacteristicFragment;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -50,27 +51,28 @@ public class SkillsFragment extends DefaultFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_skills, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.add_new_skill:
-                DefaultFragment f = new AddSkillFragment();
-                getCurrentActivity().showChildFragment(f, null);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Skills Fragment");
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (getCurrentActivity() == null && !isVisibleToUser) return;
+        getCurrentActivity().showFab(true);
+        getCurrentActivity().setFabImage(R.drawable.ic_add_black_24dp);
+        getCurrentActivity().setFabClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().showChildFragment(new AddSkillFragment(), null);
+            }
+        });
+    }
+
+    @Override
+    public boolean isFabVisible() {
+        return true;
     }
 
     @Override

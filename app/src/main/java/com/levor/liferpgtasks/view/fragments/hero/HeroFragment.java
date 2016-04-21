@@ -43,26 +43,28 @@ public class HeroFragment extends DefaultFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_hero_main_fragment, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.edit_hero:
-                getCurrentActivity().showChildFragment(new EditHeroFragment(), null);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Hero Fragment");
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (getCurrentActivity() == null && !isVisibleToUser) return;
+        getCurrentActivity().showFab(true);
+        getCurrentActivity().setFabImage(R.drawable.ic_mode_edit_black_24dp);
+        getCurrentActivity().setFabClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().showChildFragment(new EditHeroFragment(), null);
+            }
+        });
+    }
+
+    @Override
+    public boolean isFabVisible() {
+        return true;
     }
 
     public void updateUI() {

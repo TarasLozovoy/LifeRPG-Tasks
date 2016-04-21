@@ -17,8 +17,10 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -69,6 +71,7 @@ public class MainActivity extends BackUpActivity{
     InterstitialAd tasksChartAd;
     private TabLayout navigationTabLayout;
     private TabLayout.Tab heroNavigationTab;
+    private FloatingActionButton fab;
     private static Stack<DefaultFragment> mainFragmentsStack = new Stack<>();
     private static Stack<DefaultFragment> tasksFragmentsStack = new Stack<>();
     private static Stack<DefaultFragment> settingsFragmentsStack = new Stack<>();
@@ -107,6 +110,8 @@ public class MainActivity extends BackUpActivity{
 
         navigationTabLayout = (TabLayout) findViewById(R.id.navigation_tab_layout);
         setupNavigationTabs();
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
         navigationTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         navigationTabLayout.setSelectedTabIndicatorHeight(0);
@@ -276,6 +281,9 @@ public class MainActivity extends BackUpActivity{
             showRootFragment(fragmentID);
             return;
         }
+        if (getCurrentFragment() != null && getCurrentFragment().isFabVisible() && !fragment.isFabVisible()) {
+            showFab(false);
+        }
 //        if (getCurrentFragmentsStack().isEmpty()) return;
         currentFragmentID = fragmentID;
         getSupportFragmentManager().beginTransaction()
@@ -286,12 +294,16 @@ public class MainActivity extends BackUpActivity{
     public void showPreviousFragment() {
         if (getCurrentFragmentsStack().isEmpty()
                 || getCurrentFragmentsStack().size() == 1) return;
+        DefaultFragment currentFragment = getCurrentFragment();
         getCurrentFragmentsStack().pop();
         DefaultFragment fragment;
         try {
             fragment = getCurrentFragment();
         } catch (EmptyStackException e){
             return;
+        }
+        if (getCurrentFragment() != null && getCurrentFragment().isFabVisible() && !fragment.isFabVisible()) {
+            showFab(false);
         }
         if (fragment instanceof DataDependantFrament &&
                 !((DataDependantFrament)fragment).isDependableDataAvailable()){
@@ -314,6 +326,9 @@ public class MainActivity extends BackUpActivity{
     }
 
     public void showChildFragment(DefaultFragment fragment, Bundle bundle){
+        if (getCurrentFragment() != null && getCurrentFragment().isFabVisible() && !fragment.isFabVisible()) {
+            showFab(false);
+        }
         fragment.setArguments(bundle);
         getCurrentFragmentsStack().push(fragment);
         getSupportFragmentManager().beginTransaction()
@@ -435,6 +450,7 @@ public class MainActivity extends BackUpActivity{
     }
 
     public void showCoachmarks(){
+        showFab(false);
         final View bottomCoachmarks = findViewById(R.id.bottom_coachmarks);
         final View xpCoachmarks = findViewById(R.id.xp_coachmarks);
         final View coachmarksDim = findViewById(R.id.coachmarks_dim);
@@ -455,6 +471,7 @@ public class MainActivity extends BackUpActivity{
                             public void onClick(View v) {
                                 coachmarksDim.setVisibility(View.GONE);
                                 showWhatsNewDialog();
+                                showFab(true);
                             }
                         });
                     }
@@ -684,6 +701,22 @@ public class MainActivity extends BackUpActivity{
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public void showFab(boolean show) {
+        if (!show) {
+            fab.hide();
+        } else {
+            fab.show();
+        }
+    }
+
+    public void setFabImage(int resID) {
+        fab.setImageDrawable(ContextCompat.getDrawable(this, resID));
+    }
+
+    public void setFabClickListener(View.OnClickListener listener) {
+        fab.setOnClickListener(listener);
     }
 
     public enum AdType { PERFORM_TASK, CHARACTERISTICS_CHART, TASKS_PER_DAY_CHART;}

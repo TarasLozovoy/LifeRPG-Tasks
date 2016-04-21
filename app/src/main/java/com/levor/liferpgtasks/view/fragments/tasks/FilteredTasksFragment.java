@@ -20,6 +20,7 @@ import com.levor.liferpgtasks.adapters.TasksAdapter;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
+import com.levor.liferpgtasks.view.fragments.hero.EditHeroFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,14 +66,6 @@ public class FilteredTasksFragment extends DefaultFragment{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.new_task:
-                Bundle b = new Bundle();
-                b.putInt(AddTaskFragment.REPEAT_MODE_TAG, filter == INFINITE ?
-                        Task.RepeatMode.EVERY_NTH_DAY : Task.RepeatMode.SIMPLE_REPEAT);
-                b.putInt(AddTaskFragment.REPEAT_TAG, filter == INFINITE ? -1 : 1);
-
-                getCurrentActivity().showChildFragment(new AddTaskFragment(), b);
-                return true;
             case R.id.sorting:
                 String[] sortingVariants = getResources().getStringArray(R.array.sorting_spinner_items);
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
@@ -92,29 +85,6 @@ public class FilteredTasksFragment extends DefaultFragment{
                 dialog.setTitle(currentSorting);
                 dialog.show();
                 return true;
-            case R.id.delete_all_finished:
-                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                alert.setTitle(R.string.delete_all_finished_tasks)
-                        .setMessage(R.string.delete_all_finished_tasks_message)
-                        .setNegativeButton(R.string.no, null)
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                List<Task> tasks = getController().getAllTasks();
-                                List<Task> finishedTasks = new ArrayList<>();
-                                for (Task t : tasks) {
-                                    if (t.isTaskDone()) {
-                                        finishedTasks.add(t);
-                                    }
-                                }
-                                for (Task t : finishedTasks) {
-                                    getController().removeTask(t);
-                                }
-                                updateUI();
-                            }
-                        })
-                        .show();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -123,27 +93,6 @@ public class FilteredTasksFragment extends DefaultFragment{
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-
-        MenuItem newTask = menu.findItem(R.id.new_task);
-        MenuItem deleteFinished = menu.findItem(R.id.delete_all_finished);
-        if (filter == DONE) {
-            newTask.setEnabled(false);
-            newTask.getIcon().setAlpha(75);
-
-            boolean anyTaskFinished = false;
-            for (Task t : getController().getAllTasks()) {
-                if (t.isTaskDone()) {
-                    anyTaskFinished = true;
-                    break;
-                }
-            }
-            deleteFinished.setVisible(anyTaskFinished);
-        } else {
-            newTask.setEnabled(true);
-            newTask.getIcon().setAlpha(255);
-            deleteFinished.setVisible(false);
-        }
-
         final MenuItem searchItem = menu.findItem(R.id.search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -232,6 +181,60 @@ public class FilteredTasksFragment extends DefaultFragment{
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Tasks Fragment");
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (getCurrentActivity() == null || !isVisibleToUser) return;
+        getCurrentActivity().showFab(true);
+        if (filter != DONE) {
+            getCurrentActivity().setFabImage(R.drawable.ic_add_black_24dp);
+            getCurrentActivity().setFabClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle b = new Bundle();
+                    b.putInt(AddTaskFragment.REPEAT_MODE_TAG, filter == INFINITE ?
+                            Task.RepeatMode.EVERY_NTH_DAY : Task.RepeatMode.SIMPLE_REPEAT);
+                    b.putInt(AddTaskFragment.REPEAT_TAG, filter == INFINITE ? -1 : 1);
+
+                    getCurrentActivity().showChildFragment(new AddTaskFragment(), b);
+                }
+            });
+        } else {
+            getCurrentActivity().setFabImage(R.drawable.ic_delete_black_24dp);
+            getCurrentActivity().setFabClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                    alert.setTitle(R.string.delete_all_finished_tasks)
+                            .setMessage(R.string.delete_all_finished_tasks_message)
+                            .setNegativeButton(R.string.no, null)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    List<Task> tasks = getController().getAllTasks();
+                                    List<Task> finishedTasks = new ArrayList<>();
+                                    for (Task t : tasks) {
+                                        if (t.isTaskDone()) {
+                                            finishedTasks.add(t);
+                                        }
+                                    }
+                                    for (Task t : finishedTasks) {
+                                        getController().removeTask(t);
+                                    }
+                                    updateUI();
+                                }
+                            })
+                            .show();
+                }
+            });
+        }
+    }
+
+    @Override
+    public boolean isFabVisible() {
+        return true;
     }
 
     private void setupListView() {

@@ -49,12 +49,7 @@ public class CharacteristicsChartFragment extends DefaultFragment{
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Characteristics Chart Fragment");
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.clear();
-        inflater.inflate(R.menu.menu_characteristics_chart_fragment, menu);
+        showFab();
     }
 
     @Override
@@ -63,21 +58,6 @@ public class CharacteristicsChartFragment extends DefaultFragment{
             case android.R.id.home:
                 getCurrentActivity().showInterstitialAd(MainActivity.AdType.CHARACTERISTICS_CHART);
                 break;
-            case R.id.edit_chart:
-                KeyCharacteristicsSelectionDialog dialog = new KeyCharacteristicsSelectionDialog();
-                Bundle b = new Bundle();
-                b.putStringArrayList(KeyCharacteristicsSelectionDialog.CHARS_LIST, charTitles);
-                dialog.setArguments(b);
-                dialog.setListener(new KeyCharacteristicsSelectionDialog.KeyCharacteristicsChangedListener() {
-                    @Override
-                    public void onChanged(ArrayList<String> charsTitles) {
-                        charTitles = charsTitles;
-                        radarChart.clear();
-                        createChart();
-                    }
-                });
-                dialog.show(getCurrentActivity().getSupportFragmentManager(), "CharacteristicsSelection");
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -93,6 +73,35 @@ public class CharacteristicsChartFragment extends DefaultFragment{
     public void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+    }
+
+    private void showFab() {
+        if (getCurrentActivity() == null) return;
+        getCurrentActivity().showFab(true);
+        getCurrentActivity().setFabImage(R.drawable.ic_mode_edit_black_24dp);
+        getCurrentActivity().setFabClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KeyCharacteristicsSelectionDialog dialog = new KeyCharacteristicsSelectionDialog();
+                Bundle b = new Bundle();
+                b.putStringArrayList(KeyCharacteristicsSelectionDialog.CHARS_LIST, charTitles);
+                dialog.setArguments(b);
+                dialog.setListener(new KeyCharacteristicsSelectionDialog.KeyCharacteristicsChangedListener() {
+                    @Override
+                    public void onChanged(ArrayList<String> charsTitles) {
+                        charTitles = charsTitles;
+                        radarChart.clear();
+                        createChart();
+                    }
+                });
+                dialog.show(getCurrentActivity().getSupportFragmentManager(), "CharacteristicsSelection");
+            }
+        });
+    }
+
+    @Override
+    public boolean isFabVisible() {
+        return true;
     }
 
     private void setupCharacteristicsList() {

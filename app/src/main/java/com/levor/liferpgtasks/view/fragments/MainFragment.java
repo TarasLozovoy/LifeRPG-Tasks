@@ -95,6 +95,11 @@ public class MainFragment extends DefaultFragment{
         });
     }
 
+    @Override
+    public boolean isFabVisible() {
+        return true;
+    }
+
     public class PagerAdapter extends CustomPagerAdapter {
 
         public PagerAdapter(FragmentManager fm, int NumOfTabs) {
