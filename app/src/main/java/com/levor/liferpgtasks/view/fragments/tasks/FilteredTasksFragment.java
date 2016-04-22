@@ -12,20 +12,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.adapters.TasksAdapter;
 import com.levor.liferpgtasks.model.Task;
-import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 public class FilteredTasksFragment extends DefaultFragment{
     public static final String FILTER_ARG = "filter_arg";
@@ -121,8 +119,7 @@ public class FilteredTasksFragment extends DefaultFragment{
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == R.id.recyclerViewTasks){
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
-            String selectedTitle = sortedTasksTitles.get(info.position);
+            String selectedTitle = sortedTasksTitles.get(((TasksAdapter) recyclerView.getAdapter()).getPosition());
             Task selectedTask = getController().getTaskByTitle(selectedTitle);
             menu.setHeaderTitle(selectedTitle);
             menu.add(filter, UNDO_CONTEXT_MENU_ITEM, UNDO_CONTEXT_MENU_ITEM, R.string.undo)
@@ -135,8 +132,7 @@ public class FilteredTasksFragment extends DefaultFragment{
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getGroupId() == filter) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-            String selectedTitle = sortedTasksTitles.get(info.position);
+            String selectedTitle = sortedTasksTitles.get(((TasksAdapter) recyclerView.getAdapter()).getPosition());
             final Task currentTask = getController().getTaskByTitle(selectedTitle);
 
             int menuItemIndex = item.getItemId();
@@ -183,57 +179,8 @@ public class FilteredTasksFragment extends DefaultFragment{
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (getCurrentActivity() == null || !isVisibleToUser) return;
-        getCurrentActivity().showFab(true);
-        if (filter != DONE) {
-            getCurrentActivity().setFabImage(R.drawable.ic_add_black_24dp);
-            getCurrentActivity().setFabClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Bundle b = new Bundle();
-                    b.putInt(AddTaskFragment.REPEAT_MODE_TAG, filter == INFINITE ?
-                            Task.RepeatMode.EVERY_NTH_DAY : Task.RepeatMode.SIMPLE_REPEAT);
-                    b.putInt(AddTaskFragment.REPEAT_TAG, filter == INFINITE ? -1 : 1);
-
-                    getCurrentActivity().showChildFragment(new AddTaskFragment(), b);
-                }
-            });
-        } else {
-            getCurrentActivity().setFabImage(R.drawable.ic_delete_black_24dp);
-            getCurrentActivity().setFabClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                    alert.setTitle(R.string.delete_all_finished_tasks)
-                            .setMessage(R.string.delete_all_finished_tasks_message)
-                            .setNegativeButton(R.string.no, null)
-                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    List<Task> tasks = getController().getAllTasks();
-                                    List<Task> finishedTasks = new ArrayList<>();
-                                    for (Task t : tasks) {
-                                        if (t.isTaskDone()) {
-                                            finishedTasks.add(t);
-                                        }
-                                    }
-                                    for (Task t : finishedTasks) {
-                                        getController().removeTask(t);
-                                    }
-                                    updateUI();
-                                }
-                            })
-                            .show();
-                }
-            });
-        }
-    }
-
-    @Override
     public boolean isFabVisible() {
-        return true;
+        return false;
     }
 
     private void setupListView() {

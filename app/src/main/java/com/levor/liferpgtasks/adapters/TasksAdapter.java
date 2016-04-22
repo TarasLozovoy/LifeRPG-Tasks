@@ -29,6 +29,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder>{
     private List<Task> items = new ArrayList<>();
     private MainActivity activity;
     private LifeController lifeController;
+    private int position;
 
     public TasksAdapter(List<String> array, MainActivity activity) {
         this.activity = activity;
@@ -49,7 +50,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Task task = items.get(position);
         ImageButton doBtn = holder.doBtn;
         TextView titleTextView = holder.titleTextView;
@@ -64,6 +65,14 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder>{
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, taskID);
                 activity.showChildFragment(new DetailedTaskFragment(), bundle);
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                setPosition(holder.getPosition());
+                return false;
             }
         });
 
@@ -130,6 +139,14 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder>{
         return items.size();
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView;
         TextView dateTextView;
@@ -148,6 +165,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder>{
             repeatabilityTV = (TextView) view.findViewById(R.id.repeatability_tasks_list_item);
             habitDaysLeftTV = (TextView) view.findViewById(R.id.habit_days_left_text_view);
             repeatabilityLL = (LinearLayout) view.findViewById(R.id.repeatability_container_tasks_list_item);
+            itemView.setLongClickable(true);
         }
     }
 }

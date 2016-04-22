@@ -1,11 +1,16 @@
 package com.levor.liferpgtasks.view.fragments.tasks;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
@@ -19,7 +24,11 @@ import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class TasksFragment extends DefaultFragment {
@@ -28,6 +37,7 @@ public class TasksFragment extends DefaultFragment {
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    private FloatingActionButton fab;
 
     private int sorting;
     private float defaultElevation;
@@ -43,6 +53,7 @@ public class TasksFragment extends DefaultFragment {
         tabLayout.addTab(tabLayout.newTab().setText(R.string.finished_tasks));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.accent));
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
 
         viewPager = (ViewPager) view.findViewById(R.id.pager);
         ActionBar actionBar = getCurrentActivity().getSupportActionBar();
@@ -52,6 +63,7 @@ public class TasksFragment extends DefaultFragment {
         SharedPreferences prefs = getActivity()
                 .getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
         sorting = prefs.getInt(SORTING_KEY, Task.SortingOrder.DATE_DESC);
+
         getCurrentActivity().showActionBarHomeButtonAsBack(false);
         setHasOptionsMenu(true);
         return view;
@@ -73,6 +85,7 @@ public class TasksFragment extends DefaultFragment {
             defaultElevation = actionBar.getElevation();
             actionBar.setElevation(0);
         }
+        setupFab();
     }
 
     @Override
@@ -93,6 +106,7 @@ public class TasksFragment extends DefaultFragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                setupFab();
             }
 
             @Override
@@ -109,7 +123,7 @@ public class TasksFragment extends DefaultFragment {
 
     public void updateChildFragmentsUI(){
         PagerAdapter adapter = (PagerAdapter) viewPager.getAdapter();
-        for (DefaultFragment f : adapter.getFragments()) {
+        for (DefaultFragment f : adapter.getFragments().values()) {
             if (f != null && f.isCreated()){
                 f.updateUI();
             }
@@ -132,9 +146,55 @@ public class TasksFragment extends DefaultFragment {
         return true;
     }
 
+    public void setupFab() {
+        fab.show();
+        if (tabLayout.getSelectedTabPosition() != FilteredTasksFragment.DONE) {
+            fab.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_add_black_24dp));
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle b = new Bundle();
+                    b.putInt(AddTaskFragment.REPEAT_MODE_TAG, tabLayout.getSelectedTabPosition() == FilteredTasksFragment.INFINITE ?
+                            Task.RepeatMode.EVERY_NTH_DAY : Task.RepeatMode.SIMPLE_REPEAT);
+                    b.putInt(AddTaskFragment.REPEAT_TAG, tabLayout.getSelectedTabPosition() == FilteredTasksFragment.INFINITE ? -1 : 1);
+
+                    getCurrentActivity().showChildFragment(new AddTaskFragment(), b);
+                }
+            });
+        } else {
+            fab.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_delete_black_24dp));
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                    alert.setTitle(R.string.delete_all_finished_tasks)
+                            .setMessage(R.string.delete_all_finished_tasks_message)
+                            .setNegativeButton(R.string.no, null)
+                            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    List<Task> tasks = getController().getAllTasks();
+                                    List<Task> finishedTasks = new ArrayList<>();
+                                    for (Task t : tasks) {
+                                        if (t.isTaskDone()) {
+                                            finishedTasks.add(t);
+                                        }
+                                    }
+                                    for (Task t : finishedTasks) {
+                                        getController().removeTask(t);
+                                    }
+                                    updateUI();
+                                }
+                            })
+                            .show();
+                }
+            });
+        }
+    }
+
     public class PagerAdapter extends CustomPagerAdapter {
 
-        private Set<DefaultFragment> fragments = new HashSet<>();
+        private Map<Integer, DefaultFragment> fragments = new HashMap<>();
 
         public PagerAdapter(FragmentManager fm, int NumOfTabs) {
             super(fm, NumOfTabs);
@@ -166,7 +226,7 @@ public class TasksFragment extends DefaultFragment {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             DefaultFragment f = (DefaultFragment) super.instantiateItem(container, position);
-            fragments.add(f);
+            fragments.put(position, f);
             return f;
         }
 
@@ -178,7 +238,7 @@ public class TasksFragment extends DefaultFragment {
 
         }
 
-        public Set<DefaultFragment> getFragments() {
+        public Map<Integer, DefaultFragment> getFragments() {
             return fragments;
         }
     }

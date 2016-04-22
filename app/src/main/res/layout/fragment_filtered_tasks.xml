@@ -1,13 +1,12 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tasks_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="5dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:paddingTop="5dp"
-    tools:context=".TasksActivity">
+    android:paddingTop="5dp">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewTasks"
@@ -24,4 +23,4 @@
         android:gravity="center_horizontal|center_vertical"
         android:text="@string/empty_list_view"
         android:visibility="gone" />
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
