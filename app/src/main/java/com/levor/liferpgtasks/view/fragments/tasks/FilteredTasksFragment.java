@@ -2,8 +2,9 @@ package com.levor.liferpgtasks.view.fragments.tasks;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -13,14 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.levor.liferpgtasks.adapters.TasksAdapter;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
-import com.levor.liferpgtasks.view.fragments.hero.EditHeroFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,7 +41,7 @@ public class FilteredTasksFragment extends DefaultFragment{
 
     private int filter;
     private String searchQuery = "";
-    private ListView listView;
+    private RecyclerView recyclerView;
     private TextView emptyList;
 
     private List<String> sortedTasksTitles = new ArrayList<>();
@@ -53,7 +52,7 @@ public class FilteredTasksFragment extends DefaultFragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_filtered_tasks, container, false);
         filter = getArguments().getInt(FILTER_ARG);
-        listView = (ListView) view.findViewById(R.id.listViewTasks);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewTasks);
         emptyList = (TextView) view.findViewById(R.id.empty_list);
         if (filter == DONE) emptyList.setText(R.string.empty_done_list_view);
         setupListView();
@@ -121,7 +120,7 @@ public class FilteredTasksFragment extends DefaultFragment{
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId() == R.id.listViewTasks){
+        if (v.getId() == R.id.recyclerViewTasks){
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
             String selectedTitle = sortedTasksTitles.get(info.position);
             Task selectedTask = getController().getTaskByTitle(selectedTitle);
@@ -303,30 +302,21 @@ public class FilteredTasksFragment extends DefaultFragment{
 
         if (sortedTasksTitles.isEmpty()) {
             emptyList.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
         } else {
             emptyList.setVisibility(View.GONE);
-            listView.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
             TasksAdapter adapter = new TasksAdapter(sortedTasksTitles, getCurrentActivity());
-            adapter.registerDataSetObserver(new DataSetObserver() {
+            adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                 @Override
                 public void onChanged() {
                     updateFilteredFragmentsUI();
                     super.onChanged();
                 }
             });
-            listView.setAdapter(adapter);
-            registerForContextMenu(listView);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String selectedTaskTitle = sortedTasksTitles.get(position);
-                    UUID taskID = getController().getTaskByTitle(selectedTaskTitle).getId();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, taskID);
-                    getCurrentActivity().showChildFragment(new DetailedTaskFragment(), bundle);
-                }
-            });
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            registerForContextMenu(recyclerView);
         }
     }
 

@@ -3,29 +3,29 @@ package com.levor.liferpgtasks.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
 import com.levor.liferpgtasks.view.activities.MainActivity;
+import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
-public class TasksAdapter extends BaseAdapter implements ListAdapter{
+public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.ViewHolder>{
     private List<Task> items = new ArrayList<>();
     private MainActivity activity;
     private LifeController lifeController;
@@ -42,37 +42,36 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
     }
 
     @Override
-    public int getCount() {
-        return items.size();
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(activity);
+        View tasksView = inflater.inflate(R.layout.tasks_list_item, parent, false);
+        return new ViewHolder(tasksView);
     }
 
     @Override
-    public Object getItem(int position) {
-        return items.get(position).getTitle();
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        View view = convertView;
-        if (view == null){
-            LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.tasks_list_item, null);
-        }
-
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         final Task task = items.get(position);
-        ImageButton doBtn = (ImageButton) view.findViewById(R.id.check_button);
-        final View finalView = view;
+        ImageButton doBtn = holder.doBtn;
+        TextView titleTextView = holder.titleTextView;
+        TextView dateTextView = holder.dateTextView;
+        TextView repeatabilityTV = holder.repeatabilityTV;
+        TextView habitDaysLeftTV = holder.habitDaysLeftTV;
+        LinearLayout repeatabilityLL = holder.repeatabilityLL;
+        holder.root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UUID taskID = items.get(position).getId();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, taskID);
+                activity.showChildFragment(new DetailedTaskFragment(), bundle);
+            }
+        });
+
         doBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PerformTaskAlertBuilder alert = new PerformTaskAlertBuilder(activity,
-                        task,
-                        finalView);
+                        task);
                 AlertDialog alertDialog = alert.create();
                 alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
@@ -81,21 +80,12 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                     }
                 });
                 alertDialog.show();
-
-//                boolean isHeroLevelIncreased = lifeController.performTask(task);
-//                if (isHeroLevelIncreased) {
-//                    Toast.makeText(activity, activity.getString(R.string.hero_level_increased, lifeController.getHeroName()),
-//                            Toast.LENGTH_LONG).show();
-//                }
                 notifyDataSetChanged();
 
             }
         });
 
-        TextView listItemTitleTextView = (TextView) view.findViewById(R.id.list_item_title);
-        TextView listItemDateTextView = (TextView) view.findViewById(R.id.list_item_date);
-
-        listItemTitleTextView.setText(task.getTitle());
+        titleTextView.setText(task.getTitle());
         boolean isTaskFinished = task.getRepeatability() == 0;
         if (task.getDateMode() != Task.DateMode.TERMLESS || isTaskFinished) {
             Date date = isTaskFinished ? task.getFinishDate() : task.getDate();
@@ -106,16 +96,13 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                     sb.append(" ");
                     sb.append(DateFormat.format(Task.getTimeFormatting(), date));
                 }
-                listItemDateTextView.setVisibility(View.VISIBLE);
-                listItemDateTextView.setText(sb.toString());
+                dateTextView.setVisibility(View.VISIBLE);
+                dateTextView.setText(sb.toString());
             }
         } else {
-            listItemDateTextView.setVisibility(View.GONE);
+            dateTextView.setVisibility(View.GONE);
         }
 
-        TextView repeatabilityTV = (TextView) view.findViewById(R.id.repeatability_tasks_list_item);
-        TextView habitDaysLeftTV = (TextView) view.findViewById(R.id.habit_days_left_text_view);
-        LinearLayout repeatabilityLL = (LinearLayout) view.findViewById(R.id.repeatability_container_tasks_list_item);
         habitDaysLeftTV.setVisibility(View.GONE);
         int repeat = task.getRepeatability();
         if (repeat < 0) {
@@ -124,11 +111,11 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
                 habitDaysLeftTV.setText(String.valueOf(task.getHabitDaysLeft()));
             }
             int drawableId = task.getHabitDays() > 0 ? R.drawable.ic_generate_habit_black_24dp : R.drawable.infinity;
-            repeatabilityLL.setBackground(view.getResources().getDrawable(drawableId));
+            repeatabilityLL.setBackground(activity.getResources().getDrawable(drawableId));
             repeatabilityTV.setText("");
             doBtn.setEnabled(true);
         } else if (repeat > 0) {
-            repeatabilityLL.setBackground(view.getResources().getDrawable(R.drawable.ic_replay_black_24dp));
+            repeatabilityLL.setBackground(activity.getResources().getDrawable(R.drawable.ic_replay_black_24dp));
             repeatabilityTV.setText(Integer.toString(repeat));
             doBtn.setEnabled(true);
         } else {
@@ -136,6 +123,31 @@ public class TasksAdapter extends BaseAdapter implements ListAdapter{
             repeatabilityTV.setText("");
             doBtn.setEnabled(false);
         }
-        return view;
+    }
+
+    @Override
+    public int getItemCount() {
+        return items.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView titleTextView;
+        TextView dateTextView;
+        TextView repeatabilityTV;
+        TextView habitDaysLeftTV;
+        LinearLayout repeatabilityLL;
+        ImageButton doBtn;
+        View root;
+
+        public ViewHolder(View view) {
+            super(view);
+            root = view;
+            doBtn = (ImageButton) view.findViewById(R.id.check_button);
+            titleTextView = (TextView) view.findViewById(R.id.list_item_title);
+            dateTextView = (TextView) view.findViewById(R.id.list_item_date);
+            repeatabilityTV = (TextView) view.findViewById(R.id.repeatability_tasks_list_item);
+            habitDaysLeftTV = (TextView) view.findViewById(R.id.habit_days_left_text_view);
+            repeatabilityLL = (LinearLayout) view.findViewById(R.id.repeatability_container_tasks_list_item);
+        }
     }
 }

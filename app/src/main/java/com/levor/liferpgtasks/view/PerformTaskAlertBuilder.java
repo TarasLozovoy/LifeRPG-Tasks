@@ -25,7 +25,7 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
     private Context context;
     private Task task;
 
-    public PerformTaskAlertBuilder(final Context context, final Task t, View root) {
+    public PerformTaskAlertBuilder(final Context context, final Task t) {
         super(context);
         this.context = context;
         this.task = t;
@@ -52,10 +52,10 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
             xp = - xp;
         }
 
-        sb.append(root.getResources().getString(R.string.task_performed))
+        sb.append(context.getResources().getString(R.string.task_performed))
                 .append("\n")
                 .append(xp >= 0 ? "+" : "")
-                .append(root.getResources().getString(R.string.XP_gained, xp));
+                .append(context.getResources().getString(R.string.XP_gained, xp));
         for (Map.Entry<Skill, Integer> pair : skillsLevels.entrySet()) {
             Skill sk = pair.getKey();
             int oldLevel = pair.getValue();
@@ -87,14 +87,14 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
         this.setCancelable(false)
                 .setTitle(t.getTitle())
                 .setMessage(sb.toString())
-                .setNeutralButton(root.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
+                .setNeutralButton(context.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ((MainActivity)context).showInterstitialAd(MainActivity.AdType.PERFORM_TASK);
                         dialog.dismiss();
                     }
                 })
-                .setPositiveButton(root.getResources().getString(R.string.share), null);
+                .setPositiveButton(context.getResources().getString(R.string.share), null);
     }
 
     @Override

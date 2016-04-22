@@ -3,10 +3,9 @@ package com.levor.liferpgtasks.view.fragments.skills;
 
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,7 +20,6 @@ import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
-import com.levor.liferpgtasks.view.fragments.characteristics.EditCharacteristicFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.AddTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
 
@@ -38,7 +36,7 @@ public class DetailedSkillFragment extends DataDependantFrament {
     private TextView levelValue;
     private TextView sublevelValue;
     private TextView toNextLevel;
-    private ListView listView;
+    private RecyclerView recyclerView;
 
     private Skill currentSkill;
     private List<String> currentTasks;
@@ -48,14 +46,14 @@ public class DetailedSkillFragment extends DataDependantFrament {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_deatiled_skill, container, false);
-        listView = (ListView) v;
-        View header = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.detailed_skill_header, null);
-        skillTitleTV = (TextView) header.findViewById(R.id.skill_title);
-        keyCharTV = (TextView) header.findViewById(R.id.key_char);
-        levelValue = (TextView) header.findViewById(R.id.level_value);
-        sublevelValue = (TextView) header.findViewById(R.id.sublevel_value);
-        toNextLevel = (TextView) header.findViewById(R.id.to_next_level_value);
-        Button addRelatedTasks = (Button) header.findViewById(R.id.related_tasks_button);
+        recyclerView = (RecyclerView) v.findViewById(R.id.related_tasks);
+//        View header = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.detailed_skill_header, null);
+        skillTitleTV = (TextView) v.findViewById(R.id.skill_title);
+        keyCharTV = (TextView) v.findViewById(R.id.key_char);
+        levelValue = (TextView) v.findViewById(R.id.level_value);
+        sublevelValue = (TextView) v.findViewById(R.id.sublevel_value);
+        toNextLevel = (TextView) v.findViewById(R.id.to_next_level_value);
+        Button addRelatedTasks = (Button) v.findViewById(R.id.related_tasks_button);
 
         addRelatedTasks.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +63,7 @@ public class DetailedSkillFragment extends DataDependantFrament {
                 getCurrentActivity().showChildFragment(new AddTaskFragment(), b);
             }
         });
-        listView.addHeaderView(header, null, false);
+//        recyclerView.addHeaderView(header, null, false);
 
 
         UUID id = (UUID)getArguments().get(SELECTED_SKILL_UUID_TAG);
@@ -87,18 +85,6 @@ public class DetailedSkillFragment extends DataDependantFrament {
     }
 
     private void setupListView(){
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selectedTaskTitle = currentTasks.get(position - listView.getHeaderViewsCount());
-                UUID taskID = getController().getTaskByTitle(selectedTaskTitle).getId();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, taskID);
-                DefaultFragment fragment = new DetailedTaskFragment();
-                getCurrentActivity().showChildFragment(fragment, bundle);
-            }
-        });
-
         List<Task> tasks = getController().getTasksBySkill(currentSkill);
         List<String> titles = new ArrayList<>();
         for (Task t: tasks){
@@ -106,9 +92,9 @@ public class DetailedSkillFragment extends DataDependantFrament {
         }
         currentTasks = titles;
         adapter = new TasksAdapter(titles, getCurrentActivity());
-        listView.setAdapter(adapter);
-
-        adapter.registerDataSetObserver(new DataSetObserver() {
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
                 currentSkill = getController().getSkillByTitle(currentSkill.getTitle());

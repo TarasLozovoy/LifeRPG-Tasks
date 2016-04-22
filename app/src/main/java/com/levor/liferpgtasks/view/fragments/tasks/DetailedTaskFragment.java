@@ -330,8 +330,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
 
     private void performTask(){
         PerformTaskAlertBuilder alert = new PerformTaskAlertBuilder(getCurrentActivity(),
-                currentTask,
-                getView());
+                currentTask);
         AlertDialog alertDialog = alert.create();
         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
