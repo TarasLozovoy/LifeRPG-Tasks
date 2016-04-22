@@ -281,7 +281,7 @@ public class MainActivity extends BackUpActivity{
             showRootFragment(fragmentID);
             return;
         }
-        if (getCurrentFragment() != null && getCurrentFragment().isFabVisible() && !fragment.isFabVisible()) {
+        if (!fragment.isFabVisible()) {
             showFab(false);
         }
 //        if (getCurrentFragmentsStack().isEmpty()) return;
