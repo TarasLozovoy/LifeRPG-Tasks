@@ -36,7 +36,7 @@ public class EditSkillFragment extends AddSkillFragment {
             keyCharacteristicsIdList.add(ch.getId());
         }
         setHasOptionsMenu(true);
-        getCurrentActivity().setActionBarTitle("Edit skill");
+        getCurrentActivity().setActionBarTitle(R.string.edit_skill);
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return v;
     }

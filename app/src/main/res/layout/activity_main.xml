@@ -41,7 +41,8 @@
         android:layout_alignParentRight="true"
         android:layout_above="@id/navigation_tab_layout"
         app:rippleColor="@color/red"
-        app:borderWidth="0dp"/>
+        app:borderWidth="0dp"
+        />
 
     <include layout="@layout/coachmarks" />
 </RelativeLayout>

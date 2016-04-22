@@ -365,8 +365,10 @@ public class DetailedTaskFragment extends DataDependantFrament {
         getCurrentActivity().setFabClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                performTask();
-                getActivity().invalidateOptionsMenu();
+                Bundle b = new Bundle();
+                b.putSerializable(EditTaskFragment.CURRENT_TASK_TITLE_TAG, currentTask.getTitle());
+                DefaultFragment f = new EditTaskFragment();
+                getCurrentActivity().showChildFragment(f, b);
             }
         });
     }

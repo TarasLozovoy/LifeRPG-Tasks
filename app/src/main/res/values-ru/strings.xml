@@ -351,6 +351,7 @@
     <string name="support_project">Поддержать\nпроект</string>
     <string name="whats_new">Список изменений</string>
     <string name="loading">Загрузка…</string>
+    <string name="edit_skill">Редактирование</string>
     <!-- -->
 
 </resources>
