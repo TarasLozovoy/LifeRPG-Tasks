@@ -148,7 +148,7 @@ public class TasksFragment extends DefaultFragment {
 
     public void setupFab() {
         fab.show();
-        if (tabLayout.getSelectedTabPosition() != FilteredTasksFragment.DONE) {
+        if (viewPager.getCurrentItem() != FilteredTasksFragment.DONE) {
             fab.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_add_black_24dp));
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override

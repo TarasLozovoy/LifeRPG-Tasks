@@ -71,7 +71,6 @@ public class MainActivity extends BackUpActivity{
     InterstitialAd tasksChartAd;
     private TabLayout navigationTabLayout;
     private TabLayout.Tab heroNavigationTab;
-    private FloatingActionButton fab;
     private static Stack<DefaultFragment> mainFragmentsStack = new Stack<>();
     private static Stack<DefaultFragment> tasksFragmentsStack = new Stack<>();
     private static Stack<DefaultFragment> settingsFragmentsStack = new Stack<>();
@@ -110,8 +109,6 @@ public class MainActivity extends BackUpActivity{
 
         navigationTabLayout = (TabLayout) findViewById(R.id.navigation_tab_layout);
         setupNavigationTabs();
-
-        fab = (FloatingActionButton) findViewById(R.id.fab);
 
         navigationTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         navigationTabLayout.setSelectedTabIndicatorHeight(0);
@@ -240,6 +237,7 @@ public class MainActivity extends BackUpActivity{
     }
 
     public DefaultFragment getCurrentFragment() {
+        if (getCurrentFragmentsStack().isEmpty()) return null;
         return getCurrentFragmentsStack().peek();
     }
 
@@ -281,9 +279,6 @@ public class MainActivity extends BackUpActivity{
             showRootFragment(fragmentID);
             return;
         }
-        if (!fragment.isFabVisible()) {
-            showFab(false);
-        }
 //        if (getCurrentFragmentsStack().isEmpty()) return;
         currentFragmentID = fragmentID;
         getSupportFragmentManager().beginTransaction()
@@ -301,9 +296,6 @@ public class MainActivity extends BackUpActivity{
             fragment = getCurrentFragment();
         } catch (EmptyStackException e){
             return;
-        }
-        if (getCurrentFragment() != null && getCurrentFragment().isFabVisible() && !fragment.isFabVisible()) {
-            showFab(false);
         }
         if (fragment instanceof DataDependantFrament &&
                 !((DataDependantFrament)fragment).isDependableDataAvailable()){
@@ -326,9 +318,6 @@ public class MainActivity extends BackUpActivity{
     }
 
     public void showChildFragment(DefaultFragment fragment, Bundle bundle){
-        if (getCurrentFragment() != null && getCurrentFragment().isFabVisible() && !fragment.isFabVisible()) {
-            showFab(false);
-        }
         fragment.setArguments(bundle);
         getCurrentFragmentsStack().push(fragment);
         getSupportFragmentManager().beginTransaction()
@@ -450,7 +439,6 @@ public class MainActivity extends BackUpActivity{
     }
 
     public void showCoachmarks(){
-        showFab(false);
         final View bottomCoachmarks = findViewById(R.id.bottom_coachmarks);
         final View xpCoachmarks = findViewById(R.id.xp_coachmarks);
         final View coachmarksDim = findViewById(R.id.coachmarks_dim);
@@ -471,7 +459,6 @@ public class MainActivity extends BackUpActivity{
                             public void onClick(View v) {
                                 coachmarksDim.setVisibility(View.GONE);
                                 showWhatsNewDialog();
-                                showFab(true);
                             }
                         });
                     }
@@ -701,22 +688,6 @@ public class MainActivity extends BackUpActivity{
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    public void showFab(boolean show) {
-        if (!show) {
-            fab.hide();
-        } else {
-            fab.show();
-        }
-    }
-
-    public void setFabImage(int resID) {
-        fab.setImageDrawable(ContextCompat.getDrawable(this, resID));
-    }
-
-    public void setFabClickListener(View.OnClickListener listener) {
-        fab.setOnClickListener(listener);
     }
 
     public enum AdType { PERFORM_TASK, CHARACTERISTICS_CHART, TASKS_PER_DAY_CHART;}

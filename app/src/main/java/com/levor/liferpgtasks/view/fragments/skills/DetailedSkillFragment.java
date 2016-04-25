@@ -3,6 +3,7 @@ package com.levor.liferpgtasks.view.fragments.skills;
 
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
+import com.levor.liferpgtasks.view.fragments.characteristics.EditCharacteristicFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.AddTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
 
@@ -37,6 +39,7 @@ public class DetailedSkillFragment extends DataDependantFrament {
     private TextView sublevelValue;
     private TextView toNextLevel;
     private RecyclerView recyclerView;
+    private FloatingActionButton fab;
 
     private Skill currentSkill;
     private List<String> currentTasks;
@@ -53,6 +56,7 @@ public class DetailedSkillFragment extends DataDependantFrament {
         levelValue = (TextView) v.findViewById(R.id.level_value);
         sublevelValue = (TextView) v.findViewById(R.id.sublevel_value);
         toNextLevel = (TextView) v.findViewById(R.id.to_next_level_value);
+        fab = (FloatingActionButton) v.findViewById(R.id.fab);
         Button addRelatedTasks = (Button) v.findViewById(R.id.related_tasks_button);
 
         addRelatedTasks.setOnClickListener(new View.OnClickListener() {
@@ -63,8 +67,7 @@ public class DetailedSkillFragment extends DataDependantFrament {
                 getCurrentActivity().showChildFragment(new AddTaskFragment(), b);
             }
         });
-//        recyclerView.addHeaderView(header, null, false);
-
+        fab.setOnClickListener(new FabClickListener());
 
         UUID id = (UUID)getArguments().get(SELECTED_SKILL_UUID_TAG);
         currentSkill = getController().getSkillByID(id);
@@ -81,7 +84,6 @@ public class DetailedSkillFragment extends DataDependantFrament {
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Detailed Skill Fragment");
-        showFab();
     }
 
     private void setupListView(){
@@ -123,30 +125,20 @@ public class DetailedSkillFragment extends DataDependantFrament {
         toNextLevel.setText(toNextLevelString);
     }
 
-    private void showFab() {
-        if (getCurrentActivity() == null) return;
-        getCurrentActivity().showFab(true);
-        getCurrentActivity().setFabImage(R.drawable.ic_mode_edit_black_24dp);
-        getCurrentActivity().setFabClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle b = new Bundle();
-                b.putSerializable(EditSkillFragment.EDIT_SKILL_UUID_TAG, currentSkill.getId());
-                DefaultFragment f = new EditSkillFragment();
-                getCurrentActivity().showChildFragment(f, b);
-            }
-        });
-    }
-
-    @Override
-    public boolean isFabVisible() {
-        return true;
-    }
-
     @Override
     public boolean isDependableDataAvailable() {
         UUID id = (UUID)getArguments().get(SELECTED_SKILL_UUID_TAG);
         Skill skill = getController().getSkillByID(id);
         return skill != null;
+    }
+
+    private class FabClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Bundle b = new Bundle();
+            b.putSerializable(EditSkillFragment.EDIT_SKILL_UUID_TAG, currentSkill.getId());
+            DefaultFragment f = new EditSkillFragment();
+            getCurrentActivity().showChildFragment(f, b);
+        }
     }
 }

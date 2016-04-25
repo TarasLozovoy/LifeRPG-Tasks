@@ -57,25 +57,6 @@ public class SkillsFragment extends DefaultFragment {
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (getCurrentActivity() == null && !isVisibleToUser) return;
-        getCurrentActivity().showFab(true);
-        getCurrentActivity().setFabImage(R.drawable.ic_add_black_24dp);
-        getCurrentActivity().setFabClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getCurrentActivity().showChildFragment(new AddSkillFragment(), null);
-            }
-        });
-    }
-
-    @Override
-    public boolean isFabVisible() {
-        return true;
-    }
-
-    @Override
     public void updateUI() {
         List<Skill> skills = getController().getAllSkills();
         List<String> rows = new ArrayList<>(skills.size());

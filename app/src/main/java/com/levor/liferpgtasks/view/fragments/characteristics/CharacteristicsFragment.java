@@ -64,35 +64,6 @@ public class CharacteristicsFragment extends DefaultFragment {
     }
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (!isVisibleToUser) return;
-        showFab();
-    }
-
-    private void showFab() {
-        if (getCurrentActivity() == null) return;
-        getCurrentActivity().showFab(true);
-        getCurrentActivity().setFabImage(R.drawable.ic_add_black_24dp);
-        getCurrentActivity().setFabClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getCurrentActivity().showChildFragment(new EditCharacteristicFragment(), null);
-            }
-        });
-    }
-
-    @Override
-    public boolean isFabVisible() {
-        return true;
-    }
-
-    private void hideFab(){
-        if (getCurrentActivity() == null) return;
-        getCurrentActivity().showFab(false);
-    }
-
-    @Override
     public void updateUI(){
         String[] chars = getController().getCharacteristicsTitleAndLevelAsArray();
         listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, chars));

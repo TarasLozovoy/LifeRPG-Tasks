@@ -2,6 +2,7 @@ package com.levor.liferpgtasks.view.fragments.characteristics;
 
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +20,7 @@ import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.Dialogs.KeyCharacteristicsSelectionDialog;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
+import com.levor.liferpgtasks.view.fragments.hero.EditHeroFragment;
 import com.levor.liferpgtasks.view.fragments.skills.AddSkillFragment;
 import com.levor.liferpgtasks.view.fragments.skills.DetailedSkillFragment;
 
@@ -30,6 +32,7 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
     public final static String CHARACTERISTIC_ID = "characteristic_id";
 
     private ListView listView;
+    private FloatingActionButton fab;
 
     private Characteristic currentCharacteristic;
     private ArrayList<Skill> currentSkills = new ArrayList<>();
@@ -45,6 +48,9 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
         TextView levelValue = (TextView) header.findViewById(R.id.level_value);
         TextView characteristicTitle = (TextView) header.findViewById(R.id.characteristic_title);
         Button addSkillButton = (Button) header.findViewById(R.id.add_skill_button);
+        fab = (FloatingActionButton) header.findViewById(R.id.fab);
+
+        fab.setOnClickListener(new FabClickListener());
 
         characteristicTitle.setText(currentCharacteristic.getTitle());
         levelValue.setText(Integer.toString(currentCharacteristic.getLevel()));
@@ -82,7 +88,6 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Detailed Characteristic Fragment");
-        showFab();
     }
 
     private void createAdapter(){
@@ -99,22 +104,12 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
         listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, skills));
     }
 
-    private void showFab() {
-        if (getCurrentActivity() == null) return;
-        getCurrentActivity().showFab(true);
-        getCurrentActivity().setFabImage(R.drawable.ic_mode_edit_black_24dp);
-        getCurrentActivity().setFabClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle b = new Bundle();
-                b.putSerializable(EditCharacteristicFragment.CHARACTERISTIC_TAG, currentCharacteristic.getId());
-                getCurrentActivity().showChildFragment(new EditCharacteristicFragment(), b);
-            }
-        });
-    }
-
-    @Override
-    public boolean isFabVisible() {
-        return true;
+    private class FabClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Bundle b = new Bundle();
+            b.putSerializable(EditCharacteristicFragment.CHARACTERISTIC_TAG, currentCharacteristic.getId());
+            getCurrentActivity().showChildFragment(new EditCharacteristicFragment(), b);
+        }
     }
 }

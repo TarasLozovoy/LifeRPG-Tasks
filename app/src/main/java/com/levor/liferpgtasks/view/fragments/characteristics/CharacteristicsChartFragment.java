@@ -2,6 +2,7 @@ package com.levor.liferpgtasks.view.fragments.characteristics;
 
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,6 +30,7 @@ import butterknife.ButterKnife;
 
 public class CharacteristicsChartFragment extends DefaultFragment{
     @Bind(R.id.radar_chart)     RadarChart radarChart;
+    @Bind(R.id.fab)             FloatingActionButton fab;
 
 
     private ArrayList<String> charTitles;
@@ -39,6 +41,7 @@ public class CharacteristicsChartFragment extends DefaultFragment{
         ButterKnife.bind(this, view);
         setupCharacteristicsList();
         createChart();
+        fab.setOnClickListener(new FabClickListener());
 
         setHasOptionsMenu(true);
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
@@ -49,7 +52,6 @@ public class CharacteristicsChartFragment extends DefaultFragment{
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Characteristics Chart Fragment");
-        showFab();
     }
 
     @Override
@@ -73,35 +75,6 @@ public class CharacteristicsChartFragment extends DefaultFragment{
     public void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
-    }
-
-    private void showFab() {
-        if (getCurrentActivity() == null) return;
-        getCurrentActivity().showFab(true);
-        getCurrentActivity().setFabImage(R.drawable.ic_mode_edit_black_24dp);
-        getCurrentActivity().setFabClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                KeyCharacteristicsSelectionDialog dialog = new KeyCharacteristicsSelectionDialog();
-                Bundle b = new Bundle();
-                b.putStringArrayList(KeyCharacteristicsSelectionDialog.CHARS_LIST, charTitles);
-                dialog.setArguments(b);
-                dialog.setListener(new KeyCharacteristicsSelectionDialog.KeyCharacteristicsChangedListener() {
-                    @Override
-                    public void onChanged(ArrayList<String> charsTitles) {
-                        charTitles = charsTitles;
-                        radarChart.clear();
-                        createChart();
-                    }
-                });
-                dialog.show(getCurrentActivity().getSupportFragmentManager(), "CharacteristicsSelection");
-            }
-        });
-    }
-
-    @Override
-    public boolean isFabVisible() {
-        return true;
     }
 
     private void setupCharacteristicsList() {
@@ -130,5 +103,24 @@ public class CharacteristicsChartFragment extends DefaultFragment{
         radarChart.setData(radarData);
         radarChart.setDescription("");
         radarChart.invalidate();
+    }
+
+    private class FabClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            KeyCharacteristicsSelectionDialog dialog = new KeyCharacteristicsSelectionDialog();
+            Bundle b = new Bundle();
+            b.putStringArrayList(KeyCharacteristicsSelectionDialog.CHARS_LIST, charTitles);
+            dialog.setArguments(b);
+            dialog.setListener(new KeyCharacteristicsSelectionDialog.KeyCharacteristicsChangedListener() {
+                @Override
+                public void onChanged(ArrayList<String> charsTitles) {
+                    charTitles = charsTitles;
+                    radarChart.clear();
+                    createChart();
+                }
+            });
+            dialog.show(getCurrentActivity().getSupportFragmentManager(), "CharacteristicsSelection");
+        }
     }
 }

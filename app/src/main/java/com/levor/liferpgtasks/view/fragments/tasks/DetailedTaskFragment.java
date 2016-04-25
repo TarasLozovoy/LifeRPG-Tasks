@@ -3,6 +3,7 @@ package com.levor.liferpgtasks.view.fragments.tasks;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +20,7 @@ import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.view.Dialogs.KeyCharacteristicsSelectionDialog;
 import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
@@ -50,6 +52,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
     @Bind(R.id.no_related_skills)                   TextView noRelatedSkillsTV;
     @Bind(R.id.notification_text_view)              TextView notificationTV;
     @Bind(R.id.number_of_executions_text_view)      TextView numberOfExecutionsTV;
+    @Bind(R.id.fab)                                 FloatingActionButton fab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,6 +91,8 @@ public class DetailedTaskFragment extends DataDependantFrament {
 
         //setup number of executions TextView
         setupNumberOfExecutions();
+
+        fab.setOnClickListener(new FabClickListener());
 
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(getString(R.string.task));
@@ -148,7 +153,6 @@ public class DetailedTaskFragment extends DataDependantFrament {
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Detailed Task Fragment");
-        showFab();
     }
 
     private void setupTaskDate() {
@@ -357,30 +361,20 @@ public class DetailedTaskFragment extends DataDependantFrament {
         setupNumberOfExecutions();
     }
 
-    private void showFab() {
-        if (getCurrentActivity() == null) return;
-        getCurrentActivity().showFab(true);
-        getCurrentActivity().setFabImage(R.drawable.ic_mode_edit_black_24dp);
-        getCurrentActivity().setFabClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle b = new Bundle();
-                b.putSerializable(EditTaskFragment.CURRENT_TASK_TITLE_TAG, currentTask.getTitle());
-                DefaultFragment f = new EditTaskFragment();
-                getCurrentActivity().showChildFragment(f, b);
-            }
-        });
-    }
-
-    @Override
-    public boolean isFabVisible() {
-        return true;
-    }
-
     @Override
     public boolean isDependableDataAvailable() {
         UUID id = (UUID)getArguments().get(SELECTED_TASK_UUID_TAG);
         Task task = getController().getTaskByID(id);
         return task != null;
+    }
+
+    private class FabClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Bundle b = new Bundle();
+            b.putSerializable(EditTaskFragment.CURRENT_TASK_TITLE_TAG, currentTask.getTitle());
+            DefaultFragment f = new EditTaskFragment();
+            getCurrentActivity().showChildFragment(f, b);
+        }
     }
 }

@@ -48,25 +48,6 @@ public class HeroFragment extends DefaultFragment {
         getController().sendScreenNameToAnalytics("Hero Fragment");
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (getCurrentActivity() == null && !isVisibleToUser) return;
-        getCurrentActivity().showFab(true);
-        getCurrentActivity().setFabImage(R.drawable.ic_mode_edit_black_24dp);
-        getCurrentActivity().setFabClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getCurrentActivity().showChildFragment(new EditHeroFragment(), null);
-            }
-        });
-    }
-
-    @Override
-    public boolean isFabVisible() {
-        return true;
-    }
-
     public void updateUI() {
         xpProgress.setMax((int) getController().getHeroXpToNextLevel());
         xpProgress.setProgress((int) getController().getHeroXp());
