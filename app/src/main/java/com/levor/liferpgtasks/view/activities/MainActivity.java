@@ -303,6 +303,11 @@ public class MainActivity extends BackUpActivity{
         } catch (EmptyStackException e){
             return;
         }
+        if (fragment.isRemoving()) {
+            //trying to show previous fragment while it is currently removing
+            getCurrentFragmentsStack().push(fragment);
+            return;
+        }
         if (fragment instanceof DataDependantFrament &&
                 !((DataDependantFrament)fragment).isDependableDataAvailable()){
             showPreviousFragment();

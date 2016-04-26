@@ -146,6 +146,7 @@
         app:layout_anchor="@id/related_tasks"
         app:layout_anchorGravity="bottom|right|end"
         app:rippleColor="@color/red"
-        app:pressedTranslationZ="6dp"/>
+        app:pressedTranslationZ="6dp"
+        app:layout_behavior="com.levor.liferpgtasks.ScrollAwareFABBehavior"/>
 
 </android.support.design.widget.CoordinatorLayout>
