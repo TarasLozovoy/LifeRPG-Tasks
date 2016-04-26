@@ -2,40 +2,30 @@ package com.levor.liferpgtasks.view.fragments.characteristics;
 
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.adapters.SimpleRecyclerAdapter;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
-import com.levor.liferpgtasks.view.fragments.hero.EditHeroFragment;
 
 public class CharacteristicsFragment extends DefaultFragment {
-    private ListView listView;
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_characteristics, container, false);
-        listView = (ListView) view.findViewById(R.id.list_view);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bundle b = new Bundle();
-                String charTitle = getController().getCharacteristics().get(position).getTitle();
-                b.putSerializable(DetailedCharacteristicFragment.CHARACTERISTIC_ID
-                        , getController().getCharacteristicByTitle(charTitle).getId());
-                DefaultFragment f = new DetailedCharacteristicFragment();
-                getCurrentActivity().showChildFragment(f, b);
-            }
-        });
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         setHasOptionsMenu(true);
         return view;
     }
@@ -66,6 +56,21 @@ public class CharacteristicsFragment extends DefaultFragment {
     @Override
     public void updateUI(){
         String[] chars = getController().getCharacteristicsTitleAndLevelAsArray();
-        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, chars));
+        SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter(chars, getCurrentActivity());
+        adapter.registerOnItemClickListener(new SimpleRecyclerAdapter.OnRecycleItemClickListener(){
+            @Override
+            public void onItemClick(int position) {
+                Bundle b = new Bundle();
+                String charTitle = getController().getCharacteristics().get(position).getTitle();
+                b.putSerializable(DetailedCharacteristicFragment.CHARACTERISTIC_ID
+                        , getController().getCharacteristicByTitle(charTitle).getId());
+                DefaultFragment f = new DetailedCharacteristicFragment();
+                getCurrentActivity().showChildFragment(f, b);
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getCurrentActivity()));
     }
+
+
 }

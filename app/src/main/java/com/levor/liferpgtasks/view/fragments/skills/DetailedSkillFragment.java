@@ -1,7 +1,6 @@
 package com.levor.liferpgtasks.view.fragments.skills;
 
 
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,9 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.levor.liferpgtasks.adapters.TasksAdapter;
@@ -21,9 +18,7 @@ import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
-import com.levor.liferpgtasks.view.fragments.characteristics.EditCharacteristicFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.AddTaskFragment;
-import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -48,7 +43,7 @@ public class DetailedSkillFragment extends DataDependantFrament {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v =  inflater.inflate(R.layout.fragment_deatiled_skill, container, false);
+        View v =  inflater.inflate(R.layout.fragment_detailed_skill, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.related_tasks);
 //        View header = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.detailed_skill_header, null);
         skillTitleTV = (TextView) v.findViewById(R.id.skill_title);
@@ -75,7 +70,7 @@ public class DetailedSkillFragment extends DataDependantFrament {
         getCurrentActivity().setActionBarTitle(getString(R.string.skill));
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
 
-        setupListView();
+        setupRecyclerView();
         updateSkillDetails();
         return v;
     }
@@ -86,7 +81,7 @@ public class DetailedSkillFragment extends DataDependantFrament {
         getController().sendScreenNameToAnalytics("Detailed Skill Fragment");
     }
 
-    private void setupListView(){
+    private void setupRecyclerView(){
         List<Task> tasks = getController().getTasksBySkill(currentSkill);
         List<String> titles = new ArrayList<>();
         for (Task t: tasks){

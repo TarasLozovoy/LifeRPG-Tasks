@@ -33,7 +33,8 @@
             android:src="@drawable/ic_add_black_24dp"
             app:layout_anchor="@id/pager"
             app:layout_anchorGravity="bottom|right|end"
-            app:rippleColor="@color/red"/>
+            app:rippleColor="@color/red"
+            app:pressedTranslationZ="6dp"/>
     </android.support.design.widget.CoordinatorLayout>
 
 </LinearLayout>

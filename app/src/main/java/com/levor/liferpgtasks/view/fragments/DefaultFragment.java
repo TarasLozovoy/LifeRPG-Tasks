@@ -47,8 +47,4 @@ public  class DefaultFragment extends Fragment {
     public boolean isCreated(){
         return isCreated;
     }
-
-    public boolean isFabVisible() {
-        return false;
-    }
 }

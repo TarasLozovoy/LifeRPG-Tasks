@@ -134,13 +134,9 @@ public class MainFragment extends DefaultFragment{
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                setupFab(tab.getPosition());
             }
         });
-    }
-
-    @Override
-    public boolean isFabVisible() {
-        return true;
     }
 
     public class PagerAdapter extends CustomPagerAdapter {

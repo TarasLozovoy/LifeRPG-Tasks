@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,19 +15,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.levor.liferpgtasks.Utils.TimeUnitUtils;
+import com.levor.liferpgtasks.adapters.SimpleRecyclerAdapter;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
-import com.levor.liferpgtasks.view.Dialogs.KeyCharacteristicsSelectionDialog;
 import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.skills.DetailedSkillFragment;
-import com.levor.liferpgtasks.view.fragments.skills.EditSkillFragment;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -40,9 +40,9 @@ import butterknife.ButterKnife;
 public class DetailedTaskFragment extends DataDependantFrament {
     public final static String SELECTED_TASK_UUID_TAG = "selected_task_uuid_tag";
 
-    private ListView listView;
     private Task currentTask;
 
+    @Bind(R.id.recycler_view)                       RecyclerView recyclerView;
     @Bind(R.id.task_title)                          TextView taskTitleTV;
     @Bind(R.id.task_difficulty_text_view)           TextView taskDifficultyTV;
     @Bind(R.id.task_importance_text_view)           TextView taskImportanceTV;
@@ -58,9 +58,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_detailed_task, container, false);
-        listView = (ListView) v;
-        View header = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.detailed_task_header, null);
-        ButterKnife.bind(this, header);
+        ButterKnife.bind(this, v);
 
         UUID id = (UUID)getArguments().get(SELECTED_TASK_UUID_TAG);
         currentTask = getController().getTaskByID(id);
@@ -94,22 +92,11 @@ public class DetailedTaskFragment extends DataDependantFrament {
 
         fab.setOnClickListener(new FabClickListener());
 
+        setupRecyclerView();
+
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(getString(R.string.task));
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
-
-        listView.addHeaderView(header, null, false);
-        setupListView();
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bundle b = new Bundle();
-                b.putSerializable(DetailedSkillFragment.SELECTED_SKILL_UUID_TAG,
-                        currentTask.getRelatedSkillsList().get(position - listView.getHeaderViewsCount()).getId());
-                DefaultFragment f = new DetailedSkillFragment();
-                getCurrentActivity().showChildFragment(f, b);
-            }
-        });
         return v;
     }
 
@@ -318,7 +305,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
         }
     }
 
-    private void setupListView(){
+    private void setupRecyclerView(){
         ArrayList<String> skills = new ArrayList<>();
         for (Map.Entry<Skill, Boolean> pair : currentTask.getRelatedSkillsMap().entrySet()) {
             Skill sk = pair.getKey();
@@ -329,7 +316,20 @@ public class DetailedTaskFragment extends DataDependantFrament {
                     sk.getTitle() + " - " + sk.getLevel() + "(" + df.format(sk.getSublevel()) + ")");
         }
         noRelatedSkillsTV.setVisibility(skills.isEmpty() ? View.VISIBLE : View.GONE);
-        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, skills.toArray()));
+
+        SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter(skills, getCurrentActivity());
+        adapter.registerOnItemClickListener(new SimpleRecyclerAdapter.OnRecycleItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Bundle b = new Bundle();
+                b.putSerializable(DetailedSkillFragment.SELECTED_SKILL_UUID_TAG,
+                        currentTask.getRelatedSkillsList().get(position).getId());
+                DefaultFragment f = new DetailedSkillFragment();
+                getCurrentActivity().showChildFragment(f, b);
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getCurrentActivity()));
     }
 
     private void performTask(){
@@ -339,7 +339,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                setupListView();
+                setupRecyclerView();
             }
         });
         alertDialog.show();
@@ -348,7 +348,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
 
     private void undoTask(){
         getController().undoTask(currentTask);
-        setupListView();
+        setupRecyclerView();
         updateUI();
     }
 

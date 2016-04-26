@@ -1,9 +1,122 @@
-<ListView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list_view"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/related_skills"
-    android:layout_margin="@dimen/save_zone_margin"
-    android:cacheColorHint="@android:color/transparent"
-    android:listSelector="@android:color/transparent" />
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/save_zone_margin">
+
+            <TextView
+                android:id="@+id/task_title"
+                style="@style/LifeRPGTextTitleStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp" />
+
+            <TextView
+                android:id="@+id/task_date_text_view"
+                style="@style/LifeRPGTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/task_title"
+                android:layout_marginBottom="3dp" />
+
+            <TextView
+                android:id="@+id/task_repeat_times_text_view"
+                style="@style/LifeRPGTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/task_date_text_view"
+                android:layout_marginBottom="3dp" />
+
+            <TextView
+                android:id="@+id/notification_text_view"
+                style="@style/LifeRPGTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/task_repeat_times_text_view"
+                android:layout_marginBottom="3dp"
+                android:text="@string/show_notification" />
+
+            <TextView
+                android:id="@+id/habit_generation_text_view"
+                style="@style/LifeRPGTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/notification_text_view"
+                android:layout_marginBottom="3dp"
+                android:text="@string/show_notification"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/task_difficulty_text_view"
+                style="@style/LifeRPGTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/habit_generation_text_view"
+                android:layout_marginBottom="3dp" />
+
+            <TextView
+                android:id="@+id/task_importance_text_view"
+                style="@style/LifeRPGTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/task_difficulty_text_view"
+                android:layout_marginBottom="3dp" />
+
+            <TextView
+                android:id="@+id/number_of_executions_text_view"
+                style="@style/LifeRPGTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/task_importance_text_view"
+                android:layout_marginBottom="3dp" />
+
+            <TextView
+                android:id="@+id/related_skills"
+                style="@style/LifeRPGTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/number_of_executions_text_view"
+                android:layout_marginBottom="3dp"
+                android:text="@string/related_skills" />
+
+            <TextView
+                android:id="@+id/no_related_skills"
+                style="@style/LifeRPGTextTitleStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/related_skills"
+                android:gravity="center"
+                android:text="@string/no_related_skills"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/save_zone_margin" />
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_mode_edit_black_24dp"
+        app:rippleColor="@color/red"
+        app:pressedTranslationZ="6dp"/>
+
+</android.support.design.widget.CoordinatorLayout>

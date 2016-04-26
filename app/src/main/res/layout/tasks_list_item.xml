@@ -19,14 +19,16 @@
             android:id="@+id/list_item_title"
             style="@style/LifeRPGTextStyle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/list_item_date"
             style="@style/LifeRPGListItemSecondLevelTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:textColor="@color/black"/>
     </LinearLayout>
 
 
@@ -71,6 +73,7 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="2dp"
         android:layout_marginTop="2dp"
-        android:src="@drawable/ic_done_black_24dp" />
+        android:src="@drawable/ic_done_black_24dp"
+        android:elevation="2dp"/>
 
 </RelativeLayout>

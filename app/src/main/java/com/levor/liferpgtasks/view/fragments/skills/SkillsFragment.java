@@ -1,20 +1,20 @@
 package com.levor.liferpgtasks.view.fragments.skills;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.levor.liferpgtasks.adapters.SimpleRecyclerAdapter;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
-import com.levor.liferpgtasks.view.fragments.characteristics.EditCharacteristicFragment;
+import com.levor.liferpgtasks.view.fragments.characteristics.DetailedCharacteristicFragment;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -22,24 +22,13 @@ import java.util.List;
 import java.util.UUID;
 
 public class SkillsFragment extends DefaultFragment {
-    private ListView listView;
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_skills, container, false);
-        listView = (ListView) view.findViewById(R.id.skills_list_view);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                UUID currentId = getController().getAllSkills().get(position).getId();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(DetailedSkillFragment.SELECTED_SKILL_UUID_TAG
-                        , currentId);
-                DefaultFragment fragment = new DetailedSkillFragment();
-                getCurrentActivity().showChildFragment(fragment, bundle);
-            }
-        });
+        recyclerView = (RecyclerView) view.findViewById(R.id.skills_recycler_view);
 
         setHasOptionsMenu(true);
         return view;
@@ -71,7 +60,19 @@ public class SkillsFragment extends DefaultFragment {
                     .append(")");
             rows.add(sb.toString());
         }
-        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1,
-                rows.toArray(new String[rows.size()])));
+        SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter(rows, getCurrentActivity());
+        adapter.registerOnItemClickListener(new SimpleRecyclerAdapter.OnRecycleItemClickListener(){
+            @Override
+            public void onItemClick(int position) {
+                UUID currentId = getController().getAllSkills().get(position).getId();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(DetailedSkillFragment.SELECTED_SKILL_UUID_TAG
+                        , currentId);
+                DefaultFragment fragment = new DetailedSkillFragment();
+                getCurrentActivity().showChildFragment(fragment, bundle);
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getCurrentActivity()));
     }
 }

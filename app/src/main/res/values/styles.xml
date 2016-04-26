@@ -25,11 +25,21 @@
     </style>
 
     <!-- Default text for list elements style -->
-    <style name="LifeRPGTextInListStyle">
+    <style name="LifeRPGTextInListStyleSmall">
         <item name="android:textSize">@dimen/default_text_size</item>
         <item name="android:layout_marginTop">2dp</item>
         <item name="android:layout_marginBottom">2dp</item>
         <item name="android:layout_marginLeft">6dp</item>
+    </style>
+
+    <!-- Default text for list elements style -->
+    <style name="LifeRPGTextInListStyle">
+        <item name="android:textSize">@dimen/default_text_size</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
 

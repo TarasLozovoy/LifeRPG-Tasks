@@ -178,11 +178,6 @@ public class FilteredTasksFragment extends DefaultFragment{
         getController().sendScreenNameToAnalytics("Tasks Fragment");
     }
 
-    @Override
-    public boolean isFabVisible() {
-        return false;
-    }
-
     private void setupListView() {
         List<Task> tasks = getController().getAllTasks();
         Comparator<Task> comparator = null;

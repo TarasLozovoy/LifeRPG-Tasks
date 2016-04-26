@@ -16,7 +16,7 @@
             android:orientation="horizontal">
 
             <TextView
-                style="@style/LifeRPGTextInListStyle"
+                style="@style/LifeRPGTextInListStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/new_task_title" />
@@ -43,7 +43,7 @@
 
             <TextView
                 android:id="@+id/date_time_text_view"
-                style="@style/LifeRPGTextInListStyle"
+                style="@style/LifeRPGTextInListStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -63,7 +63,7 @@
 
             <TextView
                 android:id="@+id/repeat_text_view"
-                style="@style/LifeRPGTextInListStyle"
+                style="@style/LifeRPGTextInListStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -84,7 +84,7 @@
 
             <TextView
                 android:id="@+id/notification_text_view"
-                style="@style/LifeRPGTextInListStyle"
+                style="@style/LifeRPGTextInListStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -104,7 +104,7 @@
 
             <TextView
                 android:id="@+id/difficulty_text_view"
-                style="@style/LifeRPGTextInListStyle"
+                style="@style/LifeRPGTextInListStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -124,7 +124,7 @@
 
             <TextView
                 android:id="@+id/importance_text_view"
-                style="@style/LifeRPGTextInListStyle"
+                style="@style/LifeRPGTextInListStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -146,7 +146,7 @@
 
             <TextView
                 android:id="@+id/habit_generation_text_view"
-                style="@style/LifeRPGTextInListStyle"
+                style="@style/LifeRPGTextInListStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -161,7 +161,7 @@
 
             <TextView
                 android:id="@+id/increasing_skills_text_view"
-                style="@style/LifeRPGTextInListStyle"
+                style="@style/LifeRPGTextInListStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp" />
@@ -177,7 +177,7 @@
 
             <TextView
                 android:id="@+id/decreasing_skills_text_view"
-                style="@style/LifeRPGTextInListStyle"
+                style="@style/LifeRPGTextInListStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp" />

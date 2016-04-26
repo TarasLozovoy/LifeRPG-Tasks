@@ -17,6 +17,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:src="@drawable/ic_mode_edit_black_24dp"
-        app:rippleColor="@color/red" />
+        app:rippleColor="@color/red"
+        app:pressedTranslationZ="6dp"/>
 
 </RelativeLayout>

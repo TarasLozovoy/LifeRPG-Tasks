@@ -117,6 +117,7 @@ public class TasksFragment extends DefaultFragment {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                setupFab();
             }
         });
     }
@@ -139,11 +140,6 @@ public class TasksFragment extends DefaultFragment {
         SharedPreferences prefs = getActivity()
                 .getSharedPreferences(SHARED_PREFS_TAG, Context.MODE_PRIVATE);
         prefs.edit().putInt(SORTING_KEY, sorting).apply();
-    }
-
-    @Override
-    public boolean isFabVisible() {
-        return true;
     }
 
     public void setupFab() {
