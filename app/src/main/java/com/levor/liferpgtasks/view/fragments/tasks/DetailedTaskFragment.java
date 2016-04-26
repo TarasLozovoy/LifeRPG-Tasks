@@ -1,6 +1,8 @@
 package com.levor.liferpgtasks.view.fragments.tasks;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -98,6 +100,13 @@ public class DetailedTaskFragment extends DataDependantFrament {
         getCurrentActivity().setActionBarTitle(getString(R.string.task));
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
         return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        NotificationManager nManager = ((NotificationManager) getCurrentActivity().getSystemService(Context.NOTIFICATION_SERVICE));
+        nManager.cancel(currentTask.getId().hashCode());
     }
 
     private void setupNumberOfExecutions() {

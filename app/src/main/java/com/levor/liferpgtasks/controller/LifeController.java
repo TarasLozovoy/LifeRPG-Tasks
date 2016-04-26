@@ -49,6 +49,7 @@ import static com.levor.liferpgtasks.AchievsList.*;
 public class LifeController {
     public static final String FIRTS_RUN_TAG = "first_run_ tag";
     public static final String TASK_TITLE_NOTIFICATION_TAG = "task_id_notification_ tag";
+    public static final String TASK_ID_NOTIFICATION_TAG = "id_notification_ tag";
     public static final String SHARED_PREFS_TAG = "shared_prefs_tag";
     public static final String PERFORMED_TASKS_TAG = "performed_task_tag";
     public static final String TOTAL_TASKS_NUMBER_TAG = "total_tasks_number_tag";
@@ -442,8 +443,8 @@ public class LifeController {
 
     public void setupTasksNotifications(){
         // remove all previous notifications
-        NotificationManager nManager = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
-        nManager.cancelAll();
+//        NotificationManager nManager = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
+//        nManager.cancelAll();
 
         for (Task t: getAllTasks()){
             updateTaskNotification(t);
@@ -462,6 +463,7 @@ public class LifeController {
         if (notifyDate.before(currentDate)) return;
         Intent intent = new Intent(context, TaskNotification.class);
         intent.putExtra(TASK_TITLE_NOTIFICATION_TAG, task.getTitle());
+        intent.putExtra(TASK_ID_NOTIFICATION_TAG, task.getId());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                 task.getId().hashCode(), intent, 0);
         Calendar cal = Calendar.getInstance();

@@ -12,11 +12,14 @@ import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.view.activities.MainActivity;
 import com.levor.liferpgtasks.view.activities.SplashActivity;
 
+import java.util.UUID;
+
 public class TaskNotification extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
         String taskTitle = intent.getExtras().getString(LifeController.TASK_TITLE_NOTIFICATION_TAG);
+        UUID taskId = (UUID) intent.getExtras().getSerializable(LifeController.TASK_ID_NOTIFICATION_TAG);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent notificationIntent = new Intent(context, SplashActivity.class);
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -28,6 +31,6 @@ public class TaskNotification extends BroadcastReceiver {
                 .setSmallIcon(R.drawable.app_icon)
                 .setContentIntent(pIntent)
                 .setAutoCancel(true).build();
-        notificationManager.notify(0, n);
+        notificationManager.notify(taskId != null ? taskId.hashCode() : 0, n);
     }
 }

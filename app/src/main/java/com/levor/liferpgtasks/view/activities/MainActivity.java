@@ -158,6 +158,9 @@ public class MainActivity extends BackUpActivity{
                     b.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, t.getId());
                     showChildFragment(new DetailedTaskFragment(), b);
                 }
+
+                //clearing extras
+                extras.clear();
             }
         }
         bindInAppPurchasesService();
