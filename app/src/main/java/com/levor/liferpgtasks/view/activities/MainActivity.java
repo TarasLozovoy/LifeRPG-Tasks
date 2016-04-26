@@ -17,10 +17,8 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -190,6 +188,8 @@ public class MainActivity extends BackUpActivity{
         }
         if (getCurrentFragmentsStack().isEmpty()) {
             switchToRootFragment(currentFragmentID);
+        } else if (getCurrentFragmentsStack().size() == 1 && getCurrentRootFragmentClass() != getCurrentFragment().getClass()) {
+            switchToRootFragment(currentFragmentID);
         }
     }
 
@@ -287,8 +287,14 @@ public class MainActivity extends BackUpActivity{
     }
 
     public void showPreviousFragment() {
-        if (getCurrentFragmentsStack().isEmpty()
-                || getCurrentFragmentsStack().size() == 1) return;
+        if (getCurrentFragmentsStack().isEmpty()) return;
+        if (getCurrentFragmentsStack().size() == 1) {
+            if (getCurrentRootFragmentClass() != getCurrentFragment().getClass()) {
+                getCurrentFragmentsStack().pop();
+                switchToRootFragment(currentFragmentID);
+            }
+            return;
+        }
         DefaultFragment currentFragment = getCurrentFragment();
         getCurrentFragmentsStack().pop();
         DefaultFragment fragment;
@@ -330,6 +336,19 @@ public class MainActivity extends BackUpActivity{
         TabLayout.Tab tab = navigationTabLayout.getTabAt(id);
         if (tab != null) {
             tab.select();
+        }
+    }
+
+    private Class<? extends DefaultFragment> getCurrentRootFragmentClass() {
+        switch (currentFragmentID) {
+            case MAIN_FRAGMENT_ID :
+                return MainFragment.class;
+            case TASKS_FRAGMENT_ID :
+                return TasksFragment.class;
+            case  SETTINGS_FRAGMENT_ID :
+                return SettingsFragment.class;
+            default:
+                throw new RuntimeException("Illegal current fragment ID.");
         }
     }
 
