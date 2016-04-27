@@ -168,7 +168,7 @@ public class MainActivity extends BackUpActivity{
         lifeController.checkTasksPerDay();
         lifeController.checkHabitGenerationForAllTasks();
 
-        showWhatsNewDialog();
+        showWhatsNewDialog(false);
     }
 
     @Override
@@ -485,7 +485,7 @@ public class MainActivity extends BackUpActivity{
                             @Override
                             public void onClick(View v) {
                                 coachmarksDim.setVisibility(View.GONE);
-                                showWhatsNewDialog();
+                                showWhatsNewDialog(false);
                             }
                         });
                     }
@@ -699,12 +699,12 @@ public class MainActivity extends BackUpActivity{
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, token);
     }
 
-    private void showWhatsNewDialog() {
+    public void showWhatsNewDialog(boolean force) {
         if (getController().isFirstRun()) return;
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             String version = pInfo.versionName;
-            if (!version.equals(getController().getSharedPreferences().getString(LifeController.APPLICATION_VERSION_CODE_TAG, "1.0"))) {
+            if (force || !version.equals(getController().getSharedPreferences().getString(LifeController.APPLICATION_VERSION_CODE_TAG, "1.0"))) {
                 WhatsNewDialog whatsNewDialog = new WhatsNewDialog();
                 Bundle b = new Bundle();
                 b.putString(LifeController.APPLICATION_VERSION_CODE_TAG, version);

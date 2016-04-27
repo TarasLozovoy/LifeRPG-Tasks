@@ -26,6 +26,7 @@ public class AboutFragment extends DefaultFragment{
     @Bind(R.id.app_version_text_view)       TextView appVersionTextView;
     @Bind(R.id.contact_layout)              View contactView;
     @Bind(R.id.app_on_google_play_layout)   View playMarketView;
+    @Bind(R.id.whats_new_layout)            View whatsNewView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +70,13 @@ public class AboutFragment extends DefaultFragment{
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                         Uri.parse(getString(R.string.app_address_on_market)));
                 startActivity(browserIntent);
+            }
+        });
+
+        whatsNewView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().showWhatsNewDialog(true);
             }
         });
 
