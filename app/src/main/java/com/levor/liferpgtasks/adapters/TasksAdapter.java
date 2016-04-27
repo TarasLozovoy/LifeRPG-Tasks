@@ -138,14 +138,17 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 repeatabilityLL.setBackground(activity.getResources().getDrawable(drawableId));
                 repeatabilityTV.setText("");
                 doBtn.setEnabled(true);
+                doBtn.setAlpha(1.0f);
             } else if (repeat > 0) {
                 repeatabilityLL.setBackground(activity.getResources().getDrawable(R.drawable.ic_replay_black_24dp));
                 repeatabilityTV.setText(Integer.toString(repeat));
                 doBtn.setEnabled(true);
+                doBtn.setAlpha(1.0f);
             } else {
                 repeatabilityLL.setBackground(null);
                 repeatabilityTV.setText("");
                 doBtn.setEnabled(false);
+                doBtn.setAlpha(0.5f);
             }
         }
     }
