@@ -31,6 +31,7 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
 
     private RecyclerView recyclerView;
     private FloatingActionButton fab;
+    private View header;
 
     private Characteristic currentCharacteristic;
     private ArrayList<Skill> currentSkills = new ArrayList<>();
@@ -40,12 +41,14 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_detailed_characteristic, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+        fab = (FloatingActionButton) v.findViewById(R.id.fab);
         currentCharacteristic = getController().getCharacteristicByID((UUID) getArguments().get(CHARACTERISTIC_ID));
 
-        TextView levelValue = (TextView) v.findViewById(R.id.level_value);
-        TextView characteristicTitle = (TextView) v.findViewById(R.id.characteristic_title);
-        Button addSkillButton = (Button) v.findViewById(R.id.add_skill_button);
-        fab = (FloatingActionButton) v.findViewById(R.id.fab);
+        header = inflater.inflate(R.layout.detailed_characteristics_header, null);
+        TextView levelValue = (TextView) header.findViewById(R.id.level_value);
+        TextView characteristicTitle = (TextView) header.findViewById(R.id.characteristic_title);
+        Button addSkillButton = (Button) header.findViewById(R.id.add_skill_button);
+
 
         fab.setOnClickListener(new FabClickListener());
 
@@ -96,6 +99,7 @@ public class DetailedCharacteristicFragment extends DefaultFragment {
                 getCurrentActivity().showChildFragment(f, b);
             }
         });
+        adapter.setHeader(header);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getCurrentActivity()));
     }

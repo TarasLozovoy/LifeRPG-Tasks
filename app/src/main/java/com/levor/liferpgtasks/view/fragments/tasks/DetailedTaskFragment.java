@@ -43,8 +43,9 @@ public class DetailedTaskFragment extends DataDependantFrament {
     public final static String SELECTED_TASK_UUID_TAG = "selected_task_uuid_tag";
 
     private Task currentTask;
+    private RecyclerView recyclerView;
+    private View header;
 
-    @Bind(R.id.recycler_view)                       RecyclerView recyclerView;
     @Bind(R.id.task_title)                          TextView taskTitleTV;
     @Bind(R.id.task_difficulty_text_view)           TextView taskDifficultyTV;
     @Bind(R.id.task_importance_text_view)           TextView taskImportanceTV;
@@ -54,13 +55,15 @@ public class DetailedTaskFragment extends DataDependantFrament {
     @Bind(R.id.no_related_skills)                   TextView noRelatedSkillsTV;
     @Bind(R.id.notification_text_view)              TextView notificationTV;
     @Bind(R.id.number_of_executions_text_view)      TextView numberOfExecutionsTV;
-    @Bind(R.id.fab)                                 FloatingActionButton fab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_detailed_task, container, false);
-        ButterKnife.bind(this, v);
+        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recycler_view);
+        header = inflater.inflate(R.layout.detailed_task_header, null);
+        ButterKnife.bind(this, header);
 
         UUID id = (UUID)getArguments().get(SELECTED_TASK_UUID_TAG);
         currentTask = getController().getTaskByID(id);
@@ -337,6 +340,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
                 getCurrentActivity().showChildFragment(f, b);
             }
         });
+        adapter.setHeader(header);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getCurrentActivity()));
     }

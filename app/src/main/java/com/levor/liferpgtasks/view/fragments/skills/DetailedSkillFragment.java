@@ -35,6 +35,7 @@ public class DetailedSkillFragment extends DataDependantFrament {
     private TextView toNextLevel;
     private RecyclerView recyclerView;
     private FloatingActionButton fab;
+    private View header;
 
     private Skill currentSkill;
     private List<String> currentTasks;
@@ -45,14 +46,15 @@ public class DetailedSkillFragment extends DataDependantFrament {
                              Bundle savedInstanceState) {
         View v =  inflater.inflate(R.layout.fragment_detailed_skill, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.related_tasks);
-//        View header = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.detailed_skill_header, null);
-        skillTitleTV = (TextView) v.findViewById(R.id.skill_title);
-        keyCharTV = (TextView) v.findViewById(R.id.key_char);
-        levelValue = (TextView) v.findViewById(R.id.level_value);
-        sublevelValue = (TextView) v.findViewById(R.id.sublevel_value);
-        toNextLevel = (TextView) v.findViewById(R.id.to_next_level_value);
         fab = (FloatingActionButton) v.findViewById(R.id.fab);
-        Button addRelatedTasks = (Button) v.findViewById(R.id.related_tasks_button);
+
+        header = LayoutInflater.from(getCurrentActivity()).inflate(R.layout.detailed_skill_header, null);
+        skillTitleTV = (TextView) header.findViewById(R.id.skill_title);
+        keyCharTV = (TextView) header.findViewById(R.id.key_char);
+        levelValue = (TextView) header.findViewById(R.id.level_value);
+        sublevelValue = (TextView) header.findViewById(R.id.sublevel_value);
+        toNextLevel = (TextView) header.findViewById(R.id.to_next_level_value);
+        Button addRelatedTasks = (Button) header.findViewById(R.id.related_tasks_button);
 
         addRelatedTasks.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,8 +91,7 @@ public class DetailedSkillFragment extends DataDependantFrament {
         }
         currentTasks = titles;
         adapter = new TasksAdapter(titles, getCurrentActivity());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter.setHeader(header);
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
@@ -98,6 +99,8 @@ public class DetailedSkillFragment extends DataDependantFrament {
                 updateSkillDetails();
             }
         });
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void updateSkillDetails(){
