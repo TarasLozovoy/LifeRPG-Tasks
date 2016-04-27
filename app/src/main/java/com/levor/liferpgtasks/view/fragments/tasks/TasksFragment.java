@@ -40,7 +40,6 @@ public class TasksFragment extends DefaultFragment {
     private FloatingActionButton fab;
 
     private int sorting;
-    private float defaultElevation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,7 +81,6 @@ public class TasksFragment extends DefaultFragment {
         createViewPager();
         ActionBar actionBar = getCurrentActivity().getSupportActionBar();
         if(actionBar != null) {
-            defaultElevation = actionBar.getElevation();
             actionBar.setElevation(0);
         }
         setupFab();
@@ -93,7 +91,7 @@ public class TasksFragment extends DefaultFragment {
         super.onStop();
         ActionBar actionBar = getCurrentActivity().getSupportActionBar();
         if(actionBar != null) {
-            actionBar.setElevation(defaultElevation);
+            actionBar.setElevation(getResources().getDimension(R.dimen.standard_elevation));
         }
     }
 

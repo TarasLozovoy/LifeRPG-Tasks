@@ -28,8 +28,6 @@ public class MainFragment extends DefaultFragment{
     private TabLayout tabLayout;
     private FloatingActionButton fab;
 
-    private float defaultElevation;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,7 +65,6 @@ public class MainFragment extends DefaultFragment{
         createViewPager();
         ActionBar actionBar = getCurrentActivity().getSupportActionBar();
         if(actionBar != null) {
-            defaultElevation = actionBar.getElevation();
             actionBar.setElevation(0);
         }
         setupFab(viewPager.getCurrentItem());
@@ -78,7 +75,7 @@ public class MainFragment extends DefaultFragment{
         super.onStop();
         ActionBar actionBar = getCurrentActivity().getSupportActionBar();
         if(actionBar != null) {
-            actionBar.setElevation(defaultElevation);
+            actionBar.setElevation(getResources().getDimension(R.dimen.standard_elevation));
         }
     }
 

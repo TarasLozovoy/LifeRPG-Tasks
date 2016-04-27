@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragments.settings.SettingsFragment"
-    android:layout_margin="@dimen/save_zone_margin">
+    tools:context=".view.fragments.settings.SettingsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +13,8 @@
             android:id="@+id/auto_backup_to_dropbox_layout"
             style="@style/LifeRPGSettingsItemsStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingTop="13dp">
 
             <Switch
                 android:id="@+id/auto_backup_to_dropbox_switch"
@@ -31,7 +31,7 @@
                 android:text="@string/auto_backup_to_dropbox" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider" />
+        <View style="@style/HorizontalDivider.NoMargins"/>
 
         <RelativeLayout
             android:id="@+id/manual_export_DB_to_dropbox"
@@ -54,7 +54,7 @@
                 android:text="@string/manual_export_DB_to_dropbox" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider" />
+        <View style="@style/HorizontalDivider.NoMargins"/>
 
         <RelativeLayout
             android:id="@+id/import_db_from_dropbox_layout"
@@ -77,7 +77,7 @@
                 android:text="@string/import_db_from_dropbox" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider" />
+        <View style="@style/HorizontalDivider.NoMargins"/>
 
         <RelativeLayout
             android:id="@+id/export_db_to_filesystem_layout"
@@ -100,7 +100,7 @@
                 android:text="@string/export_db_to_filesystem" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider" />
+        <View style="@style/HorizontalDivider.NoMargins"/>
 
         <RelativeLayout
             android:id="@+id/import_db_from_filesystem_layout"
@@ -122,6 +122,8 @@
                 android:layout_toRightOf="@id/import_db_from_filesystem_arrow"
                 android:text="@string/import_db_from_filesystem" />
         </RelativeLayout>
+
+        <View style="@style/HorizontalDivider.NoMargins"/>
 
     </LinearLayout>
 </ScrollView>

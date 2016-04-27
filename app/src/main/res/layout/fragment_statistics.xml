@@ -1,34 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/save_zone_margin">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Statistics"
-        android:id="@+id/statistics_text_view"
-        style="@style/LifeRPGTextStyle"/>
+        android:orientation="vertical"
+        android:paddingTop="6dp">
 
-        <View style="@style/HorizontalDivider"/>
+        <TextView
+            android:id="@+id/statistics_text_view"
+            style="@style/LifeRPGTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Statistics"
+            android:paddingLeft="@dimen/save_zone_margin"
+            android:paddingRight="@dimen/save_zone_margin"/>
+
+        <View style="@style/HorizontalDivider.NoMargins" />
 
         <RelativeLayout
             android:id="@+id/characteristics_chart_layout"
+            style="@style/LifeRPGSettingsItemsStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/LifeRPGSettingsItemsStyle">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/characteristics_chart_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -38,20 +41,20 @@
                 android:text="@string/characteristics_chart" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider"/>
+        <View style="@style/HorizontalDivider.NoMargins" />
 
         <RelativeLayout
             android:id="@+id/tasks_per_day_chart_layout"
+            style="@style/LifeRPGSettingsItemsStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/LifeRPGSettingsItemsStyle">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/tasks_per_day_chart_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -61,7 +64,7 @@
                 android:text="@string/tasks_per_day_chart" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider"/>
+        <View style="@style/HorizontalDivider.NoMargins" />
 
     </LinearLayout>
 

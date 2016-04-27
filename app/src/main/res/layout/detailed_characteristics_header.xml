@@ -1,7 +1,8 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="@dimen/save_zone_margin">
 
     <TextView
         android:id="@+id/characteristic_title"

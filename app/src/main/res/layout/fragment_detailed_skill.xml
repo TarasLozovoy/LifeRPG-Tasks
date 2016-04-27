@@ -12,8 +12,7 @@
                 android:id="@+id/related_tasks"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/related_skill_layout"
-                android:padding="@dimen/save_zone_margin" />
+                android:layout_below="@id/related_skill_layout" />
         </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton

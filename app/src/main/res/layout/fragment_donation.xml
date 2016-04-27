@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/save_zone_margin"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/purchase_premium_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/LifeRPGSettingsItemsStyle">
+        style="@style/LifeRPGSettingsItemsStyle"
+        android:paddingTop="13dp">
 
         <ImageView
             android:id="@+id/purchase_premium_arrow"
@@ -28,7 +28,7 @@
     </RelativeLayout>
 
 
-    <View style="@style/HorizontalDivider" />
+    <View style="@style/HorizontalDivider.NoMargins"/>
 
     <RelativeLayout
         android:id="@+id/donate_1_usd_layout"
@@ -52,7 +52,7 @@
             android:text="@string/donate_1_usd" />
     </RelativeLayout>
 
-    <View style="@style/HorizontalDivider" />
+    <View style="@style/HorizontalDivider.NoMargins"/>
 
     <RelativeLayout
         android:id="@+id/donate_2_usd_layout"
@@ -76,7 +76,7 @@
             android:text="@string/donate_2_usd" />
     </RelativeLayout>
 
-    <View style="@style/HorizontalDivider" />
+    <View style="@style/HorizontalDivider.NoMargins"/>
 
     <RelativeLayout
         android:id="@+id/donate_3_usd_layout"
@@ -100,7 +100,7 @@
             android:text="@string/donate_3_usd" />
     </RelativeLayout>
 
-    <View style="@style/HorizontalDivider" />
+    <View style="@style/HorizontalDivider.NoMargins"/>
 
     <RelativeLayout
         android:id="@+id/donate_5_usd_layout"
@@ -124,6 +124,6 @@
             android:text="@string/donate_5_usd" />
     </RelativeLayout>
 
-    <View style="@style/HorizontalDivider" />
+    <View style="@style/HorizontalDivider.NoMargins"/>
 
 </LinearLayout>

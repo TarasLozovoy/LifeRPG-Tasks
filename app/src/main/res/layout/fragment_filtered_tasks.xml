@@ -1,11 +1,8 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/tasks_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="5dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
     android:paddingTop="5dp">
 
     <android.support.v7.widget.RecyclerView

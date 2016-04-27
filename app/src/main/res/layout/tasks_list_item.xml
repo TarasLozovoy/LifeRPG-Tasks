@@ -2,7 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants">
+    android:descendantFocusability="blocksDescendants"
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingLeft="@dimen/save_zone_margin"
+    android:paddingRight="@dimen/save_zone_margin">
 
     <LinearLayout
         android:layout_width="wrap_content"

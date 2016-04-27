@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragments.settings.SettingsFragment"
-    android:layout_margin="@dimen/save_zone_margin">
+    tools:context=".view.fragments.settings.SettingsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +13,8 @@
             android:id="@+id/statistics_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/LifeRPGSettingsItemsStyle">
+            style="@style/LifeRPGSettingsItemsStyle"
+            android:paddingTop="13dp">
 
             <ImageView
                 android:id="@+id/statistics_arrow"
@@ -31,7 +31,7 @@
                 android:text="@string/statistics" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider"/>
+        <View style="@style/HorizontalDivider.NoMargins"/>
 
         <RelativeLayout
             android:id="@+id/achievements_layout"
@@ -54,7 +54,7 @@
                 android:text="@string/achievements" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider"/>
+        <View style="@style/HorizontalDivider.NoMargins"/>
 
         <RelativeLayout
             android:id="@+id/export_import_db_layout"
@@ -77,7 +77,7 @@
                 android:text="@string/export_import_db" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider"/>
+        <View style="@style/HorizontalDivider.NoMargins"/>
 
         <RelativeLayout
             android:id="@+id/donate_layout"
@@ -101,7 +101,7 @@
                 android:text="@string/remove_ads" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider"/>
+        <View style="@style/HorizontalDivider.NoMargins"/>
 
         <RelativeLayout
             android:id="@+id/reset_layout"
@@ -122,10 +122,10 @@
                 android:layout_alignParentLeft="true"
                 android:layout_toRightOf="@id/reset_arrow"
                 android:textColor="@color/red"
-                android:text="@string/hard_reset" />
+                android:text="@string/initial_reset" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider"/>
+        <View style="@style/HorizontalDivider.NoMargins"/>
 
         <RelativeLayout
             android:id="@+id/about_layout"
@@ -148,6 +148,6 @@
                 android:text="@string/about" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider"/>
+        <View style="@style/HorizontalDivider.NoMargins"/>
     </LinearLayout>
 </ScrollView>

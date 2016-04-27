@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragments.settings.SettingsFragment"
-    android:layout_margin="@dimen/save_zone_margin">
+    tools:context=".view.fragments.settings.SettingsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +13,8 @@
             android:id="@+id/app_version_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/LifeRPGSettingsItemsStyle">
+            style="@style/LifeRPGSettingsItemsStyle"
+            android:background="#00000000">
 
             <TextView
                 android:id="@+id/app_name_text_view"
@@ -30,7 +30,7 @@
                 android:layout_below="@id/app_name_text_view" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider"/>
+        <View style="@style/HorizontalDivider.NoMargins"/>
 
 
         <RelativeLayout
@@ -54,7 +54,7 @@
                 android:text="@string/contact" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider"/>
+        <View style="@style/HorizontalDivider.NoMargins"/>
 
         <RelativeLayout
             android:id="@+id/app_on_google_play_layout"
@@ -77,7 +77,7 @@
                 android:text="@string/app_on_google_play" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider"/>
+        <View style="@style/HorizontalDivider.NoMargins"/>
 
     </LinearLayout>
 </ScrollView>
