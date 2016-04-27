@@ -6,6 +6,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
@@ -25,12 +27,16 @@ public class TaskNotification extends BroadcastReceiver {
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         notificationIntent.putExtra(LifeController.TASK_TITLE_NOTIFICATION_TAG, taskTitle);
         PendingIntent pIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), notificationIntent, 0);
+
+        Uri soundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         Notification n  = new Notification.Builder(context)
                 .setContentTitle(taskTitle)
                 .setContentText(context.getString(R.string.notification_text))
                 .setSmallIcon(R.drawable.app_icon)
                 .setContentIntent(pIntent)
-                .setAutoCancel(true).build();
+                .setAutoCancel(true)
+                .setSound(soundUri)
+                .build();
         notificationManager.notify(taskId != null ? taskId.hashCode() : 0, n);
     }
 }
