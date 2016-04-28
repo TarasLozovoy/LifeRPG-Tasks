@@ -8,6 +8,8 @@
         android:id="@+id/whats_new_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:listSelector="@android:color/transparent"/>
+        android:listSelector="@android:color/transparent"
+        android:divider="@null"
+        android:dividerHeight="0dp"/>
 
 </LinearLayout>

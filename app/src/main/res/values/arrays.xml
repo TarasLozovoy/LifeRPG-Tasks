@@ -95,6 +95,7 @@
     <string-array
         name="versions_list">
         <item>Version 1.3.6</item>
+        <item>Version 1.4.0</item>
     </string-array>
 
     <string-array
@@ -107,6 +108,13 @@
             \n- Fixed desktop widget. Press on widget now opens details for selected task.
             \n- Fixed incorrect XP value displaying during hero level up.
             \n- Fixed some crashes related to decreasing skills.</item>
+        <item>- Added floating action buttons.
+            \n- Redesigned Settings and other lists in application.
+            \n- Separate notification will be shown for each task.
+            \n- Added sound signal to notifications.
+            \n- What\'s new dialog can be displayed via Settings > About.
+            \n- Fixed crashes on navigation between screens.
+            \n- Fixed some localization strings.</item>
     </string-array>
 
 </resources>
