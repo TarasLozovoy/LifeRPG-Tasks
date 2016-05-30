@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -14,6 +17,7 @@ import com.levor.liferpgtasks.adapters.SimpleRecyclerAdapter;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
+import com.levor.liferpgtasks.view.fragments.characteristics.CharacteristicsChartFragment;
 import com.levor.liferpgtasks.view.fragments.characteristics.DetailedCharacteristicFragment;
 
 import java.text.DecimalFormat;
@@ -37,6 +41,23 @@ public class SkillsFragment extends DefaultFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.clear();
+        inflater.inflate(R.menu.menu_skills_fragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.show_chart:
+                getCurrentActivity().showChildFragment(new SkillsChartFragment(), null);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

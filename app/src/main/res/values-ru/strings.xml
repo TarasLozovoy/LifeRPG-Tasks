@@ -171,6 +171,7 @@
     <!-- Characteristics-->
     <string name="change_characteristic">Изменить характеристику</string>
     <string name="characteristics_chart">График характеристик</string>
+    <string name="skills_chart">График навыков</string>
     <!-- -->
 
     <!-- Main fragment child fragments names-->

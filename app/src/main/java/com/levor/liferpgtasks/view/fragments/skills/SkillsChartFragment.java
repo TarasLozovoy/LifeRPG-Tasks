@@ -1,4 +1,4 @@
-package com.levor.liferpgtasks.view.fragments.characteristics;
+package com.levor.liferpgtasks.view.fragments.skills;
 
 
 import android.os.Bundle;
@@ -13,9 +13,10 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.RadarData;
 import com.github.mikephil.charting.data.RadarDataSet;
 import com.levor.liferpgtasks.R;
-
 import com.levor.liferpgtasks.model.Characteristic;
+import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.view.Dialogs.KeyCharacteristicsSelectionDialog;
+import com.levor.liferpgtasks.view.Dialogs.SkillSelectionDialog;
 import com.levor.liferpgtasks.view.activities.MainActivity;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
@@ -26,18 +27,18 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CharacteristicsChartFragment extends DefaultFragment{
+public class SkillsChartFragment extends DefaultFragment{
     @Bind(R.id.radar_chart)     RadarChart radarChart;
     @Bind(R.id.fab)             FloatingActionButton fab;
 
 
-    private ArrayList<String> charTitles;
+    private ArrayList<String> skillTitles;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chart, container, false);
         ButterKnife.bind(this, view);
-        setupCharacteristicsList();
+        setupSkillsList();
         createChart();
         fab.setOnClickListener(new FabClickListener());
 
@@ -49,7 +50,7 @@ public class CharacteristicsChartFragment extends DefaultFragment{
     @Override
     public void onResume() {
         super.onResume();
-        getController().sendScreenNameToAnalytics("Characteristics Chart Fragment");
+        getController().sendScreenNameToAnalytics("Skills Chart Fragment");
     }
 
     @Override
@@ -75,29 +76,29 @@ public class CharacteristicsChartFragment extends DefaultFragment{
         ButterKnife.unbind(this);
     }
 
-    private void setupCharacteristicsList() {
-        List<Characteristic> chars = getController().getCharacteristics();
-        Collections.sort(chars, Characteristic.TITLE_COMPARATOR);
-        charTitles = new ArrayList<>();
+    private void setupSkillsList() {
+        List<Skill> skills = getController().getAllSkills();
+        Collections.sort(skills, Skill.TITLE_COMPARATOR);
+        skillTitles = new ArrayList<>();
 
-        for (int i = 0; i < chars.size(); i++) {
-            Characteristic ch = chars.get(i);
-            charTitles.add(ch.getTitle());
+        for (int i = 0; i < skills.size(); i++) {
+            Skill skill = skills.get(i);
+            skillTitles.add(skill.getTitle());
         }
     }
 
     private void createChart() {
         ArrayList<Entry> values = new ArrayList<>();
-        for (int i = 0; i < charTitles.size(); i++) {
-            Characteristic ch = getController().getCharacteristicByTitle(charTitles.get(i));
-            values.add(new Entry(ch.getLevel(), i));
+        for (int i = 0; i < skillTitles.size(); i++) {
+            Skill skill = getController().getSkillByTitle(skillTitles.get(i));
+            values.add(new Entry(skill.getLevel(), i));
         }
 
-        RadarDataSet radarDataSet = new RadarDataSet(values, getString(R.string.characteristics_fragment_name));
+        RadarDataSet radarDataSet = new RadarDataSet(values, getString(R.string.skills_fragment_name));
         radarDataSet.setColor(R.color.dark_grey);
         radarDataSet.setFillColor(R.color.red);
         radarDataSet.setDrawFilled(true);
-        RadarData radarData = new RadarData(charTitles, radarDataSet);
+        RadarData radarData = new RadarData(skillTitles, radarDataSet);
         radarChart.setData(radarData);
         radarChart.setDescription("");
         radarChart.invalidate();
@@ -106,14 +107,19 @@ public class CharacteristicsChartFragment extends DefaultFragment{
     private class FabClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            KeyCharacteristicsSelectionDialog dialog = new KeyCharacteristicsSelectionDialog();
+            SkillSelectionDialog dialog = new SkillSelectionDialog(getCurrentActivity());
             Bundle b = new Bundle();
-            b.putStringArrayList(KeyCharacteristicsSelectionDialog.CHARS_LIST, charTitles);
+            b.putStringArrayList(SkillSelectionDialog.ACTIVE_LIST_TAG, skillTitles);
             dialog.setArguments(b);
-            dialog.setListener(new KeyCharacteristicsSelectionDialog.KeyCharacteristicsChangedListener() {
+            dialog.setListener(new SkillSelectionDialog.SkillSelectionListener() {
                 @Override
-                public void onChanged(ArrayList<String> charsTitles) {
-                    charTitles = charsTitles;
+                public void onNewSkillAdded() {
+                    //ignore
+                }
+
+                @Override
+                public void onClose(boolean increasingSkills, ArrayList<String> titles) {
+                    skillTitles = titles;
                     radarChart.clear();
                     createChart();
                 }

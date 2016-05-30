@@ -10,6 +10,7 @@ import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.characteristics.CharacteristicsChartFragment;
+import com.levor.liferpgtasks.view.fragments.skills.SkillsChartFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.TasksPerDayChartFragment;
 
 import org.joda.time.LocalDate;
@@ -22,6 +23,7 @@ import butterknife.ButterKnife;
 public class StatisticsFragment extends DefaultFragment {
     @Bind(R.id.statistics_text_view)            TextView statisticsTV;
     @Bind(R.id.characteristics_chart_layout)    View charsChartView;
+    @Bind(R.id.skills_chart_layout)             View skillsChartView;
     @Bind(R.id.tasks_per_day_chart_layout)      View tasksPerDayChartView;
 
     @Override
@@ -65,6 +67,13 @@ public class StatisticsFragment extends DefaultFragment {
             @Override
             public void onClick(View v) {
                 getCurrentActivity().showChildFragment(new CharacteristicsChartFragment(), null);
+            }
+        });
+
+        skillsChartView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().showChildFragment(new SkillsChartFragment(), null);
             }
         });
 

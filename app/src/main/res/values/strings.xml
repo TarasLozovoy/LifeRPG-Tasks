@@ -180,6 +180,7 @@
     <!-- Characteristics-->
     <string name="change_characteristic">Change characteristic</string>
     <string name="characteristics_chart">Characteristics chart</string>
+    <string name="skills_chart">Skills chart</string>
     <!-- -->
 
     <!-- Main fragment child fragments names-->
