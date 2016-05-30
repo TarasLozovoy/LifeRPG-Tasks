@@ -86,21 +86,21 @@ public class LifeEntity {
         getMiscFromDB();    //added for version 1.0.2
         getTasksPerDay();
 
-        //adding new characteristic for new version (1.0.2)
-        Characteristic health = new Characteristic(context.getString(R.string.health), 1);
-        if (!characteristics.contains(health)){
-            addCharacteristic(health);
-        }
-
-        //adding new characteristics for new version (1.1.5)
-        Characteristic willpower = new Characteristic(context.getString(R.string.willpower), 1);
-        Characteristic workmanship = new Characteristic(context.getString(R.string.workmanship), 1);
-        if (!characteristics.contains(willpower)){
-            addCharacteristic(willpower);
-        }
-        if (!characteristics.contains(workmanship)){
-            addCharacteristic(workmanship);
-        }
+//        //adding new characteristic for new version (1.0.2)
+//        Characteristic health = new Characteristic(context.getString(R.string.health), 1);
+//        if (!characteristics.contains(health)){
+//            addCharacteristic(health);
+//        }
+//
+//        //adding new characteristics for new version (1.1.5)
+//        Characteristic willpower = new Characteristic(context.getString(R.string.willpower), 1);
+//        Characteristic workmanship = new Characteristic(context.getString(R.string.workmanship), 1);
+//        if (!characteristics.contains(willpower)){
+//            addCharacteristic(willpower);
+//        }
+//        if (!characteristics.contains(workmanship)){
+//            addCharacteristic(workmanship);
+//        }
     }
 
     private void firstLaunchPreSetup(){
