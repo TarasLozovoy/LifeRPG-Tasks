@@ -29,8 +29,8 @@ android {
         applicationId "com.levor.liferpgtasks"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 21
-        versionName "1.4.0"
+        versionCode 22
+        versionName "1.4.1"
     }
     buildTypes {
         release {
