@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.crashlytics.android.Crashlytics;
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.session.AppKeyPair;
+//import com.dropbox.client2.DropboxAPI;
+//import com.dropbox.client2.android.AndroidAuthSession;
+//import com.dropbox.client2.session.AppKeyPair;
 import com.facebook.FacebookSdk;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -21,7 +21,7 @@ import io.fabric.sdk.android.Fabric;
 
 public class LifeRPGApplication extends Application {
     private Tracker mTracker;
-    private DropboxAPI<AndroidAuthSession> DBApi;
+//    private DropboxAPI<AndroidAuthSession> DBApi;
 
     @Override
     public void onCreate() {
@@ -49,21 +49,21 @@ public class LifeRPGApplication extends Application {
     private void initializeDBBackupServices(){
         String dropboxKey = getString(R.string.dropbox_app_key);
         String dropboxSecret = getString(R.string.dropbox_app_secret);
-        AppKeyPair appKeys = new AppKeyPair(dropboxKey, dropboxSecret);
-        AndroidAuthSession session = new AndroidAuthSession(appKeys);
+//        AppKeyPair appKeys = new AppKeyPair(dropboxKey, dropboxSecret);
+//        AndroidAuthSession session = new AndroidAuthSession(appKeys);
 
         SharedPreferences prefs = getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
         boolean backupEnabled = prefs.getBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, false);
         if (backupEnabled){
             String accessToken = prefs.getString(LifeController.DROPBOX_ACCESS_TOKEN_TAG, null);
             if (accessToken != null){
-                session.setOAuth2AccessToken(accessToken);
+//                session.setOAuth2AccessToken(accessToken);
             }
         }
-        DBApi = new DropboxAPI<>(session);
+//        DBApi = new DropboxAPI<>(session);
     }
 
-    public DropboxAPI<AndroidAuthSession> getDBApi() {
-        return DBApi;
-    }
+//    public DropboxAPI<AndroidAuthSession> getDBApi() {
+//        return DBApi;
+//    }
 }

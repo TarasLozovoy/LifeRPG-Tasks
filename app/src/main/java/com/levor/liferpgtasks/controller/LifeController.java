@@ -2,7 +2,6 @@ package com.levor.liferpgtasks.controller;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -12,6 +11,7 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.view.Display;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -37,7 +37,6 @@ import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -71,6 +70,9 @@ public class LifeController {
     private Map<String, Float> statisticsNumbers = new LinkedHashMap<>();
 
     private static final String STAT_DIVIDER = " - ";
+
+    private long dropboxBackupTimeout = 1000;
+    private long dropboxBackupStartTime;
 
     private static LifeController LifeController;
     public static LifeController getInstance(Context context){
@@ -843,7 +845,16 @@ public class LifeController {
 
     private void performBackUpToDropBox(){
         if (isDropBoxAutoBackupEnabled()){
-            currentActivity.checkAndBackupToDropBox(true);
+            final View view = currentActivity.getCurrentFragment().getView();
+            if (view != null && System.currentTimeMillis() - dropboxBackupStartTime > dropboxBackupTimeout) {
+                view.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        currentActivity.checkAndBackupToDropBox(true);
+                    }
+                }, dropboxBackupTimeout);
+                dropboxBackupStartTime = System.currentTimeMillis();
+            }
         }
     }
 

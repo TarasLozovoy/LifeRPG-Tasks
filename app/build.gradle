@@ -27,6 +27,7 @@ android {
     buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId "com.levor.liferpgtasks"
+        multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 22
@@ -37,6 +38,13 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
+    dexOptions {
+        incremental = true;
+        preDexLibraries = false
+        javaMaxHeapSize "4g" // 2g should be also OK
+    }
+
     lintOptions {
         disable 'MissingTranslation'
     }
@@ -53,7 +61,6 @@ dependencies {
     compile('com.twitter.sdk.android:tweet-composer:1.0.2@aar') { transitive = true; }
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') { transitive = true; }
 
-    compile files('libs/dropbox-android-sdk-1.6.3.jar')
     compile files('libs/json_simple-1.1.jar')
     compile files('libs/mpandroidchartlibrary-2-1-6.jar')
 
@@ -66,6 +73,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-ads:8.3.0'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'joda-time:joda-time:2.9.2'
+    compile 'com.dropbox.core:dropbox-core-sdk:2.0.6'
+    compile 'com.squareup.okhttp3:okhttp:3.3.1'
 
     compile 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
     compile 'io.reactivex:rxandroid:1.2.0'
