@@ -53,6 +53,8 @@ public class BackUpActivity extends ActionBarActivity {
     protected LifeController lifeController;
     private List<Subscription> subscriptions = new ArrayList<>();
 
+    private boolean syncDropbox = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,19 +65,21 @@ public class BackUpActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         SharedPreferences prefs = lifeController.getSharedPreferences();
-        String accessToken = prefs.getString(LifeController.DROPBOX_ACCESS_TOKEN_TAG, null);
-        if (accessToken == null) {
-            accessToken = Auth.getOAuth2Token();
-            if (accessToken != null) {
-                prefs.edit().putString(LifeController.DROPBOX_ACCESS_TOKEN_TAG, accessToken).apply();
-                initAndLoadData(accessToken);
+        if (prefs.getBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, false) || syncDropbox) {
+            String accessToken = prefs.getString(LifeController.DROPBOX_ACCESS_TOKEN_TAG, null);
+            if (accessToken == null) {
+                accessToken = Auth.getOAuth2Token();
+                if (accessToken != null) {
+                    prefs.edit().putString(LifeController.DROPBOX_ACCESS_TOKEN_TAG, accessToken).apply();
+                    initAndLoadData(accessToken);
+                } else {
+                    authorizeToDropbox();
+                }
             } else {
-                authorizeToDropbox();
+                initAndLoadData(accessToken);
             }
-        } else {
-            initAndLoadData(accessToken);
         }
-
+        syncDropbox = false;
     }
 
     private void initAndLoadData(String accessToken) {
@@ -148,8 +152,9 @@ public class BackUpActivity extends ActionBarActivity {
                     if (!subscriber.isUnsubscribed()) {
                         subscriber.onCompleted();
                     }
-                } catch (InvalidAccessTokenException e) {
+                } catch (InvalidAccessTokenException | IllegalStateException e) {
                     authorizeToDropbox();
+                    syncDropbox = true;
                 } catch (DbxException | IOException e) {
                     if (!subscriber.isUnsubscribed()) {
                         subscriber.onError(e);
@@ -210,6 +215,9 @@ public class BackUpActivity extends ActionBarActivity {
                             subscriber.onCompleted();
                         }
                     }
+                } catch (InvalidAccessTokenException | IllegalStateException e) {
+                    authorizeToDropbox();
+                    syncDropbox = true;
                 } catch (IOException | DbxException e){
                     if (!subscriber.isUnsubscribed()) {
                         subscriber.onError(e);
@@ -250,8 +258,12 @@ public class BackUpActivity extends ActionBarActivity {
         try {
             ListRevisionsResult result = DropboxClientFactory.getClient().files().listRevisions(DB_ADDRESS_IN_DROPBOX);
             return result.getEntries().get(0).getRev();
+        } catch (InvalidAccessTokenException | IllegalStateException e) {
+            authorizeToDropbox();
+            syncDropbox = true;
+            return null;
         } catch (DbxException e) {
-        return null;
+            return null;
         }
     }
 
@@ -389,6 +401,7 @@ public class BackUpActivity extends ActionBarActivity {
                     @Override
                     public void onError(Throwable e) {
                         authorizeToDropbox();
+                        syncDropbox = true;
                         lifeController.getSharedPreferences()
                                 .edit()
                                 .putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, false)
