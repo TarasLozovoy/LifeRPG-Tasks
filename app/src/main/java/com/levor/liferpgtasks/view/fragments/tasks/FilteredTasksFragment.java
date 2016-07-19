@@ -17,10 +17,12 @@ import android.widget.TextView;
 
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.adapters.TasksAdapter;
+import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -213,6 +215,9 @@ public class FilteredTasksFragment extends DefaultFragment{
         }
         Collections.sort(tasks, comparator);
         sortedTasksTitles = new ArrayList<>();
+
+        boolean onlyTodayTasksInToDo = getController().getSharedPreferences().getBoolean(LifeController.SHOW_ONLY_TODAY_TASK_TAG, false);
+
         for (Task t : tasks) {
             if (!searchQuery.isEmpty()
                     && !t.getTitle().toLowerCase().contains(searchQuery.toLowerCase())) continue;
@@ -228,7 +233,18 @@ public class FilteredTasksFragment extends DefaultFragment{
                     }
                     break;
                 case SIMPLE:
-                    if (t.getRepeatability() > 0) {
+                    if (onlyTodayTasksInToDo) {
+                        if (t.getRepeatability() != 0) {
+                            Calendar taskDate = Calendar.getInstance();
+                            Calendar today = Calendar.getInstance();
+                            taskDate.setTime(t.getDate());
+
+                            if (taskDate.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)
+                                && taskDate.get(Calendar.YEAR) == today.get(Calendar.YEAR)) {
+                                sortedTasksTitles.add(t.getTitle());
+                            }
+                        }
+                    } else if (t.getRepeatability() > 0) {
                         sortedTasksTitles.add(t.getTitle());
                     }
                     break;

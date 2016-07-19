@@ -396,6 +396,8 @@
     <string name="whats_new">What\'s new</string>
     <string name="loading">Loading…</string>
     <string name="edit_skill">Edit skill</string>
+    <string name="common_settings">Common settings</string>
+    <string name="only_today_tasks">Only tasks for today in To do tab</string>
     <!-- -->
 
 </resources>

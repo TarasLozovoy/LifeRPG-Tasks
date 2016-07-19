@@ -353,6 +353,8 @@
     <string name="whats_new">Список изменений</string>
     <string name="loading">Загрузка…</string>
     <string name="edit_skill">Редактирование</string>
+    <string name="common_settings">Общие настройки</string>
+    <string name="only_today_tasks">Только сегодняшние задачи во вкладке Задачи</string>
     <!-- -->
 
 </resources>

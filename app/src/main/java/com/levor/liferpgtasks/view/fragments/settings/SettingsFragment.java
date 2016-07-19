@@ -24,6 +24,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SettingsFragment extends DefaultFragment {
+    @Bind(R.id.common_layout)               View commonView;
     @Bind(R.id.statistics_layout)           View statisticsView;
     @Bind(R.id.achievements_layout)         View achievementsView;
     @Bind(R.id.export_import_db_layout)     View exportImportDBView;
@@ -39,6 +40,12 @@ public class SettingsFragment extends DefaultFragment {
         ButterKnife.bind(this, v);
 
         donateTextView.setText(getCurrentActivity().isPremium() ? getString(R.string.donate) : getString(R.string.remove_ads));
+
+        commonView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().showChildFragment(new CommonSettingsFragment(), null);            }
+        });
 
         statisticsView.setOnClickListener(new View.OnClickListener() {
             @Override

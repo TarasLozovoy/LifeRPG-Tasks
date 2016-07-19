@@ -59,13 +59,11 @@ public class ExportImportDBFragment extends DefaultFragment {
         autoExportToDropboxSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences prefs = getCurrentActivity()
-                        .getSharedPreferences(LifeController.SHARED_PREFS_TAG, Context.MODE_PRIVATE);
                 if (isChecked) {
                     getCurrentActivity().checkAndBackupToDropBox(true);
-                    prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, true).apply();
+                    getController().getSharedPreferences().edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, true).apply();
                 } else {
-                    prefs.edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, false).apply();
+                    getController().getSharedPreferences().edit().putBoolean(LifeController.DROPBOX_AUTO_BACKUP_ENABLED, false).apply();
                 }
             }
         });

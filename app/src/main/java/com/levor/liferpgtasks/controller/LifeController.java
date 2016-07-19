@@ -61,6 +61,7 @@ public class LifeController {
     public static final String DROPBOX_AUTO_BACKUP_ENABLED = "dropbox_auto_backup_enabled";
     public final static String DROPBOX_ACCESS_TOKEN_TAG = "db_access_token_tag";
     public final static String APPLICATION_VERSION_CODE_TAG = "application_version_code_tag";
+    public static final String SHOW_ONLY_TODAY_TASK_TAG = "show_only_today_tasks_tag";
     private static final String HERO_ICON_NAME_TAG = "hero_icon_name_tag";
     private LifeEntity lifeEntity;
     private Context context;

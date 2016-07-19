@@ -10,6 +10,30 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/common_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/LifeRPGSettingsItemsStyle"
+            android:paddingTop="13dp">
+
+            <ImageView
+                android:id="@+id/common_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toRightOf="@id/common_arrow"
+                android:text="@string/common_settings" />
+        </RelativeLayout>
+
+        <View style="@style/HorizontalDivider.NoMargins"/>
+
+        <RelativeLayout
             android:id="@+id/statistics_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
