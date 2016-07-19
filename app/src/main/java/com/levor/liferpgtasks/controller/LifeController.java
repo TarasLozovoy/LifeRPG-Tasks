@@ -62,6 +62,7 @@ public class LifeController {
     public final static String DROPBOX_ACCESS_TOKEN_TAG = "db_access_token_tag";
     public final static String APPLICATION_VERSION_CODE_TAG = "application_version_code_tag";
     public static final String SHOW_ONLY_TODAY_TASK_TAG = "show_only_today_tasks_tag";
+    public static final String SHOW_DAILIES_IN_DONE_TAG = "show_dailies_in_done_tag";
     private static final String HERO_ICON_NAME_TAG = "hero_icon_name_tag";
     private LifeEntity lifeEntity;
     private Context context;
@@ -227,9 +228,11 @@ public class LifeController {
         Hero hero = lifeEntity.getHero();
         task.setUndonable(true);
         task.perform();
-        if (task.getRepeatability() == 0) {
+        if (task.getRepeatability() <= 0) {
             task.setFinishDate(new Date());
-            updateStatistics(FINISHED_TASKS_NUMBER_TAG, 1);
+            if (task.getRepeatability() == 0) {
+                updateStatistics(FINISHED_TASKS_NUMBER_TAG, 1);
+            }
         }
         updateTask(task);
         updateTaskNotification(task);

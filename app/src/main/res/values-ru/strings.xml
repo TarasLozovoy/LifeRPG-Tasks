@@ -355,6 +355,7 @@
     <string name="edit_skill">Редактирование</string>
     <string name="common_settings">Общие настройки</string>
     <string name="only_today_tasks">Только сегодняшние задачи во вкладке Задачи</string>
+    <string name="dailies_in_done">Показывать выполненные привычки во вкладке Сделано</string>
     <!-- -->
 
 </resources>

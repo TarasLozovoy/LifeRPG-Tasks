@@ -85,6 +85,8 @@ public class TasksCursorWrapper extends CursorWrapper {
             task.setFinishDate(finishDate);
             task.setDateMode(Task.DateMode.SPECIFIC_TIME);
             task.setUpdateNeeded(true);
+        } else if (repeatability < 0 && finishDateLong > 0) {
+            task.setFinishDate(new Date(finishDateLong));
         }
         return task;
     }

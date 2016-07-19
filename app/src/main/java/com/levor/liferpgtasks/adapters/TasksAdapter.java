@@ -34,9 +34,13 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private int position;
 
     private View header;
+    private Mode mode;
 
-    public TasksAdapter(List<String> array, MainActivity activity) {
+    public enum Mode {REGULAR, DONE}
+
+    public TasksAdapter(List<String> array, MainActivity activity, Mode mode) {
         this.activity = activity;
+        this.mode = mode;
         lifeController = LifeController.getInstance(activity.getApplicationContext());
         for (int i = 0; i < array.size(); i++) {
             Task task = lifeController.getTaskByTitle(array.get(i));
@@ -110,7 +114,8 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             });
 
             titleTextView.setText(task.getTitle());
-            boolean isTaskFinished = task.getRepeatability() == 0;
+            boolean isTaskFinished = task.getRepeatability() == 0
+                    || (task.getRepeatability() < 0 && task.getFinishDate() != null && mode == Mode.DONE);
             if (task.getDateMode() != Task.DateMode.TERMLESS || isTaskFinished) {
                 Date date = isTaskFinished ? task.getFinishDate() : task.getDate();
                 if (date != null) {
@@ -129,7 +134,7 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
             habitDaysLeftTV.setVisibility(View.GONE);
             int repeat = task.getRepeatability();
-            if (repeat < 0) {
+            if (repeat < 0 && mode != Mode.DONE) {
                 if (task.getHabitDays() > 0) {
                     habitDaysLeftTV.setVisibility(View.VISIBLE);
                     habitDaysLeftTV.setText(String.valueOf(task.getHabitDaysLeft()));
