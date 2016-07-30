@@ -217,6 +217,7 @@ public class FilteredTasksFragment extends DefaultFragment{
         sortedTasksTitles = new ArrayList<>();
 
         boolean onlyTodayTasksInToDo = getController().getSharedPreferences().getBoolean(LifeController.SHOW_ONLY_TODAY_TASK_TAG, false);
+        boolean dailiesInDone = getController().getSharedPreferences().getBoolean(LifeController.SHOW_DAILIES_IN_DONE_TAG, false);
 
         for (Task t : tasks) {
             if (!searchQuery.isEmpty()
@@ -249,6 +250,9 @@ public class FilteredTasksFragment extends DefaultFragment{
                     }
                     break;
                 case DONE:
+                    if (dailiesInDone && t.getRepeatability() < 0 && t.getFinishDate() != null) {
+                        sortedTasksTitles.add(t.getTitle());
+                    }
                     if (t.getRepeatability() == 0) {
                         sortedTasksTitles.add(t.getTitle());
                     }
@@ -264,7 +268,8 @@ public class FilteredTasksFragment extends DefaultFragment{
         } else {
             emptyList.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
-            TasksAdapter adapter = new TasksAdapter(sortedTasksTitles, getCurrentActivity());
+            TasksAdapter adapter = new TasksAdapter(sortedTasksTitles, getCurrentActivity(),
+                    filter == DONE ? TasksAdapter.Mode.DONE : TasksAdapter.Mode.REGULAR);
             adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                 @Override
                 public void onChanged() {

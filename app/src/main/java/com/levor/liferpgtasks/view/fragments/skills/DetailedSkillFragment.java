@@ -90,7 +90,7 @@ public class DetailedSkillFragment extends DataDependantFrament {
             titles.add(t.getTitle());
         }
         currentTasks = titles;
-        adapter = new TasksAdapter(titles, getCurrentActivity());
+        adapter = new TasksAdapter(titles, getCurrentActivity(), TasksAdapter.Mode.REGULAR);
         adapter.setHeader(header);
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override

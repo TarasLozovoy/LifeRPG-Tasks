@@ -21,6 +21,8 @@ import butterknife.ButterKnife;
 public class CommonSettingsFragment extends DefaultFragment {
     @Bind(R.id.only_today_tasks_layout) View onlyTodayTasksView;
     @Bind(R.id.only_today_tasks_switch) Switch onlyTodayTasksSwitch;
+    @Bind(R.id.dailies_in_done_layout)  View dailiesInDoneView;
+    @Bind(R.id.dailies_in_done_switch)  Switch dailiesInDoneSwitch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,6 +31,7 @@ public class CommonSettingsFragment extends DefaultFragment {
         ButterKnife.bind(this, v);
 
         onlyTodayTasksSwitch.setChecked(getController().getSharedPreferences().getBoolean(LifeController.SHOW_ONLY_TODAY_TASK_TAG, false));
+        dailiesInDoneSwitch.setChecked(getController().getSharedPreferences().getBoolean(LifeController.SHOW_DAILIES_IN_DONE_TAG, false));
 
         onlyTodayTasksView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,6 +44,20 @@ public class CommonSettingsFragment extends DefaultFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 getController().getSharedPreferences().edit().putBoolean(LifeController.SHOW_ONLY_TODAY_TASK_TAG, isChecked).apply();
+            }
+        });
+
+        dailiesInDoneView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dailiesInDoneSwitch.setChecked(!dailiesInDoneSwitch.isChecked());
+            }
+        });
+
+        dailiesInDoneSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                getController().getSharedPreferences().edit().putBoolean(LifeController.SHOW_DAILIES_IN_DONE_TAG, isChecked).apply();
             }
         });
 

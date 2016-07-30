@@ -398,6 +398,7 @@
     <string name="edit_skill">Edit skill</string>
     <string name="common_settings">Common settings</string>
     <string name="only_today_tasks">Only tasks for today in To do tab</string>
+    <string name="dailies_in_done">Show performed dailies in Done tab</string>
     <!-- -->
 
 </resources>

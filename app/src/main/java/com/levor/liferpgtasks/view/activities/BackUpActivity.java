@@ -153,7 +153,7 @@ public class BackUpActivity extends ActionBarActivity {
                         subscriber.onCompleted();
                     }
                 } catch (InvalidAccessTokenException | IllegalStateException e) {
-                    authorizeToDropbox();
+//                    authorizeToDropbox();
                     syncDropbox = true;
                 } catch (DbxException | IOException e) {
                     if (!subscriber.isUnsubscribed()) {

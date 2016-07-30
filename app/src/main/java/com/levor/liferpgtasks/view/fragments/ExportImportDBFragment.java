@@ -1,13 +1,18 @@
 package com.levor.liferpgtasks.view.fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +36,7 @@ import butterknife.ButterKnife;
 
 public class ExportImportDBFragment extends DefaultFragment {
     private static final int SELECT_FILE_IN_FILESYSTEM = 100;
+    private static final int WRITE_EXTERNAL_STORAGE_PERMISSION_CODE = 1;
 
     public static final String DB_EXPORT_PATH = Environment.getExternalStorageDirectory().getPath()
             +"/LifeRGPTasks/";
@@ -90,13 +96,20 @@ public class ExportImportDBFragment extends DefaultFragment {
                 File exportFile = new File(DB_EXPORT_FILE_NAME);
                 if (db.exists()){
                     try {
-                        if (!exportFile.exists()){
-                            new File(DB_EXPORT_PATH).mkdir();
-                            exportFile.createNewFile();
+                        if ( ContextCompat.checkSelfPermission(getCurrentActivity(),
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                                ActivityCompat.requestPermissions(getCurrentActivity(),
+                                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        WRITE_EXTERNAL_STORAGE_PERMISSION_CODE);
+                        } else {
+                            if (!exportFile.exists()) {
+                                new File(DB_EXPORT_PATH).mkdir();
+                                exportFile.createNewFile();
+                            }
+                            FileUtils.copyFile(new FileInputStream(db), new FileOutputStream(exportFile));
+                            Toast.makeText(getContext(), getString(R.string.db_exported_to_filesystem), Toast.LENGTH_LONG)
+                                    .show();
                         }
-                        FileUtils.copyFile(new FileInputStream(db), new FileOutputStream(exportFile));
-                        Toast.makeText(getContext(), getString(R.string.db_exported_to_filesystem), Toast.LENGTH_LONG)
-                                .show();
                     } catch (IOException e){
                         String message = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ?
                                 getString(R.string.db_export_error_android6) :
@@ -136,6 +149,17 @@ public class ExportImportDBFragment extends DefaultFragment {
     public void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case WRITE_EXTERNAL_STORAGE_PERMISSION_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    exportToFileSystemView.callOnClick();
+                }
+                break;
+        }
     }
 
     private void showFileChooserDialog(){
