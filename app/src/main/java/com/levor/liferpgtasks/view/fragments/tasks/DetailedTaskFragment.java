@@ -129,6 +129,9 @@ public class DetailedTaskFragment extends DataDependantFrament {
                 .setEnabled(!currentTask.isTaskDone());
         menu.findItem(R.id.undo_task).setVisible(currentTask.isUndonable())
                 .setEnabled(currentTask.isUndonable());
+        boolean showSkip = !currentTask.isTaskDone() && currentTask.getRepeatMode() != Task.RepeatMode.DO_NOT_REPEAT
+                && currentTask.getDateMode() != Task.DateMode.TERMLESS && currentTask.getRepeatMode() != Task.RepeatMode.REPEAT_AFTER_COMPLETION;
+        menu.findItem(R.id.skip_task).setVisible(showSkip).setEnabled(showSkip);
     }
 
     @Override
@@ -142,6 +145,9 @@ public class DetailedTaskFragment extends DataDependantFrament {
                 item.setVisible(false).setEnabled(false);
                 undoTask();
                 getActivity().invalidateOptionsMenu();
+                return true;
+            case R.id.skip_task:
+                showSkipDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -343,6 +349,22 @@ public class DetailedTaskFragment extends DataDependantFrament {
         adapter.setHeader(header);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getCurrentActivity()));
+    }
+
+    private void showSkipDialog() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getCurrentActivity());
+        alert.setTitle(R.string.skip_task)
+                .setMessage(currentTask.getHabitDays() < 0 ? R.string.skip_task_message : R.string.skip_task_message_habit)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getController().skipTask(currentTask);
+                        getActivity().invalidateOptionsMenu();
+                        updateUI();
+                    }
+                })
+                .setNegativeButton(R.string.no, null)
+                .show();
     }
 
     private void performTask(){

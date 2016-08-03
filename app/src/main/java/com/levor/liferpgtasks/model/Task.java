@@ -326,6 +326,14 @@ public class Task {
     public void perform(){
         setRepeatability(getRepeatability() - 1);
         numberOfExecutions++;
+        moveToNextRepeatDate();
+    }
+
+    public void skip() {
+        moveToNextRepeatDate();
+    }
+
+    private void moveToNextRepeatDate() {
         if (repeatability != 0) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);

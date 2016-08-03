@@ -356,6 +356,10 @@
     <string name="common_settings">Общие настройки</string>
     <string name="only_today_tasks">Только сегодняшние задачи во вкладке Задачи</string>
     <string name="dailies_in_done">Показывать выполненные привычки во вкладке Сделано</string>
+    <string name="skip">Пропустить</string>
+    <string name="skip_task">Пропуск задачи</string>
+    <string name="skip_task_message_habit">Вы точно хотите пропустить задачу для текущей даты? Весь прогресс по выработке привычки будет потерян.</string>
+    <string name="skip_task_message">Вы точно хотите пропустить задачу для текущей даты?</string>
     <!-- -->
 
 </resources>

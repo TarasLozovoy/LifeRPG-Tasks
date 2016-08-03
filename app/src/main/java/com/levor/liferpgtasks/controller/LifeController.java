@@ -73,7 +73,7 @@ public class LifeController {
 
     private static final String STAT_DIVIDER = " - ";
 
-    private long dropboxBackupTimeout = 1000;
+    private long dropboxBackupTimeout = 5000;
     private long dropboxBackupStartTime;
 
     private static LifeController LifeController;
@@ -342,8 +342,22 @@ public class LifeController {
         checkTaskHabitGeneration(task);
         increaseTasksPerDay(-1);
         checkAchievements();
-        performBackUpToDropBox();
+//        performBackUpToDropBox();
         return isLevelChanged;
+    }
+
+    public void skipTask(Task task) {
+        task.skip();
+        task.setUndonable(false);
+
+        if (task.getHabitDays() >= 0) {
+            LocalDate today = new LocalDate();
+            task.setHabitStartDate(today.minusDays(1));
+            task.setHabitDaysLeft(task.getHabitDays());
+        }
+
+        updateTask(task);
+        updateTaskNotification(task);
     }
 
     public boolean shareTask(Task task){
