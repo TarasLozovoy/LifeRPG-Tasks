@@ -16,14 +16,8 @@
 #   public *;
 #}
 
-
-# Allow obfuscation of android.support.v7.internal.view.menu.**
-# to avoid problem on Samsung 4.2.2 devices with appcompat v21
-# see https://code.google.com/p/android/issues/detail?id=78377
--keep class !android.support.v7.internal.view.menu.**,android.support.** {*;}
-
-#don't need it
--dontwarn okio.**
+-dontobfuscate
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
 
 #Butterknife
 -keep class butterknife.** { *; }
@@ -48,4 +42,15 @@
 #OkHttp
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.* { *; }
--dontwarn okhttp3.*
+-dontwarn okhttp3.**
+-dontwarn com.squareup.okhttp.**
+-dontwarn com.google.appengine.**
+-dontwarn okio.**
+-dontwarn com.squareup.okhttp.**
+-dontwarn com.google.appengine.**
+-dontwarn javax.servlet.**
+
+# Allow obfuscation of android.support.v7.internal.view.menu.**
+# to avoid problem on Samsung 4.2.2 devices with appcompat v21
+# see https://code.google.com/p/android/issues/detail?id=78377
+-keep class !android.support.v7.internal.view.menu.**,android.support.** {*;}
