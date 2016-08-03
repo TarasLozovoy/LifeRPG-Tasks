@@ -97,6 +97,7 @@
         <item>Version 1.3.6</item>
         <item>Version 1.4.0</item>
         <item>Version 1.4.1</item>
+        <item>Version 1.4.2</item>
     </string-array>
 
     <string-array
@@ -120,6 +121,12 @@
             \n- Some networking improvements.
             \n- Fixed bug with reappearing characteristics.
             \n- Fixed few rarely reproduced crashes.</item>
+        <item>- Moved to new Dropbox API v.2.
+            \n- Reduced Dropbox notification visibility time.
+            \n- Optional, only todays tasks in To Do tab (can be turned on/off via Settings).
+            \n- Optional, show dailies in Done tab with last execution date (can be turned on/off via Settings).
+            \n- Skip feature for tasks with specified date. When skip button pressed – date will be changed to nearest one by specified in task rule.
+</item>
     </string-array>
 
 </resources>
