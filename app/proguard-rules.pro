@@ -21,3 +21,31 @@
 # to avoid problem on Samsung 4.2.2 devices with appcompat v21
 # see https://code.google.com/p/android/issues/detail?id=78377
 -keep class !android.support.v7.internal.view.menu.**,android.support.** {*;}
+
+#don't need it
+-dontwarn okio.**
+
+#Butterknife
+-keep class butterknife.** { *; }
+-dontwarn butterknife.internal.**
+-keep class **$$ViewBinder { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+
+## Joda Time 2.3
+
+-dontwarn org.joda.convert.**
+-dontwarn org.joda.time.**
+-keep class org.joda.time.** { *; }
+-keep interface org.joda.time.** { *; }
+
+#OkHttp
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.* { *; }
+-dontwarn okhttp3.*
