@@ -656,6 +656,7 @@ public class LifeEntity {
         values.put(MiscTable.Cols.ACHIEVES_LEVELS, Misc.ACHIEVEMENTS_LEVELS);
         values.put(MiscTable.Cols.STATISTICS_NUMBERS, Misc.STATISTICS_NUMBERS);
         values.put(MiscTable.Cols.IMAGE_AVATAR, Misc.HERO_IMAGE_PATH);
+        values.put(MiscTable.Cols.IMAGE_AVATAR_MODE, Misc.HERO_IMAGE_MODE);
         return values;
     }
 

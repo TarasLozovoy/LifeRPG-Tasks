@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -24,7 +23,6 @@ import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.Utils.FileUtils;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.dataBase.DataBaseHelper;
-import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,10 +35,6 @@ import butterknife.ButterKnife;
 public class ExportImportDBFragment extends DefaultFragment {
     private static final int SELECT_FILE_IN_FILESYSTEM = 100;
     private static final int WRITE_EXTERNAL_STORAGE_PERMISSION_CODE = 1;
-
-    public static final String DB_EXPORT_PATH = Environment.getExternalStorageDirectory().getPath()
-            +"/LifeRGPTasks/";
-    public static final String DB_EXPORT_FILE_NAME = DB_EXPORT_PATH + "LifeRPGTasksDB.db";
 
     @Bind(R.id.auto_backup_to_dropbox_layout)       View autoExportToDropboxView;
     @Bind(R.id.auto_backup_to_dropbox_switch)       Switch autoExportToDropboxSwitch;
@@ -93,7 +87,7 @@ public class ExportImportDBFragment extends DefaultFragment {
             public void onClick(View v) {
                 getController().closeDBConnection();
                 File db = getCurrentActivity().getDatabasePath(DataBaseHelper.DATABASE_NAME);
-                File exportFile = new File(DB_EXPORT_FILE_NAME);
+                File exportFile = new File(LifeController.DB_EXPORT_FILE_NAME);
                 if (db.exists()){
                     try {
                         if ( ContextCompat.checkSelfPermission(getCurrentActivity(),
@@ -103,7 +97,7 @@ public class ExportImportDBFragment extends DefaultFragment {
                                         WRITE_EXTERNAL_STORAGE_PERMISSION_CODE);
                         } else {
                             if (!exportFile.exists()) {
-                                new File(DB_EXPORT_PATH).mkdir();
+                                new File(LifeController.FILE_EXPORT_PATH).mkdir();
                                 exportFile.createNewFile();
                             }
                             FileUtils.copyFile(new FileInputStream(db), new FileOutputStream(exportFile));

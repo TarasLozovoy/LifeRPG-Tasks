@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
+import android.os.Environment;
 import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
@@ -64,6 +65,13 @@ public class LifeController {
     public static final String SHOW_ONLY_TODAY_TASK_TAG = "show_only_today_tasks_tag";
     public static final String SHOW_DAILIES_IN_DONE_TAG = "show_dailies_in_done_tag";
     private static final String HERO_ICON_NAME_TAG = "hero_icon_name_tag";
+    public static final String FILE_EXPORT_PATH = Environment.getExternalStorageDirectory().getPath()
+            +"/LifeRGPTasks/";
+    public static final String DB_EXPORT_FILE_NAME = FILE_EXPORT_PATH + "LifeRPGTasksDB.db";
+    public static final String HERO_IMAGE_FILE_NAME = FILE_EXPORT_PATH + "HeroPhoto.jpg";
+
+    public static final int CAMERA_CAPTURE_REQUEST = 1001;
+
     private LifeEntity lifeEntity;
     private Context context;
     private Tracker tracker;

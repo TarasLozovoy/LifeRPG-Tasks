@@ -21,5 +21,6 @@ public class MiscCursorWrapper extends CursorWrapper {
         Misc.ACHIEVEMENTS_LEVELS = getString(getColumnIndex(MiscTable.Cols.ACHIEVES_LEVELS));
         Misc.STATISTICS_NUMBERS = getString(getColumnIndex(MiscTable.Cols.STATISTICS_NUMBERS));
         Misc.HERO_IMAGE_PATH = getString(getColumnIndex(MiscTable.Cols.IMAGE_AVATAR));
+        Misc.HERO_IMAGE_MODE = getInt(getColumnIndex(MiscTable.Cols.IMAGE_AVATAR_MODE));
     }
 }

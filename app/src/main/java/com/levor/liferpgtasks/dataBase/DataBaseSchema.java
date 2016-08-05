@@ -65,6 +65,7 @@ public class DataBaseSchema {
             public static final String ACHIEVES_LEVELS = "achievements_levels";
             public static final String STATISTICS_NUMBERS = "statistics_numbers";
             public static final String IMAGE_AVATAR = "hero_image_avatar";
+            public static final String IMAGE_AVATAR_MODE = "hero_image_avatar_mode";
         }
     }
 

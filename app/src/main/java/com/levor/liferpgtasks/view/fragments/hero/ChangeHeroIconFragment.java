@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.model.Misc;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 import java.io.IOException;
@@ -69,7 +70,7 @@ public class ChangeHeroIconFragment extends DefaultFragment{
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getCurrentActivity().setHeroImageName(name);
+                    getCurrentActivity().setHeroImageName(name, Misc.ASSETS_ICON);
                     getCurrentActivity().showNthPreviousFragment(2);
                     getController().getGATracker().send(new HitBuilders.EventBuilder()
                             .setCategory(getContext().getString(R.string.GA_action))

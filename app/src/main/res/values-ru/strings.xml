@@ -308,7 +308,7 @@
     <string name="oops">Ой!</string>
     <string name="notification_text">Пора выполнять задание!</string>
     <string name="removing">Удаление</string>
-    <string name="error_on_loading_image">>Возникла ошибка при загрузке иконке. Выберите, пожалуйста, другую иконку.</string>
+    <string name="error_on_loading_image">Возникла ошибка при загрузке иконке. Выберите, пожалуйста, другую иконку.</string>
     <string name="initial_reset">Стереть данные</string>
     <string name="hard_reset">Стереть все данные</string>
     <string name="soft_reset">Стереть данные частично</string>
@@ -360,6 +360,9 @@
     <string name="skip_task">Пропуск задачи</string>
     <string name="skip_task_message_habit">Вы точно хотите пропустить задачу для текущей даты? Весь прогресс по выработке привычки будет потерян.</string>
     <string name="skip_task_message">Вы точно хотите пропустить задачу для текущей даты?</string>
+    <string name="take_a_photo">Сделать фото</string>
+    <string name="load_from_filesystem">Загрузить из файловой системы</string>
+    <string name="select_icon">Выбрать иконку</string>
     <!-- -->
 
 </resources>

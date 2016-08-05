@@ -403,6 +403,9 @@
     <string name="skip_task">Skip task</string>
     <string name="skip_task_message_habit">Are you sure you want to skip task for current date? All habit generation progress will be cancelled.</string>
     <string name="skip_task_message">Are you sure you want to skip task for current date?</string>
+    <string name="take_a_photo">Take a photo</string>
+    <string name="load_from_filesystem">Load from filesystem</string>
+    <string name="select_icon">Select icon</string>
     <!-- -->
 
 </resources>

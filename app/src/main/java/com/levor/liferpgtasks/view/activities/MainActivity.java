@@ -47,6 +47,8 @@ import com.levor.liferpgtasks.view.fragments.tasks.TasksFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -413,29 +415,57 @@ public class MainActivity extends BackUpActivity{
         }
     }
 
-    public void setHeroImageName(String name){
+    public void setHeroImageName(String name, int mode){
         if (name != null) {
             Misc.HERO_IMAGE_PATH = name;
+            Misc.HERO_IMAGE_MODE = mode;
             setupNavigationTabs();
         }
     }
 
     public Bitmap getHeroIconBitmap(){
         try {
-            InputStream is = getAssets().open(Misc.HERO_IMAGE_PATH);
-            return BitmapFactory.decodeStream(is);
+            switch (Misc.HERO_IMAGE_MODE) {
+                case Misc.ASSETS_ICON:
+                    InputStream is = getAssets().open(Misc.HERO_IMAGE_PATH);
+                    return BitmapFactory.decodeStream(is);
+                case Misc.PHOTO_FROM_CAMERA:
+                    File imageFile = new File(LifeController.HERO_IMAGE_FILE_NAME);
+                    return BitmapFactory.decodeStream(new FileInputStream(imageFile));
+                case Misc.USER_IMAGE:
+                    // TODO: 05.08.2016 handle this mode
+                    return null;
+
+            }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            resetHeroImage();
+            return getHeroIconBitmap();
         }
+        return null;
+    }
+
+    private void resetHeroImage() {
+        Misc.HERO_IMAGE_PATH = "elegant5.png";
+        Misc.HERO_IMAGE_MODE = Misc.ASSETS_ICON;
     }
 
     protected void setupNavigationTabs(){
-        Drawable d;
+        Drawable d = null;
         try {
-            InputStream is = getAssets().open(Misc.HERO_IMAGE_PATH);
-            d = Drawable.createFromStream(is, null);
+            switch (Misc.HERO_IMAGE_MODE) {
+                case Misc.ASSETS_ICON:
+                    InputStream is = getAssets().open(Misc.HERO_IMAGE_PATH);
+                    d = Drawable.createFromStream(is, null);
+                    break;
+                case Misc.PHOTO_FROM_CAMERA:
+                    File imageFile = new File(LifeController.HERO_IMAGE_FILE_NAME);
+                    d = Drawable.createFromStream(new FileInputStream(imageFile), null);
+                    break;
+                case Misc.USER_IMAGE:
+                    // TODO: 05.08.2016 handle this mode
+            }
         } catch (IOException e) {
-            Misc.HERO_IMAGE_PATH = "elegant5.png";
+            resetHeroImage();
             Toast.makeText(this, R.string.error_on_loading_image, Toast.LENGTH_LONG).show();
             setupNavigationTabs();
             return;
