@@ -288,7 +288,7 @@ public class MainActivity extends BackUpActivity{
         currentFragmentID = fragmentID;
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_frame, fragment)
-                .commit();
+                .commitAllowingStateLoss();
     }
 
     public void showPreviousFragment() {
@@ -320,7 +320,7 @@ public class MainActivity extends BackUpActivity{
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)
                 .replace(R.id.content_frame, fragment)
-                .commit();
+                .commitAllowingStateLoss();
         getSupportFragmentManager().executePendingTransactions();
     }
 
@@ -430,12 +430,25 @@ public class MainActivity extends BackUpActivity{
                     InputStream is = getAssets().open(Misc.HERO_IMAGE_PATH);
                     return BitmapFactory.decodeStream(is);
                 case Misc.PHOTO_FROM_CAMERA:
-                    File imageFile = new File(LifeController.HERO_IMAGE_FILE_NAME);
-                    return BitmapFactory.decodeStream(new FileInputStream(imageFile));
                 case Misc.USER_IMAGE:
-                    // TODO: 05.08.2016 handle this mode
-                    return null;
+                    File imageFile = new File(Misc.HERO_IMAGE_PATH);
+                    Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(imageFile));
+                    if (bitmap == null) throw new IOException();
 
+                    //resizing bitmap
+                    int width = bitmap.getWidth();
+                    int height = bitmap.getHeight();
+                    int maxSize = 750;
+
+                    float bitmapRatio = (float) width / (float) height;
+                    if (bitmapRatio > 1) {
+                        width = maxSize;
+                        height = (int) (width / bitmapRatio);
+                    } else {
+                        height = maxSize;
+                        width = (int) (height * bitmapRatio);
+                    }
+                    return Bitmap.createScaledBitmap(bitmap,width, height, true);
             }
         } catch (IOException e) {
             resetHeroImage();
@@ -458,11 +471,11 @@ public class MainActivity extends BackUpActivity{
                     d = Drawable.createFromStream(is, null);
                     break;
                 case Misc.PHOTO_FROM_CAMERA:
-                    File imageFile = new File(LifeController.HERO_IMAGE_FILE_NAME);
-                    d = Drawable.createFromStream(new FileInputStream(imageFile), null);
-                    break;
                 case Misc.USER_IMAGE:
-                    // TODO: 05.08.2016 handle this mode
+                    File imageFile = new File(Misc.HERO_IMAGE_PATH);
+                    d = Drawable.createFromStream(new FileInputStream(imageFile), null);
+                    if (d == null) throw new IOException();
+                    break;
             }
         } catch (IOException e) {
             resetHeroImage();
@@ -483,6 +496,18 @@ public class MainActivity extends BackUpActivity{
             Drawable d = Drawable.createFromStream(is, null);
             heroNavigationTab.setIcon(d);
         } catch (IOException e) {}
+    }
+
+    public void showFileChooserDialog(){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        try {
+            startActivityForResult(
+                    Intent.createChooser(intent, "Select a File to Upload"),
+                    LifeController.SELECT_FILE_IN_FILESYSTEM_REQUEST);
+        } catch (android.content.ActivityNotFoundException ignored) {
+        }
     }
 
     @Override

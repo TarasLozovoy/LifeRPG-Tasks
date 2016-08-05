@@ -33,7 +33,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class ExportImportDBFragment extends DefaultFragment {
-    private static final int SELECT_FILE_IN_FILESYSTEM = 100;
+
     private static final int WRITE_EXTERNAL_STORAGE_PERMISSION_CODE = 1;
 
     @Bind(R.id.auto_backup_to_dropbox_layout)       View autoExportToDropboxView;
@@ -120,7 +120,7 @@ public class ExportImportDBFragment extends DefaultFragment {
         importFromFileSystemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showFileChooserDialog();
+                getCurrentActivity().showFileChooserDialog();
             }
         });
 
@@ -156,23 +156,11 @@ public class ExportImportDBFragment extends DefaultFragment {
         }
     }
 
-    private void showFileChooserDialog(){
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        try {
-            startActivityForResult(
-                    Intent.createChooser(intent, "Select a File to Upload"),
-                    SELECT_FILE_IN_FILESYSTEM);
-        } catch (android.content.ActivityNotFoundException ignored) {
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK){
-            if (requestCode == SELECT_FILE_IN_FILESYSTEM){
+            if (requestCode == LifeController.SELECT_FILE_IN_FILESYSTEM_REQUEST){
                 Uri uri = data.getData();
                 String path = FileUtils.getPathFromUri(getCurrentActivity(), uri);
 

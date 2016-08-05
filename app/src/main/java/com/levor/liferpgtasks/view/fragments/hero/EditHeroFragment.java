@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.Utils.FileUtils;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Misc;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
@@ -87,8 +89,14 @@ public class EditHeroFragment extends DefaultFragment{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == LifeController.CAMERA_CAPTURE_REQUEST && resultCode == Activity.RESULT_OK) {
+        if (resultCode != Activity.RESULT_OK) return;
+        if (requestCode == LifeController.CAMERA_CAPTURE_REQUEST) {
             getCurrentActivity().setHeroImageName(LifeController.HERO_IMAGE_FILE_NAME, Misc.PHOTO_FROM_CAMERA);
+            getCurrentActivity().showPreviousFragment();
+        } else if (requestCode == LifeController.SELECT_FILE_IN_FILESYSTEM_REQUEST) {
+            Uri uri = data.getData();
+            String path = FileUtils.getPathFromUri(getCurrentActivity(), uri);
+            getCurrentActivity().setHeroImageName(path, Misc.USER_IMAGE);
             getCurrentActivity().showPreviousFragment();
         }
     }
@@ -99,6 +107,11 @@ public class EditHeroFragment extends DefaultFragment{
             case WRITE_EXTERNAL_STORAGE_PERMISSION_CODE_PHOTO:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     requestNewImageFromCamera();
+                }
+                break;
+            case WRITE_EXTERNAL_STORAGE_PERMISSION_CODE_UPLOAD:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    requestNewImageFromExternalStorage();
                 }
                 break;
         }
@@ -134,6 +147,17 @@ public class EditHeroFragment extends DefaultFragment{
         }
     }
 
+    private void requestNewImageFromExternalStorage() {
+        if ( ContextCompat.checkSelfPermission(getCurrentActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(getCurrentActivity(),
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    WRITE_EXTERNAL_STORAGE_PERMISSION_CODE_UPLOAD);
+            return;
+        }
+        getCurrentActivity().showFileChooserDialog();
+    }
+
     private class ChangeIconClickListener implements View.OnClickListener{
 
         @Override
@@ -152,14 +176,7 @@ public class EditHeroFragment extends DefaultFragment{
                             requestNewImageFromCamera();
                             break;
                         case 1: //load photo from filesystem
-                            if ( ContextCompat.checkSelfPermission(getCurrentActivity(),
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-                                ActivityCompat.requestPermissions(getCurrentActivity(),
-                                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                        WRITE_EXTERNAL_STORAGE_PERMISSION_CODE_UPLOAD);
-                                return;
-                            }
-                            // TODO: 05.08.2016 load from file system
+                            requestNewImageFromExternalStorage();
                             break;
                         case 2: //select icon
                             getCurrentActivity().showChildFragment(new ChangeHeroIconFragment(), null);

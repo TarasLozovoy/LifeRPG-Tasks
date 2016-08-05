@@ -71,6 +71,7 @@ public class LifeController {
     public static final String HERO_IMAGE_FILE_NAME = FILE_EXPORT_PATH + "HeroPhoto.jpg";
 
     public static final int CAMERA_CAPTURE_REQUEST = 1001;
+    public static final int SELECT_FILE_IN_FILESYSTEM_REQUEST = 1002;
 
     private LifeEntity lifeEntity;
     private Context context;
