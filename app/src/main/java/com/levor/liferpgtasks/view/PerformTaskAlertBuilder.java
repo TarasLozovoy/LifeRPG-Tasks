@@ -3,6 +3,8 @@ package com.levor.liferpgtasks.view;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.adapters.ShareDialogAdapter;
+import com.levor.liferpgtasks.controller.AudioController;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
@@ -52,6 +55,13 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
             xp = - xp;
         }
 
+        boolean levelUp = false;
+        int skillsUp = 0;
+
+        if (oldHeroLevel < lifeController.getHeroLevel()) {
+            levelUp = true;
+        }
+
         sb.append(context.getResources().getString(R.string.task_performed))
                 .append("\n")
                 .append(xp >= 0 ? "+" : "")
@@ -70,6 +80,7 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
                         .append(sk.getKeyCharacteristicsGrowth() * (sk.getLevel() - oldLevel))
                         .append(" ")
                         .append(sk.getKeyCharacteristicsStringForUI());
+                skillsUp++;
             } else if (sk.getLevel() < oldLevel) {
                 sb.append("\n")
                         .append("-")
@@ -95,6 +106,18 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
                     }
                 })
                 .setPositiveButton(context.getResources().getString(R.string.share), null);
+
+        //play some sound for level up and skill up
+        if (levelUp || skillsUp > 0) {
+            AudioController audioController = AudioController.getInstance(context);
+
+            if (levelUp) {
+                audioController.playLevelUpSound();
+            } else if (skillsUp > 0) {
+                audioController.playSkillUpSound(skillsUp);
+            }
+
+        }
     }
 
     @Override

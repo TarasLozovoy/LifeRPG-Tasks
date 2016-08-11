@@ -98,6 +98,7 @@ public class LifeController {
         this.context = context;
         initAchievements();
         initStatistics();
+        initAudioController();
     }
 
     public void setGATracker(Tracker tracker){
@@ -115,6 +116,10 @@ public class LifeController {
     public void sendScreenNameToAnalytics(String name){
         tracker.setScreenName("/" + name);
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
+    }
+
+    public void initAudioController() {
+        AudioController.getInstance(context);
     }
 
     public List<Task> getAllTasks(){

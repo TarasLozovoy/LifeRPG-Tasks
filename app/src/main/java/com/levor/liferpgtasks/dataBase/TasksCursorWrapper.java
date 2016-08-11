@@ -80,7 +80,7 @@ public class TasksCursorWrapper extends CursorWrapper {
         task.setHabitStartDate(habitStartDate);
         task.setNumberOfExecutions(numberOfExecutions);
 
-        if (repeatability == 0) {
+        if (repeatability == 0 && task.getDateMode() != Task.DateMode.SPECIFIC_TIME) {
             Date finishDate = finishDateLong > 0 ? new Date(finishDateLong) : new Date();
             task.setFinishDate(finishDate);
             task.setDateMode(Task.DateMode.SPECIFIC_TIME);
