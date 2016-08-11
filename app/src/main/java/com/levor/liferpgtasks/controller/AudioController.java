@@ -11,6 +11,7 @@ public class AudioController {
     private int levelUpSoundID;
     private int skillsUpSoundID;
     private SoundPool soundPool;
+    private Context context;
 
     private static AudioController AudioController;
     public static AudioController getInstance(Context context){
@@ -21,6 +22,8 @@ public class AudioController {
     }
 
     AudioController(Context context) {
+        this.context = context;
+
         //init SoundPool
         soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 
@@ -30,10 +33,14 @@ public class AudioController {
     }
 
     public void playLevelUpSound() {
-        soundPool.play(levelUpSoundID, 1, 1, 0, 0, 1);
+        if (!LifeController.getInstance(context).getSharedPreferences().getBoolean(LifeController.DISABLE_SOUNDS_TAG, false)) {
+            soundPool.play(levelUpSoundID, 1, 1, 0, 0, 1);
+        }
     }
 
     public void playSkillUpSound(int repeats) {
-        soundPool.play(skillsUpSoundID, 1, 1, 0, repeats - 1, 1);
+        if (!LifeController.getInstance(context).getSharedPreferences().getBoolean(LifeController.DISABLE_SOUNDS_TAG, false)) {
+            soundPool.play(skillsUpSoundID, 1, 1, 0, repeats - 1, 1);
+        }
     }
 }

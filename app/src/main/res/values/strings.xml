@@ -406,6 +406,7 @@
     <string name="take_a_photo">Take a photo</string>
     <string name="load_from_filesystem">Load from filesystem</string>
     <string name="select_icon">Select icon</string>
+    <string name="disable_sounds">Disable sounds</string>
     <!-- -->
 
 </resources>

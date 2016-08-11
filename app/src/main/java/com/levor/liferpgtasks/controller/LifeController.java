@@ -62,6 +62,7 @@ public class LifeController {
     public static final String DROPBOX_AUTO_BACKUP_ENABLED = "dropbox_auto_backup_enabled";
     public final static String DROPBOX_ACCESS_TOKEN_TAG = "db_access_token_tag";
     public final static String APPLICATION_VERSION_CODE_TAG = "application_version_code_tag";
+    public static final String DISABLE_SOUNDS_TAG = "disable_sounds_tag";
     public static final String SHOW_ONLY_TODAY_TASK_TAG = "show_only_today_tasks_tag";
     public static final String SHOW_DAILIES_IN_DONE_TAG = "show_dailies_in_done_tag";
     private static final String HERO_ICON_NAME_TAG = "hero_icon_name_tag";

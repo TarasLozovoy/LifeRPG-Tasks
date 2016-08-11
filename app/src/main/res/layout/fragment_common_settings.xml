@@ -10,29 +10,54 @@
         android:orientation="vertical">
 
         <RelativeLayout
-        android:id="@+id/only_today_tasks_layout"
-        style="@style/LifeRPGSettingsItemsStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="13dp">
-
-        <Switch
-            android:id="@+id/only_today_tasks_switch"
-            android:layout_width="wrap_content"
+            android:id="@+id/disable_sounds_layout"
+            style="@style/LifeRPGSettingsItemsStyle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:checked="false" />
+            android:paddingTop="13dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+            <Switch
+                android:id="@+id/disable_sounds_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:checked="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@id/disable_sounds_switch"
+                android:singleLine="false"
+                android:text="@string/disable_sounds" />
+        </RelativeLayout>
+
+        <View style="@style/HorizontalDivider.NoMargins" />
+
+        <RelativeLayout
+            android:id="@+id/only_today_tasks_layout"
+            style="@style/LifeRPGSettingsItemsStyle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@id/only_today_tasks_switch"
-            android:text="@string/only_today_tasks"
-            android:singleLine="false"/>
-    </RelativeLayout>
+            android:paddingTop="13dp">
 
-        <View style="@style/HorizontalDivider.NoMargins"/>
+            <Switch
+                android:id="@+id/only_today_tasks_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:checked="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@id/only_today_tasks_switch"
+                android:singleLine="false"
+                android:text="@string/only_today_tasks" />
+        </RelativeLayout>
+
+        <View style="@style/HorizontalDivider.NoMargins" />
 
         <RelativeLayout
             android:id="@+id/dailies_in_done_layout"
@@ -53,10 +78,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_toLeftOf="@id/dailies_in_done_switch"
-                android:text="@string/dailies_in_done"
-                android:singleLine="false"/>
+                android:singleLine="false"
+                android:text="@string/dailies_in_done" />
         </RelativeLayout>
 
-        <View style="@style/HorizontalDivider.NoMargins"/>
+        <View style="@style/HorizontalDivider.NoMargins" />
     </LinearLayout>
 </ScrollView>
