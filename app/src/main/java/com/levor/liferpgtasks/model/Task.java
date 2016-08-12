@@ -566,7 +566,7 @@ public class Task {
         public int compare(Task lhs, Task rhs) {
             Date dateLhs = lhs.isTaskDone() ? lhs.getFinishDate() : lhs.getDate();
             Date dateRhs = rhs.isTaskDone() ? rhs.getFinishDate() : rhs.getDate();
-            if (dateLhs != dateRhs){
+            if (dateLhs != dateRhs && dateLhs != null && dateRhs != null){
                 if (lhs.repeatability == 0 && rhs.repeatability == 0){
                     return dateLhs.compareTo(dateRhs);
                 }
@@ -584,7 +584,7 @@ public class Task {
         public int compare(Task lhs, Task rhs) {
             Date dateLhs = lhs.isTaskDone() ? lhs.getFinishDate() : lhs.getDate();
             Date dateRhs = rhs.isTaskDone() ? rhs.getFinishDate() : rhs.getDate();
-            if (dateLhs != dateRhs){
+            if (dateLhs != dateRhs && dateLhs != null && dateRhs != null){
                 if (lhs.repeatability == 0 && rhs.repeatability == 0){
                     return dateRhs.compareTo(dateLhs);
                 }
