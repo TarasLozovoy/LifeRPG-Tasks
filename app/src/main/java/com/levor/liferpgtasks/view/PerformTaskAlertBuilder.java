@@ -114,7 +114,7 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
             if (levelUp) {
                 audioController.playLevelUpSound();
             } else if (skillsUp > 0) {
-                audioController.playSkillUpSound(skillsUp);
+                audioController.playSkillUpSound();
             }
 
         }

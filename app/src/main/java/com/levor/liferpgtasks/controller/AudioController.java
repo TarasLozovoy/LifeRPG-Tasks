@@ -38,9 +38,9 @@ public class AudioController {
         }
     }
 
-    public void playSkillUpSound(int repeats) {
+    public void playSkillUpSound() {
         if (!LifeController.getInstance(context).getSharedPreferences().getBoolean(LifeController.DISABLE_SOUNDS_TAG, false)) {
-            soundPool.play(skillsUpSoundID, 1, 1, 0, repeats - 1, 1);
+            soundPool.play(skillsUpSoundID, 1, 1, 0, 0, 1);
         }
     }
 }

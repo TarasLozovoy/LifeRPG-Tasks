@@ -98,6 +98,7 @@
         <item>Version 1.4.0</item>
         <item>Version 1.4.1</item>
         <item>Version 1.4.2</item>
+        <item>Version 1.4.3</item>
     </string-array>
 
     <string-array
@@ -126,6 +127,10 @@
             \n- Optional, only todays tasks in To Do tab (can be turned on/off via Settings).
             \n- Optional, show dailies in Done tab with last execution date (can be turned on/off via Settings).
             \n- Skip feature for tasks with specified date. When skip button pressed – date will be changed to nearest one by specified in task rule.
+</item>
+        <item>-	Possibility to set custom avatar from file system.
+            \n-	Possibility to set new avatar right from camera.
+            \n-	Added sounds on level up and skill up (can be switched on/off in settings).
 </item>
     </string-array>
 
