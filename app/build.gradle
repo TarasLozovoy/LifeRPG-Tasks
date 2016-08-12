@@ -27,10 +27,10 @@ android {
     buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId "com.levor.liferpgtasks"
-        multiDexEnabled true
+//        multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 24
+        versionCode 25
         versionName "1.4.3"
     }
     buildTypes {
@@ -43,11 +43,11 @@ android {
         }
     }
 
-    dexOptions {
-        incremental = true;
-        preDexLibraries = false
-        javaMaxHeapSize "4g" // 2g should be also OK
-    }
+//    dexOptions {
+//        incremental = true;
+//        preDexLibraries = false
+//        javaMaxHeapSize "4g" // 2g should be also OK
+//    }
 
     lintOptions {
         disable 'MissingTranslation'
