@@ -7,7 +7,9 @@ import com.levor.liferpgtasks.model.LifeEntity;
 import com.levor.liferpgtasks.model.Reward;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class RewardsController {
 
@@ -29,13 +31,18 @@ public class RewardsController {
 
     public List<Reward> getAllRewards() {
         List<Reward> list = new ArrayList<>();
-        list.add(new Reward());
+        list.add(new Reward(new Date().toString()));
         return list;
         // TODO: 8/22/16 remove mock reward
     }
 
     public Reward getRewardByTitle(String title) {
-        return new Reward();
+        return new Reward(new Date().toString());
+        // TODO: 8/22/16 remove mock reward
+    }
+
+    public Reward getRewardByID(UUID id) {
+        return new Reward(new Date().toString());
         // TODO: 8/22/16 remove mock reward
     }
 }

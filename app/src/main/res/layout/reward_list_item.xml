@@ -7,15 +7,6 @@
     android:paddingLeft="@dimen/save_zone_margin"
     android:paddingRight="@dimen/save_zone_margin">
 
-
-    <ImageView
-        android:id="@+id/gold_coin_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/gold_coin_icon"
-        android:layout_toLeftOf="@id/check_button"
-        android:layout_centerVertical="true"/>
-
     <ImageButton
         android:id="@+id/check_button"
         style="@style/LifeRPGDefaultButton"
@@ -29,20 +20,29 @@
         android:elevation="2dp"
         android:src="@drawable/ic_done_black_24dp" />
 
+    <ImageView
+        android:id="@+id/gold_coin_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/gold_coin_icon"
+        android:layout_toLeftOf="@id/check_button"
+        android:layout_centerVertical="true"/>
+
+    <TextView
+        android:id="@+id/cost_text_view"
+        android:textSize="14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/gold_coin_icon"
+        android:textColor="@color/black"
+        android:layout_centerVertical="true"/>
+
     <TextView
         android:id="@+id/list_item_title"
         style="@style/LifeRPGTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/cost_text_view"
-        android:textColor="@color/black" />
-
-    <TextView
-        android:id="@+id/cost_text_view"
-        style="@style/LifeRPGTextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/gold_coin_icon"
         android:textColor="@color/black" />
 
 </RelativeLayout>

@@ -67,94 +67,18 @@ public class RewardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-//        if (holder instanceof ViewHolderItem) {
-//            final ViewHolderItem itemHolder = (ViewHolderItem) holder;
-//            final Task task = items.get(position - 1);
-//            ImageButton doBtn = itemHolder.doBtn;
-//            TextView titleTextView = itemHolder.titleTextView;
-//            TextView dateTextView = itemHolder.dateTextView;
-//            TextView repeatabilityTV = itemHolder.repeatabilityTV;
-//            TextView habitDaysLeftTV = itemHolder.habitDaysLeftTV;
-//            LinearLayout repeatabilityLL = itemHolder.repeatabilityLL;
-//            itemHolder.root.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    UUID taskID = items.get(position - 1).getId();
-//                    Bundle bundle = new Bundle();
-//                    bundle.putSerializable(DetailedTaskFragment.SELECTED_TASK_UUID_TAG, taskID);
-//                    activity.showChildFragment(new DetailedTaskFragment(), bundle);
-//                }
-//            });
-//
-//            itemHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    setPosition(itemHolder.getPosition());
-//                    return false;
-//                }
-//            });
-//
-//            doBtn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    PerformTaskAlertBuilder alert = new PerformTaskAlertBuilder(activity,
-//                            task);
-//                    AlertDialog alertDialog = alert.create();
-//                    alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-//                        @Override
-//                        public void onDismiss(DialogInterface dialog) {
-//                            notifyDataSetChanged();
-//                        }
-//                    });
-//                    alertDialog.show();
-//                    notifyDataSetChanged();
-//
-//                }
-//            });
-//
-//            titleTextView.setText(task.getTitle());
-//            boolean isTaskFinished = task.getRepeatability() == 0
-//                    || (task.getRepeatability() < 0 && task.getFinishDate() != null && mode == Mode.DONE);
-//            if (task.getDateMode() != Task.DateMode.TERMLESS || isTaskFinished) {
-//                Date date = isTaskFinished ? task.getFinishDate() : task.getDate();
-//                if (date != null) {
-//                    StringBuilder sb = new StringBuilder();
-//                    sb.append(DateFormat.format(Task.getDateFormatting(), date));
-//                    if (task.getDateMode() == Task.DateMode.SPECIFIC_TIME || isTaskFinished) {
-//                        sb.append(" ");
-//                        sb.append(DateFormat.format(Task.getTimeFormatting(), date));
-//                    }
-//                    dateTextView.setVisibility(View.VISIBLE);
-//                    dateTextView.setText(sb.toString());
-//                }
-//            } else {
-//                dateTextView.setVisibility(View.GONE);
-//            }
-//
-//            habitDaysLeftTV.setVisibility(View.GONE);
-//            int repeat = task.getRepeatability();
-//            if (repeat < 0 && mode != Mode.DONE) {
-//                if (task.getHabitDays() > 0) {
-//                    habitDaysLeftTV.setVisibility(View.VISIBLE);
-//                    habitDaysLeftTV.setText(String.valueOf(task.getHabitDaysLeft()));
-//                }
-//                int drawableId = task.getHabitDays() > 0 ? R.drawable.ic_generate_habit_black_24dp : R.drawable.infinity;
-//                repeatabilityLL.setBackground(activity.getResources().getDrawable(drawableId));
-//                repeatabilityTV.setText("");
-//                doBtn.setEnabled(true);
-//                doBtn.setAlpha(1.0f);
-//            } else if (repeat > 0) {
-//                repeatabilityLL.setBackground(activity.getResources().getDrawable(R.drawable.ic_replay_black_24dp));
-//                repeatabilityTV.setText(Integer.toString(repeat));
-//                doBtn.setEnabled(true);
-//                doBtn.setAlpha(1.0f);
-//            } else {
-//                repeatabilityLL.setBackground(null);
-//                repeatabilityTV.setText("");
-//                doBtn.setEnabled(false);
-//                doBtn.setAlpha(0.5f);
-//            }
-//        }
+        if (holder instanceof ViewHolderItem) {
+            ViewHolderItem viewHolder = ((ViewHolderItem) holder);
+            Reward currentReward = items.get(position - 1);
+            viewHolder.root.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO: 22.08.2016 call detailed reward fragment
+                }
+            });
+            viewHolder.titleTextView.setText(currentReward.getTitle());
+            viewHolder.costTextView.setText("" + currentReward.getCost());
+        }
     }
 
     @Override

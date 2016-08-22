@@ -40,6 +40,7 @@ import com.levor.liferpgtasks.view.Dialogs.WhatsNewDialog;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.MainFragment;
+import com.levor.liferpgtasks.view.fragments.rewards.RewardsFragment;
 import com.levor.liferpgtasks.view.fragments.settings.SettingsFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.TasksFragment;
@@ -270,9 +271,13 @@ public class MainActivity extends BackUpActivity{
                 }
                 break;
             case REWARD_FRAGMENT_ID :
-                Toast.makeText(this, "TEST", Toast.LENGTH_SHORT).show();
-                return;
-//                break;
+                if (rewardsFragmentsStack.empty()){
+                    fragment = new RewardsFragment();
+                    rewardsFragmentsStack.push(fragment);
+                } else {
+                    fragment = rewardsFragmentsStack.peek();
+                }
+                break;
             case SETTINGS_FRAGMENT_ID:
                 if (settingsFragmentsStack.empty()){
                     fragment = new SettingsFragment();

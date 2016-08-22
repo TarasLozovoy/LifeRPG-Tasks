@@ -2,14 +2,26 @@ package com.levor.liferpgtasks.model;
 
 import java.util.Comparator;
 import java.util.Date;
+import java.util.UUID;
 
 public class Reward {
     public static final Comparator<Reward> TITLE_ASC_REWARDS_COMPARATOR = new TitleAscRewardsComparator();
     public static final Comparator<Reward> TITLE_DESC_REWARDS_COMPARATOR = new TitleDescRewardsComparator();
 
-    // TODO: 8/22/16 remove mock title
-    private String title = new Date().toString();
+    private String title;
+    private int cost = 10000;
+    private UUID id;
+
     private boolean isDone = false;
+
+    public Reward (String title){
+        this(title, UUID.randomUUID());
+    }
+
+    public Reward (String title, UUID id){
+        this.title = title;
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -21,6 +33,14 @@ public class Reward {
 
     public void setDone(boolean isDone) {
         this.isDone = isDone;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
     }
 
     public static class SortingOrder{
