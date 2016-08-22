@@ -80,7 +80,7 @@
     </string-array>
 
     <string-array
-        name="sorting_spinner_items">
+        name="tasks_sorting_spinner_items">
         <item>@string/completion_task_order</item>
         <item>@string/title_asc_task_order</item>
         <item>@string/title_desc_task_order</item>
@@ -90,6 +90,12 @@
         <item>@string/difficulty_desc_task_order</item>
         <item>@string/date_asc_task_order</item>
         <item>@string/date_desc_task_order</item>
+    </string-array>
+
+    <string-array
+        name="rewards_sorting_spinner_items">
+        <item>@string/title_asc_task_order</item>
+        <item>@string/title_desc_task_order</item>
     </string-array>
 
     <string-array

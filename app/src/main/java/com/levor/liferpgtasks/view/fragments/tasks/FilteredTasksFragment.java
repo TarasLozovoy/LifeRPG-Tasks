@@ -50,11 +50,15 @@ public class FilteredTasksFragment extends DefaultFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_filtered_tasks, container, false);
+        View view = inflater.inflate(R.layout.fragment_filtered_list, container, false);
         filter = getArguments().getInt(FILTER_ARG);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewTasks);
         emptyList = (TextView) view.findViewById(R.id.empty_list);
-        if (filter == DONE) emptyList.setText(R.string.empty_done_list_view);
+        if (filter == DONE) {
+            emptyList.setText(R.string.empty_done_list_view);
+        } else {
+            emptyList.setText(R.string.empty_tasks_list_view);
+        }
         setupListView();
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(R.string.tasks);
@@ -62,11 +66,12 @@ public class FilteredTasksFragment extends DefaultFragment{
         isCreated = true;
         return view;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.sorting:
-                String[] sortingVariants = getResources().getStringArray(R.array.sorting_spinner_items);
+                String[] sortingVariants = getResources().getStringArray(R.array.tasks_sorting_spinner_items);
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                         android.R.layout.select_dialog_item, sortingVariants);
                 AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());

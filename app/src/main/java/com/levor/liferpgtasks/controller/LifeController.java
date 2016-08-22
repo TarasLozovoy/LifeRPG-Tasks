@@ -100,6 +100,7 @@ public class LifeController {
         initAchievements();
         initStatistics();
         initAudioController();
+        initRewardsController();
     }
 
     public void setGATracker(Tracker tracker){
@@ -121,6 +122,10 @@ public class LifeController {
 
     public void initAudioController() {
         AudioController.getInstance(context);
+    }
+
+    public void initRewardsController() {
+        RewardsController.getInstance(context);
     }
 
     public List<Task> getAllTasks(){

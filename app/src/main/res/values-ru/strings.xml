@@ -40,7 +40,7 @@
     <string name="show_notification">Будет показано уведомления о задаче.</string>
     <string name="overdue">- просрочено!</string>
     <string name="task_already_done">Задача завершена. Снова сделать эту задачу активной?</string>
-    <string name="empty_list_view">В текущей категории нет задач. Нажмите на кнопку + чтобы добавить новую задачу.</string>
+    <string name="empty_tasks_list_view">В текущей категории нет задач. Нажмите на кнопку + чтобы добавить новую задачу.</string>
     <string name="empty_done_list_view">Выполненных задач пока нет.</string>
     <string name="no_related_skills">В этой задаче пока нету связанных навыков. Нажмите кнопку редактировать чтобы добавить связанные навыки.</string>
     <string name="task">Задача</string>
@@ -364,6 +364,13 @@
     <string name="load_from_filesystem">Загрузить из файловой системы</string>
     <string name="select_icon">Выбрать иконку</string>
     <string name="disable_sounds">Отключить звуки</string>
+    <string name="new_rewards">Новые</string>
+    <string name="claimed_rewards">Полученные</string>
+    <string name="delete_all_claimed_rewards">Удалить все полученные награды</string>
+    <string name="delete_all_claimed_rewards_message">Вы действительно хотите удалить все полученные награды?</string>
+    <string name="empty_claimed_reward_list_view">Полученных наград пока нет.</string>
+    <string name="empty_rewards_list_view">Добавленных задач нет. Нажмите на кнопку + чтобы добавить новую награду.</string>
+    <string name="rewards">Награды</string>
     <!-- -->
 
 </resources>

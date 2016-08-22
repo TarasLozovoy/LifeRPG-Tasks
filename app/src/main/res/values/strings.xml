@@ -49,7 +49,7 @@
     <string name="show_notification">Task notification will be shown.</string>
     <string name="overdue">- overdue!</string>
     <string name="task_already_done">This task has been already done. Are you sure you want to make this task active?</string>
-    <string name="empty_list_view">There are no task in current category. To add new task press button +</string>
+    <string name="empty_tasks_list_view">There are no tasks in current category. To add new task press button +</string>
     <string name="empty_done_list_view">There are no done task yet.</string>
     <string name="no_related_skills">This task doesn\'t have related skills yet. Press edit button to add new related skills.</string>
     <string name="task">Task</string>
@@ -407,6 +407,13 @@
     <string name="load_from_filesystem">Load from filesystem</string>
     <string name="select_icon">Select icon</string>
     <string name="disable_sounds">Disable sounds</string>
+    <string name="new_rewards">New</string>
+    <string name="claimed_rewards">Claimed</string>
+    <string name="delete_all_claimed_rewards">Delete all claimed rewards</string>
+    <string name="delete_all_claimed_rewards_message">Are you really want to delete all claimed rewards?</string>
+    <string name="empty_claimed_reward_list_view">There are no claimed rewards yet.</string>
+    <string name="empty_rewards_list_view">There are no rewards in current category. To add new reward press + button.</string>
+    <string name="rewards">Rewards</string>
     <!-- -->
 
 </resources>

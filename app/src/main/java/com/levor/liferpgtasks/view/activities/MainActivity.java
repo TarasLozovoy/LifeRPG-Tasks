@@ -62,7 +62,8 @@ import java.util.Stack;
 public class MainActivity extends BackUpActivity{
     public final static int MAIN_FRAGMENT_ID = 0;
     public final static int TASKS_FRAGMENT_ID = 1;
-    public final static int SETTINGS_FRAGMENT_ID = 2;
+    public final static int REWARD_FRAGMENT_ID = 2;
+    public final static int SETTINGS_FRAGMENT_ID = 3;
     private static final String SELECTED_FRAGMENT_TAG = "selected_fragment_tag";
     private static final String PREMIUM_BOUGHT_TAG = "premium_bought_tag";
 
@@ -73,6 +74,7 @@ public class MainActivity extends BackUpActivity{
     private TabLayout.Tab heroNavigationTab;
     private static Stack<DefaultFragment> mainFragmentsStack = new Stack<>();
     private static Stack<DefaultFragment> tasksFragmentsStack = new Stack<>();
+    private static Stack<DefaultFragment> rewardsFragmentsStack = new Stack<>();
     private static Stack<DefaultFragment> settingsFragmentsStack = new Stack<>();
     private int currentFragmentID;
 
@@ -234,6 +236,8 @@ public class MainActivity extends BackUpActivity{
                 return mainFragmentsStack;
             case TASKS_FRAGMENT_ID :
                 return tasksFragmentsStack;
+            case REWARD_FRAGMENT_ID :
+                return rewardsFragmentsStack;
             case SETTINGS_FRAGMENT_ID :
                 return settingsFragmentsStack;
             default:
@@ -265,6 +269,10 @@ public class MainActivity extends BackUpActivity{
                     fragment = tasksFragmentsStack.peek();
                 }
                 break;
+            case REWARD_FRAGMENT_ID :
+                Toast.makeText(this, "TEST", Toast.LENGTH_SHORT).show();
+                return;
+//                break;
             case SETTINGS_FRAGMENT_ID:
                 if (settingsFragmentsStack.empty()){
                     fragment = new SettingsFragment();
@@ -280,6 +288,7 @@ public class MainActivity extends BackUpActivity{
                 !((DataDependantFrament)fragment).isDependableDataAvailable()){
             if (fragmentID == MAIN_FRAGMENT_ID) mainFragmentsStack.pop();
             if (fragmentID == TASKS_FRAGMENT_ID) tasksFragmentsStack.pop();
+            if (fragmentID == REWARD_FRAGMENT_ID) rewardsFragmentsStack.pop();
             if (fragmentID == SETTINGS_FRAGMENT_ID) settingsFragmentsStack.pop();
             showRootFragment(fragmentID);
             return;
@@ -486,8 +495,9 @@ public class MainActivity extends BackUpActivity{
         navigationTabLayout.removeAllTabs();
         heroNavigationTab = navigationTabLayout.newTab().setIcon(d);
         navigationTabLayout.addTab(heroNavigationTab);
-        navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.tasks));
-        navigationTabLayout.addTab(navigationTabLayout.newTab().setText(R.string.settings));
+        navigationTabLayout.addTab(navigationTabLayout.newTab().setIcon(R.drawable.ic_format_list_bulleted_black_24dp));
+        navigationTabLayout.addTab(navigationTabLayout.newTab().setIcon(R.drawable.reward_icon));
+        navigationTabLayout.addTab(navigationTabLayout.newTab().setIcon(R.drawable.ic_settings_black_24dp));
     }
 
     private void updateHeroNavigationTab(){
