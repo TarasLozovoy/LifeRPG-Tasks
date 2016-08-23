@@ -32,6 +32,9 @@ public class RewardsController {
     public List<Reward> getAllRewards() {
         List<Reward> list = new ArrayList<>();
         list.add(new Reward(new Date().toString()));
+        Reward reward = new Reward("Claimed one");
+        reward.setDone(true);
+        list.add(reward);
         return list;
         // TODO: 8/22/16 remove mock reward
     }
@@ -44,5 +47,21 @@ public class RewardsController {
     public Reward getRewardByID(UUID id) {
         return new Reward(new Date().toString());
         // TODO: 8/22/16 remove mock reward
+    }
+
+    public void addReward(Reward reward) {
+        // TODO: 8/23/16 adding reward to DB
+    }
+
+    public void updateReward(Reward reward) {
+        // TODO: 8/23/16 adding reward to DB
+    }
+
+    public void removeReward(Reward reward) {
+        // TODO: 8/23/16 adding reward to DB
+    }
+
+    public void claimReward(Reward reward) {
+        // TODO: 8/23/16 adding reward to DB
     }
 }

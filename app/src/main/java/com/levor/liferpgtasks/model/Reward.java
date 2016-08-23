@@ -1,7 +1,6 @@
 package com.levor.liferpgtasks.model;
 
 import java.util.Comparator;
-import java.util.Date;
 import java.util.UUID;
 
 public class Reward {
@@ -11,6 +10,7 @@ public class Reward {
     private String title;
     private int cost = 10000;
     private UUID id;
+    private String description = "";
 
     private boolean isDone = false;
 
@@ -27,6 +27,10 @@ public class Reward {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public boolean isDone() {
         return isDone;
     }
@@ -41,6 +45,18 @@ public class Reward {
 
     public void setCost(int cost) {
         this.cost = cost;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public static class SortingOrder{

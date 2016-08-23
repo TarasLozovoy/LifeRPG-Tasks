@@ -1,6 +1,6 @@
 <resources>
     <!-- Tasks-->
-    <string name="new_task_title">Название:</string>
+    <string name="title">Название:</string>
     <string name="new_task_title_edit_text">введите название задачи</string>
     <string name="add_increasing_skill_to_task">Добавить повышающийся навык</string>
     <string name="add_decreasing_skill_to_task">Добавить понижающийся навык</string>
@@ -371,6 +371,19 @@
     <string name="empty_claimed_reward_list_view">Полученных наград пока нет.</string>
     <string name="empty_rewards_list_view">Добавленных задач нет. Нажмите на кнопку + чтобы добавить новую награду.</string>
     <string name="rewards">Награды</string>
+    <string name="reward">Награда</string>
+    <string name="cost">Стоимость:</string>
+    <string name="new_reward_title_edit_text">введите название награды</string>
+    <string name="description">Описание:</string>
+    <string name="reward_description_edit_text">введите описание</string>
+    <string name="reward_cost_edit_text">введите стоимость</string>
+    <string name="add_new_reward">Новая награда</string>
+    <string name="empty_reward_title_error">Название награды не может быть пустым</string>
+    <string name="duplicate_reward_title_error">Награда с таким названием уже существует</string>
+    <string name="reward_cost_empty_error">Стоимость награды не может быть пустой</string>
+    <string name="removing_reward_message">вы действительно хотите удалить эту награду?</string>
+    <string name="reward_claimed">Награда получена!</string>
+    <string name="reward_claimed_dialog_message">Награда \'%1s\' получена!</string>
     <!-- -->
 
 </resources>

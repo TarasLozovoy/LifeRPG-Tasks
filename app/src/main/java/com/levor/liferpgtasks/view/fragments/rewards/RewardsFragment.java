@@ -1,9 +1,7 @@
 package com.levor.liferpgtasks.view.fragments.rewards;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -20,12 +18,13 @@ import android.view.ViewGroup;
 
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.adapters.CustomPagerAdapter;
+import com.levor.liferpgtasks.controller.RewardsController;
 import com.levor.liferpgtasks.model.Reward;
-import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.AddTaskFragment;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RewardsFragment extends DefaultFragment {
@@ -81,6 +80,12 @@ public class RewardsFragment extends DefaultFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getController().sendScreenNameToAnalytics("Reward Fragment");
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         ActionBar actionBar = getCurrentActivity().getSupportActionBar();
@@ -96,9 +101,7 @@ public class RewardsFragment extends DefaultFragment {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Bundle b = new Bundle();
-                    getCurrentActivity().showChildFragment(new AddTaskFragment(), b);
-                    // TODO: 8/22/16 new fragment
+                    getCurrentActivity().showChildFragment(new EditRewardFragment(), null);
                 }
             });
         } else if (viewPager.getCurrentItem() == FilteredRewardsFragment.CLAIMED){
@@ -113,7 +116,13 @@ public class RewardsFragment extends DefaultFragment {
                             .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // TODO: 8/22/16 remove all rewards
+                                    RewardsController rewardsController = RewardsController.getInstance(getCurrentActivity());
+                                    List<Reward> rewards = rewardsController.getAllRewards();
+                                    for (Reward r : rewards) {
+                                        if (r.isDone()) {
+                                            rewardsController.removeReward(r);
+                                        }
+                                    }
                                     updateUI();
                                 }
                             })

@@ -14,16 +14,11 @@ import android.widget.TextView;
 
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.adapters.RewardsAdapter;
-import com.levor.liferpgtasks.adapters.TasksAdapter;
-import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.controller.RewardsController;
 import com.levor.liferpgtasks.model.Reward;
-import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
-import com.levor.liferpgtasks.view.fragments.tasks.TasksFragment;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;

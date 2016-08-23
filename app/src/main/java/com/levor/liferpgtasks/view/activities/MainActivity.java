@@ -209,7 +209,10 @@ public class MainActivity extends BackUpActivity{
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        getCurrentFragment().onActivityResult(requestCode, resultCode, data);
+        DefaultFragment fragment = getCurrentFragment();
+        if (fragment != null) { //fix crash #287 from Crashlytics
+            getCurrentFragment().onActivityResult(requestCode, resultCode, data);
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -369,6 +372,8 @@ public class MainActivity extends BackUpActivity{
                 return MainFragment.class;
             case TASKS_FRAGMENT_ID :
                 return TasksFragment.class;
+            case REWARD_FRAGMENT_ID :
+                return RewardsFragment.class;
             case  SETTINGS_FRAGMENT_ID :
                 return SettingsFragment.class;
             default:

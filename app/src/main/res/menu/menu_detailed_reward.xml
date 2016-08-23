@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/claim_reward"
+        android:icon="@drawable/claim_reward"
+        android:orderInCategory="3"
+        android:title="@string/do_task"
+        app:showAsAction="always" />
+
+</menu>

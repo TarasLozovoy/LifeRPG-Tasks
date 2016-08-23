@@ -4,26 +4,21 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.levor.liferpgtasks.R;
-import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.controller.RewardsController;
 import com.levor.liferpgtasks.model.Reward;
-import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
 import com.levor.liferpgtasks.view.activities.MainActivity;
-import com.levor.liferpgtasks.view.fragments.tasks.DetailedTaskFragment;
+import com.levor.liferpgtasks.view.fragments.rewards.DetailedRewadsFragment;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -69,15 +64,46 @@ public class RewardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewHolderItem) {
             ViewHolderItem viewHolder = ((ViewHolderItem) holder);
-            Reward currentReward = items.get(position - 1);
+            final Reward currentReward = items.get(position - 1);
             viewHolder.root.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO: 22.08.2016 call detailed reward fragment
+                    UUID rewardID = items.get(position - 1).getId();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(DetailedRewadsFragment.SELECTED_REWARD_UUID_TAG, rewardID);
+                    activity.showChildFragment(new DetailedRewadsFragment(), bundle);
                 }
             });
             viewHolder.titleTextView.setText(currentReward.getTitle());
             viewHolder.costTextView.setText("" + currentReward.getCost());
+
+            viewHolder.claimBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                    alert.setTitle(R.string.reward_claimed)
+                            .setMessage(activity.getString(R.string.reward_claimed_dialog_message, currentReward.getTitle()))
+                            .setCancelable(false)
+                            .setNeutralButton(activity.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    activity.showInterstitialAd(MainActivity.AdType.PERFORM_TASK);
+                                    dialog.dismiss();
+                                }
+                            });
+                    // TODO: 8/23/16 Add sharing to social networks
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            notifyDataSetChanged();
+                        }
+                    });
+                    alertDialog.show();
+                    notifyDataSetChanged();
+
+                }
+            });
         }
     }
 
@@ -114,13 +140,13 @@ public class RewardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView titleTextView;
         TextView costTextView;
         ImageView goldIconImageView;
-        ImageButton doBtn;
+        ImageButton claimBtn;
         View root;
 
         public ViewHolderItem(View view) {
             super(view);
             root = view;
-            doBtn = (ImageButton) view.findViewById(R.id.check_button);
+            claimBtn = (ImageButton) view.findViewById(R.id.check_button);
             titleTextView = (TextView) view.findViewById(R.id.list_item_title);
             costTextView = (TextView) view.findViewById(R.id.cost_text_view);
             goldIconImageView = (ImageView) view.findViewById(R.id.gold_coin_icon);

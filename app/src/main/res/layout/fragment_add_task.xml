@@ -19,7 +19,7 @@
                 style="@style/LifeRPGTextInListStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/new_task_title" />
+                android:text="@string/title" />
 
             <EditText
                 android:id="@+id/task_title_edit_text"

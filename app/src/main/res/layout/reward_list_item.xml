@@ -18,7 +18,7 @@
         android:layout_marginBottom="2dp"
         android:layout_marginTop="2dp"
         android:elevation="2dp"
-        android:src="@drawable/ic_done_black_24dp" />
+        android:src="@drawable/claim_reward" />
 
     <ImageView
         android:id="@+id/gold_coin_icon"

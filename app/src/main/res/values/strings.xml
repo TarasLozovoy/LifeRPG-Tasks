@@ -9,7 +9,7 @@
     <!-- -->
 
     <!-- Tasks-->
-    <string name="new_task_title">Title:</string>
+    <string name="title">Title:</string>
     <string name="new_task_title_edit_text">Type task title</string>
     <string name="add_increasing_skill_to_task">Add increasing skill</string>
     <string name="add_decreasing_skill_to_task">Add decreasing skill</string>
@@ -414,6 +414,19 @@
     <string name="empty_claimed_reward_list_view">There are no claimed rewards yet.</string>
     <string name="empty_rewards_list_view">There are no rewards in current category. To add new reward press + button.</string>
     <string name="rewards">Rewards</string>
+    <string name="reward">Reward</string>
+    <string name="cost">Cost:</string>
+    <string name="new_reward_title_edit_text">Type reward title</string>
+    <string name="description">Description:</string>
+    <string name="reward_description_edit_text">Type description</string>
+    <string name="reward_cost_edit_text">Type cost</string>
+    <string name="add_new_reward">New reward</string>
+    <string name="empty_reward_title_error">Reward title can\'t be null</string>
+    <string name="duplicate_reward_title_error">Reward with same title already exists</string>
+    <string name="reward_cost_empty_error">Reward cost can\'t be empty</string>
+    <string name="removing_reward_message">Are you really want to remove this reward?</string>
+    <string name="reward_claimed">Reward claimed!</string>
+    <string name="reward_claimed_dialog_message">Reward \'%1s\' claimed!</string>
     <!-- -->
 
 </resources>
