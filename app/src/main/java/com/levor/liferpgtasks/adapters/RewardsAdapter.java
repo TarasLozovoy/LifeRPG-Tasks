@@ -80,6 +80,7 @@ public class RewardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolder.claimBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    rewardsController.claimReward(currentReward);
                     AlertDialog.Builder alert = new AlertDialog.Builder(activity);
                     alert.setTitle(R.string.reward_claimed)
                             .setMessage(activity.getString(R.string.reward_claimed_dialog_message, currentReward.getTitle()))

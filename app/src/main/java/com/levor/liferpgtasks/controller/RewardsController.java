@@ -30,38 +30,36 @@ public class RewardsController {
     }
 
     public List<Reward> getAllRewards() {
-        List<Reward> list = new ArrayList<>();
-        list.add(new Reward(new Date().toString()));
-        Reward reward = new Reward("Claimed one");
-        reward.setDone(true);
-        list.add(reward);
-        return list;
-        // TODO: 8/22/16 remove mock reward
+        return lifeEntity.getRewards();
     }
 
     public Reward getRewardByTitle(String title) {
-        return new Reward(new Date().toString());
-        // TODO: 8/22/16 remove mock reward
+        for (Reward r : getAllRewards()) {
+            if (r.getTitle().equals(title)) {
+                return r;
+            }
+        }
+        return null;
     }
 
     public Reward getRewardByID(UUID id) {
-        return new Reward(new Date().toString());
-        // TODO: 8/22/16 remove mock reward
+        return lifeEntity.getRewardByID(id);
     }
 
     public void addReward(Reward reward) {
-        // TODO: 8/23/16 adding reward to DB
+        lifeEntity.addReward(reward);
     }
 
     public void updateReward(Reward reward) {
-        // TODO: 8/23/16 adding reward to DB
+        lifeEntity.updateReward(reward);
     }
 
     public void removeReward(Reward reward) {
-        // TODO: 8/23/16 adding reward to DB
+        lifeEntity.removeReward(reward);
     }
 
     public void claimReward(Reward reward) {
-        // TODO: 8/23/16 adding reward to DB
+        reward.setDone(true);
+        updateReward(reward);
     }
 }

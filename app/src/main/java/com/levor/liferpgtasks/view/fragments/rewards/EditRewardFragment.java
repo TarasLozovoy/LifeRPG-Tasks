@@ -86,7 +86,8 @@ public class EditRewardFragment extends DataDependantFrament {
             case R.id.ok_menu_item:
                 if (titleEditText.getText().toString().equals("")){
                     Toast.makeText(getContext(), getString(R.string.empty_reward_title_error), Toast.LENGTH_SHORT).show();
-                } else if (rewardsController.getRewardByTitle(titleEditText.getText().toString()) != null){
+                } else if (currentReward == null &&
+                        rewardsController.getRewardByTitle(titleEditText.getText().toString()) != null){
                     Toast.makeText(getContext(), getString(R.string.duplicate_reward_title_error), Toast.LENGTH_SHORT).show();
                 } else if (costEditText.getText().toString().equals("")) {
                     Toast.makeText(getContext(), getString(R.string.reward_cost_empty_error), Toast.LENGTH_SHORT).show();

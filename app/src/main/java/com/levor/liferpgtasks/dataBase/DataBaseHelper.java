@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import static com.levor.liferpgtasks.dataBase.DataBaseSchema.*;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-    private static final int VERSION = 9;
+    private static final int VERSION = 10;
     public static final String DATABASE_NAME = "RealLifeBase.db";
 
     public DataBaseHelper(Context context) {
@@ -77,6 +77,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 TasksPerDayTable.Cols.DATE + " TEXT, " +
                 TasksPerDayTable.Cols.TASKS_PERFORMED +
                 ")");
+
+        //v10+
+        db.execSQL("create table " + RewardsTable.NAME + " (" +
+                " _id integer primary key autoincrement, " +
+                RewardsTable.Cols.TITLE + " TEXT, " +
+                RewardsTable.Cols.COST + " INTEGER, " +
+                RewardsTable.Cols.ID + " TEXT, " +
+                RewardsTable.Cols.DONE + " INTEGER, " +
+                RewardsTable.Cols.DESCRIPTION + " TEXT" +
+                ")");
     }
 
     @Override
@@ -128,7 +138,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             case 8:
                 db.execSQL("alter table " + MiscTable.NAME + " add column " +
                         MiscTable.Cols.IMAGE_AVATAR_MODE  + " INTEGER");
-
+            case 9:
+                db.execSQL("create table " + RewardsTable.NAME + " (" +
+                        " _id integer primary key autoincrement, " +
+                        RewardsTable.Cols.TITLE + " TEXT, " +
+                        RewardsTable.Cols.COST + " INTEGER, " +
+                        RewardsTable.Cols.ID + " TEXT, " +
+                        RewardsTable.Cols.DONE + " INTEGER, " +
+                        RewardsTable.Cols.DESCRIPTION + " TEXT" +
+                        ")");
         }
     }
 }

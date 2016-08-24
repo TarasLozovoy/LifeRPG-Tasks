@@ -77,4 +77,16 @@ public class DataBaseSchema {
             public static final String TASKS_PERFORMED = "tasks_performed";
         }
     }
+
+    public static final class RewardsTable {
+        public static final String NAME = "real_life_rewards";
+
+        public static final class Cols {
+            public static final String TITLE = "reward_title";
+            public static final String COST = "reward_cost";
+            public static final String ID = "reward_id";
+            public static final String DESCRIPTION = "reward_description";
+            public static final String DONE = "reward_done";
+        }
+    }
 }

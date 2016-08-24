@@ -11,7 +11,6 @@ public class Reward {
     private int cost = 10000;
     private UUID id;
     private String description = "";
-
     private boolean isDone = false;
 
     public Reward (String title){
@@ -49,6 +48,10 @@ public class Reward {
 
     public UUID getId() {
         return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getDescription() {

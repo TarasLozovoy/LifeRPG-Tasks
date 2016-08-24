@@ -14,6 +14,7 @@ import com.levor.liferpgtasks.dataBase.DataBaseHelper;
 import com.levor.liferpgtasks.dataBase.DataBaseSchema.*;
 import com.levor.liferpgtasks.dataBase.HeroCursorWrapper;
 import com.levor.liferpgtasks.dataBase.MiscCursorWrapper;
+import com.levor.liferpgtasks.dataBase.RewardsCursorWrapper;
 import com.levor.liferpgtasks.dataBase.SkillsCursorWrapper;
 import com.levor.liferpgtasks.dataBase.TasksCursorWrapper;
 import com.levor.liferpgtasks.dataBase.TasksPerDayCursorWrapper;
@@ -37,6 +38,7 @@ public class LifeEntity {
     private List<Task> tasks;
     private List<Skill> skills;
     private List<Characteristic> characteristics;
+    private List<Reward> rewards;
     private Hero hero;
     private Map<LocalDate, Integer> tasksPerDay = new TreeMap<>();
     private Context context;
@@ -68,6 +70,7 @@ public class LifeEntity {
         characteristics = getCharacteristics();
         skills = getSkills();
         tasks = getTasks();
+        rewards = getRewards();
 
         for (Characteristic ch : characteristics) {
             if (ch.isUpdateNeeded()) {
@@ -85,28 +88,13 @@ public class LifeEntity {
         }
         getMiscFromDB();    //added for version 1.0.2
         getTasksPerDay();
-
-//        //adding new characteristic for new version (1.0.2)
-//        Characteristic health = new Characteristic(context.getString(R.string.health), 1);
-//        if (!characteristics.contains(health)){
-//            addCharacteristic(health);
-//        }
-//
-//        //adding new characteristics for new version (1.1.5)
-//        Characteristic willpower = new Characteristic(context.getString(R.string.willpower), 1);
-//        Characteristic workmanship = new Characteristic(context.getString(R.string.workmanship), 1);
-//        if (!characteristics.contains(willpower)){
-//            addCharacteristic(willpower);
-//        }
-//        if (!characteristics.contains(workmanship)){
-//            addCharacteristic(workmanship);
-//        }
     }
 
     private void firstLaunchPreSetup(){
         characteristics = new ArrayList<>();
         skills = new ArrayList<>();
         tasks = new ArrayList<>();
+        rewards = new ArrayList<>();
         Characteristic intelligence = new Characteristic(context.getString(R.string.intelligence), 1);
         Characteristic wisdom = new Characteristic(context.getString(R.string.wisdom), 1);
         Characteristic strength = new Characteristic(context.getString(R.string.strength), 1);
@@ -780,5 +768,91 @@ public class LifeEntity {
         } else {
             preSetup();
         }
+    }
+
+    public List<Reward> getRewards(){
+        if (rewards != null) {
+            Collections.sort(rewards, Reward.TITLE_DESC_REWARDS_COMPARATOR);
+            return rewards;
+        }
+        List<Reward> rewards = new ArrayList<>();
+        RewardsCursorWrapper cursorWrapper = queryRewards(null, null);
+        try {
+            cursorWrapper.moveToFirst();
+            while (!cursorWrapper.isAfterLast()) {
+                rewards.add(cursorWrapper.getReward());
+                cursorWrapper.moveToNext();
+            }} finally {
+            cursorWrapper.close();
+        }
+        Collections.sort(rewards, Reward.TITLE_DESC_REWARDS_COMPARATOR);
+        return rewards;
+    }
+
+    private RewardsCursorWrapper queryRewards(String whereClause, String[] whereArgs) {
+        Cursor cursor = database.query(
+                RewardsTable.NAME,
+                null, // Columns - null selects all columns
+                whereClause,
+                whereArgs,
+                null, // groupBy
+                null, // having
+                null // orderBy
+        );
+        return new RewardsCursorWrapper(cursor, this);
+    }
+
+    private static ContentValues getContentValuesForReward(Reward reward) {
+        ContentValues values = new ContentValues();
+        values.put(RewardsTable.Cols.TITLE, reward.getTitle());
+        values.put(RewardsTable.Cols.ID, reward.getId().toString());
+        values.put(RewardsTable.Cols.COST, reward.getCost());
+        values.put(RewardsTable.Cols.DESCRIPTION, reward.getDescription());
+        values.put(RewardsTable.Cols.DONE, reward.isDone() ? 1 : 0);
+        return values;
+    }
+
+    public void addReward(Reward reward){
+        rewards.add(reward);
+        final ContentValues values = getContentValuesForReward(reward);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                database.insert(RewardsTable.NAME, null, values);
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public void updateReward(final Reward reward) {
+        if (rewards.remove(reward)) {
+            rewards.add(reward);
+            final ContentValues values = getContentValuesForReward(reward);
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    database.update(RewardsTable.NAME, values, RewardsTable.Cols.ID + " = ?", new String[]{reward.getId().toString()});
+                    return null;
+                }
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
+
+    public void removeReward(final Reward reward) {
+        rewards.remove(reward);
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                database.delete(RewardsTable.NAME, RewardsTable.Cols.ID + " = ?", new String[]{reward.getId().toString()});
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    public Reward getRewardByID(UUID id) {
+        for (Reward r : getRewards()){
+            if (r.getId().equals(id)) return r;
+        }
+        return null;
     }
 }

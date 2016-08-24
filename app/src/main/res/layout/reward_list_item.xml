@@ -24,24 +24,26 @@
         android:id="@+id/gold_coin_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/gold_coin_icon"
+        android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/check_button"
-        android:layout_centerVertical="true"/>
+        android:src="@drawable/gold_coin_icon" />
 
     <TextView
         android:id="@+id/cost_text_view"
-        android:textSize="14sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/gold_coin_icon"
         android:textColor="@color/black"
-        android:layout_centerVertical="true"/>
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/list_item_title"
         style="@style/LifeRPGTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/cost_text_view"
         android:textColor="@color/black" />
 
