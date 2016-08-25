@@ -20,6 +20,7 @@ public class RewardsCursorWrapper extends CursorWrapper {
     public Reward getReward() {
         String title = getString(getColumnIndex(DataBaseSchema.RewardsTable.Cols.TITLE));
         int cost = getInt(getColumnIndex(DataBaseSchema.RewardsTable.Cols.COST));
+        int mode = getInt(getColumnIndex(DataBaseSchema.RewardsTable.Cols.MODE));
         String idString = getString(getColumnIndex(DataBaseSchema.RewardsTable.Cols.ID));
         String description = getString(getColumnIndex(DataBaseSchema.RewardsTable.Cols.DESCRIPTION));
         boolean done = getInt(getColumnIndex(DataBaseSchema.RewardsTable.Cols.DONE)) == 1;
@@ -34,6 +35,7 @@ public class RewardsCursorWrapper extends CursorWrapper {
         reward.setCost(cost);
         reward.setDescription(description == null ? "" : description);
         reward.setDone(done);
+        reward.setMode(mode);
         return reward;
     }
 }

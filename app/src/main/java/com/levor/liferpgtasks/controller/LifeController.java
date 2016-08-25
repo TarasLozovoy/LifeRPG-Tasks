@@ -254,6 +254,9 @@ public class LifeController {
                 updateStatistics(FINISHED_TASKS_NUMBER_TAG, 1);
             }
         }
+
+        hero.addMoney(task.getMoneyReward());
+
         updateTask(task);
         updateTaskNotification(task);
         double multiplier = task.getMultiplier();
@@ -328,6 +331,9 @@ public class LifeController {
         task.setUndonable(false);
         task.undo();
         task.setFinishDate(null);
+
+        hero.removeMoney(task.getMoneyReward());
+
         updateTask(task);
         updateTaskNotification(task);
         double multiplier = task.getMultiplier();

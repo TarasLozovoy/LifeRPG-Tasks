@@ -9,8 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.controller.RewardsController;
 import com.levor.liferpgtasks.model.Reward;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
@@ -24,9 +26,10 @@ import butterknife.ButterKnife;
 public class DetailedRewadsFragment extends DataDependantFrament {
     public final static String SELECTED_REWARD_UUID_TAG = "selected_reward_uuid_tag";
 
-    @Bind(R.id.reward_title) TextView rewardTitleTV;
-    @Bind(R.id.reward_cost) TextView rewardCostTV;
-    @Bind(R.id.reward_description) TextView rewardDescriptionTV;
+    @Bind(R.id.reward_title)            TextView rewardTitleTV;
+    @Bind(R.id.reward_cost)             TextView rewardCostTV;
+    @Bind(R.id.reward_description)      TextView rewardDescriptionTV;
+    @Bind(R.id.reward_mode)             TextView rewardModeTV;
 
     private Reward currentReward;
     private RewardsController rewardsController;
@@ -57,6 +60,9 @@ public class DetailedRewadsFragment extends DataDependantFrament {
         rewardCostTV.setText(getString(R.string.cost) + " " + String.valueOf(currentReward.getCost()));
         rewardDescriptionTV.setText(currentReward.getDescription());
 
+        rewardModeTV.setText(currentReward.getMode() == Reward.Mode.SINGLE_TIME ? R.string.reward_single_repeat_mode
+                : R.string.reward_infinite_repeat_mode);
+
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(getString(R.string.reward));
         getCurrentActivity().showActionBarHomeButtonAsBack(true);
@@ -74,13 +80,23 @@ public class DetailedRewadsFragment extends DataDependantFrament {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.claim_reward).setVisible(!currentReward.isDone())
                 .setEnabled(!currentReward.isDone());
+        menu.findItem(R.id.undo).setVisible(currentReward.isDone())
+                .setEnabled(currentReward.isDone());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.claim_reward:
-                rewardsController.claimReward(currentReward);
+                if (currentReward.getCost() <= getController().getHero().getMoney()) {
+                    rewardsController.claimReward(currentReward);
+                    getActivity().invalidateOptionsMenu();
+                } else {
+                    Toast.makeText(getCurrentActivity(), R.string.insuficiend_funds_message, Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            case R.id.undo:
+                rewardsController.unclaim(currentReward);
                 getActivity().invalidateOptionsMenu();
                 return true;
             default:
@@ -96,7 +112,8 @@ public class DetailedRewadsFragment extends DataDependantFrament {
 
     @Override
     public boolean isDependableDataAvailable() {
-        return true;
-        // TODO: 8/23/16 add check from RewardController on null
+        UUID id = (UUID)getArguments().get(SELECTED_REWARD_UUID_TAG);
+        Reward reward = RewardsController.getInstance(getCurrentActivity()).getRewardByID(id);
+        return reward != null;
     }
 }

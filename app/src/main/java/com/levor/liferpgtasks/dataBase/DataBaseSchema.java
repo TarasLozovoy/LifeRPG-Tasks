@@ -55,6 +55,7 @@ public class DataBaseSchema {
             public static final String HABIT_DAYS_LEFT = "habit_days_left";
             public static final String HABIT_START_DATE = "habit_start_date";
             public static final String NUMBER_OF_EXECUTIONS = "number_of_executions";
+            public static final String MONEY_REWARD = "money_reward";
         }
     }
 
@@ -87,6 +88,7 @@ public class DataBaseSchema {
             public static final String ID = "reward_id";
             public static final String DESCRIPTION = "reward_description";
             public static final String DONE = "reward_done";
+            public static final String MODE = "reward_mode";
         }
     }
 }

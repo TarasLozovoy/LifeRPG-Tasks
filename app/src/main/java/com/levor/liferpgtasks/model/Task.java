@@ -39,6 +39,7 @@ public class Task {
     private int habitDaysLeft = -1;
     private int numberOfExecutions = 0;
     private LocalDate habitStartDate = new LocalDate();
+    private double moneyReward;
 
     private boolean updateNeeded = false;
 
@@ -295,6 +296,14 @@ public class Task {
 
     public void setNumberOfExecutions(int numberOfExecutions) {
         this.numberOfExecutions = numberOfExecutions;
+    }
+
+    public double getMoneyReward() {
+        return moneyReward;
+    }
+
+    public void setMoneyReward(double moneyReward) {
+        this.moneyReward = moneyReward;
     }
 
     public double getMultiplier(){

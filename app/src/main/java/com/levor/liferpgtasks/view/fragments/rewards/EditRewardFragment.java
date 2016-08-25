@@ -9,12 +9,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.RewardsController;
-import com.levor.liferpgtasks.model.Characteristic;
 import com.levor.liferpgtasks.model.Reward;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 
@@ -28,10 +29,13 @@ public class EditRewardFragment extends DataDependantFrament {
 
     private Reward currentReward;
     private RewardsController rewardsController;
+    private int rewardMode;
 
     @Bind(R.id.reward_title_edit_text)          EditText titleEditText;
     @Bind(R.id.reward_description_edit_text)    EditText descriptionEditText;
     @Bind(R.id.reward_cost_edit_text)           EditText costEditText;
+    @Bind(R.id.mode_layout)                     View modeLayout;
+    @Bind(R.id.reward_repeat_mode_text_view)    TextView modeTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,7 +49,31 @@ public class EditRewardFragment extends DataDependantFrament {
             titleEditText.setText(currentReward.getTitle());
             descriptionEditText.setText(currentReward.getDescription());
             costEditText.setText(String.valueOf(currentReward.getCost()));
+            rewardMode = currentReward.getMode();
+        } else {
+            rewardMode = Reward.Mode.SINGLE_TIME;
         }
+
+        updateModeView();
+
+        modeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().showSoftKeyboard(false, getView());
+                String[] notifyVariants = getResources().getStringArray(R.array.rewards_mode_array);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                        android.R.layout.select_dialog_item, notifyVariants);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        rewardMode = which;
+                        updateModeView();
+                        dialog.dismiss();
+                    }
+                }).show();
+            }
+        });
 
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(currentReward != null ?
@@ -94,11 +122,16 @@ public class EditRewardFragment extends DataDependantFrament {
                 } else {
                     if (currentReward == null) {
                         currentReward = new Reward(titleEditText.getText().toString());
+                        currentReward.setTitle(titleEditText.getText().toString());
+                        currentReward.setDescription(descriptionEditText.getText().toString());
+                        currentReward.setCost(Integer.parseInt(costEditText.getText().toString()));
+                        currentReward.setMode(rewardMode);
                         rewardsController.addReward(currentReward);
                     } else {
                         currentReward.setTitle(titleEditText.getText().toString());
                         currentReward.setDescription(descriptionEditText.getText().toString());
                         currentReward.setCost(Integer.parseInt(costEditText.getText().toString()));
+                        currentReward.setMode(rewardMode);
                         rewardsController.updateReward(currentReward);
                     }
                     getCurrentActivity().showPreviousFragment();
@@ -130,8 +163,21 @@ public class EditRewardFragment extends DataDependantFrament {
     }
 
     @Override
+    public void updateUI() {
+        super.updateUI();
+        updateModeView();
+    }
+
+    private void updateModeView() {
+        modeTextView.setText(rewardMode == Reward.Mode.SINGLE_TIME ? R.string.reward_single_repeat_mode :
+                R.string.reward_infinite_repeat_mode);
+    }
+
+    @Override
     public boolean isDependableDataAvailable() {
-        return true;
-        // TODO: 8/23/16 add check from controller on null
+        if (getArguments() == null) return false;
+        UUID id = (UUID)getArguments().get(CURRENT_REWARD_TAG);
+        Reward reward = RewardsController.getInstance(getCurrentActivity()).getRewardByID(id);
+        return reward != null;
     }
 }

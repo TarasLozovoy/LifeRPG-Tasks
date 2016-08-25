@@ -376,7 +376,7 @@
     <string name="new_reward_title_edit_text">введите название награды</string>
     <string name="description">Описание:</string>
     <string name="reward_description_edit_text">введите описание</string>
-    <string name="reward_cost_edit_text">введите стоимость</string>
+    <string name="reward_cost_edit_text">стоимость</string>
     <string name="add_new_reward">Новая награда</string>
     <string name="empty_reward_title_error">Название награды не может быть пустым</string>
     <string name="duplicate_reward_title_error">Награда с таким названием уже существует</string>
@@ -384,6 +384,10 @@
     <string name="removing_reward_message">вы действительно хотите удалить эту награду?</string>
     <string name="reward_claimed">Награда получена!</string>
     <string name="reward_claimed_dialog_message">Награда \'%1s\' получена!</string>
+    <string name="reward_single_repeat_mode">Одноразовая награда</string>
+    <string name="reward_infinite_repeat_mode">Многоразовая награда</string>
+    <string name="money_reward">Награда:</string>
+    <string name="insuficiend_funds_message">Недостаточно золота для этой награды.</string>
     <!-- -->
 
 </resources>

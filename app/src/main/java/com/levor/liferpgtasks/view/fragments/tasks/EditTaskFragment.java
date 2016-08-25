@@ -48,6 +48,7 @@ public class EditTaskFragment extends AddTaskFragment {
             habitdays = currentTask.getHabitDays();
             habitdaysLeft = currentTask.getHabitDaysLeft();
             habitStartDate = currentTask.getHabitStartDate();
+            moneyReward = currentTask.getMoneyReward();
             for (Map.Entry<Skill, Boolean> pair : currentTask.getRelatedSkillsMap().entrySet()) {
                 Skill sk = pair.getKey();
                 boolean increaseSkill = pair.getValue();
@@ -188,6 +189,7 @@ public class EditTaskFragment extends AddTaskFragment {
         currentTask.setHabitDays(habitdays);
         currentTask.setHabitDaysLeft(habitdaysLeft);
         currentTask.setHabitStartDate(habitStartDate.minusDays(1));
+        currentTask.setMoneyReward(moneyReward);
         currentTask.removeAllRelatedSkills();
         for (String increasingSkillTitle : increasingRelatedSkills) {
             Skill sk = getController().getSkillByTitle(increasingSkillTitle);

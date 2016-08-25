@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
 import com.levor.liferpgtasks.R;
-import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 import com.levor.liferpgtasks.dataBase.CharacteristicsCursorWrapper;
 import com.levor.liferpgtasks.dataBase.DataBaseHelper;
 import com.levor.liferpgtasks.dataBase.DataBaseSchema.*;
@@ -179,7 +178,7 @@ public class LifeEntity {
         addTask(task3);
         addTask(task4);
 
-        addHero(new Hero(0, 0, 1, context.getString(R.string.default_hero_name)));
+        addHero(new Hero(0, 0, 1, context.getString(R.string.default_hero_name), 0));
 
         addMiscToDB(); //added for version 1.0.2
     }
@@ -322,6 +321,7 @@ public class LifeEntity {
         values.put(TasksTable.Cols.HABIT_DAYS_LEFT, task.getHabitDaysLeft());
         values.put(TasksTable.Cols.HABIT_START_DATE, task.getHabitStartDate().toDate().getTime());
         values.put(TasksTable.Cols.NUMBER_OF_EXECUTIONS, task.getNumberOfExecutions());
+        values.put(TasksTable.Cols.MONEY_REWARD, task.getMoneyReward());
         values.put(TasksTable.Cols.FINISH_DATE, task.getFinishDate() == null ? 0 : task.getFinishDate().getTime());
         return values;
     }
@@ -809,6 +809,7 @@ public class LifeEntity {
         values.put(RewardsTable.Cols.COST, reward.getCost());
         values.put(RewardsTable.Cols.DESCRIPTION, reward.getDescription());
         values.put(RewardsTable.Cols.DONE, reward.isDone() ? 1 : 0);
+        values.put(RewardsTable.Cols.MODE, reward.getMode());
         return values;
     }
 

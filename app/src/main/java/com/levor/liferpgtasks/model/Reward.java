@@ -12,6 +12,7 @@ public class Reward {
     private UUID id;
     private String description = "";
     private boolean isDone = false;
+    private int mode = Mode.SINGLE_TIME;
 
     public Reward (String title){
         this(title, UUID.randomUUID());
@@ -62,9 +63,22 @@ public class Reward {
         this.description = description;
     }
 
+    public int getMode() {
+        return mode;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
+    }
+
     public static class SortingOrder{
         public static final int TITLE_ASC = 0;
         public static final int TITLE_DESC = 1;
+    }
+
+    public static class Mode{
+        public static final int SINGLE_TIME = 0;
+        public static final int INFINITE = 1;
     }
 
     private static class TitleAscRewardsComparator implements Comparator<Reward> {

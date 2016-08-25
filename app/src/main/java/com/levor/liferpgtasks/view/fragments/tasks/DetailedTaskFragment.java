@@ -52,6 +52,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
     @Bind(R.id.habit_generation_text_view)          TextView habitGenerationTV;
     @Bind(R.id.task_repeat_times_text_view)         TextView taskRepeatTV;
     @Bind(R.id.task_date_text_view)                 TextView taskDateTV;
+    @Bind(R.id.task_reward_text_view)               TextView taskRewardTV;
     @Bind(R.id.no_related_skills)                   TextView noRelatedSkillsTV;
     @Bind(R.id.notification_text_view)              TextView notificationTV;
     @Bind(R.id.number_of_executions_text_view)      TextView numberOfExecutionsTV;
@@ -71,6 +72,10 @@ public class DetailedTaskFragment extends DataDependantFrament {
 
         //setup task date
         setupTaskDate();
+
+        //setup task reward
+        String moneyReward = getString(R.string.money_reward) + " " + (int)currentTask.getMoneyReward();
+        taskRewardTV.setText(moneyReward);
 
         //setup difficulty TextView
         int difficulty = currentTask.getDifficulty();

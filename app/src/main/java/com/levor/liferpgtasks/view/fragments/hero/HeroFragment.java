@@ -3,9 +3,6 @@ package com.levor.liferpgtasks.view.fragments.hero;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,21 +15,22 @@ import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import java.text.DecimalFormat;
 
 public class HeroFragment extends DefaultFragment {
-    TextView heroNameTV, heroLevelTV, xpProgressTV;
-    ImageView heroImageIV;
+    TextView heroNameTextView, heroLevelTextView, xpProgressTextView, moneyTextView;
+    ImageView heroImageImageView;
     ProgressBar xpProgress;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_hero_main, container, false);
-        heroNameTV = (TextView) v.findViewById(R.id.hero_name);
-        heroImageIV = (ImageView) v.findViewById(R.id.hero_image);
+        heroNameTextView = (TextView) v.findViewById(R.id.hero_name);
+        heroImageImageView = (ImageView) v.findViewById(R.id.hero_image);
         xpProgress = (ProgressBar) v.findViewById(R.id.xp_progressbar);
-        xpProgressTV = (TextView) v.findViewById(R.id.xp_progress_TV);
-        heroLevelTV = (TextView) v.findViewById(R.id.hero_level);
+        xpProgressTextView = (TextView) v.findViewById(R.id.xp_progress_TV);
+        heroLevelTextView = (TextView) v.findViewById(R.id.hero_level);
+        moneyTextView = (TextView) v.findViewById(R.id.money);
 
-        heroImageIV.setImageBitmap(getCurrentActivity().getHeroIconBitmap());
+        heroImageImageView.setImageBitmap(getCurrentActivity().getHeroIconBitmap());
         setHasOptionsMenu(true);
         return v;
     }
@@ -54,9 +52,11 @@ public class HeroFragment extends DefaultFragment {
         DecimalFormat df = new DecimalFormat("#.##");
         String xpString = getString(R.string.XP) + " : " + df.format(getController().getHeroXp()) +
                 "/" + df.format(getController().getHeroXpToNextLevel());
-        xpProgressTV.setText(xpString);
-        heroNameTV.setText(getController().getHeroName());
+        xpProgressTextView.setText(xpString);
+        heroNameTextView.setText(getController().getHeroName());
         String heroLvl = getString(R.string.hero_level)+ " " + getController().getHeroLevel();
-        heroLevelTV.setText(heroLvl);
+        heroLevelTextView.setText(heroLvl);
+
+        moneyTextView.setText(df.format(getController().getHero().getMoney()));
     }
 }

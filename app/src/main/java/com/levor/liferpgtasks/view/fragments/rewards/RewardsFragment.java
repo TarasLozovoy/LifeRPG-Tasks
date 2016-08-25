@@ -23,6 +23,7 @@ import com.levor.liferpgtasks.model.Reward;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.tasks.AddTaskFragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,12 +119,17 @@ public class RewardsFragment extends DefaultFragment {
                                 public void onClick(DialogInterface dialog, int which) {
                                     RewardsController rewardsController = RewardsController.getInstance(getCurrentActivity());
                                     List<Reward> rewards = rewardsController.getAllRewards();
+                                    List<Reward> rewardsToRemove = new ArrayList<Reward>();
                                     for (Reward r : rewards) {
                                         if (r.isDone()) {
-                                            rewardsController.removeReward(r);
+                                            rewardsToRemove.add(r);
                                         }
                                     }
-                                    updateUI();
+
+                                    for (Reward r : rewardsToRemove) {
+                                        rewardsController.removeReward(r);
+                                    }
+                                    updateChildFragmentsUI();
                                 }
                             })
                             .show();

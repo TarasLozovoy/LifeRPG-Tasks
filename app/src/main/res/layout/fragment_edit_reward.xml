@@ -84,6 +84,23 @@
         </LinearLayout>
 
         <View style="@style/HorizontalDivider" />
+
+    <LinearLayout
+        android:id="@+id/mode_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/reward_repeat_mode_text_view"
+            style="@style/LifeRPGTextInListStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reward_single_repeat_mode" />
+
+    </LinearLayout>
+
+        <View style="@style/HorizontalDivider" />
     </LinearLayout>
 
 </ScrollView>

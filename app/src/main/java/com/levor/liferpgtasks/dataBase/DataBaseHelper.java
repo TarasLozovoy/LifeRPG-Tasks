@@ -58,6 +58,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 TasksTable.Cols.HABIT_DAYS + ", " +
                 TasksTable.Cols.HABIT_DAYS_LEFT + ", " +
                 TasksTable.Cols.HABIT_START_DATE + ", " +
+                TasksTable.Cols.MONEY_REWARD + ", " +
                 TasksTable.Cols.FINISH_DATE  + " INTEGER" + ", " +
                 TasksTable.Cols.NUMBER_OF_EXECUTIONS  + " INTEGER" +
                 ")");
@@ -85,6 +86,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 RewardsTable.Cols.COST + " INTEGER, " +
                 RewardsTable.Cols.ID + " TEXT, " +
                 RewardsTable.Cols.DONE + " INTEGER, " +
+                RewardsTable.Cols.MODE + " INTEGER, " +
                 RewardsTable.Cols.DESCRIPTION + " TEXT" +
                 ")");
     }
@@ -145,8 +147,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         RewardsTable.Cols.COST + " INTEGER, " +
                         RewardsTable.Cols.ID + " TEXT, " +
                         RewardsTable.Cols.DONE + " INTEGER, " +
+                        RewardsTable.Cols.MODE + " INTEGER, " +
                         RewardsTable.Cols.DESCRIPTION + " TEXT" +
                         ")");
+                db.execSQL("alter table " + TasksTable.NAME + " add column " +
+                        TasksTable.Cols.MONEY_REWARD);
         }
     }
 }

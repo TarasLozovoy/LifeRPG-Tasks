@@ -44,6 +44,7 @@ import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 
 import org.joda.time.LocalDate;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -89,6 +90,8 @@ public class AddTaskFragment extends DataDependantFrament {
     @Bind(R.id.habit_generation_text_view)  protected TextView habitGenerationTextView;
     @Bind(R.id.habit_generation_layout)     protected View habitGenerationsView;
     @Bind(R.id.habit_generation_image_view) protected ImageView habitGenerationsImageView;
+    @Bind(R.id.money_reward_layout)         protected View moneyRewardView;
+    @Bind(R.id.money_reward_text_view)      protected TextView moneyRewardTextView;
 
     protected Date date;
     protected int dateMode = DateMode.TERMLESS;
@@ -99,6 +102,7 @@ public class AddTaskFragment extends DataDependantFrament {
     protected long notifyDelta = -1;         // <0 - do not notify, >0 notify at (date - delta) time
     protected int difficulty = Task.LOW;
     protected int importance = Task.LOW;
+    protected double moneyReward = 5;
     protected int habitdays = -1;
     protected int habitdaysLeft = -1;
     protected LocalDate habitStartDate = new LocalDate();
@@ -121,6 +125,7 @@ public class AddTaskFragment extends DataDependantFrament {
         String importanceString = getString(R.string.importance) + " " + getResources().getStringArray(R.array.importance_array)[0];
         importanceTextView.setText(importanceString);
         increasingSkillsTextView.setText(R.string.add_increasing_skill_to_task);
+        updateRewardView();
         registerListeners();
         if (savedInstanceState != null) {
             taskTitleEditText.setText(savedInstanceState.getString(TASK_TITLE_TAG));
@@ -209,6 +214,7 @@ public class AddTaskFragment extends DataDependantFrament {
         updateRepeatView();
         updateDifficultyView();
         updateImportanceView();
+        updateRewardView();
         updateHabitView();
         updateIncreasingSkillsView();
         updateDecreasingSkillsView();
@@ -254,6 +260,7 @@ public class AddTaskFragment extends DataDependantFrament {
         task.setHabitDaysLeft(habitdaysLeft);
         task.setHabitStartDate(habitStartDate.minusDays(1));
         task.removeAllRelatedSkills();
+        task.setMoneyReward(moneyReward);
         for (String increasingSkillTitle : increasingRelatedSkills) {
             Skill sk = getController().getSkillByTitle(increasingSkillTitle);
             if (sk != null) {
@@ -452,6 +459,14 @@ public class AddTaskFragment extends DataDependantFrament {
                         dialog.dismiss();
                     }
                 }).show();
+            }
+        });
+
+        moneyRewardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentActivity().showSoftKeyboard(true, getView());
+                new RewardForFinishedTaskDialog().show(getCurrentActivity().getSupportFragmentManager(), "RewardForFinishedTask");
             }
         });
 
@@ -723,6 +738,13 @@ public class AddTaskFragment extends DataDependantFrament {
         String importanceString = getString(R.string.importance) + " " +
                 getResources().getStringArray(R.array.importance_array)[importance];
         importanceTextView.setText(importanceString);
+    }
+
+    private void updateRewardView() {
+        DecimalFormat df = new DecimalFormat("#.##");
+        String rewardString = getString(R.string.money_reward) + " " +
+                df.format(moneyReward);
+        moneyRewardTextView.setText(rewardString);
     }
 
     private void updateHabitView() {
@@ -1223,6 +1245,31 @@ public class AddTaskFragment extends DataDependantFrament {
                                 habitdaysLeft = -1;
                             }
                             updateHabitView();
+                        }
+                    })
+                    .create();
+        }
+    }
+
+    @SuppressLint("ValidFragment")
+    public class RewardForFinishedTaskDialog extends DialogFragment {
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            View dialogView = View.inflate(getContext(), R.layout.reward_for_finished_task_dialog, null);
+            final EditText rewardEditText = (EditText) dialogView.findViewById(R.id.money_reward_edit_text);
+            rewardEditText.setText(String.valueOf((int)moneyReward));
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            return builder.setView(dialogView)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String rewardString = rewardEditText.getText().toString();
+                            if (rewardString.isEmpty()) rewardString = "1";
+                            int reward = Integer.parseInt(rewardString);
+                            moneyReward = reward;
+                            updateRewardView();
                         }
                     })
                     .create();

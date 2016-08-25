@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.controller.RewardsController;
 import com.levor.liferpgtasks.model.Reward;
 import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
@@ -77,32 +79,46 @@ public class RewardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolder.titleTextView.setText(currentReward.getTitle());
             viewHolder.costTextView.setText("" + currentReward.getCost());
 
+            viewHolder.infiniteModeImageView.setVisibility(currentReward.getMode() == Reward.Mode.INFINITE ? View.VISIBLE : View.GONE);
+
+            if (currentReward.isDone()) {
+                viewHolder.claimBtn.setEnabled(false);
+                viewHolder.claimBtn.setAlpha(0.5f);
+            } else {
+                viewHolder.claimBtn.setEnabled(true);
+                viewHolder.claimBtn.setAlpha(1f);
+            }
+
+
             viewHolder.claimBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    rewardsController.claimReward(currentReward);
-                    AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                    alert.setTitle(R.string.reward_claimed)
-                            .setMessage(activity.getString(R.string.reward_claimed_dialog_message, currentReward.getTitle()))
-                            .setCancelable(false)
-                            .setNeutralButton(activity.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    activity.showInterstitialAd(MainActivity.AdType.PERFORM_TASK);
-                                    dialog.dismiss();
-                                }
-                            });
-                    // TODO: 8/23/16 Add sharing to social networks
-                    AlertDialog alertDialog = alert.create();
-                    alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            notifyDataSetChanged();
-                        }
-                    });
-                    alertDialog.show();
-                    notifyDataSetChanged();
-
+                    if (currentReward.getCost() <= LifeController.getInstance(activity).getHero().getMoney()) {
+                        rewardsController.claimReward(currentReward);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+                        alert.setTitle(R.string.reward_claimed)
+                                .setMessage(activity.getString(R.string.reward_claimed_dialog_message, currentReward.getTitle()))
+                                .setCancelable(false)
+                                .setNeutralButton(activity.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        activity.showInterstitialAd(MainActivity.AdType.PERFORM_TASK);
+                                        dialog.dismiss();
+                                    }
+                                });
+                        // TODO: 8/23/16 Add sharing to social networks
+                        AlertDialog alertDialog = alert.create();
+                        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                notifyDataSetChanged();
+                            }
+                        });
+                        alertDialog.show();
+                        notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(activity, R.string.insuficiend_funds_message, Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
@@ -141,6 +157,7 @@ public class RewardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView titleTextView;
         TextView costTextView;
         ImageView goldIconImageView;
+        ImageView infiniteModeImageView;
         ImageButton claimBtn;
         View root;
 
@@ -151,6 +168,7 @@ public class RewardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             titleTextView = (TextView) view.findViewById(R.id.list_item_title);
             costTextView = (TextView) view.findViewById(R.id.cost_text_view);
             goldIconImageView = (ImageView) view.findViewById(R.id.gold_coin_icon);
+            infiniteModeImageView = (ImageView) view.findViewById(R.id.reward_mode_icon);
             itemView.setLongClickable(true);
         }
     }

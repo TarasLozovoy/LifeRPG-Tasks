@@ -148,9 +148,9 @@ public class TasksFragment extends DefaultFragment {
                 @Override
                 public void onClick(View v) {
                     Bundle b = new Bundle();
-                    b.putInt(AddTaskFragment.REPEAT_MODE_TAG, tabLayout.getSelectedTabPosition() == FilteredTasksFragment.INFINITE ?
+                    b.putInt(AddTaskFragment.REPEAT_MODE_TAG, viewPager.getCurrentItem() == FilteredTasksFragment.INFINITE ?
                             Task.RepeatMode.EVERY_NTH_DAY : Task.RepeatMode.SIMPLE_REPEAT);
-                    b.putInt(AddTaskFragment.REPEAT_TAG, tabLayout.getSelectedTabPosition() == FilteredTasksFragment.INFINITE ? -1 : 1);
+                    b.putInt(AddTaskFragment.REPEAT_TAG, viewPager.getCurrentItem() == FilteredTasksFragment.INFINITE ? -1 : 1);
 
                     getCurrentActivity().showChildFragment(new AddTaskFragment(), b);
                 }
@@ -169,15 +169,18 @@ public class TasksFragment extends DefaultFragment {
                                 public void onClick(DialogInterface dialog, int which) {
                                     List<Task> tasks = getController().getAllTasks();
                                     List<Task> finishedTasks = new ArrayList<>();
+                                    List<Task> updateNeededTasks = new ArrayList<>();
                                     for (Task t : tasks) {
                                         if (t.isTaskDone()) {
                                             finishedTasks.add(t);
+                                        } else if (t.getFinishDate() != null && t.getRepeatability() < 0) {
+                                            updateNeededTasks.add(t);
                                         }
                                     }
                                     for (Task t : finishedTasks) {
                                         getController().removeTask(t);
                                     }
-                                    updateUI();
+                                    updateChildFragmentsUI();
                                 }
                             })
                             .show();

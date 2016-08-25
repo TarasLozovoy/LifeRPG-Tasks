@@ -59,7 +59,18 @@ public class RewardsController {
     }
 
     public void claimReward(Reward reward) {
-        reward.setDone(true);
+        if (reward.getMode() != Reward.Mode.INFINITE) {
+            reward.setDone(true);
+        }
+        LifeController.getInstance(context).getHero().removeMoney(reward.getCost());
         updateReward(reward);
+    }
+
+    public void unclaim(Reward reward) {
+        if (reward.isDone()) {
+            reward.setDone(false);
+            LifeController.getInstance(context).getHero().addMoney(reward.getCost());
+            lifeEntity.updateReward(reward);
+        }
     }
 }

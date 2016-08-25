@@ -6,16 +6,18 @@ public class Hero {
     private double xpToNextLevel;
     private double baseXP;
     private String name;
+    private double money;
 
     public Hero(){
-        this(0, 0, 1, "Johnny");
+        this(0, 0, 1, "Johnny", 0);
     }
 
-    public Hero(int level, double xp, double baseXP, String name){
+    public Hero(int level, double xp, double baseXP, String name, double money){
         this.level = level;
         this.xp = xp;
         this.name = name;
         this.baseXP = baseXP;
+        this.money = money;
         xpToNextLevel = xpToLevel(level);
     }
 
@@ -69,6 +71,22 @@ public class Hero {
 
     public String getName() {
         return name;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
+    }
+
+    public void addMoney(double amount) {
+        this.money += amount;
+    }
+
+    public void removeMoney(double amount) {
+        this.money -= amount;
     }
 
     private double xpToLevel(int level){
