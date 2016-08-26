@@ -80,6 +80,7 @@ public class LifeController {
     private MainActivity currentActivity;
     private List<Integer> achievementsLevels = new ArrayList<>();
     private Map<String, Float> statisticsNumbers = new LinkedHashMap<>();
+    private String achievementsBuffer = "";
 
     private static final String STAT_DIVIDER = " - ";
 
@@ -693,10 +694,12 @@ public class LifeController {
         int position = achievement.ordinal();
         String achievementString = String.format(achievement.getDescription(),
                 achievement.getThresholdForLevel(achievementsLevels.get(position)));
-        Toast.makeText(context,
-                context.getString(R.string.achievement_unlocked, achievementString) + "\n" +
-                        context.getString(R.string.xp_multiplier_reward, achievement.getReward()),
-                Toast.LENGTH_LONG).show();
+//        Toast.makeText(context,
+//                context.getString(R.string.achievement_unlocked, achievementString) + "\n" +
+//                        context.getString(R.string.xp_multiplier_reward, achievement.getReward()),
+//                Toast.LENGTH_LONG).show();
+        achievementsBuffer += context.getString(R.string.achievement_unlocked, achievementString) + "\n" +
+                context.getString(R.string.xp_multiplier_reward, achievement.getReward()) + "\n";
 
         achievementsLevels.set(position, achievementsLevels.get(position) + 1);
         Hero hero = getHero();
@@ -711,6 +714,14 @@ public class LifeController {
                 .build());
 
         performBackUpToDropBox();
+    }
+
+    public String getAchievementsBuffer() {
+        return achievementsBuffer;
+    }
+
+    public void clearAchievementsBuffer() {
+        achievementsBuffer = "";
     }
 
     public List<Integer> getAchievementsLevels(){

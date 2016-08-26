@@ -165,6 +165,7 @@
     <string name="skill_updated_message">Skill updated</string>
     <string name="removing_skill_message">Are you really want to remove this skill?</string>
     <string name="skill">Skill</string>
+    <string name="skills">Skills:</string>
     <!-- -->
 
     <!-- Hero-->
@@ -174,7 +175,7 @@
     <string name="hero_name_hint_edit_hero_fragment">Your hero name.</string>
     <string name="change_hero_icon">Change picture</string>
     <string name="edit_hero_fragment_title">Edit hero</string>
-    <string name="hero_level_increased">Congratulations!\n %1s\'s level increased!</string>
+    <string name="hero_level_increased">Congratulations!\n%1s\'s level increased!</string>
     <!-- -->
 
     <!-- Characteristics-->
@@ -251,8 +252,9 @@
     <string name="n_skills_level_25_achievement">%1d skills with level 25</string>
     <string name="n_skills_level_50_achievement">%1d skills with level 50</string>
     <string name="n_skills_level_100_achievement">%1d skills with level 100</string>
-    <string name="achievement_unlocked">Achievement \"%1s\" unlocked!</string>
+    <string name="achievement_unlocked">\"%1s\" unlocked!</string>
     <string name="achievements_unlocked">Achievements unlocked: </string>
+    <string name="achievements_unlocked_title">Achievements unlocked: </string>
     <!-- -->
 
     <!--Coachmarks-->
@@ -386,7 +388,6 @@
     <string name="donate_N_usd">Donate</string>
     <string name="purchase_unsuccessful">Purchase unsuccessful. Please try again.</string>
     <string name="purchase_successful">Purchase successful</string>
-    <string name="level_short">lvl</string>
     <string name="number_of_executions">Number of executions: %3d</string>
     <string name="repeat_in_N_days_after_completion">Repeat in %2d days after completion</string>
     <string name="in_N_days_after_completion">In %2d days after completion</string>
@@ -430,6 +431,7 @@
     <string name="reward_infinite_repeat_mode">Infinite reward</string>
     <string name="money_reward">Reward:</string>
     <string name="insuficiend_funds_message">Not enough gold for this reward.</string>
+    <string name="characteristics">Characteristics:</string>
     <!-- -->
 
 </resources>

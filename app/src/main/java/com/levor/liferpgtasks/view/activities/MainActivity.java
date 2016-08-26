@@ -505,7 +505,7 @@ public class MainActivity extends BackUpActivity{
         navigationTabLayout.removeAllTabs();
         heroNavigationTab = navigationTabLayout.newTab().setIcon(d);
         navigationTabLayout.addTab(heroNavigationTab);
-        navigationTabLayout.addTab(navigationTabLayout.newTab().setIcon(R.drawable.ic_format_list_bulleted_black_24dp));
+        navigationTabLayout.addTab(navigationTabLayout.newTab().setIcon(R.drawable.tasks_list));
         navigationTabLayout.addTab(navigationTabLayout.newTab().setIcon(R.drawable.reward_icon));
         navigationTabLayout.addTab(navigationTabLayout.newTab().setIcon(R.drawable.ic_settings_black_24dp));
     }
