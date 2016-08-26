@@ -139,6 +139,7 @@ public class LifeEntity {
         task1.setImportance(Task.LOW);
         task1.setNotifyDelta(-1);
         task1.addRelatedSkill(getSkillByTitle(context.getString(R.string.erudition)), true);
+        task1.setMoneyReward(5);
 
         Task task2 = new Task(context.getString(R.string.learn_spanish));
         task2.setDate(tomorrow);
@@ -150,6 +151,7 @@ public class LifeEntity {
         task2.setImportance(Task.MEDIUM);
         task2.setNotifyDelta(-1);
         task2.addRelatedSkill(getSkillByTitle(context.getString(R.string.spanish)), true);
+        task2.setMoneyReward(5);
 
         Task task3 = new Task(context.getString(R.string.perform_workout));
         task3.setDate(tomorrow);
@@ -161,6 +163,7 @@ public class LifeEntity {
         task3.setImportance(Task.HIGH);
         task3.setNotifyDelta(-1);
         task3.addRelatedSkill(getSkillByTitle(context.getString(R.string.powerlifting)), true);
+        task3.setMoneyReward(5);
 
         Task task4 = new Task(context.getString(R.string.morning_running));
         task4.setDate(tomorrow);
@@ -172,6 +175,7 @@ public class LifeEntity {
         task4.setImportance(Task.INSANE);
         task4.setNotifyDelta(-1);
         task4.addRelatedSkill(getSkillByTitle(context.getString(R.string.running)), true);
+        task4.setMoneyReward(5);
 
         addTask(task1);
         addTask(task2);
@@ -582,7 +586,7 @@ public class LifeEntity {
         values.put(HeroTable.Cols.LEVEL, hero.getLevel());
         values.put(HeroTable.Cols.XP, hero.getXp());
         values.put(HeroTable.Cols.BASEXP, hero.getBaseXP());
-        values.put(HeroTable.Cols.MONEY, 0.0d);
+        values.put(HeroTable.Cols.MONEY, hero.getMoney());
         return values;
     }
 

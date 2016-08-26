@@ -16,6 +16,7 @@ import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.controller.RewardsController;
 import com.levor.liferpgtasks.model.Reward;
+import com.levor.liferpgtasks.view.ClaimRewardAlertBuilder;
 import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
 import com.levor.liferpgtasks.view.activities.MainActivity;
 import com.levor.liferpgtasks.view.fragments.rewards.DetailedRewadsFragment;
@@ -94,19 +95,7 @@ public class RewardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 @Override
                 public void onClick(View v) {
                     if (currentReward.getCost() <= LifeController.getInstance(activity).getHero().getMoney()) {
-                        rewardsController.claimReward(currentReward);
-                        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
-                        alert.setTitle(R.string.reward_claimed)
-                                .setMessage(activity.getString(R.string.reward_claimed_dialog_message, currentReward.getTitle()))
-                                .setCancelable(false)
-                                .setNeutralButton(activity.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        activity.showInterstitialAd(MainActivity.AdType.PERFORM_TASK);
-                                        dialog.dismiss();
-                                    }
-                                });
-                        // TODO: 8/23/16 Add sharing to social networks
+                        ClaimRewardAlertBuilder alert = new ClaimRewardAlertBuilder(activity, currentReward);
                         AlertDialog alertDialog = alert.create();
                         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                             @Override

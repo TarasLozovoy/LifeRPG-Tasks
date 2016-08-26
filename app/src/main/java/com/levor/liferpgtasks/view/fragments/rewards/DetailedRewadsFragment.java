@@ -1,5 +1,7 @@
 package com.levor.liferpgtasks.view.fragments.rewards;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.controller.RewardsController;
 import com.levor.liferpgtasks.model.Reward;
+import com.levor.liferpgtasks.view.ClaimRewardAlertBuilder;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
@@ -88,12 +91,16 @@ public class DetailedRewadsFragment extends DataDependantFrament {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.claim_reward:
-                if (currentReward.getCost() <= getController().getHero().getMoney()) {
-                    rewardsController.claimReward(currentReward);
-                    getActivity().invalidateOptionsMenu();
+                if (currentReward.getCost() <= LifeController.getInstance(getCurrentActivity()).getHero().getMoney()) {
+                    ClaimRewardAlertBuilder alert = new ClaimRewardAlertBuilder(getCurrentActivity(), currentReward);
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
+                    updateUI();
                 } else {
                     Toast.makeText(getCurrentActivity(), R.string.insuficiend_funds_message, Toast.LENGTH_SHORT).show();
                 }
+
+                getActivity().invalidateOptionsMenu();
                 return true;
             case R.id.undo:
                 rewardsController.unclaim(currentReward);

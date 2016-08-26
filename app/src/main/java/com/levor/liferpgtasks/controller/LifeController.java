@@ -437,6 +437,11 @@ public class LifeController {
         performBackUpToDropBox();
     }
 
+    public void updateHero(Hero hero) {
+        lifeEntity.updateHero(hero);
+        performBackUpToDropBox();
+    }
+
     public void checkHabitGenerationForAllTasks(){
         List<Task> tasks = getAllTasks();
         boolean[] updateTasks = new boolean[tasks.size()];

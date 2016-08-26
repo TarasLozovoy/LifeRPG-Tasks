@@ -383,7 +383,6 @@
     <string name="reward_cost_empty_error">Стоимость награды не может быть пустой</string>
     <string name="removing_reward_message">вы действительно хотите удалить эту награду?</string>
     <string name="reward_claimed">Награда получена!</string>
-    <string name="reward_claimed_dialog_message">Награда \'%1s\' получена!</string>
     <string name="reward_single_repeat_mode">Одноразовая награда</string>
     <string name="reward_infinite_repeat_mode">Многоразовая награда</string>
     <string name="money_reward">Награда:</string>

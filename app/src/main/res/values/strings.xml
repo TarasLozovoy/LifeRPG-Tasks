@@ -426,7 +426,6 @@
     <string name="reward_cost_empty_error">Reward cost can\'t be empty</string>
     <string name="removing_reward_message">Are you really want to remove this reward?</string>
     <string name="reward_claimed">Reward claimed!</string>
-    <string name="reward_claimed_dialog_message">Reward \'%1s\' claimed!</string>
     <string name="reward_single_repeat_mode">Single time reward</string>
     <string name="reward_infinite_repeat_mode">Infinite reward</string>
     <string name="money_reward">Reward:</string>
