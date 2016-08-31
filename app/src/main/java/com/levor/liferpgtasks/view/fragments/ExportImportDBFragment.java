@@ -33,8 +33,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class ExportImportDBFragment extends DefaultFragment {
-
-    private static final int WRITE_EXTERNAL_STORAGE_PERMISSION_CODE = 1;
+    private static final int IMPORT_FROM_FILESYSTEM_ACTION = 101;
+    private static final int EXPORT_TO_FILESYSTEM_ACTION = 102;
 
     @Bind(R.id.auto_backup_to_dropbox_layout)       View autoExportToDropboxView;
     @Bind(R.id.auto_backup_to_dropbox_switch)       Switch autoExportToDropboxSwitch;
@@ -90,12 +90,7 @@ public class ExportImportDBFragment extends DefaultFragment {
                 File exportFile = new File(LifeController.DB_EXPORT_FILE_NAME);
                 if (db.exists()){
                     try {
-                        if ( ContextCompat.checkSelfPermission(getCurrentActivity(),
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-                                ActivityCompat.requestPermissions(getCurrentActivity(),
-                                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                        WRITE_EXTERNAL_STORAGE_PERMISSION_CODE);
-                        } else {
+                        if (isWriteStoragePermissionGranted(EXPORT_TO_FILESYSTEM_ACTION)) {
                             if (!exportFile.exists()) {
                                 new File(LifeController.FILE_EXPORT_PATH).mkdir();
                                 exportFile.createNewFile();
@@ -120,7 +115,9 @@ public class ExportImportDBFragment extends DefaultFragment {
         importFromFileSystemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getCurrentActivity().showFileChooserDialog();
+                if (isWriteStoragePermissionGranted(IMPORT_FROM_FILESYSTEM_ACTION)) {
+                    getCurrentActivity().showFileChooserDialog();
+                }
             }
         });
 
@@ -148,9 +145,14 @@ public class ExportImportDBFragment extends DefaultFragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case WRITE_EXTERNAL_STORAGE_PERMISSION_CODE:
+            case EXPORT_TO_FILESYSTEM_ACTION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     exportToFileSystemView.callOnClick();
+                }
+                break;
+            case IMPORT_FROM_FILESYSTEM_ACTION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    importFromFileSystemView.callOnClick();
                 }
                 break;
         }
@@ -183,5 +185,16 @@ public class ExportImportDBFragment extends DefaultFragment {
                 }
             }
         }
+    }
+
+    private boolean isWriteStoragePermissionGranted(int actionCode) {
+        if ( ContextCompat.checkSelfPermission(getCurrentActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(getCurrentActivity(),
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    actionCode);
+            return false;
+        }
+        return true;
     }
 }
