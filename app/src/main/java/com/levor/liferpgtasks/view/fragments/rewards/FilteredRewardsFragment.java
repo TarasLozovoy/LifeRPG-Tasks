@@ -18,6 +18,7 @@ import com.levor.liferpgtasks.controller.RewardsController;
 import com.levor.liferpgtasks.model.Reward;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,6 +35,8 @@ public class FilteredRewardsFragment extends DefaultFragment {
     private int filter;
     private RecyclerView recyclerView;
     private TextView emptyList;
+    private TextView moneyTextView;
+    private View moneyView;
     private List<String> sortedRewardsTitles = new ArrayList<>();
 
     @Override
@@ -45,12 +48,15 @@ public class FilteredRewardsFragment extends DefaultFragment {
         filter = getArguments().getInt(FILTER_ARG);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewTasks);
         emptyList = (TextView) view.findViewById(R.id.empty_list);
+        moneyTextView = (TextView) view.findViewById(R.id.money);
+        moneyView =  view.findViewById(R.id.money_layout);
         if (filter == CLAIMED) {
             emptyList.setText(R.string.empty_claimed_reward_list_view);
         } else {
             emptyList.setText(R.string.empty_rewards_list_view);
         }
 
+        updateTotalGold();
         setupListView();
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(R.string.rewards);
@@ -62,6 +68,7 @@ public class FilteredRewardsFragment extends DefaultFragment {
     @Override
     public void updateUI() {
         setupListView();
+        updateTotalGold();
     }
 
     private void updateFilteredFragmentsUI(){
@@ -144,6 +151,18 @@ public class FilteredRewardsFragment extends DefaultFragment {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 //            registerForContextMenu(recyclerView);
             // TODO: 8/22/16 add context menu
+        }
+    }
+
+    private void updateTotalGold() {
+        if (filter == NEW) {
+            moneyView.setVisibility(View.VISIBLE);
+            double money = getController().getHero().getMoney();
+            DecimalFormat df = new DecimalFormat("#.##");
+            String moneyString = getString(R.string.total) + " " + df.format(money);
+            moneyTextView.setText(moneyString);
+        } else {
+            moneyView.setVisibility(View.GONE);
         }
     }
 

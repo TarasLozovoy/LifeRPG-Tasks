@@ -389,6 +389,7 @@
     <string name="money_reward">Награда:</string>
     <string name="insuficiend_funds_message">Недостаточно золота для этой награды.</string>
     <string name="characteristics">Характеристики:</string>
+    <string name="total">Всего:</string>
     <!-- -->
 
 </resources>

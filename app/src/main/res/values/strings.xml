@@ -432,6 +432,7 @@
     <string name="money_reward">Reward:</string>
     <string name="insuficiend_funds_message">Not enough gold for this reward.</string>
     <string name="characteristics">Characteristics:</string>
+    <string name="total">Total:</string>
     <!-- -->
 
 </resources>

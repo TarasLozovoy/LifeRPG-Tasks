@@ -5,12 +5,45 @@
     android:paddingBottom="5dp"
     android:paddingTop="5dp">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewTasks"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/money_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textSize="18sp"
+                android:layout_marginLeft="5dp"/>
+
+            <ImageView
+                android:id="@+id/gold_coin_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/gold_coin_icon"
+                android:layout_marginLeft="2dp"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewTasks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/money_layout"/>
+
+    </RelativeLayout>
+
 
     <TextView
         android:id="@+id/empty_list"

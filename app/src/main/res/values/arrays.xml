@@ -111,6 +111,7 @@
         <item>Version 1.4.1</item>
         <item>Version 1.4.2</item>
         <item>Version 1.4.3</item>
+        <item>Version 1.5.0</item>
     </string-array>
 
     <string-array
@@ -136,14 +137,18 @@
             \n- Fixed few rarely reproduced crashes.</item>
         <item>- Moved to new Dropbox API v.2.
             \n- Reduced Dropbox notification visibility time.
-            \n- Optional, only todays tasks in To Do tab (can be turned on/off via Settings).
+            \n- Optional, only today\'s tasks in To Do tab (can be turned on/off via Settings).
             \n- Optional, show dailies in Done tab with last execution date (can be turned on/off via Settings).
             \n- Skip feature for tasks with specified date. When skip button pressed – date will be changed to nearest one by specified in task rule.
-</item>
+        </item>
         <item>-	Possibility to set custom avatar from file system.
             \n-	Possibility to set new avatar right from camera.
             \n-	Added sounds on level up and skill up (can be switched on/off in settings).
-</item>
+        </item>
+        <item>- Rewards system: for every task can be set reward in gold, when task is finished indicated amount of gold is added to hero gold; on rewards screen new rewards with specified cost can be added and claimed.
+            \n- Task completion dialog changed – now it displays all updates: XP, gold, hero lvl up, skills, characteristics updates and unlocked achievements.
+            \n- Minor crash and bug fixes.
+        </item>
     </string-array>
 
 </resources>
