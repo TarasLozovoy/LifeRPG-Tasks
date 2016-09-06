@@ -90,6 +90,8 @@
         <item>@string/difficulty_desc_task_order</item>
         <item>@string/date_asc_task_order</item>
         <item>@string/date_desc_task_order</item>
+        <item>@string/fear_asc_task_order</item>
+        <item>@string/fear_desc_task_order</item>
     </string-array>
 
     <string-array

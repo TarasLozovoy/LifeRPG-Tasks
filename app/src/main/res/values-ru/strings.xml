@@ -21,6 +21,7 @@
     <string name="tasks">Задачи</string>
     <string name="difficulty">Сложность:</string>
     <string name="importance">Важность:</string>
+    <string name="fear">Страх:</string>
     <string name="date">Дата:</string>
     <string name="tasks_order_title">Сортировать задачи</string>
     <string name="completion_task_order">Завершенность</string>
@@ -30,6 +31,8 @@
     <string name="importance_desc_task_order">Важность Я > А</string>
     <string name="difficulty_asc_task_order">Сложность А > Я</string>
     <string name="difficulty_desc_task_order">Сложность Я > А</string>
+    <string name="fear_asc_task_order">Страх А > Я</string>
+    <string name="fear_desc_task_order">Страх Я > А</string>
     <string name="date_asc_task_order">Дата А > Я</string>
     <string name="date_desc_task_order">Дата Я > А</string>
     <string name="sort_image">Сортировка</string>
@@ -390,6 +393,7 @@
     <string name="insuficiend_funds_message">Недостаточно золота для этой награды.</string>
     <string name="characteristics">Характеристики:</string>
     <string name="total">Всего:</string>
+    <string name="XP_mult">Опыта</string>
     <!-- -->
 
 </resources>

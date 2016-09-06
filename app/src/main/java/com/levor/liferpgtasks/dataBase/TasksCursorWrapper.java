@@ -34,6 +34,7 @@ public class TasksCursorWrapper extends CursorWrapper {
         int repeatability = getInt(getColumnIndex(TasksTable.Cols.REPEATABILITY));
         int difficulty = getInt(getColumnIndex(TasksTable.Cols.DIFFICULTY));
         int importance = getInt(getColumnIndex(TasksTable.Cols.IMPORTANCE));
+        int fear = getInt(getColumnIndex(TasksTable.Cols.IMPORTANCE));
         long dateLong = getLong(getColumnIndex(TasksTable.Cols.DATE));
         long finishDateLong = getLong(getColumnIndex(TasksTable.Cols.FINISH_DATE));
         long notifyLong = getLong(getColumnIndex(TasksTable.Cols.NOTIFY));
@@ -74,6 +75,7 @@ public class TasksCursorWrapper extends CursorWrapper {
         task.setRepeatIndex(repeatIndex == 0 ? 1 : repeatIndex);
         task.setDifficulty(difficulty);
         task.setImportance(importance);
+        task.setFear(fear);
         task.setNotifyDelta(notifyLong);
         task.setRelatedSkills(skills);
         task.setHabitDays(habitDays);

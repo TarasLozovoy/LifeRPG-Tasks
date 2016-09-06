@@ -175,6 +175,10 @@ public class MainActivity extends BackUpActivity{
         lifeController.checkHabitGenerationForAllTasks();
 
         showWhatsNewDialog(false);
+
+
+        //temporary
+        lifeController.gatherSelectedForAvatarImage();
     }
 
     @Override
@@ -449,6 +453,11 @@ public class MainActivity extends BackUpActivity{
             Misc.HERO_IMAGE_PATH = name;
             Misc.HERO_IMAGE_MODE = mode;
             setupNavigationTabs();
+
+            //temporary
+            if (mode == Misc.ASSETS_ICON) {
+                lifeController.onHeroImageUpdatedFromAssets();
+            }
         }
     }
 

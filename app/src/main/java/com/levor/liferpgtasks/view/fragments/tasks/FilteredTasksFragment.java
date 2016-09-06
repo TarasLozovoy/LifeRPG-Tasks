@@ -210,6 +210,12 @@ public class FilteredTasksFragment extends DefaultFragment{
             case Task.SortingOrder.DIFFICULTY_DESC :
                 comparator = Task.DIFFICULTY_DESC_TASKS_COMPARATOR;
                 break;
+            case Task.SortingOrder.FEAR_ASC :
+                comparator = Task.FEAR_ASC_TASKS_COMPARATOR;
+                break;
+            case Task.SortingOrder.FEAR_DESC :
+                comparator = Task.FEAR_DESC_TASKS_COMPARATOR;
+                break;
             case Task.SortingOrder.DATE_ASC :
                 comparator = Task.DATE_ASC_TASKS_COMPARATOR;
                 break;

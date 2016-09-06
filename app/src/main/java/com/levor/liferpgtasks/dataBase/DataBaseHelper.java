@@ -7,8 +7,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import static com.levor.liferpgtasks.dataBase.DataBaseSchema.*;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-    private static final int VERSION = 10;
+    private static final int VERSION = 11;
     public static final String DATABASE_NAME = "RealLifeBase.db";
+
+    private int upgradedFromVersion = -1; //used for external indication that
 
     public DataBaseHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -34,7 +36,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("create table " + SkillsTable.NAME + " (" +
                 " _id integer primary key autoincrement, " +
-                SkillsTable.Cols.UUID + ", " +
+                SkillsTable.Cols.UUID + " INTEGER, " +
                 SkillsTable.Cols.TITLE + ", " +
                 SkillsTable.Cols.LEVEL + ", " +
                 SkillsTable.Cols.SUBLEVEL + ", " +
@@ -48,6 +50,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 TasksTable.Cols.REPEATABILITY + ", " +
                 TasksTable.Cols.DIFFICULTY + ", " +
                 TasksTable.Cols.IMPORTANCE + ", " +
+                TasksTable.Cols.FEAR + ", " +
                 TasksTable.Cols.DATE + ", " +
                 TasksTable.Cols.NOTIFY + ", " +
                 TasksTable.Cols.RELATED_SKILLS + ", " +
@@ -98,6 +101,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        upgradedFromVersion = oldVersion;
         switch (oldVersion) {
             case 1:
                 db.execSQL("create table " + MiscTable.NAME + " (" +
@@ -152,6 +156,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                         ")");
                 db.execSQL("alter table " + TasksTable.NAME + " add column " +
                         TasksTable.Cols.MONEY_REWARD);
+            case 10:
+                db.execSQL("alter table " + TasksTable.NAME + " add column " +
+                        TasksTable.Cols.FEAR + " INTEGER");
         }
+    }
+
+    public int getUpgradedFromVersion() {
+        return upgradedFromVersion;
     }
 }

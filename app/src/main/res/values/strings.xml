@@ -30,6 +30,7 @@
     <string name="tasks">Tasks</string>
     <string name="difficulty">Difficulty:</string>
     <string name="importance">Importance:</string>
+    <string name="fear">Fear:</string>
     <string name="date">Date:</string>
     <string name="tasks_order_title">Tasks order</string>
     <string name="completion_task_order">Completion</string>
@@ -39,6 +40,8 @@
     <string name="importance_desc_task_order">Importance desc.</string>
     <string name="difficulty_asc_task_order">Difficulty asc.</string>
     <string name="difficulty_desc_task_order">Difficulty desc.</string>
+    <string name="fear_asc_task_order">Fear asc.</string>
+    <string name="fear_desc_task_order">Fear desc.</string>
     <string name="date_asc_task_order">Date asc.</string>
     <string name="date_desc_task_order">Date desc.</string>
     <string name="sort_image">Sort image</string>
@@ -433,6 +436,7 @@
     <string name="insuficiend_funds_message">Not enough gold for this reward.</string>
     <string name="characteristics">Characteristics:</string>
     <string name="total">Total:</string>
+    <string name="XP_mult">XP</string>
     <!-- -->
 
 </resources>

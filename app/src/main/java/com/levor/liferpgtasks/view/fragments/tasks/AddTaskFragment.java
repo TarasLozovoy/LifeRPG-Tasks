@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -63,35 +64,32 @@ public class AddTaskFragment extends DataDependantFrament {
     public static final String TASK_TITLE_TAG = "task_title_tag";
     private final String RELATED_SKILLS_TAG = "related_skills_tag";
     private final String DECREASING_RELATED_SKILLS_TAG = "decreasing_related_skills_tag";
-//    private final String DIFFICULTY_TAG = "difficulty_tag";
-//    private final String IMPORTANCE_TAG = "importance_tag";
     private final String DATE_TAG = "date_tag";
-//    private final String NOTIFY_TAG = "notify_tag";
-//    private final String REPEAT_CHECKBOX_TAG = "repeat_checkbox_tag";
 
 
-    @Bind(R.id.task_title_edit_text)        protected EditText taskTitleEditText;
-    @Bind(R.id.date_time_text_view)         protected TextView dateTextView;
-    @Bind(R.id.date_time_layout)            protected View dateView;
-    @Bind(R.id.notification_text_view)      protected TextView notifyTextView;
-    @Bind(R.id.notification_layout)         protected View notifyView;
-    @Bind(R.id.notify_image_view)           protected ImageView notifyImageView;
-    @Bind(R.id.repeat_text_view)            protected TextView repeatTextView;
-    @Bind(R.id.repeat_layout)               protected View repeatView;
-    @Bind(R.id.repeat_image_view)           protected ImageView repeatImageView;
-    @Bind(R.id.difficulty_text_view)        protected TextView difficultyTextView;
-    @Bind(R.id.difficulty_layout)           protected View difficultyView;
-    @Bind(R.id.importance_text_view)        protected TextView importanceTextView;
-    @Bind(R.id.importance_layout)           protected View importanceView;
-    @Bind(R.id.increasing_skills_text_view) protected TextView increasingSkillsTextView;
-    @Bind(R.id.increasing_skills_layout)    protected View increasingSkillsView;
-    @Bind(R.id.decreasing_skills_text_view) protected TextView decreasingSkillsTextView;
-    @Bind(R.id.decreasing_skills_layout)    protected View decreasingSkillsView;
-    @Bind(R.id.habit_generation_text_view)  protected TextView habitGenerationTextView;
-    @Bind(R.id.habit_generation_layout)     protected View habitGenerationsView;
-    @Bind(R.id.habit_generation_image_view) protected ImageView habitGenerationsImageView;
-    @Bind(R.id.money_reward_layout)         protected View moneyRewardView;
-    @Bind(R.id.money_reward_text_view)      protected TextView moneyRewardTextView;
+    @Bind(R.id.task_title_edit_text)                protected EditText taskTitleEditText;
+    @Bind(R.id.date_time_text_view)                 protected TextView dateTextView;
+    @Bind(R.id.date_time_layout)                    protected View dateView;
+    @Bind(R.id.notification_text_view)              protected TextView notifyTextView;
+    @Bind(R.id.notification_layout)                 protected View notifyView;
+    @Bind(R.id.notify_image_view)                   protected ImageView notifyImageView;
+    @Bind(R.id.repeat_text_view)                    protected TextView repeatTextView;
+    @Bind(R.id.repeat_layout)                       protected View repeatView;
+    @Bind(R.id.repeat_image_view)                   protected ImageView repeatImageView;
+    @Bind(R.id.difficulty_importance_fear_layout)   protected View difficultyImportanceFearView;
+    @Bind(R.id.difficulty_text_view)                protected TextView difficultyTextView;
+    @Bind(R.id.importance_text_view)                protected TextView importanceTextView;
+    @Bind(R.id.fear_text_view)                      protected TextView fearTextView;
+    @Bind(R.id.total_xp_text_view)                  protected TextView totalXPTextView;
+    @Bind(R.id.increasing_skills_text_view)         protected TextView increasingSkillsTextView;
+    @Bind(R.id.increasing_skills_layout)            protected View increasingSkillsView;
+    @Bind(R.id.decreasing_skills_text_view)         protected TextView decreasingSkillsTextView;
+    @Bind(R.id.decreasing_skills_layout)            protected View decreasingSkillsView;
+    @Bind(R.id.habit_generation_text_view)          protected TextView habitGenerationTextView;
+    @Bind(R.id.habit_generation_layout)             protected View habitGenerationsView;
+    @Bind(R.id.habit_generation_image_view)         protected ImageView habitGenerationsImageView;
+    @Bind(R.id.money_reward_layout)                 protected View moneyRewardView;
+    @Bind(R.id.money_reward_text_view)              protected TextView moneyRewardTextView;
 
     protected Date date;
     protected int dateMode = DateMode.TERMLESS;
@@ -102,6 +100,7 @@ public class AddTaskFragment extends DataDependantFrament {
     protected long notifyDelta = -1;         // <0 - do not notify, >0 notify at (date - delta) time
     protected int difficulty = Task.LOW;
     protected int importance = Task.LOW;
+    protected int fear = Task.LOW;
     protected double moneyReward = 5;
     protected int habitdays = -1;
     protected int habitdaysLeft = -1;
@@ -120,6 +119,10 @@ public class AddTaskFragment extends DataDependantFrament {
         dateTextView.setText(getString(R.string.task_date_termless));
         repeatTextView.setText(getString(R.string.task_repeat_do_not_repeat));
         notifyTextView.setText(getString(R.string.task_add_notification));
+
+        difficulty = 25;
+        importance = 25;
+        fear = 0;
         String difficultyString = getString(R.string.difficulty) + " " + getResources().getStringArray(R.array.difficulties_array)[0];
         difficultyTextView.setText(difficultyString);
         String importanceString = getString(R.string.importance) + " " + getResources().getStringArray(R.array.importance_array)[0];
@@ -212,8 +215,7 @@ public class AddTaskFragment extends DataDependantFrament {
         updateDateView();
         updateNotifyView();
         updateRepeatView();
-        updateDifficultyView();
-        updateImportanceView();
+        updateDifficultyImportanceFearView();
         updateRewardView();
         updateHabitView();
         updateIncreasingSkillsView();
@@ -255,6 +257,7 @@ public class AddTaskFragment extends DataDependantFrament {
         task.setRepeatIndex(repeatIndex);
         task.setDifficulty(difficulty);
         task.setImportance(importance);
+        task.setFear(fear);
         task.setNotifyDelta(notifyDelta);
         task.setHabitDays(habitdays);
         task.setHabitDaysLeft(habitdaysLeft);
@@ -424,41 +427,12 @@ public class AddTaskFragment extends DataDependantFrament {
             }
         });
 
-        difficultyView.setOnClickListener(new View.OnClickListener() {
+        difficultyImportanceFearView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getCurrentActivity().showSoftKeyboard(false, getView());
-                String[] notifyVariants = getResources().getStringArray(R.array.difficulties_array);
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                        android.R.layout.select_dialog_item, notifyVariants);
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-                dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        difficulty = which;
-                        updateDifficultyView();
-                        dialog.dismiss();
-                    }
-                }).show();
-            }
-        });
-
-        importanceView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getCurrentActivity().showSoftKeyboard(false, getView());
-                String[] notifyVariants = getResources().getStringArray(R.array.importance_array);
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                        android.R.layout.select_dialog_item, notifyVariants);
-                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-                dialog.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        importance = which;
-                        updateImportanceView();
-                        dialog.dismiss();
-                    }
-                }).show();
+                new DifficultyImportanceFearDialog()
+                        .show(getCurrentActivity().getSupportFragmentManager(), "DiffImportanceFear");
             }
         });
 
@@ -728,16 +702,15 @@ public class AddTaskFragment extends DataDependantFrament {
         notifyTextView.setText(sb.toString());
     }
 
-    protected void updateDifficultyView() {
-        String difficultyString = getString(R.string.difficulty) + " "
-                + getResources().getStringArray(R.array.difficulties_array)[difficulty];
-        difficultyTextView.setText(difficultyString);
-    }
+    protected void updateDifficultyImportanceFearView() {
+        difficultyTextView.setText(getString(R.string.difficulty) + " " + difficulty + "%");
+        importanceTextView.setText(getString(R.string.importance) + " " + importance + "%");
+        fearTextView.setText(getString(R.string.fear) + " " + + fear + "%");
 
-    private void updateImportanceView() {
-        String importanceString = getString(R.string.importance) + " " +
-                getResources().getStringArray(R.array.importance_array)[importance];
-        importanceTextView.setText(importanceString);
+        DecimalFormat df = new DecimalFormat("#.##");
+        double totalXP = getController().getHero().getBaseXP()
+                * Task.getMultiplierByFormula(difficulty, importance, fear);
+        totalXPTextView.setText("+ " +df.format(totalXP) + " " + getString(R.string.XP_mult));
     }
 
     private void updateRewardView() {
@@ -1273,6 +1246,112 @@ public class AddTaskFragment extends DataDependantFrament {
                         }
                     })
                     .create();
+        }
+    }
+
+    @SuppressLint("ValidFragment")
+    public class DifficultyImportanceFearDialog extends DialogFragment {
+        private TextView totalXPTextView;
+        private TextView difficultyTV;
+        private TextView importanceTV;
+        private TextView fearTV;
+        private int difficulty;
+        private int importance;
+        private int fear;
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            View dialogView = View.inflate(getContext(), R.layout.difficulty_importance_fear_dialog_layout, null);
+            totalXPTextView = (TextView) dialogView.findViewById(R.id.total_xp_text_view);
+            difficultyTV = (TextView) dialogView.findViewById(R.id.difficulty_text_view);
+            SeekBar difficultySeekBar = (SeekBar) dialogView.findViewById(R.id.difficulty_seek_bar);
+            importanceTV = (TextView) dialogView.findViewById(R.id.importance_text_view);
+            SeekBar importanceSeekBar = (SeekBar) dialogView.findViewById(R.id.importance_seek_bar);
+            fearTV = (TextView) dialogView.findViewById(R.id.fear_text_view);
+            SeekBar fearSeekBar = (SeekBar) dialogView.findViewById(R.id.fear_seek_bar);
+
+            updateDifficulty(AddTaskFragment.this.difficulty);
+            updateImportance(AddTaskFragment.this.importance);
+            updateFear(AddTaskFragment.this.fear);
+
+            difficultySeekBar.setProgress(difficulty);
+            importanceSeekBar.setProgress(importance);
+            fearSeekBar.setProgress(fear);
+
+            difficultySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    updateDifficulty(progress);
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {}
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
+
+            importanceSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    updateImportance(progress);
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {}
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
+
+            fearSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    updateFear(progress);
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {}
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            return builder.setView(dialogView)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            AddTaskFragment.this.difficulty = difficulty;
+                            AddTaskFragment.this.importance = importance;
+                            AddTaskFragment.this.fear = fear;
+                            updateDifficultyImportanceFearView();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .create();
+        }
+
+        private void updateTotalXP() {
+            double totalXP = getController().getHero().getBaseXP()
+                    * Task.getMultiplierByFormula(difficulty, importance, fear);
+            DecimalFormat df = new DecimalFormat("#.##");
+            totalXPTextView.setText("+ " + df.format(totalXP) + " " + getString(R.string.XP_mult));
+        }
+
+        private void updateDifficulty(int progress) {
+            difficulty = progress;
+            difficultyTV.setText(getString(R.string.difficulty) + " " + difficulty + "%");
+            updateTotalXP();
+        }
+
+        private void updateImportance(int progress) {
+            importance = progress;
+            importanceTV.setText(getString(R.string.importance) + " " + importance + "%");
+            updateTotalXP();
+        }
+
+        private void updateFear(int progress) {
+            fear = progress;
+            fearTV.setText(getString(R.string.fear) + " " + fear + "%");
+            updateTotalXP();
         }
     }
 }

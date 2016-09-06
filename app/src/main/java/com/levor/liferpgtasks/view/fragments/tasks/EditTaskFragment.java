@@ -44,6 +44,7 @@ public class EditTaskFragment extends AddTaskFragment {
             repeatIndex = currentTask.getRepeatIndex();
             difficulty = currentTask.getDifficulty();
             importance = currentTask.getImportance();
+            fear = currentTask.getFear();
             notifyDelta = currentTask.getNotifyDelta();
             habitdays = currentTask.getHabitDays();
             habitdaysLeft = currentTask.getHabitDaysLeft();
@@ -185,6 +186,7 @@ public class EditTaskFragment extends AddTaskFragment {
         currentTask.setRepeatIndex(repeatIndex);
         currentTask.setDifficulty(difficulty);
         currentTask.setImportance(importance);
+        currentTask.setFear(fear);
         currentTask.setNotifyDelta(notifyDelta);
         currentTask.setHabitDays(habitdays);
         currentTask.setHabitDaysLeft(habitdaysLeft);

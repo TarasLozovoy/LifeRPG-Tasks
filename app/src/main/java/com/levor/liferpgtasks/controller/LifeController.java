@@ -929,4 +929,28 @@ public class LifeController {
         currentActivity.switchToRootFragment(MainActivity.SETTINGS_FRAGMENT_ID);
         currentActivity.showChildFragment(new DonationFragment(), null);
     }
+
+    //temporary, for 1 version///////////////////////////
+    private static final String SELECTED_ICON_INFO_SELECTED_TAG = "selected_icon_info_selected";
+    public void gatherSelectedForAvatarImage() {
+        if (!getSharedPreferences().getBoolean(SELECTED_ICON_INFO_SELECTED_TAG, false)) {
+            getSharedPreferences().edit().putBoolean(SELECTED_ICON_INFO_SELECTED_TAG, true).apply();
+            if (Misc.HERO_IMAGE_MODE == Misc.ASSETS_ICON) {
+                getGATracker().send(new HitBuilders.EventBuilder()
+                        .setCategory("Investigation")
+                        .setAction(Misc.HERO_IMAGE_PATH)
+                        .setValue(1)
+                        .build());
+            }
+        }
+    }
+
+    public void onHeroImageUpdatedFromAssets() {
+        getGATracker().send(new HitBuilders.EventBuilder()
+                .setCategory("Investigation")
+                .setAction(Misc.HERO_IMAGE_PATH)
+                .setValue(1)
+                .build());
+    }
+    /////////////////////////////////////////////////////
 }

@@ -44,6 +44,7 @@ public class DataBaseSchema {
             public static final String REPEATABILITY = "task_repeatability";
             public static final String DIFFICULTY = "task_difficulty";
             public static final String IMPORTANCE = "task_importance";
+            public static final String FEAR = "task_fear";
             public static final String DATE = "task_date";
             public static final String FINISH_DATE = "task_finish_date";
             public static final String NOTIFY = "task_notify";

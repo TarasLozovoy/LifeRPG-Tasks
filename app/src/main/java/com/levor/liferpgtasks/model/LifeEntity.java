@@ -10,7 +10,13 @@ import android.os.AsyncTask;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.dataBase.CharacteristicsCursorWrapper;
 import com.levor.liferpgtasks.dataBase.DataBaseHelper;
-import com.levor.liferpgtasks.dataBase.DataBaseSchema.*;
+import com.levor.liferpgtasks.dataBase.DataBaseSchema.CharacteristicsTable;
+import com.levor.liferpgtasks.dataBase.DataBaseSchema.HeroTable;
+import com.levor.liferpgtasks.dataBase.DataBaseSchema.MiscTable;
+import com.levor.liferpgtasks.dataBase.DataBaseSchema.RewardsTable;
+import com.levor.liferpgtasks.dataBase.DataBaseSchema.SkillsTable;
+import com.levor.liferpgtasks.dataBase.DataBaseSchema.TasksPerDayTable;
+import com.levor.liferpgtasks.dataBase.DataBaseSchema.TasksTable;
 import com.levor.liferpgtasks.dataBase.HeroCursorWrapper;
 import com.levor.liferpgtasks.dataBase.MiscCursorWrapper;
 import com.levor.liferpgtasks.dataBase.RewardsCursorWrapper;
@@ -31,6 +37,7 @@ import java.util.UUID;
 
 public class LifeEntity {
     private SQLiteDatabase database;
+    private DataBaseHelper dataBaseHelper;
 
     private static LifeEntity lifeEntity;
 
@@ -70,6 +77,8 @@ public class LifeEntity {
         skills = getSkills();
         tasks = getTasks();
         rewards = getRewards();
+
+        onDBUpgraded(dataBaseHelper.getUpgradedFromVersion());
 
         for (Characteristic ch : characteristics) {
             if (ch.isUpdateNeeded()) {
@@ -135,8 +144,8 @@ public class LifeEntity {
         task1.setRepeatability(-1);
         task1.setRepeatMode(Task.RepeatMode.EVERY_NTH_DAY);
         task1.setRepeatIndex(1);
-        task1.setDifficulty(Task.LOW);
-        task1.setImportance(Task.LOW);
+        task1.setDifficulty(25);
+        task1.setImportance(25);
         task1.setNotifyDelta(-1);
         task1.addRelatedSkill(getSkillByTitle(context.getString(R.string.erudition)), true);
         task1.setMoneyReward(5);
@@ -147,8 +156,8 @@ public class LifeEntity {
         task2.setRepeatability(1);
         task2.setRepeatMode(Task.RepeatMode.SIMPLE_REPEAT);
         task2.setRepeatIndex(1);
-        task2.setDifficulty(Task.MEDIUM);
-        task2.setImportance(Task.MEDIUM);
+        task2.setDifficulty(50);
+        task2.setImportance(50);
         task2.setNotifyDelta(-1);
         task2.addRelatedSkill(getSkillByTitle(context.getString(R.string.spanish)), true);
         task2.setMoneyReward(5);
@@ -159,8 +168,8 @@ public class LifeEntity {
         task3.setRepeatability(1);
         task3.setRepeatMode(Task.RepeatMode.SIMPLE_REPEAT);
         task3.setRepeatIndex(1);
-        task3.setDifficulty(Task.HIGH);
-        task3.setImportance(Task.HIGH);
+        task3.setDifficulty(75);
+        task3.setImportance(75);
         task3.setNotifyDelta(-1);
         task3.addRelatedSkill(getSkillByTitle(context.getString(R.string.powerlifting)), true);
         task3.setMoneyReward(5);
@@ -171,8 +180,9 @@ public class LifeEntity {
         task4.setRepeatability(-1);
         task4.setRepeatMode(Task.RepeatMode.EVERY_NTH_DAY);
         task4.setRepeatIndex(1);
-        task4.setDifficulty(Task.INSANE);
-        task4.setImportance(Task.INSANE);
+        task4.setDifficulty(100);
+        task4.setImportance(100);
+        task4.setFear(50);
         task4.setNotifyDelta(-1);
         task4.addRelatedSkill(getSkillByTitle(context.getString(R.string.running)), true);
         task4.setMoneyReward(5);
@@ -314,6 +324,7 @@ public class LifeEntity {
         values.put(TasksTable.Cols.REPEATABILITY, task.getRepeatability());
         values.put(TasksTable.Cols.DIFFICULTY, task.getDifficulty());
         values.put(TasksTable.Cols.IMPORTANCE, task.getImportance());
+        values.put(TasksTable.Cols.FEAR, task.getFear());
         values.put(TasksTable.Cols.DATE, task.getDate().getTime());
         values.put(TasksTable.Cols.NOTIFY, task.getNotifyDelta());
         values.put(TasksTable.Cols.RELATED_SKILLS, task.getRelatedSkillsString());
@@ -758,7 +769,24 @@ public class LifeEntity {
         if (database != null && !database.isOpen()){
             database.close();
         }
-        database = new DataBaseHelper(context.getApplicationContext()).getWritableDatabase();
+        dataBaseHelper = new DataBaseHelper(context.getApplicationContext());
+        database = dataBaseHelper.getWritableDatabase();
+    }
+
+    private void onDBUpgraded(int fromVersion) {
+        switch (fromVersion) {
+            case 10:
+                List<Task> tasks = new ArrayList<>();
+                tasks.addAll(getTasks());
+                for (Task t : tasks) {
+                    int importance = 25 + 25 * t.getImportance();
+                    int difficulty = 25 + 25 * t.getDifficulty();
+                    t.setImportance(importance > 100 ? 100 : importance);
+                    t.setDifficulty(difficulty > 100 ? 100 : difficulty);
+                    updateTask(t);
+                }
+                break;
+        }
     }
 
     public void onDBFileUpdated(boolean isFileDeleted){

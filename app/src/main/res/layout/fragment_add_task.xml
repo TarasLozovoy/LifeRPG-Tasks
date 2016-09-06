@@ -92,41 +92,80 @@
         <View style="@style/HorizontalDivider" />
 
         <LinearLayout
-            android:id="@+id/difficulty_layout"
+            android:id="@+id/difficulty_importance_fear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_difficulty_black_24dp" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/difficulty_text_view"
-                style="@style/LifeRPGTextInListStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
 
-        <View style="@style/HorizontalDivider" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/importance_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_difficulty_black_24dp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/difficulty_text_view"
+                        style="@style/LifeRPGTextInListStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/total_xp_text_view"
+                    style="@style/LifeRPGTextInListStyleSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end|center_vertical" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_importance_black_24dp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/importance_text_view"
-                style="@style/LifeRPGTextInListStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_importance_black_24dp" />
+
+                <TextView
+                    android:id="@+id/importance_text_view"
+                    style="@style/LifeRPGTextInListStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/fear" />
+
+                <TextView
+                    android:id="@+id/fear_text_view"
+                    style="@style/LifeRPGTextInListStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <View style="@style/HorizontalDivider" />
@@ -135,8 +174,9 @@
             android:id="@+id/money_reward_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_marginLeft="24dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/money_reward_text_view"

@@ -100,13 +100,13 @@ public class Skill implements Comparable<Skill> {
      */
     public boolean increaseSublevel(double value){
         sublevel += value;
-        if (sublevel >= ((double)level)){
+        while (sublevel >= ((double)level)){
             sublevel = sublevel - ((double) level);
             level++;
             for (Characteristic ch : getKeyCharacteristicsList()) {
                 ch.increaseLevelByN(getKeyCharacteristicsGrowth());
             }
-            return true;
+            if (sublevel <(double)level) { return true; }
         }
         return false;
     }
@@ -116,14 +116,17 @@ public class Skill implements Comparable<Skill> {
      */
     public boolean decreaseSublevel(double value){
         sublevel -= value;
-        if (sublevel < 0.0d && level > 1) {
+        while (sublevel < 0.0d && level > 1) {
             for (Characteristic ch : getKeyCharacteristicsList()) {
                 ch.increaseLevelByN(-getKeyCharacteristicsGrowth());
             }
             level --;
             sublevel = ((double) level) + sublevel;
-            if (sublevel < 0) { sublevel = 0; }
-            return true;
+            if (sublevel < 0 && level <= 1) {
+                sublevel = 0;
+                level = 1;
+            }
+            if (sublevel > 0.0d) { return true; }
         }
         if (sublevel < 0) { sublevel = 0; }
         return false;

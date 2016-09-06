@@ -30,6 +30,7 @@ public class Task {
     private int repeatIndex = 1;
     private int difficulty = LOW;
     private int importance = LOW;
+    private int fear = LOW;
     private Date date;
     private Date finishDate;    //used for finished tasks that can be undone
     private int dateMode = DateMode.TERMLESS;
@@ -50,6 +51,8 @@ public class Task {
     public static final Comparator<Task> IMPORTANCE_DESC_TASKS_COMPARATOR = new ImportanceDescTasksComparator();
     public static final Comparator<Task> DIFFICULTY_ASC_TASKS_COMPARATOR = new DifficultyAscTasksComparator();
     public static final Comparator<Task> DIFFICULTY_DESC_TASKS_COMPARATOR = new DifficultyDescTasksComparator();
+    public static final Comparator<Task> FEAR_ASC_TASKS_COMPARATOR = new FearAscTasksComparator();
+    public static final Comparator<Task> FEAR_DESC_TASKS_COMPARATOR = new FearDescTasksComparator();
     public static final Comparator<Task> DATE_ASC_TASKS_COMPARATOR = new DateAscTasksComparator();
     public static final Comparator<Task> DATE_DESC_TASKS_COMPARATOR = new DateDescTasksComparator();
 
@@ -165,6 +168,14 @@ public class Task {
 
     public void setImportance(int importance) {
         this.importance = importance;
+    }
+
+    public int getFear() {
+        return fear;
+    }
+
+    public void setFear(int fear) {
+        this.fear = fear;
     }
 
     public Date getNotificationDate() {
@@ -307,7 +318,14 @@ public class Task {
     }
 
     public double getMultiplier(){
-        return (1 + (0.25 * difficulty) + (0.25 * importance));
+        return getMultiplierByFormula(difficulty, importance, fear);
+    }
+
+    public static double getMultiplierByFormula(int difficulty, int importance, int fear) {
+        float m1 = difficulty / 100f;
+        float m2 = importance / 100f;
+        float m3 = fear / 100f;
+        return (m1 + m2 + m3 + 2*m1*m2 + 2*m1*m3 + 2*m2*m3 + 3*m1*m2*m3);
     }
 
     public double getShareMultiplier(){
@@ -452,6 +470,8 @@ public class Task {
         public static final int DIFFICULTY_DESC = 6;
         public static final int DATE_ASC = 7;
         public static final int DATE_DESC = 8;
+        public static final int FEAR_ASC = 9;
+        public static final int FEAR_DESC = 10;
     }
 
     public static class DateMode {
@@ -564,6 +584,36 @@ public class Task {
             }
             if (lhs.getDifficulty() != rhs.getDifficulty()){
                 return rhs.getDifficulty() - lhs.getDifficulty();
+            }
+            return rhs.getTitle().compareTo(lhs.getTitle());
+        }
+    }
+
+    private static class FearAscTasksComparator implements Comparator<Task> {
+
+        @Override
+        public int compare(Task lhs, Task rhs) {
+            if (lhs.repeatability != rhs.repeatability) {
+                if (lhs.repeatability == 0) return 1;
+                if (rhs.repeatability == 0) return -1;
+            }
+            if (lhs.getFear() != rhs.getFear()){
+                return lhs.getFear() - rhs.getFear();
+            }
+            return rhs.getTitle().compareTo(lhs.getTitle());
+        }
+    }
+
+    private static class FearDescTasksComparator implements Comparator<Task> {
+
+        @Override
+        public int compare(Task lhs, Task rhs) {
+            if (lhs.repeatability != rhs.repeatability) {
+                if (lhs.repeatability == 0) return 1;
+                if (rhs.repeatability == 0) return -1;
+            }
+            if (lhs.getFear() != rhs.getFear()){
+                return rhs.getFear() - lhs.getFear();
             }
             return rhs.getTitle().compareTo(lhs.getTitle());
         }

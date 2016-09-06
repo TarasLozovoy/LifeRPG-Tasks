@@ -47,8 +47,10 @@ public class DetailedTaskFragment extends DataDependantFrament {
     private View header;
 
     @Bind(R.id.task_title)                          TextView taskTitleTV;
+    @Bind(R.id.total_xp_text_view)                  TextView totalXPTV;
     @Bind(R.id.task_difficulty_text_view)           TextView taskDifficultyTV;
     @Bind(R.id.task_importance_text_view)           TextView taskImportanceTV;
+    @Bind(R.id.task_fear_text_view)                 TextView taskFearTV;
     @Bind(R.id.habit_generation_text_view)          TextView habitGenerationTV;
     @Bind(R.id.task_repeat_times_text_view)         TextView taskRepeatTV;
     @Bind(R.id.task_date_text_view)                 TextView taskDateTV;
@@ -77,16 +79,22 @@ public class DetailedTaskFragment extends DataDependantFrament {
         String moneyReward = getString(R.string.money_reward) + " " + (int)currentTask.getMoneyReward();
         taskRewardTV.setText(moneyReward);
 
+        //setup total xp for task execution
+        DecimalFormat df = new DecimalFormat("#.##");
+        totalXPTV.setText("+ " + df.format(getController().getHero().getBaseXP()
+                * currentTask.getMultiplier()) + " " + getString(R.string.XP_mult));
+
         //setup difficulty TextView
-        int difficulty = currentTask.getDifficulty();
-        String difficultyString = getString(R.string.difficulty) + " " +
-                Arrays.asList(getResources().getStringArray(R.array.difficulties_array)).get(difficulty);
+        String difficultyString = getString(R.string.difficulty) + " " + currentTask.getDifficulty() + "%";
         taskDifficultyTV.setText(difficultyString);
 
         //setup importance TextView
-        String importanceString = getString(R.string.importance) + " " +
-                Arrays.asList(getResources().getStringArray(R.array.importance_array)).get(currentTask.getImportance());
+        String importanceString = getString(R.string.importance) + " " + currentTask.getImportance() + "%";
         taskImportanceTV.setText(importanceString);
+
+        //setup fear TextView
+        String fearString = getString(R.string.fear) + " " + currentTask.getFear() + "%";
+        taskFearTV.setText(fearString);
 
         //setup repeatability TextView
         setupRepeatability();

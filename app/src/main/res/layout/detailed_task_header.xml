@@ -72,11 +72,19 @@
         android:visibility="gone" />
 
     <TextView
-        android:id="@+id/task_difficulty_text_view"
+        android:id="@+id/total_xp_text_view"
         style="@style/LifeRPGTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/habit_generation_text_view"
+        android:layout_marginBottom="3dp" />
+
+    <TextView
+        android:id="@+id/task_difficulty_text_view"
+        style="@style/LifeRPGTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/total_xp_text_view"
         android:layout_marginBottom="3dp" />
 
     <TextView
@@ -86,13 +94,20 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/task_difficulty_text_view"
         android:layout_marginBottom="3dp" />
+    <TextView
+        android:id="@+id/task_fear_text_view"
+        style="@style/LifeRPGTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/task_importance_text_view"
+        android:layout_marginBottom="3dp" />
 
     <TextView
         android:id="@+id/number_of_executions_text_view"
         style="@style/LifeRPGTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/task_importance_text_view"
+        android:layout_below="@id/task_fear_text_view"
         android:layout_marginBottom="3dp" />
 
     <TextView
