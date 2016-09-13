@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,12 +14,12 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.Utils.TextUtils;
 import com.levor.liferpgtasks.adapters.RewardsAdapter;
 import com.levor.liferpgtasks.controller.RewardsController;
 import com.levor.liferpgtasks.model.Reward;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,6 +30,9 @@ public class FilteredRewardsFragment extends DefaultFragment {
 
     public static final int NEW = 0;
     public static final int CLAIMED = 1;
+    private static final int UNDO_CONTEXT_MENU_ITEM = 0;
+    private static final int EDIT_CONTEXT_MENU_ITEM = 1;
+    private static final int DELETE_CONTEXT_MENU_ITEM = 2;
 
     private RewardsController rewardsController;
 
@@ -46,7 +50,7 @@ public class FilteredRewardsFragment extends DefaultFragment {
 
         View view = inflater.inflate(R.layout.fragment_filtered_list, container, false);
         filter = getArguments().getInt(FILTER_ARG);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewTasks);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         emptyList = (TextView) view.findViewById(R.id.empty_list);
         moneyTextView = (TextView) view.findViewById(R.id.money);
         moneyView =  view.findViewById(R.id.money_layout);
@@ -102,6 +106,68 @@ public class FilteredRewardsFragment extends DefaultFragment {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (recyclerView != null) {
+            unregisterForContextMenu(recyclerView);
+        }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.recycler_view) {
+            int selectedIndex = ((RewardsAdapter) recyclerView.getAdapter()).getPosition();
+            String selectedTitle = sortedRewardsTitles.get(selectedIndex);
+            Reward reward = rewardsController.getRewardByTitle(selectedTitle);
+            menu.setHeaderTitle(selectedTitle);
+            if (reward.isDone()) {
+                menu.add(filter, UNDO_CONTEXT_MENU_ITEM, UNDO_CONTEXT_MENU_ITEM, R.string.undo);
+            }
+            menu.add(filter, EDIT_CONTEXT_MENU_ITEM, EDIT_CONTEXT_MENU_ITEM, R.string.edit_task);
+            menu.add(filter, DELETE_CONTEXT_MENU_ITEM, DELETE_CONTEXT_MENU_ITEM, R.string.remove);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getGroupId() == filter) {
+            int selectedIndex = ((RewardsAdapter) recyclerView.getAdapter()).getPosition();
+            String selectedTitle = sortedRewardsTitles.get(selectedIndex);
+            final Reward reward = rewardsController.getRewardByTitle(selectedTitle);
+
+            int menuItemIndex = item.getItemId();
+            switch (menuItemIndex) {
+                case UNDO_CONTEXT_MENU_ITEM:
+                    rewardsController.unclaim(reward);
+                    updateFilteredFragmentsUI();
+                    return true;
+                case EDIT_CONTEXT_MENU_ITEM:
+                    DefaultFragment f = new EditRewardFragment();
+                    Bundle b = new Bundle();
+                    b.putSerializable(EditRewardFragment.CURRENT_REWARD_UUID_TAG, reward.getId());
+                    getCurrentActivity().showChildFragment(f, b);
+                    return true;
+                case DELETE_CONTEXT_MENU_ITEM:
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    alert.setTitle(reward.getTitle())
+                            .setMessage(getString(R.string.removing_reward_message))
+                            .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    rewardsController.removeReward(reward);
+                                    dialog.dismiss();
+                                    updateFilteredFragmentsUI();
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.no), null)
+                            .show();
+                    return true;
+            }
+        }
+        return false;
+    }
+
     private void setupListView() {
         List<Reward> rewards = rewardsController.getAllRewards();
         Comparator<Reward> comparator = null;
@@ -149,8 +215,7 @@ public class FilteredRewardsFragment extends DefaultFragment {
             });
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//            registerForContextMenu(recyclerView);
-            // TODO: 8/22/16 add context menu
+            registerForContextMenu(recyclerView);
         }
     }
 
@@ -158,8 +223,7 @@ public class FilteredRewardsFragment extends DefaultFragment {
         if (filter == NEW) {
             moneyView.setVisibility(View.VISIBLE);
             double money = getController().getHero().getMoney();
-            DecimalFormat df = new DecimalFormat("#.##");
-            String moneyString = getString(R.string.total) + " " + df.format(money);
+            String moneyString = getString(R.string.total) + " " + TextUtils.DECIMAL_FORMAT.format(money);
             moneyTextView.setText(moneyString);
         } else {
             moneyView.setVisibility(View.GONE);

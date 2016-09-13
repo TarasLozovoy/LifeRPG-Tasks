@@ -52,7 +52,7 @@ public class FilteredTasksFragment extends DefaultFragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_filtered_list, container, false);
         filter = getArguments().getInt(FILTER_ARG);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewTasks);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         emptyList = (TextView) view.findViewById(R.id.empty_list);
         if (filter == DONE) {
             emptyList.setText(R.string.empty_done_list_view);
@@ -125,12 +125,13 @@ public class FilteredTasksFragment extends DefaultFragment{
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        if (v.getId() == R.id.recyclerViewTasks){
+        if (v.getId() == R.id.recycler_view){
             String selectedTitle = sortedTasksTitles.get(((TasksAdapter) recyclerView.getAdapter()).getPosition());
             Task selectedTask = getController().getTaskByTitle(selectedTitle);
             menu.setHeaderTitle(selectedTitle);
-            menu.add(filter, UNDO_CONTEXT_MENU_ITEM, UNDO_CONTEXT_MENU_ITEM, R.string.undo)
-                    .setEnabled(selectedTask.isUndonable());
+            if (selectedTask.isUndonable()) {
+                menu.add(filter, UNDO_CONTEXT_MENU_ITEM, UNDO_CONTEXT_MENU_ITEM, R.string.undo);
+            }
             menu.add(filter, EDIT_CONTEXT_MENU_ITEM, EDIT_CONTEXT_MENU_ITEM, R.string.edit_task);
             menu.add(filter, DELETE_CONTEXT_MENU_ITEM, DELETE_CONTEXT_MENU_ITEM, R.string.remove);
         }
@@ -156,7 +157,7 @@ public class FilteredTasksFragment extends DefaultFragment{
                     return true;
                 case DELETE_CONTEXT_MENU_ITEM:
                     AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                    alert.setTitle(getString(R.string.removing) + " " + currentTask.getTitle())
+                    alert.setTitle(currentTask.getTitle())
                             .setMessage(getString(R.string.removing_task_description))
                             .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                                 @Override
@@ -166,12 +167,7 @@ public class FilteredTasksFragment extends DefaultFragment{
                                     updateFilteredFragmentsUI();
                                 }
                             })
-                            .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
+                            .setNegativeButton(getString(R.string.no), null)
                             .show();
                     return true;
             }

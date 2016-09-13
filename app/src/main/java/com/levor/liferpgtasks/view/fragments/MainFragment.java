@@ -24,6 +24,10 @@ import com.levor.liferpgtasks.view.fragments.skills.AddSkillFragment;
 import com.levor.liferpgtasks.view.fragments.skills.SkillsFragment;
 
 public class MainFragment extends DefaultFragment{
+    public static final int HERO_FRAGMENT_ID = 0;
+    public static final int CHARACTERISTICS_FRAGMENT_ID = 1;
+    public static final int SKILLS_FRAGMENT_ID = 2;
+
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private FloatingActionButton fab;
@@ -82,7 +86,7 @@ public class MainFragment extends DefaultFragment{
     public void setupFab(int selectedFragment) {
         fab.show();
         switch (selectedFragment) {
-            case 0:
+            case HERO_FRAGMENT_ID:
                 fab.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_mode_edit_black_24dp));
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -91,7 +95,7 @@ public class MainFragment extends DefaultFragment{
                     }
                 });
                 break;
-            case 1:
+            case CHARACTERISTICS_FRAGMENT_ID:
                 fab.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_add_black_24dp));
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -100,7 +104,7 @@ public class MainFragment extends DefaultFragment{
                     }
                 });
                 break;
-            case 2:
+            case SKILLS_FRAGMENT_ID:
                 fab.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_add_black_24dp));
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -145,11 +149,11 @@ public class MainFragment extends DefaultFragment{
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0:
+                case HERO_FRAGMENT_ID:
                     return new HeroFragment();
-                case 1:
+                case CHARACTERISTICS_FRAGMENT_ID:
                     return new CharacteristicsFragment();
-                case 2:
+                case SKILLS_FRAGMENT_ID:
                     return new SkillsFragment();
                 default:
                     return null;

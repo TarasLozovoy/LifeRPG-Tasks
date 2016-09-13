@@ -90,7 +90,7 @@ public class TasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             itemHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    setPosition(itemHolder.getPosition());
+                    setPosition(itemHolder.getAdapterPosition());
                     return false;
                 }
             });

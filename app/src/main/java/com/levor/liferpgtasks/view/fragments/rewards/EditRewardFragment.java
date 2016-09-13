@@ -25,7 +25,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class EditRewardFragment extends DataDependantFrament {
-    public static String CURRENT_REWARD_TAG = "current_reward_tag";
+    public static String CURRENT_REWARD_UUID_TAG = "current_reward_tag";
 
     private Reward currentReward;
     private RewardsController rewardsController;
@@ -45,7 +45,7 @@ public class EditRewardFragment extends DataDependantFrament {
         rewardsController = RewardsController.getInstance(getCurrentActivity());
 
         if (getArguments() != null) {
-            currentReward = rewardsController.getRewardByID((UUID) getArguments().get(CURRENT_REWARD_TAG));
+            currentReward = rewardsController.getRewardByID((UUID) getArguments().get(CURRENT_REWARD_UUID_TAG));
             titleEditText.setText(currentReward.getTitle());
             descriptionEditText.setText(currentReward.getDescription());
             costEditText.setText(String.valueOf(currentReward.getCost()));
@@ -176,7 +176,7 @@ public class EditRewardFragment extends DataDependantFrament {
     @Override
     public boolean isDependableDataAvailable() {
         if (getArguments() == null) return false;
-        UUID id = (UUID)getArguments().get(CURRENT_REWARD_TAG);
+        UUID id = (UUID)getArguments().get(CURRENT_REWARD_UUID_TAG);
         Reward reward = RewardsController.getInstance(getCurrentActivity()).getRewardByID(id);
         return reward != null;
     }

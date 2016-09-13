@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.levor.liferpgtasks.Utils.TextUtils;
 import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 import com.levor.liferpgtasks.adapters.SimpleRecyclerAdapter;
 import com.levor.liferpgtasks.model.Skill;
@@ -28,11 +30,13 @@ import com.levor.liferpgtasks.view.PerformTaskAlertBuilder;
 import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import com.levor.liferpgtasks.view.fragments.skills.DetailedSkillFragment;
+import com.levor.liferpgtasks.view.fragments.skills.EditSkillFragment;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -41,8 +45,12 @@ import butterknife.ButterKnife;
 
 public class DetailedTaskFragment extends DataDependantFrament {
     public final static String SELECTED_TASK_UUID_TAG = "selected_task_uuid_tag";
+    private static final int EDIT_CONTEXT_MENU_ITEM = 1;
+    private static final int DELETE_CONTEXT_MENU_ITEM = 2;
 
     private Task currentTask;
+    private List<String> skillsTitles;
+
     private RecyclerView recyclerView;
     private View header;
 
@@ -80,8 +88,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
         taskRewardTV.setText(moneyReward);
 
         //setup total xp for task execution
-        DecimalFormat df = new DecimalFormat("#.##");
-        totalXPTV.setText("+ " + df.format(getController().getHero().getBaseXP()
+        totalXPTV.setText("+ " + TextUtils.DECIMAL_FORMAT.format(getController().getHero().getBaseXP()
                 * currentTask.getMultiplier()) + " " + getString(R.string.XP_mult));
 
         //setup difficulty TextView
@@ -171,6 +178,60 @@ public class DetailedTaskFragment extends DataDependantFrament {
     public void onResume() {
         super.onResume();
         getController().sendScreenNameToAnalytics("Detailed Task Fragment");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (recyclerView != null) {
+            unregisterForContextMenu(recyclerView);
+        }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        if (v.getId() == R.id.recycler_view) {
+            int selectedIndex = ((SimpleRecyclerAdapter) recyclerView.getAdapter()).getPosition();
+            String selectedTitle = skillsTitles.get(selectedIndex).substring(1)
+                    .split(TextUtils.HYPHEN_DIVIDER)[0];
+            menu.setHeaderTitle(selectedTitle);
+            menu.add(0, EDIT_CONTEXT_MENU_ITEM, EDIT_CONTEXT_MENU_ITEM, R.string.edit_task);
+            menu.add(0, DELETE_CONTEXT_MENU_ITEM, DELETE_CONTEXT_MENU_ITEM, R.string.remove);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int selectedIndex = ((SimpleRecyclerAdapter) recyclerView.getAdapter()).getPosition();
+        String selectedTitle = skillsTitles.get(selectedIndex).substring(1)
+                .split(TextUtils.HYPHEN_DIVIDER)[0];
+        final Skill skill = getController().getSkillByTitle(selectedTitle);
+
+        int menuItemIndex = item.getItemId();
+        switch (menuItemIndex) {
+            case EDIT_CONTEXT_MENU_ITEM:
+                DefaultFragment f = new EditSkillFragment();
+                Bundle b = new Bundle();
+                b.putSerializable(EditSkillFragment.EDIT_SKILL_UUID_TAG, skill.getId());
+                getCurrentActivity().showChildFragment(f, b);
+                return true;
+            case DELETE_CONTEXT_MENU_ITEM:
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setTitle(skill.getTitle())
+                        .setMessage(getString(R.string.removing_skill_message))
+                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                getController().removeSkill(skill);
+                                dialog.dismiss();
+                                setupRecyclerView();
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.no), null)
+                        .show();
+                return true;
+        }
+        return false;
     }
 
     private void setupTaskDate() {
@@ -337,18 +398,17 @@ public class DetailedTaskFragment extends DataDependantFrament {
     }
 
     private void setupRecyclerView(){
-        ArrayList<String> skills = new ArrayList<>();
+        skillsTitles = new ArrayList<>();
         for (Map.Entry<Skill, Boolean> pair : currentTask.getRelatedSkillsMap().entrySet()) {
             Skill sk = pair.getKey();
             boolean increaseSkill = pair.getValue();
             if (sk == null) continue;
-            DecimalFormat df = new DecimalFormat("#.##");
-            skills.add((increaseSkill ? "+" : "-") +
-                    sk.getTitle() + " - " + sk.getLevel() + "(" + df.format(sk.getSublevel()) + ")");
+            skillsTitles.add((increaseSkill ? "+" : "-") +
+                    sk.getTitle() + TextUtils.HYPHEN_DIVIDER + sk.getLevel() + "(" + TextUtils.DECIMAL_FORMAT.format(sk.getSublevel()) + ")");
         }
-        noRelatedSkillsTV.setVisibility(skills.isEmpty() ? View.VISIBLE : View.GONE);
+        noRelatedSkillsTV.setVisibility(skillsTitles.isEmpty() ? View.VISIBLE : View.GONE);
 
-        SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter(skills, getCurrentActivity());
+        SimpleRecyclerAdapter adapter = new SimpleRecyclerAdapter(skillsTitles, getCurrentActivity());
         adapter.registerOnItemClickListener(new SimpleRecyclerAdapter.OnRecycleItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -362,6 +422,7 @@ public class DetailedTaskFragment extends DataDependantFrament {
         adapter.setHeader(header);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getCurrentActivity()));
+        registerForContextMenu(recyclerView);
     }
 
     private void showSkipDialog() {

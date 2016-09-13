@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.Utils.TextUtils;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 import java.text.DecimalFormat;
@@ -49,7 +50,7 @@ public class HeroFragment extends DefaultFragment {
     public void updateUI() {
         xpProgress.setMax((int) getController().getHeroXpToNextLevel());
         xpProgress.setProgress((int) getController().getHeroXp());
-        DecimalFormat df = new DecimalFormat("#.##");
+        DecimalFormat df = TextUtils.DECIMAL_FORMAT;
         String xpString = getString(R.string.XP) + " : " + df.format(getController().getHeroXp()) +
                 "/" + df.format(getController().getHeroXpToNextLevel());
         xpProgressTextView.setText(xpString);

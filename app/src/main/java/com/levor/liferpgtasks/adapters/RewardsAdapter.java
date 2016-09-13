@@ -66,7 +66,7 @@ public class RewardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ViewHolderItem) {
-            ViewHolderItem viewHolder = ((ViewHolderItem) holder);
+            final ViewHolderItem viewHolder = ((ViewHolderItem) holder);
             final Reward currentReward = items.get(position - 1);
             viewHolder.root.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -108,6 +108,14 @@ public class RewardsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     } else {
                         Toast.makeText(activity, R.string.insuficiend_funds_message, Toast.LENGTH_SHORT).show();
                     }
+                }
+            });
+
+            viewHolder.root.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    setPosition(viewHolder.getAdapterPosition());
+                    return false;
                 }
             });
         }

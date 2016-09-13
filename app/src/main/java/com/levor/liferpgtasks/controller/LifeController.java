@@ -19,6 +19,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.levor.liferpgtasks.AchievsList;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.Utils.TextUtils;
 import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 import com.levor.liferpgtasks.broadcastReceivers.TaskNotification;
 import com.levor.liferpgtasks.model.Characteristic;
@@ -81,8 +82,6 @@ public class LifeController {
     private List<Integer> achievementsLevels = new ArrayList<>();
     private Map<String, Float> statisticsNumbers = new LinkedHashMap<>();
     private String achievementsBuffer = "";
-
-    private static final String STAT_DIVIDER = " - ";
 
     private long dropboxBackupTimeout = 5000;
     private long dropboxBackupStartTime;
@@ -186,7 +185,7 @@ public class LifeController {
         List<Characteristic> characteristics = lifeEntity.getCharacteristics();
         ArrayList<String> strings = new ArrayList<>();
         for (Characteristic ch : characteristics){
-            strings.add(ch.getTitle() + " - " + ch.getLevel());
+            strings.add(ch.getTitle() + TextUtils.HYPHEN_DIVIDER + ch.getLevel());
         }
         return strings.toArray(new String[strings.size()]);
     }
@@ -583,7 +582,7 @@ public class LifeController {
 
     private void initStatistics(){
         if (Misc.STATISTICS_NUMBERS != null) {
-            String[] numbersArray = Misc.STATISTICS_NUMBERS.split(STAT_DIVIDER);
+            String[] numbersArray = Misc.STATISTICS_NUMBERS.split(TextUtils.HYPHEN_DIVIDER);
             List<Float> numbers = new ArrayList<>();
             for (String aNumbersArray : numbersArray) {
                 numbers.add(Float.parseFloat(aNumbersArray));
@@ -634,7 +633,7 @@ public class LifeController {
     private void updateStatisticsToMisc(){
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, Float> e : statisticsNumbers.entrySet()){
-            sb.append(e.getValue()).append(STAT_DIVIDER);
+            sb.append(e.getValue()).append(TextUtils.HYPHEN_DIVIDER);
         }
         sb.delete(sb.length() - 3, sb.length() - 1);
         Misc.STATISTICS_NUMBERS = sb.toString();

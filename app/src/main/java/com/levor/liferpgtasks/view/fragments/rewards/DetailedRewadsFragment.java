@@ -1,7 +1,6 @@
 package com.levor.liferpgtasks.view.fragments.rewards;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -53,7 +52,7 @@ public class DetailedRewadsFragment extends DataDependantFrament {
             @Override
             public void onClick(View v) {
                 Bundle b = new Bundle();
-                b.putSerializable(EditRewardFragment.CURRENT_REWARD_TAG, currentReward.getId());
+                b.putSerializable(EditRewardFragment.CURRENT_REWARD_UUID_TAG, currentReward.getId());
                 DefaultFragment f = new EditRewardFragment();
                 getCurrentActivity().showChildFragment(f, b);
             }

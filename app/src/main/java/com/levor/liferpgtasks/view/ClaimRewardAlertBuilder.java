@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.Utils.TextUtils;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.controller.RewardsController;
 import com.levor.liferpgtasks.model.Reward;
@@ -23,7 +24,7 @@ public class ClaimRewardAlertBuilder extends AlertDialog.Builder {
         TextView goldBeforeTextView = (TextView) dialogView.findViewById(R.id.gold_before);
         TextView goldAfterTextView = (TextView) dialogView.findViewById(R.id.gold_after);
 
-        DecimalFormat df = new DecimalFormat("#.##");
+        DecimalFormat df = TextUtils.DECIMAL_FORMAT;
         LifeController lifeController = LifeController.getInstance(context);
         goldBeforeTextView.setText(df.format(lifeController.getHero().getMoney()));
         RewardsController.getInstance(context).claimReward(r);

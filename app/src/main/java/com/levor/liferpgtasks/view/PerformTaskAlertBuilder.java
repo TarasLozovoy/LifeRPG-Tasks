@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.Utils.TextUtils;
 import com.levor.liferpgtasks.adapters.ShareDialogAdapter;
 import com.levor.liferpgtasks.controller.AudioController;
 import com.levor.liferpgtasks.controller.LifeController;
@@ -92,9 +93,8 @@ public class PerformTaskAlertBuilder extends AlertDialog.Builder {
 
         //gold
         if (t.getMoneyReward() > 0d) {
-            DecimalFormat df = new DecimalFormat("#.##");
             goldView.setVisibility(View.VISIBLE);
-            gainedGold.setText("+" + df.format(t.getMoneyReward()));
+            gainedGold.setText("+" + TextUtils.DECIMAL_FORMAT.format(t.getMoneyReward()));
         }
 
         //skills

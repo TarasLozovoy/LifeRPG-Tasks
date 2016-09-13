@@ -35,6 +35,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
+import com.levor.liferpgtasks.Utils.TextUtils;
 import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
@@ -707,16 +708,13 @@ public class AddTaskFragment extends DataDependantFrament {
         importanceTextView.setText(getString(R.string.importance) + " " + importance + "%");
         fearTextView.setText(getString(R.string.fear) + " " + + fear + "%");
 
-        DecimalFormat df = new DecimalFormat("#.##");
         double totalXP = getController().getHero().getBaseXP()
                 * Task.getMultiplierByFormula(difficulty, importance, fear);
-        totalXPTextView.setText("+ " +df.format(totalXP) + " " + getString(R.string.XP_mult));
+        totalXPTextView.setText("+ " + TextUtils.DECIMAL_FORMAT.format(totalXP) + " " + getString(R.string.XP_mult));
     }
 
     private void updateRewardView() {
-        DecimalFormat df = new DecimalFormat("#.##");
-        String rewardString = getString(R.string.money_reward) + " " +
-                df.format(moneyReward);
+        String rewardString = getString(R.string.money_reward) + " " + TextUtils.DECIMAL_FORMAT.format(moneyReward);
         moneyRewardTextView.setText(rewardString);
     }
 
@@ -1332,8 +1330,7 @@ public class AddTaskFragment extends DataDependantFrament {
         private void updateTotalXP() {
             double totalXP = getController().getHero().getBaseXP()
                     * Task.getMultiplierByFormula(difficulty, importance, fear);
-            DecimalFormat df = new DecimalFormat("#.##");
-            totalXPTextView.setText("+ " + df.format(totalXP) + " " + getString(R.string.XP_mult));
+            totalXPTextView.setText("+ " + TextUtils.DECIMAL_FORMAT.format(totalXP) + " " + getString(R.string.XP_mult));
         }
 
         private void updateDifficulty(int progress) {

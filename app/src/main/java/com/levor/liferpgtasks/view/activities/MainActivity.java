@@ -331,7 +331,6 @@ public class MainActivity extends BackUpActivity{
             }
             return;
         }
-        DefaultFragment currentFragment = getCurrentFragment();
         getCurrentFragmentsStack().pop();
         DefaultFragment fragment;
         try {
@@ -347,6 +346,7 @@ public class MainActivity extends BackUpActivity{
         if (fragment instanceof DataDependantFrament &&
                 !((DataDependantFrament)fragment).isDependableDataAvailable()){
             showPreviousFragment();
+            return;
         }
         getSupportFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.enter_left, R.anim.exit_right)
