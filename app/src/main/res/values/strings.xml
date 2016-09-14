@@ -346,8 +346,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="interstitial_perform_task_banner_ad_unit_id">ca-app-pub-3618933742218575/7397853043</string>
-    <string name="interstitial_chars_chart_banner_ad_unit_id">ca-app-pub-3618933742218575/2022189044</string>
-    <string name="interstitial_tasks_per_day_chart_banner_ad_unit_id">ca-app-pub-3618933742218575/6452388645</string>
     <string name="app_email">liferpgtasks@gmail.com</string>
     <string name="app_address_on_market">https://play.google.com/store/apps/details?id=com.levor.liferpgtasks</string>
     <string name="contact">Contact</string>

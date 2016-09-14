@@ -13,6 +13,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.IBinder;
@@ -33,6 +34,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.analytics.HitBuilders;
+import com.levor.liferpgtasks.Utils.BitmapUtils;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.model.Misc;
@@ -69,9 +71,7 @@ public class MainActivity extends BackUpActivity{
     private static final String SELECTED_FRAGMENT_TAG = "selected_fragment_tag";
     private static final String PREMIUM_BOUGHT_TAG = "premium_bought_tag";
 
-    InterstitialAd performTaskAd;
-    InterstitialAd charsChartAd;
-    InterstitialAd tasksChartAd;
+    InterstitialAd interstitialAd;
     private TabLayout navigationTabLayout;
     private TabLayout.Tab heroNavigationTab;
     private static Stack<DefaultFragment> mainFragmentsStack = new Stack<>();
@@ -469,24 +469,7 @@ public class MainActivity extends BackUpActivity{
                     return BitmapFactory.decodeStream(is);
                 case Misc.PHOTO_FROM_CAMERA:
                 case Misc.USER_IMAGE:
-                    File imageFile = new File(Misc.HERO_IMAGE_PATH);
-                    Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(imageFile));
-                    if (bitmap == null) throw new IOException();
-
-                    //resizing bitmap
-                    int width = bitmap.getWidth();
-                    int height = bitmap.getHeight();
-                    int maxSize = 750;
-
-                    float bitmapRatio = (float) width / (float) height;
-                    if (bitmapRatio > 1) {
-                        width = maxSize;
-                        height = (int) (width / bitmapRatio);
-                    } else {
-                        height = maxSize;
-                        width = (int) (height * bitmapRatio);
-                    }
-                    return Bitmap.createScaledBitmap(bitmap,width, height, true);
+                    return BitmapUtils.getScaledBitmap(Misc.HERO_IMAGE_PATH, 500);
             }
         } catch (IOException e) {
             resetHeroImage();
@@ -510,9 +493,8 @@ public class MainActivity extends BackUpActivity{
                     break;
                 case Misc.PHOTO_FROM_CAMERA:
                 case Misc.USER_IMAGE:
-                    File imageFile = new File(Misc.HERO_IMAGE_PATH);
-                    d = Drawable.createFromStream(new FileInputStream(imageFile), null);
-                    if (d == null) throw new IOException();
+                    Bitmap bitmap = BitmapUtils.getScaledBitmap(Misc.HERO_IMAGE_PATH, 48);
+                    d = new BitmapDrawable(getResources(), bitmap);
                     break;
             }
         } catch (IOException e) {
@@ -590,20 +572,10 @@ public class MainActivity extends BackUpActivity{
 
     private void setupInterstitialAds() {
         if(premium) return;
-        performTaskAd = new InterstitialAd(this);
-        performTaskAd.setAdUnitId(getString(R.string.interstitial_perform_task_banner_ad_unit_id));
-        performTaskAd.setAdListener(new CustomAdListener());
-        requestNewInterstitial(performTaskAd);
-
-        charsChartAd = new InterstitialAd(this);
-        charsChartAd.setAdUnitId(getString(R.string.interstitial_chars_chart_banner_ad_unit_id));
-        charsChartAd.setAdListener(new CustomAdListener());
-        requestNewInterstitial(charsChartAd);
-
-        tasksChartAd = new InterstitialAd(this);
-        tasksChartAd.setAdUnitId(getString(R.string.interstitial_tasks_per_day_chart_banner_ad_unit_id));
-        tasksChartAd.setAdListener(new CustomAdListener());
-        requestNewInterstitial(tasksChartAd);
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId(getString(R.string.interstitial_perform_task_banner_ad_unit_id));
+        interstitialAd.setAdListener(new CustomAdListener());
+        requestNewInterstitial(interstitialAd);
     }
 
     private void requestNewInterstitial(InterstitialAd ad) {
@@ -617,20 +589,17 @@ public class MainActivity extends BackUpActivity{
 
     public void showInterstitialAd(AdType type){
         if(premium) return;
-        InterstitialAd ad = null;
+        InterstitialAd ad = interstitialAd;
         int successShowRate = 0;
         switch (type) {
             case PERFORM_TASK:
                 successShowRate = 35;
-                ad = performTaskAd;
                 break;
             case CHARACTERISTICS_CHART:
                 successShowRate = 50;
-                ad = charsChartAd;
                 break;
             case TASKS_PER_DAY_CHART:
                 successShowRate = 50;
-                ad = tasksChartAd;
                 break;
         }
         if (ad == null) return;
@@ -811,12 +780,12 @@ public class MainActivity extends BackUpActivity{
         }
     }
 
-    public enum AdType { PERFORM_TASK, CHARACTERISTICS_CHART, TASKS_PER_DAY_CHART;}
+    public enum AdType { PERFORM_TASK, CHARACTERISTICS_CHART, TASKS_PER_DAY_CHART}
 
     private class CustomAdListener extends AdListener {
         @Override
         public void onAdClosed() {
-            requestNewInterstitial(tasksChartAd);
+            requestNewInterstitial(interstitialAd);
             lifeController.getGATracker().send(new HitBuilders.EventBuilder()
                     .setCategory(getString(R.string.GA_action))
                     .setAction(getString(R.string.GA_ad_shown))

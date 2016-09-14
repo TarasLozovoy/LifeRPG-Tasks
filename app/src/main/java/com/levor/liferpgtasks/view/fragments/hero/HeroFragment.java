@@ -1,6 +1,8 @@
 package com.levor.liferpgtasks.view.fragments.hero;
 
 
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,16 +11,19 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.Utils.TextUtils;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
+import java.lang.ref.WeakReference;
 import java.text.DecimalFormat;
 
 public class HeroFragment extends DefaultFragment {
     TextView heroNameTextView, heroLevelTextView, xpProgressTextView, moneyTextView;
     ImageView heroImageImageView;
     ProgressBar xpProgress;
+    CircularProgressView circularProgressView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -30,8 +35,9 @@ public class HeroFragment extends DefaultFragment {
         xpProgressTextView = (TextView) v.findViewById(R.id.xp_progress_TV);
         heroLevelTextView = (TextView) v.findViewById(R.id.hero_level);
         moneyTextView = (TextView) v.findViewById(R.id.money);
+        circularProgressView = (CircularProgressView) v.findViewById(R.id.progress_view);
 
-        heroImageImageView.setImageBitmap(getCurrentActivity().getHeroIconBitmap());
+        loadHeroBitmap(heroImageImageView);
         setHasOptionsMenu(true);
         return v;
     }
@@ -59,5 +65,38 @@ public class HeroFragment extends DefaultFragment {
         heroLevelTextView.setText(heroLvl);
 
         moneyTextView.setText(df.format(getController().getHero().getMoney()));
+    }
+
+    public void loadHeroBitmap(ImageView imageView) {
+        BitmapWorkerTask task = new BitmapWorkerTask(imageView);
+        task.execute();
+    }
+
+    class BitmapWorkerTask extends AsyncTask<Void, Void, Bitmap> {
+        private final WeakReference<ImageView> imageViewReference;
+
+        public BitmapWorkerTask(ImageView imageView) {
+            // Use a WeakReference to ensure the ImageView can be garbage collected
+            imageViewReference = new WeakReference<>(imageView);
+        }
+
+        // Decode image in background.
+        @Override
+        protected Bitmap doInBackground(Void... params) {
+            return getCurrentActivity().getHeroIconBitmap();
+        }
+
+        // Once complete, see if ImageView is still around and set bitmap.
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (imageViewReference != null && bitmap != null) {
+                final ImageView imageView = imageViewReference.get();
+                if (imageView != null) {
+                    imageView.setVisibility(View.VISIBLE);
+                    circularProgressView.setVisibility(View.GONE);
+                    imageView.setImageBitmap(bitmap);
+                }
+            }
+        }
     }
 }

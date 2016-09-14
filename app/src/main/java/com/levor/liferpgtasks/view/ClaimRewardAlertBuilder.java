@@ -40,7 +40,5 @@ public class ClaimRewardAlertBuilder extends AlertDialog.Builder {
                 dialog.dismiss();
             }
         });
-
-        // TODO: 8/23/16 Add sharing to social networks
     }
 }
