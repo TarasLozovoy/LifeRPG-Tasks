@@ -114,6 +114,7 @@
         <item>Version 1.4.2</item>
         <item>Version 1.4.3</item>
         <item>Version 1.5.0</item>
+        <item>Version 1.5.1</item>
     </string-array>
 
     <string-array
@@ -150,6 +151,12 @@
         <item>- Rewards system: for every task can be set reward in gold, when task is finished indicated amount of gold is added to hero gold; on rewards screen new rewards with specified cost can be added and claimed.
             \n- Task completion dialog changed – now it displays all updates: XP, gold, hero lvl up, skills, characteristics updates and unlocked achievements.
             \n- Minor crash and bug fixes.
+        </item>
+        <item>- Fear of task factor added.
+            \n- Changed assessment system of difficulty/importance/fear: each factor could be set to value between 0 – 100; more tight dependence between factors and XP for task; if every factor set to 0 – there will be 0 XP for task.
+            \n- Hero leveling up XP reevaluated.
+            \n- Added context menu to all characteristics, skills, tasks and rewards lists (called with longtap on any list element).
+            \n- Optimized work with user loaded hero images.
         </item>
     </string-array>
 
