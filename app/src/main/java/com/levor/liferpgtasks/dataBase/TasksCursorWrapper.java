@@ -34,7 +34,7 @@ public class TasksCursorWrapper extends CursorWrapper {
         int repeatability = getInt(getColumnIndex(TasksTable.Cols.REPEATABILITY));
         int difficulty = getInt(getColumnIndex(TasksTable.Cols.DIFFICULTY));
         int importance = getInt(getColumnIndex(TasksTable.Cols.IMPORTANCE));
-        int fear = getInt(getColumnIndex(TasksTable.Cols.IMPORTANCE));
+        int fear = getInt(getColumnIndex(TasksTable.Cols.FEAR));
         long dateLong = getLong(getColumnIndex(TasksTable.Cols.DATE));
         long finishDateLong = getLong(getColumnIndex(TasksTable.Cols.FINISH_DATE));
         long notifyLong = getLong(getColumnIndex(TasksTable.Cols.NOTIFY));
