@@ -23,6 +23,7 @@ import com.levor.liferpgtasks.view.activities.MainActivity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @SuppressLint("ValidFragment")
 public class SkillSelectionDialog extends DialogFragment {
@@ -36,9 +37,11 @@ public class SkillSelectionDialog extends DialogFragment {
 
     private SkillSelectionListener listener;
 
-    public SkillSelectionDialog(MainActivity mainActivity) {
-        this.activity = mainActivity;
-        lifeController = LifeController.getInstance(mainActivity);
+    public static SkillSelectionDialog getInstance(MainActivity activity) {
+        SkillSelectionDialog dialog = new SkillSelectionDialog();
+        dialog.activity = activity;
+        dialog.lifeController = LifeController.getInstance(activity);
+        return dialog;
     }
 
     @NonNull
@@ -172,15 +175,11 @@ public class SkillSelectionDialog extends DialogFragment {
                                 for (String s : charsTitlesList) {
                                     chars.add(lifeController.getCharacteristicByTitle(s));
                                 }
-                                lifeController.addSkill(titleEditText.getText().toString(), chars);
-                                lifeController.getGATracker().send(new HitBuilders.EventBuilder()
-                                        .setCategory(getString(R.string.GA_action))
-                                        .setAction(getString(R.string.GA_add_new_skill))
-                                        .build());
-
+                                String skillTitle = titleEditText.getText().toString();
+                                lifeController.addSkill(skillTitle, chars);
                                 dialog.dismiss();
                             if (listener != null) {
-                                listener.onNewSkillAdded();
+                                listener.onNewSkillAdded(skillTitle);
                             }
                             }
                         }
@@ -208,7 +207,7 @@ public class SkillSelectionDialog extends DialogFragment {
     }
 
     public interface SkillSelectionListener{
-        void onNewSkillAdded();
+        void onNewSkillAdded(String skillTitle);
         void onClose(boolean increasingSkills, ArrayList<String> titles);
     }
 }

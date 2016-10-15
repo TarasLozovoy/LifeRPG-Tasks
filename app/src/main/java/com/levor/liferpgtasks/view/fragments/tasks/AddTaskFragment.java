@@ -46,7 +46,6 @@ import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 
 import org.joda.time.LocalDate;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -1143,8 +1142,8 @@ public class AddTaskFragment extends DataDependantFrament {
         alertDialog.show();
     }
 
-    private void showSkillSelectionDialog(boolean increaseSkills) {
-        SkillSelectionDialog dialog = new SkillSelectionDialog(getCurrentActivity());
+    private void showSkillSelectionDialog(final boolean increaseSkills) {
+        SkillSelectionDialog dialog = SkillSelectionDialog.getInstance(getCurrentActivity());
         Bundle b = new Bundle();
         b.putBoolean(SkillSelectionDialog.INCREASE_SKILLS_TAG, increaseSkills);
         b.putStringArrayList(SkillSelectionDialog.ACTIVE_LIST_TAG, increaseSkills ? increasingRelatedSkills : decreasingRelatedSkills);
@@ -1153,8 +1152,14 @@ public class AddTaskFragment extends DataDependantFrament {
         dialog.setArguments(b);
         dialog.setListener(new SkillSelectionDialog.SkillSelectionListener() {
             @Override
-            public void onNewSkillAdded() {
-                showSkillSelectionDialog(getArguments().getBoolean(SkillSelectionDialog.INCREASE_SKILLS_TAG));
+            public void onNewSkillAdded(String skillTitle) {
+                if (increaseSkills) {
+                    increasingRelatedSkills.add(skillTitle);
+                } else {
+                    decreasingRelatedSkills.add(skillTitle);
+                }
+
+                showSkillSelectionDialog(increaseSkills);
             }
 
             @Override

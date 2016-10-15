@@ -194,11 +194,6 @@ public class AddSkillFragment extends DataDependantFrament {
         getController().addSkill(title, chars);
         Toast.makeText(getCurrentActivity(), message, Toast.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
-
-        getController().getGATracker().send(new HitBuilders.EventBuilder()
-                .setCategory(getString(R.string.GA_action))
-                .setAction(getString(R.string.GA_add_new_skill))
-                .build());
     }
 
     @Override

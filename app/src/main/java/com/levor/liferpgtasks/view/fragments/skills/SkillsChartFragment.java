@@ -13,9 +13,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.RadarData;
 import com.github.mikephil.charting.data.RadarDataSet;
 import com.levor.liferpgtasks.R;
-import com.levor.liferpgtasks.model.Characteristic;
 import com.levor.liferpgtasks.model.Skill;
-import com.levor.liferpgtasks.view.Dialogs.KeyCharacteristicsSelectionDialog;
 import com.levor.liferpgtasks.view.Dialogs.SkillSelectionDialog;
 import com.levor.liferpgtasks.view.activities.MainActivity;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
@@ -107,13 +105,13 @@ public class SkillsChartFragment extends DefaultFragment{
     private class FabClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            SkillSelectionDialog dialog = new SkillSelectionDialog(getCurrentActivity());
+            SkillSelectionDialog dialog = SkillSelectionDialog.getInstance(getCurrentActivity());
             Bundle b = new Bundle();
             b.putStringArrayList(SkillSelectionDialog.ACTIVE_LIST_TAG, skillTitles);
             dialog.setArguments(b);
             dialog.setListener(new SkillSelectionDialog.SkillSelectionListener() {
                 @Override
-                public void onNewSkillAdded() {
+                public void onNewSkillAdded(String skillTitle) {
                     //ignore
                 }
 
