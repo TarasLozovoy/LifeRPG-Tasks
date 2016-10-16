@@ -24,8 +24,8 @@
     <string name="repeat">Repeat</string>
     <string name="task_finished">Task finished.</string>
     <string name="all_tasks">All</string>
-    <string name="every_day_tasks">Dailies</string>
-    <string name="simple_tasks">To do</string>
+    <string name="every_day_tasks">Continuous</string>
+    <string name="simple_tasks">Finite</string>
     <string name="finished_tasks">Done</string>
     <string name="tasks">Tasks</string>
     <string name="difficulty">Difficulty:</string>
@@ -435,6 +435,9 @@
     <string name="characteristics">Characteristics:</string>
     <string name="total">Total:</string>
     <string name="XP_mult">XP</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="termless">Termless</string>
     <!-- -->
 
 </resources>

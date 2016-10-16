@@ -21,6 +21,9 @@ import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -31,9 +34,12 @@ public class FilteredTasksFragment extends DefaultFragment{
     public static final String FILTER_ARG = "filter_arg";
 
     public static final int ALL = 0;
-    public static final int INFINITE = 1;
-    public static final int SIMPLE = 2;
-    public static final int DONE = 3;
+    public static final int TODAY = 1;
+    public static final int TOMORROW = 2;
+    public static final int TERMLESS = 3;
+    public static final int INFINITE = 4;
+    public static final int SIMPLE = 5;
+    public static final int DONE = 6;
 
     private static final int UNDO_CONTEXT_MENU_ITEM = 0;
     private static final int EDIT_CONTEXT_MENU_ITEM = 1;
@@ -226,12 +232,34 @@ public class FilteredTasksFragment extends DefaultFragment{
         boolean onlyTodayTasksInToDo = getController().getSharedPreferences().getBoolean(LifeController.SHOW_ONLY_TODAY_TASK_TAG, false);
         boolean dailiesInDone = getController().getSharedPreferences().getBoolean(LifeController.SHOW_DAILIES_IN_DONE_TAG, false);
 
+        LocalDate currentTime = new LocalDate();
         for (Task t : tasks) {
             if (!searchQuery.isEmpty()
                     && !t.getTitle().toLowerCase().contains(searchQuery.toLowerCase())) continue;
             switch (filter) {
                 case ALL:
                     if (t.getRepeatability() != 0) {
+                        sortedTasksTitles.add(t.getTitle());
+                    }
+                    break;
+                case TODAY:
+                    if (t.getDateMode() == Task.DateMode.WHOLE_DAY || t.getDateMode() == Task.DateMode.SPECIFIC_TIME) {
+                        LocalDate dateOfTask = new LocalDate(t.getDate().getTime());
+                        if (Days.daysBetween(currentTime, dateOfTask).getDays() == 0) {
+                            sortedTasksTitles.add(t.getTitle());
+                        }
+                    }
+                    break;
+                case TOMORROW:
+                    if (t.getDateMode() == Task.DateMode.WHOLE_DAY || t.getDateMode() == Task.DateMode.SPECIFIC_TIME) {
+                        LocalDate taskDate = new LocalDate(t.getDate().getTime());
+                        if (Days.daysBetween(currentTime.plusDays(1), taskDate).getDays() == 0) {
+                            sortedTasksTitles.add(t.getTitle());
+                        }
+                    }
+                    break;
+                case TERMLESS:
+                    if (t.getDateMode() == Task.DateMode.TERMLESS) {
                         sortedTasksTitles.add(t.getTitle());
                     }
                     break;

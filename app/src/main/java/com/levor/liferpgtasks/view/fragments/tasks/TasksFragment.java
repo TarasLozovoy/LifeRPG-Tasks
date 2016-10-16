@@ -47,10 +47,14 @@ public class TasksFragment extends DefaultFragment {
         View view = inflater.inflate(R.layout.fragment_pager_with_tabs, container, false);
         tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.all_tasks));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.today));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tomorrow));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.termless));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.every_day_tasks));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.simple_tasks));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.finished_tasks));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.accent));
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
 
@@ -148,10 +152,30 @@ public class TasksFragment extends DefaultFragment {
                 @Override
                 public void onClick(View v) {
                     Bundle b = new Bundle();
-                    b.putInt(AddTaskFragment.REPEAT_MODE_TAG, viewPager.getCurrentItem() == FilteredTasksFragment.INFINITE ?
-                            Task.RepeatMode.EVERY_NTH_DAY : Task.RepeatMode.SIMPLE_REPEAT);
-                    b.putInt(AddTaskFragment.REPEAT_TAG, viewPager.getCurrentItem() == FilteredTasksFragment.INFINITE ? -1 : 1);
-
+                    switch (viewPager.getCurrentItem()) {
+                        case FilteredTasksFragment.ALL:
+                        case FilteredTasksFragment.TERMLESS:
+                        case FilteredTasksFragment.SIMPLE:
+                            b.putInt(AddTaskFragment.REPEAT_MODE_TAG, Task.RepeatMode.SIMPLE_REPEAT);
+                            b.putInt(AddTaskFragment.REPEAT_TAG, 1);
+                            break;
+                        case FilteredTasksFragment.TODAY:
+                            b.putInt(AddTaskFragment.REPEAT_MODE_TAG, Task.RepeatMode.SIMPLE_REPEAT);
+                            b.putInt(AddTaskFragment.REPEAT_TAG, 1);
+                            b.putInt(AddTaskFragment.DATE_MODE_TAG, Task.DateMode.WHOLE_DAY);
+                            b.putInt(AddTaskFragment.EXACT_DATE_TAG, 0);
+                            break;
+                        case FilteredTasksFragment.TOMORROW:
+                            b.putInt(AddTaskFragment.REPEAT_MODE_TAG, Task.RepeatMode.SIMPLE_REPEAT);
+                            b.putInt(AddTaskFragment.REPEAT_TAG, 1);
+                            b.putInt(AddTaskFragment.DATE_MODE_TAG, Task.DateMode.WHOLE_DAY);
+                            b.putInt(AddTaskFragment.EXACT_DATE_TAG, 1);
+                            break;
+                        case FilteredTasksFragment.INFINITE:
+                            b.putInt(AddTaskFragment.REPEAT_MODE_TAG, Task.RepeatMode.EVERY_NTH_DAY);
+                            b.putInt(AddTaskFragment.REPEAT_TAG, -1);
+                            break;
+                    }
                     getCurrentActivity().showChildFragment(new AddTaskFragment(), b);
                 }
             });
@@ -200,21 +224,31 @@ public class TasksFragment extends DefaultFragment {
         @Override
         public Fragment getItem(int position) {
             Bundle b = new Bundle();
-            switch (position) {
-                case FilteredTasksFragment.ALL:
-                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.ALL);
-                    break;
-                case FilteredTasksFragment.INFINITE:
-                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.INFINITE);
-                    break;
-                case FilteredTasksFragment.SIMPLE:
-                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.SIMPLE);
-                    break;
-                case FilteredTasksFragment.DONE:
-                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.DONE);
-                    break;
-                default:
-            }
+            b.putInt(FilteredTasksFragment.FILTER_ARG, position);
+//            switch (position) {
+//                case FilteredTasksFragment.ALL:
+//                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.ALL);
+//                    break;
+//                case FilteredTasksFragment.TODAY:
+//                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.TODAY);
+//                    break;
+//                case FilteredTasksFragment.TOMORROW:
+//                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.TOMORROW);
+//                    break;
+//                case FilteredTasksFragment.TERMLESS:
+//                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.TERMLESS);
+//                    break;
+//                case FilteredTasksFragment.INFINITE:
+//                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.INFINITE);
+//                    break;
+//                case FilteredTasksFragment.SIMPLE:
+//                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.SIMPLE);
+//                    break;
+//                case FilteredTasksFragment.DONE:
+//                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.DONE);
+//                    break;
+//                default:
+//            }
             Fragment f = new FilteredTasksFragment();
             f.setArguments(b);
             return f;

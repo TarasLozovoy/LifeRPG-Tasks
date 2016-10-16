@@ -61,6 +61,8 @@ public class AddTaskFragment extends DataDependantFrament {
 
     public static final String REPEAT_MODE_TAG = "repeat_mode_tag";
     public static final String REPEAT_TAG = "repeat_tag";
+    public static final String DATE_MODE_TAG = "date_mode_tag";
+    public static final String EXACT_DATE_TAG = "exact_date_tag";  //0 - today, 1 - tomorrow etc.
     public static final String TASK_TITLE_TAG = "task_title_tag";
     private final String RELATED_SKILLS_TAG = "related_skills_tag";
     private final String DECREASING_RELATED_SKILLS_TAG = "decreasing_related_skills_tag";
@@ -141,7 +143,20 @@ public class AddTaskFragment extends DataDependantFrament {
         if (getArguments() != null){
             repeatMode = getArguments().getInt(REPEAT_MODE_TAG, RepeatMode.SIMPLE_REPEAT);
             repeatability = getArguments().getInt(REPEAT_TAG, 1);
-            dateMode = repeatMode == RepeatMode.EVERY_NTH_DAY ? DateMode.WHOLE_DAY : dateMode;
+
+            int dateMode = getArguments().getInt(DATE_MODE_TAG, -1);
+            int exactDate = getArguments().getInt(EXACT_DATE_TAG, -1);
+            if (dateMode < 0) {
+                this.dateMode = DateMode.TERMLESS;
+            } else {
+                this.dateMode = DateMode.WHOLE_DAY;
+                if (exactDate == 0) {
+                    date = new Date();
+                } else if (exactDate > 0) {
+                    LocalDate localDate = new LocalDate();
+                    date = localDate.plusDays(exactDate).toDate();
+                }
+            }
 
             String skillTitle;
             if ((skillTitle = getArguments().getString(RECEIVED_SKILL_TITLE_TAG)) != null){

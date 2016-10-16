@@ -394,6 +394,9 @@
     <string name="characteristics">Характеристики:</string>
     <string name="total">Всего:</string>
     <string name="XP_mult">Опыта</string>
+    <string name="today">Сегодня</string>
+    <string name="tomorrow">Завтра</string>
+    <string name="termless">Бессрочные</string>
     <!-- -->
 
 </resources>
