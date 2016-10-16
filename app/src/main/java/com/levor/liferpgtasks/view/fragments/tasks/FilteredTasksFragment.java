@@ -243,7 +243,9 @@ public class FilteredTasksFragment extends DefaultFragment{
                     }
                     break;
                 case TODAY:
-                    if (t.getDateMode() == Task.DateMode.WHOLE_DAY || t.getDateMode() == Task.DateMode.SPECIFIC_TIME) {
+                    if ((t.getDateMode() == Task.DateMode.WHOLE_DAY
+                            || t.getDateMode() == Task.DateMode.SPECIFIC_TIME)
+                            && t.getRepeatability() != 0) {
                         LocalDate dateOfTask = new LocalDate(t.getDate().getTime());
                         if (Days.daysBetween(currentTime, dateOfTask).getDays() == 0) {
                             sortedTasksTitles.add(t.getTitle());
@@ -251,7 +253,9 @@ public class FilteredTasksFragment extends DefaultFragment{
                     }
                     break;
                 case TOMORROW:
-                    if (t.getDateMode() == Task.DateMode.WHOLE_DAY || t.getDateMode() == Task.DateMode.SPECIFIC_TIME) {
+                    if ((t.getDateMode() == Task.DateMode.WHOLE_DAY
+                            || t.getDateMode() == Task.DateMode.SPECIFIC_TIME)
+                            && t.getRepeatability() != 0) {
                         LocalDate taskDate = new LocalDate(t.getDate().getTime());
                         if (Days.daysBetween(currentTime.plusDays(1), taskDate).getDays() == 0) {
                             sortedTasksTitles.add(t.getTitle());
@@ -259,7 +263,7 @@ public class FilteredTasksFragment extends DefaultFragment{
                     }
                     break;
                 case TERMLESS:
-                    if (t.getDateMode() == Task.DateMode.TERMLESS) {
+                    if (t.getDateMode() == Task.DateMode.TERMLESS && t.getRepeatability() != 0) {
                         sortedTasksTitles.add(t.getTitle());
                     }
                     break;

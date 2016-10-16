@@ -18,10 +18,11 @@ import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChangeHeroIconFragment extends DefaultFragment{
     private AssetManager assets;
-    private String[] imageNames;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,13 +32,22 @@ public class ChangeHeroIconFragment extends DefaultFragment{
         RecyclerView recyclerView = (RecyclerView) v;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
 
+        String[] assetsNames = null;
         try {
-            imageNames = assets.list("");
+            assetsNames = assets.list("");
         } catch (IOException e) {
             Log.e("Assets", "Could not list assets", e);
         }
 
-        recyclerView.setAdapter(new ImageAdapter(imageNames));
+        List<String> imageNames = new ArrayList<>();
+        //sort out all non icons
+        for (int i = 0; i < assetsNames.length; i++) {
+            if (assetsNames[i].endsWith(".png")) {
+                imageNames.add(assetsNames[i]);
+            }
+        }
+
+        recyclerView.setAdapter(new ImageAdapter(imageNames.toArray(new String[imageNames.size()])));
 
         setHasOptionsMenu(true);
         getCurrentActivity().setActionBarTitle(getString(R.string.edit_hero_fragment_title));

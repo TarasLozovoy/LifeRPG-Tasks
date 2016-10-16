@@ -225,30 +225,6 @@ public class TasksFragment extends DefaultFragment {
         public Fragment getItem(int position) {
             Bundle b = new Bundle();
             b.putInt(FilteredTasksFragment.FILTER_ARG, position);
-//            switch (position) {
-//                case FilteredTasksFragment.ALL:
-//                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.ALL);
-//                    break;
-//                case FilteredTasksFragment.TODAY:
-//                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.TODAY);
-//                    break;
-//                case FilteredTasksFragment.TOMORROW:
-//                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.TOMORROW);
-//                    break;
-//                case FilteredTasksFragment.TERMLESS:
-//                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.TERMLESS);
-//                    break;
-//                case FilteredTasksFragment.INFINITE:
-//                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.INFINITE);
-//                    break;
-//                case FilteredTasksFragment.SIMPLE:
-//                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.SIMPLE);
-//                    break;
-//                case FilteredTasksFragment.DONE:
-//                    b.putInt(FilteredTasksFragment.FILTER_ARG, FilteredTasksFragment.DONE);
-//                    break;
-//                default:
-//            }
             Fragment f = new FilteredTasksFragment();
             f.setArguments(b);
             return f;

@@ -51,8 +51,6 @@ import com.levor.liferpgtasks.view.fragments.tasks.TasksFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -175,10 +173,6 @@ public class MainActivity extends BackUpActivity{
         lifeController.checkHabitGenerationForAllTasks();
 
         showWhatsNewDialog(false);
-
-
-        //temporary
-        lifeController.gatherSelectedForAvatarImage();
     }
 
     @Override
@@ -453,11 +447,6 @@ public class MainActivity extends BackUpActivity{
             Misc.HERO_IMAGE_PATH = name;
             Misc.HERO_IMAGE_MODE = mode;
             setupNavigationTabs();
-
-            //temporary
-            if (mode == Misc.ASSETS_ICON) {
-                lifeController.onHeroImageUpdatedFromAssets();
-            }
         }
     }
 
