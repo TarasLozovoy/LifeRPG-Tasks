@@ -2,7 +2,6 @@ package com.levor.liferpgtasks.view.fragments.skills;
 
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,12 +10,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.model.Characteristic;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.view.Dialogs.KeyCharacteristicsSelectionDialog;
@@ -24,19 +21,20 @@ import com.levor.liferpgtasks.view.fragments.DataDependantFrament;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 
 public class AddSkillFragment extends DataDependantFrament {
     public static final String RECEIVED_CHARACTERISTIC_ID_TAG = "received_characteristic_title_tag";
 
     protected final String SKILL_TITLE_TAG = "skill_title_tag";
-    protected final String KEY_CHARACTERISTIC_TITLE = "key_characteristic_title";
 
     protected View relatedCharacteristicsView;
     protected EditText titleEditText;
     protected TextView relatedCharacteristicsTextView;
 
-    protected ArrayList<UUID> keyCharacteristicsIdList = new ArrayList<>();
+    protected TreeMap<UUID, Integer> keyCharacteristicsIdMap = new TreeMap<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,12 +50,13 @@ public class AddSkillFragment extends DataDependantFrament {
                 getCurrentActivity().showSoftKeyboard(false, getView());
                 KeyCharacteristicsSelectionDialog dialog = new KeyCharacteristicsSelectionDialog();
                 Bundle b = new Bundle();
-                b.putStringArrayList(KeyCharacteristicsSelectionDialog.CHARS_LIST, convertIdsToTitles());
+                b.putSerializable(KeyCharacteristicsSelectionDialog.CHARS_MAP, convertIdsToTitles());
+                b.putBoolean(KeyCharacteristicsSelectionDialog.WITH_IMPACT, true);
                 dialog.setArguments(b);
                 dialog.setListener(new KeyCharacteristicsSelectionDialog.KeyCharacteristicsChangedListener() {
                     @Override
-                    public void onChanged(ArrayList<String> charsTitles) {
-                        convertTitlesToIds(charsTitles);
+                    public void onChanged(TreeMap<String, Integer> characteristicsMap) {
+                        convertTitlesToIds(characteristicsMap);
                         updateRelatedCharacteristicsView();
                     }
                 });
@@ -67,7 +66,7 @@ public class AddSkillFragment extends DataDependantFrament {
 
         UUID uuid;
         if (getArguments()!= null && (uuid = (UUID) getArguments().getSerializable(RECEIVED_CHARACTERISTIC_ID_TAG)) != null){
-            keyCharacteristicsIdList.add(uuid);
+            keyCharacteristicsIdMap.put(uuid, 100);
         }
         if (savedInstanceState != null) {
             titleEditText.setText(savedInstanceState.getString(SKILL_TITLE_TAG));
@@ -112,7 +111,7 @@ public class AddSkillFragment extends DataDependantFrament {
             case R.id.ok_menu_item:
                 if (titleEditText.getText().toString().equals("")){
                     Toast.makeText(getContext(), getString(R.string.empty_skill_title_error), Toast.LENGTH_SHORT).show();
-                } else if (keyCharacteristicsIdList.isEmpty()){
+                } else if (keyCharacteristicsIdMap.isEmpty()){
                     Toast.makeText(getContext(), getString(R.string.no_key_characteristic_error), Toast.LENGTH_SHORT).show();
                 } else if (getController().getSkillByTitle(titleEditText.getText().toString()) != null){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -147,33 +146,34 @@ public class AddSkillFragment extends DataDependantFrament {
         super.onSaveInstanceState(outState);
     }
 
-    private ArrayList<String> convertIdsToTitles() {
-        ArrayList<String> titles = new ArrayList<>();
-        for (UUID id : keyCharacteristicsIdList) {
-            titles.add(getController().getCharacteristicByID(id).getTitle());
+    private TreeMap<String, Integer> convertIdsToTitles() {
+        TreeMap<String, Integer> titlesMap = new TreeMap<>();
+        for (Map.Entry<UUID, Integer> pair : keyCharacteristicsIdMap.entrySet()) {
+            titlesMap.put(getController().getCharacteristicByID(pair.getKey()).getTitle(), pair.getValue());
         }
-        return titles;
+        return titlesMap;
     }
 
-    private void convertTitlesToIds(List<String> titles) {
-        keyCharacteristicsIdList.clear();
-        for (String s : titles) {
-            keyCharacteristicsIdList.add(getController().getCharacteristicByTitle(s).getId());
+    private void convertTitlesToIds(TreeMap<String, Integer> titlesMap) {
+        keyCharacteristicsIdMap.clear();
+        for (Map.Entry<String, Integer> pair : titlesMap.entrySet()) {
+            keyCharacteristicsIdMap.put(getController().getCharacteristicByTitle(pair.getKey()).getId(), pair.getValue());
         }
     }
 
     private void updateRelatedCharacteristicsView(){
         StringBuilder sb = new StringBuilder();
-        if (keyCharacteristicsIdList.isEmpty()) {
+        if (keyCharacteristicsIdMap.isEmpty()) {
             sb.append(getString(R.string.key_characteristic_empty));
         } else {
             sb.append(getString(R.string.key_characteristic))
                     .append(" ");
-            for (UUID id : keyCharacteristicsIdList) {
-                Characteristic keyChar = getController().getCharacteristicByID(id);
+            for (Map.Entry<UUID, Integer> pair : keyCharacteristicsIdMap.entrySet()) {
+                Characteristic keyChar = getController().getCharacteristicByID(pair.getKey());
                 if (keyChar == null) continue;
                 String s = keyChar.getTitle();
                 sb.append(s)
+                        .append("(" + pair.getValue() + "%)")
                         .append(", ");
             }
             sb.delete(sb.length() - 2, sb.length() - 1);
@@ -187,11 +187,11 @@ public class AddSkillFragment extends DataDependantFrament {
     }
 
     protected void finish(String title, String message) {
-        List<Characteristic> chars = new ArrayList<>();
-        for (UUID id : keyCharacteristicsIdList) {
-            chars.add(getController().getCharacteristicByID(id));
+        TreeMap <Characteristic, Integer> charsMap = new TreeMap<>();
+        for (Map.Entry<UUID, Integer> pair : keyCharacteristicsIdMap.entrySet()) {
+            charsMap.put(getController().getCharacteristicByID(pair.getKey()), pair.getValue());
         }
-        getController().addSkill(title, chars);
+        getController().addSkill(title, charsMap);
         Toast.makeText(getCurrentActivity(), message, Toast.LENGTH_LONG).show();
         getCurrentActivity().showPreviousFragment();
     }

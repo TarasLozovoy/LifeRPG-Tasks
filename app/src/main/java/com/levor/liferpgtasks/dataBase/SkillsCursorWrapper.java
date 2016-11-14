@@ -10,6 +10,7 @@ import com.levor.liferpgtasks.model.Skill;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.UUID;
 
 public class SkillsCursorWrapper extends CursorWrapper {
@@ -27,18 +28,22 @@ public class SkillsCursorWrapper extends CursorWrapper {
         int level = getInt(getColumnIndex(SkillsTable.Cols.LEVEL));
         double sublevel = getFloat(getColumnIndex(SkillsTable.Cols.SUBLEVEL));
 
-
-
-        List<Characteristic> chars = new ArrayList<>();
-        String[] charsArray = keyCharString.split("::");
+        //parsing related characteristics and impact
+        TreeMap<Characteristic, Integer> charsImpactMap = new TreeMap<>();
+        String[] charsArray = keyCharString.split(Skill.CHAR_CHAR_DB_DIVIDER);
         for (String s : charsArray) {
             if (s.equals("")) continue;
-            Characteristic characteristic = lifeEntity.getCharacteristicByTitle(s);
-            if (characteristic == null) {
-                characteristic = lifeEntity.getCharacteristicById(UUID.fromString(s));
+            if (!s.contains(Skill.CHAR_IMPACT_DB_DIVIDER)) {
+                s += Skill.CHAR_IMPACT_DB_DIVIDER + 100;
             }
-            chars.add(characteristic);
+            String charTitle = s.split(Skill.CHAR_IMPACT_DB_DIVIDER)[0];
+            int impact = Integer.parseInt(s.split(Skill.CHAR_IMPACT_DB_DIVIDER)[1]);
+            Characteristic characteristic = lifeEntity.getCharacteristicByTitle(charTitle);
+            if (characteristic == null) {
+                characteristic = lifeEntity.getCharacteristicById(UUID.fromString(charTitle));
+            }
+            charsImpactMap.put(characteristic, impact);
         }
-        return new Skill(title, level, sublevel, UUID.fromString(uuid), chars);
+        return new Skill(title, level, sublevel, UUID.fromString(uuid), charsImpactMap);
     }
 }

@@ -364,26 +364,26 @@ public class LifeEntity {
         return values;
     }
 
-    public void addSkill(String title, List<Characteristic> characteristicList){
-        addSkill(title, 1, 0.0f, characteristicList);
+    public void addSkill(String title, TreeMap<Characteristic, Integer> charsWithImpactsMap){
+        addSkill(title, 1, 0.0f, charsWithImpactsMap);
     }
 
     public void addSkill(String title, Characteristic characteristic){
-        List<Characteristic> chars = new ArrayList<>();
-        chars.add(characteristic);
-        addSkill(title, 1, 0.0f, chars);
+        TreeMap<Characteristic, Integer> charsWithImpactsMap = new TreeMap<>();
+        charsWithImpactsMap.put(characteristic, 100);
+        addSkill(title, 1, 0.0f, charsWithImpactsMap);
     }
 
-    public void addSkill(String title, int level, float sublevel, List<Characteristic> characteristicList){
+    public void addSkill(String title, int level, float sublevel, TreeMap<Characteristic, Integer> charsWithImpactsMap){
         Skill oldSkill = getSkillByTitle(title);
         if (oldSkill != null) {
             oldSkill.setLevel(level);
             oldSkill.setSublevel(sublevel);
-            oldSkill.setKeyCharacteristicsList(characteristicList);
+            oldSkill.setKeyCharacteristicsMap(charsWithImpactsMap);
             updateSkill(oldSkill);
         } else {
             UUID id = UUID.randomUUID();
-            Skill newSkill = new Skill(title, level, sublevel, id, characteristicList);
+            Skill newSkill = new Skill(title, level, sublevel, id, charsWithImpactsMap);
             skills.add(newSkill);
             final ContentValues values = getContentValuesForSkill(newSkill);
             new AsyncTask<Void, Void, Void>(){
@@ -434,7 +434,7 @@ public class LifeEntity {
     public ArrayList<Skill> getSkillsByCharacteristic(Characteristic ch){
         ArrayList<Skill> sk = new ArrayList<>();
         for (Skill skill : getSkills()){
-            if (skill.getKeyCharacteristicsList().contains(ch)){
+            if (skill.getKeyCharacteristicsMap().containsKey(ch)){
                 sk.add(skill);
             }
         }
@@ -563,7 +563,6 @@ public class LifeEntity {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    @Deprecated
     public Characteristic getCharacteristicByTitle(String title) {
         for (Characteristic ch : getCharacteristics()){
             if (ch.getTitle().equals(title)) return ch;

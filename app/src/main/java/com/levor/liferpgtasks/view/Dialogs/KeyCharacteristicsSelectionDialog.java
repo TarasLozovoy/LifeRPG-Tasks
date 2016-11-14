@@ -11,15 +11,20 @@ import android.support.v4.app.DialogFragment;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Characteristic;
+import com.levor.liferpgtasks.view.ItemsWithImpactAlertBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class KeyCharacteristicsSelectionDialog extends DialogFragment {
-    public static final String CHARS_LIST = "chars_list";
-//    public static final String CONTEXT = "context";
-    private ArrayList<String> keyCharacteristicsTitleList;
+    public static final String CHARS_MAP = "chars_list";
+    public static final String WITH_IMPACT = "with_impact";
+
+    private boolean showImpact;
+    private TreeMap<String, Integer> characteristicsMap;
     private Context context;
     private KeyCharacteristicsChangedListener listener;
 
@@ -27,7 +32,8 @@ public class KeyCharacteristicsSelectionDialog extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            keyCharacteristicsTitleList = getArguments().getStringArrayList(CHARS_LIST);
+            characteristicsMap = (TreeMap<String, Integer>) getArguments().get(CHARS_MAP);
+            showImpact = getArguments().getBoolean(WITH_IMPACT, false);
             context = getContext();
         }
     }
@@ -39,45 +45,46 @@ public class KeyCharacteristicsSelectionDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        LifeController lifeController = LifeController.getInstance(context);
+        final LifeController lifeController = LifeController.getInstance(context);
         List<Characteristic> allCharacteristics = lifeController.getCharacteristics();
         Collections.sort(allCharacteristics, Characteristic.LEVEL_COMPARATOR);
         String[] characteristicsNames = new String[allCharacteristics.size()];
-        boolean[] characteristicsStates = new boolean[allCharacteristics.size()];
+        Integer[] characteristicsImpacts = new Integer[allCharacteristics.size()];
 
         for (int i = 0; i < allCharacteristics.size(); i++) {
-            characteristicsNames[i] = allCharacteristics.get(i).getTitle();
-            characteristicsStates[i] = keyCharacteristicsTitleList.contains(allCharacteristics.get(i).getTitle());
+            String characteristicTitle = allCharacteristics.get(i).getTitle();
+            characteristicsNames[i] = characteristicTitle;
+            Integer impact = characteristicsMap.get(characteristicTitle);
+            characteristicsImpacts[i] = impact == null ? -1 : impact;
         }
 
-        final String[] items = characteristicsNames;
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.select_key_characteristic)
-                .setMultiChoiceItems(items, characteristicsStates,
-                        new DialogInterface.OnMultiChoiceClickListener() {
-                            public void onClick(DialogInterface dialog, int item, boolean isChecked) {
-                                if (isChecked){
-                                    keyCharacteristicsTitleList.add(items[item]);
-                                } else {
-                                    keyCharacteristicsTitleList.remove(items[item]);
-                                }
-                            }
-                        })
+        ItemsWithImpactAlertBuilder builder = new ItemsWithImpactAlertBuilder(context, showImpact);
+        builder.setTitle(R.string.select_key_characteristic);
+        builder.setMultiChoiceItemsWithImpact(characteristicsNames, characteristicsImpacts
+                , new ItemsWithImpactAlertBuilder.MultiChoiceImpactListener() {
+                    @Override
+                    public void onChanged(String item, int newImpact) {
+                        if (newImpact < 0) {
+                            characteristicsMap.remove(item);
+                        } else {
+                            characteristicsMap.put(item, newImpact);
+                        }
+                    }
+                })
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (listener != null) {
-                            listener.onChanged(keyCharacteristicsTitleList);
+                            listener.onChanged(characteristicsMap);
                         }
                         dialog.dismiss();
                     }
                 })
                 .setCancelable(false);
-
         return builder.create();
     }
 
     public interface KeyCharacteristicsChangedListener {
-        void onChanged(ArrayList<String> titles);
+        void onChanged(TreeMap<String, Integer> characteristicsMap);
     }
 }

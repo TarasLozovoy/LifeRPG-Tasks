@@ -22,6 +22,8 @@ import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -107,13 +109,23 @@ public class CharacteristicsChartFragment extends DefaultFragment{
         @Override
         public void onClick(View v) {
             KeyCharacteristicsSelectionDialog dialog = new KeyCharacteristicsSelectionDialog();
+
+            TreeMap<String, Integer> titlesMap = new TreeMap<>();
+            for (String s : charTitles) {
+                titlesMap.put(s, 100);
+            }
+
             Bundle b = new Bundle();
-            b.putStringArrayList(KeyCharacteristicsSelectionDialog.CHARS_LIST, charTitles);
+            b.putSerializable(KeyCharacteristicsSelectionDialog.CHARS_MAP, titlesMap);
+            b.putBoolean(KeyCharacteristicsSelectionDialog.WITH_IMPACT, false);
             dialog.setArguments(b);
             dialog.setListener(new KeyCharacteristicsSelectionDialog.KeyCharacteristicsChangedListener() {
                 @Override
-                public void onChanged(ArrayList<String> charsTitles) {
-                    charTitles = charsTitles;
+                public void onChanged(TreeMap<String, Integer> characteristicsMap) {
+                    charTitles.clear();
+                    for (String s : characteristicsMap.keySet()) {
+                        charTitles.add(s);
+                    }
                     radarChart.clear();
                     createChart();
                 }

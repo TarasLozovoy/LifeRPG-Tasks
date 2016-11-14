@@ -64,7 +64,7 @@
     <string name="task_add_notification">Добавить уведомление</string>
     <string name="is_whole_day_task">Целый день</string>
     <string name="task_repeat_every_day">Каждый день</string>
-    <string name="task_repeat_every_Nth_day">Каждый %1s день</string>
+    <string name="task_repeat_every_Nth_day">Каждый %1d день</string>
     <string name="task_repeat_every_week">Каждую неделю</string>
     <string name="task_repeat_every_Nth_week">Каждую %1d неделю</string>
     <string name="task_repeat_every_month">Каждый месяц</string>

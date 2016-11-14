@@ -43,6 +43,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 
 import static com.levor.liferpgtasks.AchievsList.*;
@@ -158,8 +159,8 @@ public class LifeController {
         performBackUpToDropBox();
     }
 
-    public void addSkill(String title, List<Characteristic> keyCharList){
-        lifeEntity.addSkill(title, keyCharList);
+    public void addSkill(String title, TreeMap<Characteristic, Integer> charsWithImpactsMap){
+        lifeEntity.addSkill(title, charsWithImpactsMap);
         getGATracker().send(new HitBuilders.EventBuilder()
                 .setCategory(context.getString(R.string.GA_action))
                 .setAction("New skill: " + title)
@@ -274,7 +275,7 @@ public class LifeController {
             if (sk == null) continue;
             boolean skillChanged = increaseSkill ? sk.increaseSublevel(finalXP) : sk.decreaseSublevel(finalXP);
             if (skillChanged){
-                for (Characteristic ch : sk.getKeyCharacteristicsList()) {
+                for (Characteristic ch : sk.getKeyCharacteristicsMap().keySet()) {
                     updateCharacteristic(ch);
                 }
             }
@@ -351,7 +352,7 @@ public class LifeController {
             if (sk == null) continue;
             boolean skillChanged = increaseSkill ? sk.decreaseSublevel(finalXP) : sk.increaseSublevel(finalXP);
             if (skillChanged){
-                for (Characteristic ch : sk.getKeyCharacteristicsList()) {
+                for (Characteristic ch : sk.getKeyCharacteristicsMap().keySet()) {
                     updateCharacteristic(ch);
                 }
             }

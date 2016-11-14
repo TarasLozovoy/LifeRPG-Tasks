@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Characteristic;
@@ -23,7 +22,8 @@ import com.levor.liferpgtasks.view.activities.MainActivity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
+import java.util.TreeMap;
 
 @SuppressLint("ValidFragment")
 public class SkillSelectionDialog extends DialogFragment {
@@ -123,7 +123,7 @@ public class SkillSelectionDialog extends DialogFragment {
         private View addCharView;
         private TextView addedCharsTextView;
 
-        private ArrayList<String> charsTitlesList = new ArrayList<>();
+        private TreeMap<String, Integer> charsMap = new TreeMap<>();
 
         @NonNull
         @Override
@@ -138,12 +138,13 @@ public class SkillSelectionDialog extends DialogFragment {
                 public void onClick(View v) {
                     KeyCharacteristicsSelectionDialog dialog = new KeyCharacteristicsSelectionDialog();
                     Bundle b = new Bundle();
-                    b.putStringArrayList(KeyCharacteristicsSelectionDialog.CHARS_LIST, charsTitlesList);
+                    b.putSerializable(KeyCharacteristicsSelectionDialog.CHARS_MAP, charsMap);
+                    b.putBoolean(KeyCharacteristicsSelectionDialog.WITH_IMPACT, true);
                     dialog.setArguments(b);
                     dialog.setListener(new KeyCharacteristicsSelectionDialog.KeyCharacteristicsChangedListener() {
                         @Override
-                        public void onChanged(ArrayList<String> charsTitles) {
-                            charsTitlesList = charsTitles;
+                        public void onChanged(TreeMap<String, Integer> characteristicsMap) {
+                            charsMap = characteristicsMap;
                             updateCharacteristicsView();
                         }
                     });
@@ -165,15 +166,15 @@ public class SkillSelectionDialog extends DialogFragment {
                         public void onClick(View v) {
                             if (titleEditText.getText().toString().equals("")) {
                                 Toast.makeText(getContext(), getString(R.string.empty_skill_title_error), Toast.LENGTH_SHORT).show();
-                            } else if (charsTitlesList.isEmpty()) {
+                            } else if (charsMap.isEmpty()) {
                                 Toast.makeText(getContext(), getString(R.string.no_key_characteristic_error), Toast.LENGTH_SHORT).show();
                             } else if (lifeController.getSkillByTitle(titleEditText.getText().toString()) != null) {
                                 Toast.makeText(getContext(), getString(R.string.skill_duplicate_error_no_question), Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(getContext(), getString(R.string.skill_added_message), Toast.LENGTH_SHORT).show();
-                                List<Characteristic> chars = new ArrayList<>();
-                                for (String s : charsTitlesList) {
-                                    chars.add(lifeController.getCharacteristicByTitle(s));
+                                TreeMap<Characteristic, Integer> chars = new TreeMap<>();
+                                for (Map.Entry<String, Integer> pair : charsMap.entrySet()) {
+                                    chars.put(lifeController.getCharacteristicByTitle(pair.getKey()), pair.getValue());
                                 }
                                 String skillTitle = titleEditText.getText().toString();
                                 lifeController.addSkill(skillTitle, chars);
@@ -191,13 +192,14 @@ public class SkillSelectionDialog extends DialogFragment {
 
         private void updateCharacteristicsView() {
             StringBuilder sb = new StringBuilder();
-            if (charsTitlesList.isEmpty()) {
+            if (charsMap.isEmpty()) {
                 sb.append(getString(R.string.key_characteristic_empty));
             } else {
                 sb.append(getString(R.string.key_characteristic))
                         .append(" ");
-                for (String s : charsTitlesList) {
-                    sb.append(s)
+                for (Map.Entry<String, Integer> pair : charsMap.entrySet()) {
+                    sb.append(pair.getKey())
+                            .append("(" + pair.getValue() + "%)")
                             .append(", ");
                 }
                 sb.delete(sb.length() - 2, sb.length() - 1);

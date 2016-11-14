@@ -3,27 +3,32 @@ package com.levor.liferpgtasks.model;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 
 public class Skill implements Comparable<Skill> {
+    public static final String CHAR_CHAR_DB_DIVIDER = "::";
+    public static final String CHAR_IMPACT_DB_DIVIDER = ":-:";
+
     private String title;
     private int level;
     private double sublevel;
-    private List<Characteristic> keyCharacteristicsList;
+    private TreeMap<Characteristic, Integer> keyCharsImpactMap;
     private UUID id;
 
     public static final Comparator<Skill> TITLE_COMPARATOR = new SkillByTitleComparator();
     public static final Comparator<Skill> LEVEL_COMPARATOR = new SkillByLevelComparator();
 
-    public Skill(String title, UUID id, List<Characteristic> keyCharacteristicsList) {
-        this(title, 1, 0.0f, id, keyCharacteristicsList);
+    public Skill(String title, UUID id, TreeMap<Characteristic, Integer> keyCharsImpactMap) {
+        this(title, 1, 0.0f, id, keyCharsImpactMap);
     }
 
-    public Skill(String title, int level, double sublevel, UUID id, List<Characteristic> keyCharacteristicsList) {
+    public Skill(String title, int level, double sublevel, UUID id, TreeMap<Characteristic, Integer> keyCharsImpactMap) {
         this.title = title;
         this.level = level;
         this.sublevel = sublevel;
-        this.keyCharacteristicsList = keyCharacteristicsList;
+        this.keyCharsImpactMap = keyCharsImpactMap;
         this.id = id;
     }
 
@@ -47,50 +52,37 @@ public class Skill implements Comparable<Skill> {
         this.sublevel = sublevel;
     }
 
-    public List<Characteristic> getKeyCharacteristicsList() {
-        keyCharacteristicsList.removeAll(Collections.singleton(null));
-        return keyCharacteristicsList;
+    public TreeMap<Characteristic, Integer> getKeyCharacteristicsMap() {
+        return keyCharsImpactMap;
     }
 
-    public void setKeyCharacteristicsList(List<Characteristic> keyCharacteristicsList) {
-        this.keyCharacteristicsList = keyCharacteristicsList;
+    public void setKeyCharacteristicsMap(TreeMap<Characteristic, Integer> keyCharsImpactMap) {
+        this.keyCharsImpactMap = keyCharsImpactMap;
     }
 
-    public void addKeyCharacteristic(Characteristic characteristic){
-        if (characteristic != null && !keyCharacteristicsList.contains(characteristic)) {
-            keyCharacteristicsList.add(characteristic);
+    public void addKeyCharacteristic(Characteristic characteristic, int impact){
+        if (characteristic != null && !keyCharsImpactMap.containsKey(characteristic)) {
+            keyCharsImpactMap.put(characteristic, impact);
         }
     }
 
     public void removeKeyCharacteristic(Characteristic characteristic){
         if (characteristic != null) {
-            keyCharacteristicsList.remove(characteristic);
+            keyCharsImpactMap.remove(characteristic);
         }
     }
 
     public void removeAllKeyCharacteristics() {
-        keyCharacteristicsList.clear();
+        keyCharsImpactMap.clear();
     }
 
     public String getKeyCharacteristicsStringForDB() {
-        Collections.sort(keyCharacteristicsList, Characteristic.LEVEL_COMPARATOR);
         StringBuilder sb = new StringBuilder();
-        for (Characteristic ch : keyCharacteristicsList) {
-            sb.append(ch.getId().toString())
-                    .append("::");
-        }
-        return sb.toString();
-    }
-
-    public String getKeyCharacteristicsStringForUI() {
-        Collections.sort(keyCharacteristicsList, Characteristic.LEVEL_COMPARATOR);
-        StringBuilder sb = new StringBuilder();
-        for (Characteristic ch : keyCharacteristicsList) {
-            sb.append(ch.getTitle().toString())
-                    .append(", ");
-        }
-        if (keyCharacteristicsList.size() > 0) {
-            sb.delete(sb.length() - 2, sb.length() - 1);
+        for (Map.Entry<Characteristic, Integer> pair : keyCharsImpactMap.entrySet()) {
+            sb.append(pair.getKey().getId().toString())
+                    .append(CHAR_IMPACT_DB_DIVIDER)
+                    .append(pair.getValue())
+                    .append(CHAR_CHAR_DB_DIVIDER);
         }
         return sb.toString();
     }
@@ -103,8 +95,8 @@ public class Skill implements Comparable<Skill> {
         while (sublevel >= ((double)level)){
             sublevel = sublevel - ((double) level);
             level++;
-            for (Characteristic ch : getKeyCharacteristicsList()) {
-                ch.increaseLevelByN(getKeyCharacteristicsGrowth());
+            for (Characteristic ch : getKeyCharacteristicsMap().keySet()) {
+                ch.increaseLevelByN(getActualGrowthForCharacteristic(ch));
             }
             if (sublevel <(double)level) { return true; }
         }
@@ -117,8 +109,8 @@ public class Skill implements Comparable<Skill> {
     public boolean decreaseSublevel(double value){
         sublevel -= value;
         while (sublevel < 0.0d && level > 1) {
-            for (Characteristic ch : getKeyCharacteristicsList()) {
-                ch.increaseLevelByN(-getKeyCharacteristicsGrowth());
+            for (Characteristic ch : getKeyCharacteristicsMap().keySet()) {
+                ch.increaseLevelByN(-getActualGrowthForCharacteristic(ch));
             }
             level --;
             sublevel = ((double) level) + sublevel;
@@ -130,6 +122,18 @@ public class Skill implements Comparable<Skill> {
         }
         if (sublevel < 0) { sublevel = 0; }
         return false;
+    }
+
+    private int getActualGrowthForCharacteristic(Characteristic characteristic) {
+        int initialGrowth = getKeyCharacteristicsGrowth();
+        double impactMultiplier = getKeyCharacteristicsMap().get(characteristic) / 100d;
+        double actualGrowth = initialGrowth * impactMultiplier;
+        if (actualGrowth > 0 && actualGrowth <= 1) {
+            actualGrowth = 1;
+        } else {
+            actualGrowth = Math.round(actualGrowth);
+        }
+        return (int) actualGrowth;
     }
 
     public int getKeyCharacteristicsGrowth() {
