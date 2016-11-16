@@ -438,6 +438,7 @@
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="termless">Termless</string>
+    <string name="impact">Impact:</string>
     <!-- -->
 
 </resources>

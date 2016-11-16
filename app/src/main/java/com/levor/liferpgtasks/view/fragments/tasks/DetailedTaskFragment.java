@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.levor.liferpgtasks.Utils.Pair;
 import com.levor.liferpgtasks.Utils.TextUtils;
 import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 import com.levor.liferpgtasks.adapters.SimpleRecyclerAdapter;
@@ -399,12 +400,15 @@ public class DetailedTaskFragment extends DataDependantFrament {
 
     private void setupRecyclerView(){
         skillsTitles = new ArrayList<>();
-        for (Map.Entry<Skill, Boolean> pair : currentTask.getRelatedSkillsMap().entrySet()) {
+        for (Map.Entry<Skill, Pair<Integer, Boolean>>  pair : currentTask.getRelatedSkillsMap().entrySet()) {
             Skill sk = pair.getKey();
-            boolean increaseSkill = pair.getValue();
+            boolean increaseSkill = pair.getValue().getSecond();
+            int impact = pair.getValue().getFirst();
             if (sk == null) continue;
             skillsTitles.add((increaseSkill ? "+" : "-") +
-                    sk.getTitle() + TextUtils.HYPHEN_DIVIDER + sk.getLevel() + "(" + TextUtils.DECIMAL_FORMAT.format(sk.getSublevel()) + ")");
+                    sk.getTitle() + TextUtils.HYPHEN_DIVIDER + sk.getLevel() +
+                    "(" + TextUtils.DECIMAL_FORMAT.format(sk.getSublevel()) + ")" +
+                    (impact == 100 ? "" : "(" + impact + "%)"));
         }
         noRelatedSkillsTV.setVisibility(skillsTitles.isEmpty() ? View.VISIBLE : View.GONE);
 

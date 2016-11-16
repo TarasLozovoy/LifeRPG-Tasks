@@ -147,7 +147,7 @@ public class LifeEntity {
         task1.setDifficulty(25);
         task1.setImportance(25);
         task1.setNotifyDelta(-1);
-        task1.addRelatedSkill(getSkillByTitle(context.getString(R.string.erudition)), true);
+        task1.addRelatedSkill(getSkillByTitle(context.getString(R.string.erudition)), true, 100);
         task1.setMoneyReward(5);
 
         Task task2 = new Task(context.getString(R.string.learn_spanish));
@@ -159,7 +159,7 @@ public class LifeEntity {
         task2.setDifficulty(50);
         task2.setImportance(50);
         task2.setNotifyDelta(-1);
-        task2.addRelatedSkill(getSkillByTitle(context.getString(R.string.spanish)), true);
+        task2.addRelatedSkill(getSkillByTitle(context.getString(R.string.spanish)), true, 100);
         task2.setMoneyReward(5);
 
         Task task3 = new Task(context.getString(R.string.perform_workout));
@@ -171,7 +171,7 @@ public class LifeEntity {
         task3.setDifficulty(75);
         task3.setImportance(75);
         task3.setNotifyDelta(-1);
-        task3.addRelatedSkill(getSkillByTitle(context.getString(R.string.powerlifting)), true);
+        task3.addRelatedSkill(getSkillByTitle(context.getString(R.string.powerlifting)), true, 100);
         task3.setMoneyReward(5);
 
         Task task4 = new Task(context.getString(R.string.morning_running));
@@ -184,7 +184,7 @@ public class LifeEntity {
         task4.setImportance(100);
         task4.setFear(50);
         task4.setNotifyDelta(-1);
-        task4.addRelatedSkill(getSkillByTitle(context.getString(R.string.running)), true);
+        task4.addRelatedSkill(getSkillByTitle(context.getString(R.string.running)), true, 100);
         task4.setMoneyReward(5);
 
         addTask(task1);

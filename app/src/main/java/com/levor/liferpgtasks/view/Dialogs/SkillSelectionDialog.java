@@ -17,6 +17,7 @@ import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.controller.LifeController;
 import com.levor.liferpgtasks.model.Characteristic;
 import com.levor.liferpgtasks.model.Skill;
+import com.levor.liferpgtasks.view.ItemsWithImpactAlertBuilder;
 import com.levor.liferpgtasks.view.activities.MainActivity;
 
 import java.util.ArrayList;
@@ -28,14 +29,16 @@ import java.util.TreeMap;
 @SuppressLint("ValidFragment")
 public class SkillSelectionDialog extends DialogFragment {
     public static final String INCREASE_SKILLS_TAG = "increase_skills_tag";
-    public static final String ACTIVE_LIST_TAG = "active_list_tag";
-    public static final String NONACTIVE_LIST_TAG = "nonactive_list_tag";
+    public static final String ACTIVE_MAP_TAG = "active_map_tag";
+    public static final String NONACTIVE_MAP_TAG = "nonactive_map_tag";
     public static final String WITH_NEW_SKILL_BUTTON_TAG = "with_new_skill_tag";
+    public static final String WITH_IMPACT = "with_impact";
 
     private LifeController lifeController;
     private MainActivity activity;
 
     private SkillSelectionListener listener;
+    private boolean showImpact;
 
     public static SkillSelectionDialog getInstance(MainActivity activity) {
         SkillSelectionDialog dialog = new SkillSelectionDialog();
@@ -48,54 +51,57 @@ public class SkillSelectionDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final boolean increasingSkills = getArguments().getBoolean(INCREASE_SKILLS_TAG);
-        final ArrayList<String> skillsList = getArguments().getStringArrayList(ACTIVE_LIST_TAG);
-        ArrayList<String> nonActiveList = getArguments().getStringArrayList(NONACTIVE_LIST_TAG);
-        if (nonActiveList == null) {
-            nonActiveList = new ArrayList<>();
+        final TreeMap<String, Integer> activeMap = (TreeMap<String, Integer>) getArguments().get(ACTIVE_MAP_TAG);
+        TreeMap<String, Integer> nonActiveMap = (TreeMap<String, Integer>) getArguments().get(NONACTIVE_MAP_TAG);
+        showImpact = getArguments().getBoolean(WITH_IMPACT, false);
+        if (nonActiveMap == null) {
+            nonActiveMap = new TreeMap<>();
         }
         boolean withNewSkill = getArguments().getBoolean(WITH_NEW_SKILL_BUTTON_TAG, true);
         List<Skill> allSkills = lifeController.getAllSkills();
         allSkills.removeAll(Collections.singleton(null));
         Collections.sort(allSkills, Skill.TITLE_COMPARATOR);
         List<String> skillNames = new ArrayList<>();
-        List<Boolean> skillStates = new ArrayList<>();
 
-        for (int i = 0; i < allSkills.size(); i++) {
-            String skillName = allSkills.get(i).getTitle();
-            if (!nonActiveList.contains(skillName)) {
-                skillNames.add(allSkills.get(i).getTitle());
-                skillStates.add(skillsList.contains(allSkills.get(i).getTitle()));
+        List<Integer> skillImpacts = new ArrayList<>();
+        for (Skill sk: allSkills) {
+            String skillName = sk.getTitle();
+            if (!nonActiveMap.containsKey(skillName)) {
+                skillNames.add(skillName);
+                skillImpacts.add(activeMap.containsKey(skillName) ? activeMap.get(skillName) : -1);
             }
         }
 
         final String[] items = new String[skillNames.size()];
-        final boolean[] states = new boolean[skillStates.size()];
-        for (int i = 0; i < skillStates.size(); i++) {
+        final Integer[] impacts = new Integer[skillImpacts.size()];
+        for (int i = 0; i < skillNames.size(); i++) {
             items[i] = skillNames.get(i);
-            states[i] = skillStates.get(i);
+            impacts[i] = skillImpacts.get(i);
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.skill_choosing)
-                .setMultiChoiceItems(items, states,
-                        new DialogInterface.OnMultiChoiceClickListener() {
-                            public void onClick(DialogInterface dialog, int item, boolean isChecked) {
-                                if (isChecked) {
-                                    skillsList.add(items[item]);
-                                } else {
-                                    skillsList.remove(items[item]);
-                                }
-                            }
-                        })
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        ItemsWithImpactAlertBuilder builder = new ItemsWithImpactAlertBuilder(activity, showImpact);
+        builder.setTitle(R.string.skill_choosing);
+        builder.setMultiChoiceItemsWithImpact(items, impacts
+                , new ItemsWithImpactAlertBuilder.MultiChoiceImpactListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        if (listener != null) {
-                            listener.onClose(increasingSkills, skillsList);
+                    public void onChanged(String item, int newImpact) {
+                        if (newImpact < 0) {
+                            activeMap.remove(item);
+                        } else {
+                            activeMap.put(item, newImpact);
                         }
                     }
                 })
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (listener != null) {
+                            listener.onClose(increasingSkills, activeMap);
+                        }
+                        dialog.dismiss();
+                    }
+                })
                 .setCancelable(false);
+
         if (withNewSkill) {
             builder.setNeutralButton(R.string.add_new_skill, new DialogInterface.OnClickListener() {
                 @Override
@@ -210,6 +216,6 @@ public class SkillSelectionDialog extends DialogFragment {
 
     public interface SkillSelectionListener{
         void onNewSkillAdded(String skillTitle);
-        void onClose(boolean increasingSkills, ArrayList<String> titles);
+        void onClose(boolean increasingSkills, TreeMap<String, Integer> titlesMapWithImpact);
     }
 }

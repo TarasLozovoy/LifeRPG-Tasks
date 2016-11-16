@@ -14,6 +14,7 @@ import com.github.mikephil.charting.data.RadarData;
 import com.github.mikephil.charting.data.RadarDataSet;
 import com.levor.liferpgtasks.R;
 import com.levor.liferpgtasks.model.Skill;
+import com.levor.liferpgtasks.view.Dialogs.KeyCharacteristicsSelectionDialog;
 import com.levor.liferpgtasks.view.Dialogs.SkillSelectionDialog;
 import com.levor.liferpgtasks.view.activities.MainActivity;
 import com.levor.liferpgtasks.view.fragments.DefaultFragment;
@@ -21,9 +22,12 @@ import com.levor.liferpgtasks.view.fragments.DefaultFragment;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.TreeMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static com.levor.liferpgtasks.view.Dialogs.SkillSelectionDialog.WITH_IMPACT;
 
 public class SkillsChartFragment extends DefaultFragment{
     @Bind(R.id.radar_chart)     RadarChart radarChart;
@@ -31,6 +35,7 @@ public class SkillsChartFragment extends DefaultFragment{
 
 
     private ArrayList<String> skillTitles;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -105,9 +110,15 @@ public class SkillsChartFragment extends DefaultFragment{
     private class FabClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            TreeMap<String, Integer> skillMap = new TreeMap<>();
+            for (String title : skillTitles) {
+                skillMap.put(title, 100);
+            }
+
             SkillSelectionDialog dialog = SkillSelectionDialog.getInstance(getCurrentActivity());
             Bundle b = new Bundle();
-            b.putStringArrayList(SkillSelectionDialog.ACTIVE_LIST_TAG, skillTitles);
+            b.putSerializable(SkillSelectionDialog.ACTIVE_MAP_TAG, skillMap);
+            b.putBoolean(WITH_IMPACT, false);
             dialog.setArguments(b);
             dialog.setListener(new SkillSelectionDialog.SkillSelectionListener() {
                 @Override
@@ -116,8 +127,11 @@ public class SkillsChartFragment extends DefaultFragment{
                 }
 
                 @Override
-                public void onClose(boolean increasingSkills, ArrayList<String> titles) {
-                    skillTitles = titles;
+                public void onClose(boolean increasingSkills, TreeMap<String, Integer> titlesMapWithImpact) {
+                    skillTitles.clear();
+                    for (String title : titlesMapWithImpact.keySet()) {
+                        skillTitles.add(title);
+                    }
                     radarChart.clear();
                     createChart();
                 }

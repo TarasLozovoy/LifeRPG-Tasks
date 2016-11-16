@@ -3,7 +3,7 @@ package com.levor.liferpgtasks.dataBase;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
-import com.levor.liferpgtasks.Utils.TimeUnitUtils;
+import com.levor.liferpgtasks.Utils.Pair;
 import com.levor.liferpgtasks.dataBase.DataBaseSchema.TasksTable;
 import com.levor.liferpgtasks.model.LifeEntity;
 import com.levor.liferpgtasks.model.Skill;
@@ -11,10 +11,7 @@ import com.levor.liferpgtasks.model.Task;
 
 import org.joda.time.LocalDate;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -47,18 +44,23 @@ public class TasksCursorWrapper extends CursorWrapper {
         double moneyReward = getDouble(getColumnIndex(TasksTable.Cols.MONEY_REWARD));
         Long habitStartDateMillis = getLong(getColumnIndex(TasksTable.Cols.HABIT_START_DATE));
         String repeatDaysOfWeekString = getString(getColumnIndex(TasksTable.Cols.REPEAT_DAYS_OF_WEEK));
-        Map<Skill, Boolean> skills = new TreeMap<>();
-        String[] skillsArray = relatedSkills.split("::");
+        Map<Skill, Pair<Integer, Boolean>> skills = new TreeMap<>();
+        String[] skillsArray = relatedSkills.split(Task.SKILL_SKILL_DIVIDER);
         for (String s : skillsArray) {
-            String[] skillString = s.split(":;");
+            String[] skillString = s.split(Task.SKILL_ARGS_DIVIDER);
             String skillTitle = skillString[0];
             if (skillTitle.equals("")) continue;
             Skill skill = lifeEntity.getSkillByID(UUID.fromString(skillTitle));
             if (skill == null) continue;
             if (skillString.length == 1) {
-                skills.put(skill, true);
+                //moving from plain skills
+                skills.put(skill, new Pair<>(100, true));
+            } else if (skillString.length == 2) {
+                //moving from map with positive\negative skills
+                skills.put(skill, new Pair<>(100, skillString[1].equals("+")));
             } else {
-                skills.put(skill, skillString[1].equals("+"));
+                int impact = Integer.parseInt(skillString[2]);
+                skills.put(skill, new Pair<>(impact, skillString[1].equals("+")));
             }
         }
 

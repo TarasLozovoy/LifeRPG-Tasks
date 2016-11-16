@@ -397,6 +397,7 @@
     <string name="today">Сегодня</string>
     <string name="tomorrow">Завтра</string>
     <string name="termless">Бессрочные</string>
+    <string name="impact">Влияние:</string>
     <!-- -->
 
 </resources>

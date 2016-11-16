@@ -50,11 +50,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static com.levor.liferpgtasks.model.Task.DateMode;
+import static com.levor.liferpgtasks.view.Dialogs.SkillSelectionDialog.WITH_IMPACT;
 
 public class AddTaskFragment extends DataDependantFrament {
     public static final String RECEIVED_SKILL_TITLE_TAG = "received_skill_tag";
@@ -100,15 +103,16 @@ public class AddTaskFragment extends DataDependantFrament {
     protected Boolean[] repeatDaysOfWeek;
     protected int repeatIndex = 1;      //repeat every N days, repeatIndex == N
     protected long notifyDelta = -1;         // <0 - do not notify, >0 notify at (date - delta) time
-    protected int difficulty = Task.LOW;
-    protected int importance = Task.LOW;
-    protected int fear = Task.LOW;
+    protected int difficulty = 0;
+    protected int importance = 0;
+    protected int fear = 0;
     protected double moneyReward = 5;
     protected int habitdays = -1;
     protected int habitdaysLeft = -1;
     protected LocalDate habitStartDate = new LocalDate();
-    protected ArrayList<String> increasingRelatedSkills = new ArrayList<>();
-    protected ArrayList<String> decreasingRelatedSkills = new ArrayList<>();
+
+    protected TreeMap<String, Integer> increasingSkillsMap = new TreeMap<>();
+    protected TreeMap<String, Integer> decreasingSkillsMap = new TreeMap<>();
 
     private int notifyEditTextMaxValue = 600;
 
@@ -134,8 +138,8 @@ public class AddTaskFragment extends DataDependantFrament {
         registerListeners();
         if (savedInstanceState != null) {
             taskTitleEditText.setText(savedInstanceState.getString(TASK_TITLE_TAG));
-            increasingRelatedSkills = savedInstanceState.getStringArrayList(RELATED_SKILLS_TAG);
-            decreasingRelatedSkills = savedInstanceState.getStringArrayList(DECREASING_RELATED_SKILLS_TAG);
+            increasingSkillsMap = (TreeMap<String, Integer>) savedInstanceState.getSerializable(RELATED_SKILLS_TAG);
+            decreasingSkillsMap = (TreeMap<String, Integer>) savedInstanceState.getSerializable(DECREASING_RELATED_SKILLS_TAG);
             date = new Date (savedInstanceState.getLong(DATE_TAG));
         } else {
             date = new Date();
@@ -160,7 +164,8 @@ public class AddTaskFragment extends DataDependantFrament {
 
             String skillTitle;
             if ((skillTitle = getArguments().getString(RECEIVED_SKILL_TITLE_TAG)) != null){
-                increasingRelatedSkills.add(skillTitle);
+                //when invoking from detailed skill page
+                increasingSkillsMap.put(skillTitle, 100);
             }
         }
 
@@ -218,8 +223,8 @@ public class AddTaskFragment extends DataDependantFrament {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putSerializable(TASK_TITLE_TAG, taskTitleEditText != null ? taskTitleEditText.getText().toString() : "");
-        outState.putSerializable(RELATED_SKILLS_TAG, increasingRelatedSkills);
-        outState.putSerializable(DECREASING_RELATED_SKILLS_TAG, decreasingRelatedSkills);
+        outState.putSerializable(RELATED_SKILLS_TAG, increasingSkillsMap);
+        outState.putSerializable(DECREASING_RELATED_SKILLS_TAG, decreasingSkillsMap);
         outState.putSerializable(DATE_TAG, date);
         super.onSaveInstanceState(outState);
     }
@@ -279,16 +284,16 @@ public class AddTaskFragment extends DataDependantFrament {
         task.setHabitStartDate(habitStartDate.minusDays(1));
         task.removeAllRelatedSkills();
         task.setMoneyReward(moneyReward);
-        for (String increasingSkillTitle : increasingRelatedSkills) {
+        for (String increasingSkillTitle : increasingSkillsMap.keySet()) {
             Skill sk = getController().getSkillByTitle(increasingSkillTitle);
             if (sk != null) {
-                task.addRelatedSkill(sk, true);
+                task.addRelatedSkill(sk, true, increasingSkillsMap.get(increasingSkillTitle));
             }
         }
-        for (String increasingSkillTitle : decreasingRelatedSkills) {
-            Skill sk = getController().getSkillByTitle(increasingSkillTitle);
+        for (String decreasingSkillTitle : decreasingSkillsMap.keySet()) {
+            Skill sk = getController().getSkillByTitle(decreasingSkillTitle);
             if (sk != null) {
-                task.addRelatedSkill(sk, false);
+                task.addRelatedSkill(sk, false, decreasingSkillsMap.get(decreasingSkillTitle));
             }
         }
         getController().createNewTask(task);
@@ -758,30 +763,34 @@ public class AddTaskFragment extends DataDependantFrament {
 
     protected void updateIncreasingSkillsView(){
         StringBuilder sb = new StringBuilder();
-        if (increasingRelatedSkills.isEmpty()){
+        if (increasingSkillsMap.isEmpty()){
             sb.append(getString(R.string.add_increasing_skill_to_task));
         } else {
             sb.append(getString(R.string.increasing_skills_list));
             sb.append("\n");
-            for (int i = 0; i < increasingRelatedSkills.size(); i++) {
-                sb.append(increasingRelatedSkills.get(i));
-                if (i < increasingRelatedSkills.size() - 1) sb.append(", ");
+            for (Map.Entry<String, Integer> pair : increasingSkillsMap.entrySet()) {
+                sb.append(pair.getKey())
+                        .append("(").append(pair.getValue()).append("%)");
+                sb.append(", ");
             }
+            sb.delete(sb.length() - 2, sb.length() - 1);
         }
         increasingSkillsTextView.setText(sb.toString());
     }
 
     protected void updateDecreasingSkillsView(){
         StringBuilder sb = new StringBuilder();
-        if (decreasingRelatedSkills.isEmpty()){
+        if (decreasingSkillsMap.isEmpty()){
             sb.append(getString(R.string.add_decreasing_skill_to_task));
         } else {
             sb.append(getString(R.string.decreasing_skills_list));
             sb.append("\n");
-            for (int i = 0; i < decreasingRelatedSkills.size(); i++) {
-                sb.append(decreasingRelatedSkills.get(i));
-                if (i < decreasingRelatedSkills.size() - 1) sb.append(", ");
+            for (Map.Entry<String, Integer> pair : decreasingSkillsMap.entrySet()) {
+                sb.append(pair.getKey())
+                        .append("(").append(pair.getValue()).append("%)");
+                sb.append(", ");
             }
+            sb.delete(sb.length() - 2, sb.length() - 1);
         }
         decreasingSkillsTextView.setText(sb.toString());
     }
@@ -1161,28 +1170,29 @@ public class AddTaskFragment extends DataDependantFrament {
         SkillSelectionDialog dialog = SkillSelectionDialog.getInstance(getCurrentActivity());
         Bundle b = new Bundle();
         b.putBoolean(SkillSelectionDialog.INCREASE_SKILLS_TAG, increaseSkills);
-        b.putStringArrayList(SkillSelectionDialog.ACTIVE_LIST_TAG, increaseSkills ? increasingRelatedSkills : decreasingRelatedSkills);
-        b.putStringArrayList(SkillSelectionDialog.NONACTIVE_LIST_TAG, increaseSkills ? decreasingRelatedSkills : increasingRelatedSkills);
+        b.putSerializable(SkillSelectionDialog.ACTIVE_MAP_TAG, increaseSkills ? increasingSkillsMap : decreasingSkillsMap);
+        b.putSerializable(SkillSelectionDialog.NONACTIVE_MAP_TAG, increaseSkills ? decreasingSkillsMap : increasingSkillsMap);
         b.putBoolean(SkillSelectionDialog.WITH_NEW_SKILL_BUTTON_TAG, true);
+        b.putBoolean(SkillSelectionDialog.WITH_IMPACT, true);
         dialog.setArguments(b);
         dialog.setListener(new SkillSelectionDialog.SkillSelectionListener() {
             @Override
             public void onNewSkillAdded(String skillTitle) {
                 if (increaseSkills) {
-                    increasingRelatedSkills.add(skillTitle);
+                    increasingSkillsMap.put(skillTitle, 100);
                 } else {
-                    decreasingRelatedSkills.add(skillTitle);
+                    decreasingSkillsMap.put(skillTitle, 100);
                 }
 
                 showSkillSelectionDialog(increaseSkills);
             }
 
             @Override
-            public void onClose(boolean increasingSkills, ArrayList<String> titles) {
+            public void onClose(boolean increasingSkills, TreeMap<String, Integer> titlesMapWithImpact) {
                 if (increasingSkills) {
-                    increasingRelatedSkills = titles;
+                    increasingSkillsMap = titlesMapWithImpact;
                 } else {
-                    decreasingRelatedSkills = titles;
+                    decreasingSkillsMap = titlesMapWithImpact;
                 }
                 updateIncreasingSkillsView();
                 updateDecreasingSkillsView();

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.levor.liferpgtasks.Utils.Pair;
 import com.levor.liferpgtasks.model.Skill;
 import com.levor.liferpgtasks.model.Task;
 import com.levor.liferpgtasks.R;
@@ -50,14 +51,15 @@ public class EditTaskFragment extends AddTaskFragment {
             habitdaysLeft = currentTask.getHabitDaysLeft();
             habitStartDate = currentTask.getHabitStartDate();
             moneyReward = currentTask.getMoneyReward();
-            for (Map.Entry<Skill, Boolean> pair : currentTask.getRelatedSkillsMap().entrySet()) {
+            for (Map.Entry<Skill, Pair<Integer, Boolean>> pair : currentTask.getRelatedSkillsMap().entrySet()) {
                 Skill sk = pair.getKey();
-                boolean increaseSkill = pair.getValue();
+                boolean increaseSkill = pair.getValue().getSecond();
+                int impact = pair.getValue().getFirst();
                 if (sk != null) {
                     if (increaseSkill) {
-                        increasingRelatedSkills.add(sk.getTitle());
+                        increasingSkillsMap.put(sk.getTitle(), impact);
                     } else {
-                        decreasingRelatedSkills.add(sk.getTitle());
+                        increasingSkillsMap.put(sk.getTitle(), impact);
                     }
                 }
             }
@@ -193,16 +195,16 @@ public class EditTaskFragment extends AddTaskFragment {
         currentTask.setHabitStartDate(habitStartDate.minusDays(1));
         currentTask.setMoneyReward(moneyReward);
         currentTask.removeAllRelatedSkills();
-        for (String increasingSkillTitle : increasingRelatedSkills) {
-            Skill sk = getController().getSkillByTitle(increasingSkillTitle);
+        for (Map.Entry<String, Integer> entry : increasingSkillsMap.entrySet()) {
+            Skill sk = getController().getSkillByTitle(entry.getKey());
             if (sk != null) {
-                currentTask.addRelatedSkill(sk, true);
+                currentTask.addRelatedSkill(sk, true, entry.getValue());
             }
         }
-        for (String increasingSkillTitle : decreasingRelatedSkills) {
-            Skill sk = getController().getSkillByTitle(increasingSkillTitle);
+        for (Map.Entry<String, Integer> entry : decreasingSkillsMap.entrySet()) {
+            Skill sk = getController().getSkillByTitle(entry.getKey());
             if (sk != null) {
-                currentTask.addRelatedSkill(sk, false);
+                currentTask.addRelatedSkill(sk, false, entry.getValue());
             }
         }
         getController().updateTask(currentTask);

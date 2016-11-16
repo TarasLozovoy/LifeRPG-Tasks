@@ -17,8 +17,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.common.api.BooleanResult;
 import com.levor.liferpgtasks.AchievsList;
 import com.levor.liferpgtasks.R;
+import com.levor.liferpgtasks.Utils.Pair;
 import com.levor.liferpgtasks.Utils.TextUtils;
 import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 import com.levor.liferpgtasks.broadcastReceivers.TaskNotification;
@@ -264,16 +266,18 @@ public class LifeController {
         double finalXP = hero.getBaseXP() * multiplier;
         int decreasingSkillsCount = 0;
         int increasingSkillsCount = 0;
-        for (Map.Entry<Skill, Boolean> pair : task.getRelatedSkillsMap().entrySet()) {
+        for (Map.Entry<Skill, Pair<Integer, Boolean>> pair : task.getRelatedSkillsMap().entrySet()) {
             Skill sk = pair.getKey();
-            boolean increaseSkill = pair.getValue();
+            boolean increaseSkill = pair.getValue().getSecond();
+            int impact = pair.getValue().getFirst();
+            double xpWithImpact = finalXP * impact / 100;
             if (!increaseSkill) {
                 decreasingSkillsCount++;
             } else {
                 increasingSkillsCount++;
             }
             if (sk == null) continue;
-            boolean skillChanged = increaseSkill ? sk.increaseSublevel(finalXP) : sk.decreaseSublevel(finalXP);
+            boolean skillChanged = increaseSkill ? sk.increaseSublevel(xpWithImpact) : sk.decreaseSublevel(xpWithImpact);
             if (skillChanged){
                 for (Characteristic ch : sk.getKeyCharacteristicsMap().keySet()) {
                     updateCharacteristic(ch);
@@ -341,16 +345,18 @@ public class LifeController {
         double finalXP = hero.getBaseXP() * multiplier;
         int decreasingSkillsCount = 0;
         int increasingSkillsCount = 0;
-        for (Map.Entry<Skill, Boolean> pair : task.getRelatedSkillsMap().entrySet()) {
+        for (Map.Entry<Skill, Pair<Integer, Boolean>> pair : task.getRelatedSkillsMap().entrySet()) {
             Skill sk = pair.getKey();
-            boolean increaseSkill = pair.getValue();
+            boolean increaseSkill = pair.getValue().getSecond();
+            int impact = pair.getValue().getFirst();
+            double xpWithImpact = finalXP * impact / 100;
             if (!increaseSkill) {
                 decreasingSkillsCount++;
             } else {
                 increasingSkillsCount++;
             }
             if (sk == null) continue;
-            boolean skillChanged = increaseSkill ? sk.decreaseSublevel(finalXP) : sk.increaseSublevel(finalXP);
+            boolean skillChanged = increaseSkill ? sk.decreaseSublevel(xpWithImpact) : sk.increaseSublevel(xpWithImpact);
             if (skillChanged){
                 for (Characteristic ch : sk.getKeyCharacteristicsMap().keySet()) {
                     updateCharacteristic(ch);

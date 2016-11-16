@@ -1,5 +1,6 @@
 package com.levor.liferpgtasks.model;
 
+import com.levor.liferpgtasks.Utils.Pair;
 import com.levor.liferpgtasks.Utils.TimeUnitUtils;
 
 import org.joda.time.LocalDate;
@@ -9,28 +10,25 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
 public class Task {
-    public final static int LOW = 0;
-    public final static int MEDIUM = 1;
-    public final static int HIGH = 2;
-    public final static int INSANE = 3;
+    public static final String SKILL_SKILL_DIVIDER = "::";
+    public static final String SKILL_ARGS_DIVIDER = ":;";
 
     private String title;
-    private Map<Skill, Boolean> relatedSkills = new TreeMap<>();
+    private Map<Skill, Pair<Integer, Boolean>> relatedSkills = new TreeMap<>();
     private UUID id;
     private int repeatability = -1;
     private int repeatMode = RepeatMode.DO_NOT_REPEAT;
     private Boolean[] repeatDaysOfWeek = new Boolean[7];
     private int repeatIndex = 1;
-    private int difficulty = LOW;
-    private int importance = LOW;
-    private int fear = LOW;
+    private int difficulty = 0;
+    private int importance = 0;
+    private int fear = 0;
     private Date date;
     private Date finishDate;    //used for finished tasks that can be undone
     private int dateMode = DateMode.TERMLESS;
@@ -78,7 +76,7 @@ public class Task {
 
     private void removeNullsFromRelatedSkills() {
         List<Skill> skillsToRemove = new ArrayList<>();
-        for(Map.Entry<Skill, Boolean> pair : relatedSkills.entrySet()) {
+        for(Map.Entry<Skill, Pair<Integer, Boolean>> pair : relatedSkills.entrySet()) {
             if (pair.getKey() == (null)) {
                 skillsToRemove.add(pair.getKey());
             }
@@ -91,28 +89,31 @@ public class Task {
     public List<Skill> getRelatedSkillsList() {
         removeNullsFromRelatedSkills();
         List<Skill> skillsList = new ArrayList<>();
-        for (Map.Entry<Skill, Boolean> pair : relatedSkills.entrySet()) {
+        for (Map.Entry<Skill, Pair<Integer, Boolean>> pair : relatedSkills.entrySet()) {
             skillsList.add(pair.getKey());
         }
         Collections.sort(skillsList, Skill.LEVEL_COMPARATOR);
         return skillsList;
     }
 
-    public Map<Skill, Boolean> getRelatedSkillsMap() {
+    public Map<Skill, Pair<Integer, Boolean>> getRelatedSkillsMap() {
         return relatedSkills;
     }
 
     public String getRelatedSkillsString() {
         removeNullsFromRelatedSkills();
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<Skill, Boolean> pair : relatedSkills.entrySet()) {
-            Skill sk = pair.getKey();
-            boolean increaseSkill = pair.getValue();
+        for (Map.Entry<Skill, Pair<Integer, Boolean>> entry : relatedSkills.entrySet()) {
+            Skill sk = entry.getKey();
+            boolean increaseSkill = entry.getValue().getSecond();
+            int impact = entry.getValue().getFirst();
             if (sk == null) continue;
             sb.append(sk.getId())
-                    .append(":;")
+                    .append(SKILL_ARGS_DIVIDER)
                     .append(increaseSkill ? "+" : "-")
-                    .append("::");
+                    .append(SKILL_ARGS_DIVIDER)
+                    .append(impact)
+                    .append(SKILL_SKILL_DIVIDER);
         }
         return sb.toString();
     }
@@ -121,12 +122,12 @@ public class Task {
         relatedSkills = new TreeMap<>();
     }
 
-    public void setRelatedSkills(Map<Skill, Boolean> relatedSkills) {
+    public void setRelatedSkills(Map<Skill, Pair<Integer, Boolean>> relatedSkills) {
         this.relatedSkills = relatedSkills;
     }
 
-    public void addRelatedSkill(Skill skill, Boolean increaseSkill) {
-        relatedSkills.put(skill, increaseSkill);
+    public void addRelatedSkill(Skill skill, Boolean increaseSkill, int impact) {
+        relatedSkills.put(skill, new Pair<>(impact, increaseSkill));
     }
 
     public void removeRelatedSkill(Skill skill) {
