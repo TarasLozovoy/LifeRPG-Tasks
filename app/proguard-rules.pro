@@ -16,8 +16,14 @@
 #   public *;
 #}
 
--dontobfuscate
+#-dontobfuscate
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*,!code/allocation/variable
+
+#Fabric.io
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
 
 #Butterknife
 -keep class butterknife.** { *; }

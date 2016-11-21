@@ -115,6 +115,8 @@
         <item>Version 1.4.3</item>
         <item>Version 1.5.0</item>
         <item>Version 1.5.1</item>
+        <item>Version 1.5.2</item>
+        <item>Version 1.5.3</item>
     </string-array>
 
     <string-array
@@ -157,6 +159,15 @@
             \n- Hero leveling up XP reevaluated.
             \n- Added context menu to all characteristics, skills, tasks and rewards lists (called with longtap on any list element).
             \n- Optimized work with user loaded hero images.
+        </item>
+        <item>- Added new tabs for tasks.
+            \n- Improved avatar icons selection work.
+            \n- Fix bug with fear incorrect value after restart.
+            \n- Fixed some bugs with dialogs.
+        </item>
+        <item>- Different impact of skills on related characteristics (can be set in Skill details > Edit > Add characteristic).
+            \n- Different impact of tasks on related skills (can be set in Task details > Edit > Add skill).
+            \n- Various fixes.
         </item>
     </string-array>
 
