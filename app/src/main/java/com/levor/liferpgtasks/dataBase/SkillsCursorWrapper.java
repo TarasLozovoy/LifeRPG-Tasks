@@ -42,7 +42,9 @@ public class SkillsCursorWrapper extends CursorWrapper {
             if (characteristic == null) {
                 characteristic = lifeEntity.getCharacteristicById(UUID.fromString(charTitle));
             }
-            charsImpactMap.put(characteristic, impact);
+            if (characteristic != null) {
+                charsImpactMap.put(characteristic, impact);
+            }
         }
         return new Skill(title, level, sublevel, UUID.fromString(uuid), charsImpactMap);
     }

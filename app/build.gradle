@@ -30,7 +30,7 @@ android {
 //        multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 29
+        versionCode 30
         versionName "1.5.3"
     }
     buildTypes {
