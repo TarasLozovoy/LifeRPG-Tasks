@@ -90,6 +90,8 @@ public class Characteristic implements Comparable<Characteristic>{
 
         @Override
         public int compare(Characteristic lhs, Characteristic rhs) {
+            if (lhs == null) return -1;
+            if (rhs == null) return 1;
             if (rhs.getLevel() != lhs.getLevel()) {
                 return rhs.getLevel() - lhs.getLevel();
             } else {
@@ -102,6 +104,8 @@ public class Characteristic implements Comparable<Characteristic>{
 
         @Override
         public int compare(Characteristic lhs, Characteristic rhs) {
+            if (lhs == null) return -1;
+            if (rhs == null) return 1;
             return lhs.getTitle().compareTo(rhs.getTitle());
         }
     }
