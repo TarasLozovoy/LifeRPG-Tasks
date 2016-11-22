@@ -59,7 +59,7 @@ public class EditTaskFragment extends AddTaskFragment {
                     if (increaseSkill) {
                         increasingSkillsMap.put(sk.getTitle(), impact);
                     } else {
-                        increasingSkillsMap.put(sk.getTitle(), impact);
+                        decreasingSkillsMap.put(sk.getTitle(), impact);
                     }
                 }
             }

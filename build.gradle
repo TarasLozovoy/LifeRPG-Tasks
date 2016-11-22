@@ -18,6 +18,12 @@ allprojects {
     repositories {
         jcenter()
     }
+
+    tasks.withType(JavaCompile) {
+        configure(options) {
+            incremental = true
+        }
+    }
 }
 
 task clean(type: Delete) {
