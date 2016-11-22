@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ import com.vk.sdk.VKSdk;
 
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -473,14 +475,17 @@ public class LifeController {
         LocalDate habitStartDate = t.getHabitStartDate();
 
         if (nextRepeatDate.isBefore(today)) {
-            t.setHabitStartDate(today.minusDays(1));
+            while (!LocalDateTime.fromDateFields(t.getDate()).isAfter(new LocalDateTime())) {
+                t.skip();
+            }
+            t.setHabitStartDate(LocalDate.fromDateFields(t.getDate()));
             t.setHabitDaysLeft(t.getHabitDays());
             Toast.makeText(currentActivity, currentActivity.getString(R.string.habit_generation_failed,t.getTitle()),
                     Toast.LENGTH_LONG)
                     .show();
             return true;
         } else if (Days.daysBetween(today, nextRepeatDate).getDays() == 0) {
-            if (today.equals(habitStartDate)) return false;
+//            if (today.equals(habitStartDate)) return false;
             int diff = Math.abs(Days.daysBetween(today.minusDays(1), habitStartDate).getDays());
             t.setHabitDaysLeft(t.getHabitDays() - diff);
         } else {
