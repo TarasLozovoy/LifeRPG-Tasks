@@ -34,7 +34,7 @@ public class SkillsCursorWrapper extends CursorWrapper {
         for (String s : charsArray) {
             if (s.equals("")) continue;
             if (!s.contains(Skill.CHAR_IMPACT_DB_DIVIDER)) {
-                s += Skill.CHAR_IMPACT_DB_DIVIDER + 100;
+                s += Skill.CHAR_IMPACT_DB_DIVIDER + "100";
             }
             String charTitle = s.split(Skill.CHAR_IMPACT_DB_DIVIDER)[0];
             int impact = Integer.parseInt(s.split(Skill.CHAR_IMPACT_DB_DIVIDER)[1]);

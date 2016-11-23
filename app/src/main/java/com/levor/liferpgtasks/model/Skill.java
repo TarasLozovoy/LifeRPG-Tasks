@@ -124,7 +124,11 @@ public class Skill implements Comparable<Skill> {
 
     private int getActualGrowthForCharacteristic(Characteristic characteristic) {
         int initialGrowth = getKeyCharacteristicsGrowth();
-        double impactMultiplier = getKeyCharacteristicsMap().get(characteristic) / 100d;
+        int impact = 100;
+        if (getKeyCharacteristicsMap() != null || getKeyCharacteristicsMap().get(characteristic) != null) {
+            impact = getKeyCharacteristicsMap().get(characteristic);
+        }
+        double impactMultiplier = impact / 100d;
         double actualGrowth = initialGrowth * impactMultiplier;
         if (actualGrowth > 0 && actualGrowth <= 1) {
             actualGrowth = 1;
