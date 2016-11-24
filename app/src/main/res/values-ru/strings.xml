@@ -140,7 +140,7 @@
     <string name="new_item_title">Название:</string>
     <string name="new_skill_title_edit_text">введите название навыка</string>
     <string name="key_characteristic">Связанные характеристики:</string>
-    <string name="key_characteristic_empty">Добавить связанные харакетристики</string>
+    <string name="key_characteristic_empty">Добавить связанные характеристики</string>
     <string name="create_new_skill">Добавить навык</string>
     <string name="add_new_skill">Новый навык</string>
     <string name="new_skill">Новый навык</string>
