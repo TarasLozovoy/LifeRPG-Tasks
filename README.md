@@ -1,7 +1,11 @@
 # LifeRPG-Tasks
+### Moved to private repo
+***
+
+
 Android application which helps to perform your tasks in fun RPG-like way.
 
-<a href=https://play.google.com/store/apps/details?id=com.levor.liferpgtasks> Application on Google Play </a>
+[App on Google Play](https://play.google.com/store/apps/details?id=com.levor.liferpgtasks)
 
 LifeRPG Tasks - task manager which allows you to create and track your everyday tasks and develop your virtual self along with skills, characteristics and levels.
 By performing your everyday tasks you can level up skills, which will enhance characteristics. And besides, higher skill level – faster characteristic will enhance.
